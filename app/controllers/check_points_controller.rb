@@ -4,7 +4,8 @@ class CheckPointsController < ApplicationController
   # GET /check_points
   # GET /check_points.json
   def index
-    @check_points = CheckPoint.all
+    asset = Asset.find(params[:asset_id])
+    @check_points = asset.check_points.where(check_point_params)
   end
 
   # GET /check_points/1
@@ -23,7 +24,8 @@ class CheckPointsController < ApplicationController
   # POST /check_points.json
   def create
     begin
-      @check_point = CheckPoint.create!(check_point_params)
+      asset = Asset.find(params[:asset_id])
+      @check_point = asset.check_points.create!(check_point_params)
       render template: 'check_points/show', status: :created
     rescue Exception => e
       render json: {:message=> e.to_s}.to_json, status: :internal_server_error
@@ -33,24 +35,20 @@ class CheckPointsController < ApplicationController
   # PATCH/PUT /check_points/1
   # PATCH/PUT /check_points/1.json
   def update
-    respond_to do |format|
-      if @check_point.update(check_point_params)
-        format.html { redirect_to @check_point, notice: 'Check point was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @check_point.errors, status: :unprocessable_entity }
+      begin
+        @check_point.update(check_point_params)
+      rescue Exception => e
+        render json: {:message=> e.to_s}.to_json, status: :internal_server_error
       end
-    end
   end
 
   # DELETE /check_points/1
   # DELETE /check_points/1.json
   def destroy
-    @check_point.destroy
-    respond_to do |format|
-      format.html { redirect_to check_points_url }
-      format.json { head :no_content }
+    begin
+      @check_point.destroy
+    rescue Exception => e
+      render json: {:message=> e.to_s}.to_json, status: :internal_server_error
     end
   end
 

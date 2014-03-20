@@ -41,24 +41,20 @@ class AssetsController < ApplicationController
   # PATCH/PUT /assets/1
   # PATCH/PUT /assets/1.json
   def update
-    respond_to do |format|
-      if @asset.update(asset_params)
-        format.html { redirect_to @asset, notice: 'Asset was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @asset.errors, status: :unprocessable_entity }
-      end
+    begin
+      @asset.update(asset_params)
+    rescue Exception => e
+      render json: {:message=> e.to_s}.to_json, status: :internal_server_error
     end
   end
 
   # DELETE /assets/1
   # DELETE /assets/1.json
   def destroy
-    @asset.destroy
-    respond_to do |format|
-      format.html { redirect_to assets_url }
-      format.json { head :no_content }
+    begin
+      @asset.destroy
+    rescue Exception => e
+      render json: {:message=> e.to_s}.to_json, status: :internal_server_error
     end
   end
 
