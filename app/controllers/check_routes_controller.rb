@@ -4,7 +4,13 @@ class CheckRoutesController < ApplicationController
   # GET /check_routes
   # GET /check_routes.json
   def index
-    @check_routes = CheckRoute.all
+    @check_routes = CheckRoute.where(check_route_params)
+    if stale?(etag: @check_routes.to_a,
+              last_modified: @check_routes.maximum(:updated_at))
+      render template: 'check_routes/index', status: :ok
+    else
+      head :not_modified
+    end
   end
 
   # GET /check_routes/1
