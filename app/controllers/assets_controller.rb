@@ -7,8 +7,12 @@ class AssetsController < ApplicationController
     begin
 
       @assets = Asset.where(asset_params)
-
-      render template: 'assets/index', status: :ok
+      if stale?(etag: @assets.to_a,
+                last_modified: @assets.maximum(:updated_at))
+        render template: 'assets/index', status: :ok
+      else
+        head :not_modified
+      end
     rescue Exception => e
       Rails.logger.error("Encountered an error while indexing  #{e}")
       render json: {:message=> e.to_s}.to_json, status: :not_found

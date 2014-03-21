@@ -6,6 +6,12 @@ class CheckPointsController < ApplicationController
   def index
     asset = Asset.find(params[:asset_id])
     @check_points = asset.check_points.where(check_point_params)
+    if stale?(etag: @check_points.to_a,
+              last_modified: @check_points.maximum(:updated_at))
+      render template: 'check_points/index', status: :ok
+    else
+      head :not_modified
+    end
   end
 
   # GET /check_points/1
