@@ -5,13 +5,21 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-asset = Asset.create({tag:'abc', number: 123})
-asset.check_points.create([{site_id: 111},{site_id:222}])
-route = CheckRoute.create!({description:'路线一'})
-route.assets<< asset
+require 'securerandom'
+
+#route 1
+route_descriptions = ['一工区机械8小时点巡检', '二工区机械8小时点巡检','三工区机械8小时点巡检', '四工区机械8小时点巡检' ]
+
+route_descriptions.each do |route_des|
+  route = CheckRoute.create!({description:route_des})
+  asset = Asset.create({tag: SecureRandom.urlsafe_base64(10), number: SecureRandom.random_number(5), serialnum: SecureRandom.urlsafe_base64(10)})
+  asset.check_points.create([{site_id: SecureRandom.random_number(5)},{site_id:SecureRandom.random_number(5)}])
+  route.assets<< asset
 
 
-asset2 = Asset.create({tag:'def', number: 456})
-route.assets<< asset2
-CheckRoute.create!({description:'路线2'})
+  asset = Asset.create({tag: SecureRandom.urlsafe_base64(10), number: SecureRandom.random_number(5), serialnum: SecureRandom.urlsafe_base64(10)})
+  asset.check_points.create([{site_id: SecureRandom.random_number(5)},{site_id:SecureRandom.random_number(5)}])
+  route.assets<< asset
+end
+
 
