@@ -1,0 +1,25 @@
+<h1>Listing check_results</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @check_results.each do |check_result| %>
+      <tr>
+        <td><%= link_to 'Show', check_result %></td>
+        <td><%= link_to 'Edit', edit_check_result_path(check_result) %></td>
+        <td><%= link_to 'Destroy', check_result, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Check result', new_check_result_path %>
