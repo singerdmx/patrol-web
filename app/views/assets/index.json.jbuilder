@@ -17,6 +17,7 @@ json.array! @assets do |asset|
   json.ytd_cost asset.ytd_cost
   json.budget_cost asset.budget_cost
   json.calnum asset.calnum
+  json.barcode asset.barcode
   json.routes asset.check_routes.map {   |route|
       route.id
     }
