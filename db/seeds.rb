@@ -12,12 +12,12 @@ route_descriptions = ['一工区机械8小时点巡检', '二工区机械8小时
 asset_descriptions = ['轧机电机','轧机联轴器','轧机减速机']
 route_descriptions.each do |route_des|
   route = CheckRoute.create!({description:route_des})
-  asset = Asset.create({tag: SecureRandom.urlsafe_base64(10), number: SecureRandom.random_number(5), serialnum: SecureRandom.urlsafe_base64(10), description:asset_descriptions.sample })
+  asset = Asset.create({tag: SecureRandom.urlsafe_base64(10), barcode:SecureRandom.random_number(8), number: SecureRandom.random_number(5), serialnum: SecureRandom.urlsafe_base64(10), description:asset_descriptions.sample })
   asset.check_points.create([{site_id: SecureRandom.random_number(5)},{site_id:SecureRandom.random_number(5)}])
   route.assets<< asset
 
 
-  asset = Asset.create({tag: SecureRandom.urlsafe_base64(10), number: SecureRandom.random_number(5), serialnum: SecureRandom.urlsafe_base64(10), description:asset_descriptions.sample})
+  asset = Asset.create({tag: SecureRandom.urlsafe_base64(10), barcode:SecureRandom.random_number(8), number: SecureRandom.random_number(5), serialnum: SecureRandom.urlsafe_base64(10), description:asset_descriptions.sample})
   asset.check_points.create([{site_id: SecureRandom.random_number(5)},{site_id:SecureRandom.random_number(5)}])
   route.assets<< asset
 end

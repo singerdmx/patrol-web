@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140319213659) do
+ActiveRecord::Schema.define(version: 20140326004403) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,8 +54,10 @@ ActiveRecord::Schema.define(version: 20140319213659) do
     t.integer  "calnum"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "barcode"
   end
 
+  add_index "assets", ["barcode"], name: "index_assets_on_barcode", using: :btree
   add_index "assets", ["number"], name: "index_assets_on_number", using: :btree
 
   create_table "assets_check_routes", force: true do |t|
