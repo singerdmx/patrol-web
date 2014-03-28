@@ -4,7 +4,13 @@ class CheckResultsController < ApplicationController
   # GET /check_results
   # GET /check_results.json
   def index
-    @check_results = CheckResult.all
+    @check_results = CheckResult.where(check_result_params)
+    if stale?(etag: @check_results.to_a,
+              last_modified: @check_results.maximum(:updated_at))
+      render template: 'check_results/index', status: :ok
+    else
+      head :not_modified
+    end
   end
 
   # GET /check_results/1

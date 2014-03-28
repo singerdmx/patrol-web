@@ -4,8 +4,8 @@ class CheckPointsController < ApplicationController
   # GET /check_points
   # GET /check_points.json
   def index
-    asset = Asset.find(params[:asset_id])
-    @check_points = asset.check_points.where(check_point_params)
+
+    @check_points = CheckPoint.where(check_point_params)
     if stale?(etag: @check_points.to_a,
               last_modified: @check_points.maximum(:updated_at))
       render template: 'check_points/index', status: :ok
