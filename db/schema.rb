@@ -65,6 +65,14 @@ ActiveRecord::Schema.define(version: 20140326210059) do
     t.integer "asset_id"
   end
 
+  create_table "check_manager", id: false, force: true do |t|
+    t.integer "check_route_id", null: false
+    t.integer "check_point_id", null: false
+  end
+
+  add_index "check_manager", ["check_point_id"], name: "index_check_manager_on_check_point_id", using: :btree
+  add_index "check_manager", ["check_route_id"], name: "index_check_manager_on_check_route_id", using: :btree
+
   create_table "check_points", force: true do |t|
     t.integer  "cstm_tpmid"
     t.text     "description"
