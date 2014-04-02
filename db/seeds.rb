@@ -35,15 +35,21 @@ asset1.check_points.create([
                   period:       1,
                   period_unit:  'D',
                   status:       "运转",
-                  standard:     "<= 70" },
+                  standard:     <<-CRITERIA
+                                  { "max":  70, "description": "温度测量" }
+                                CRITERIA
+                },
                 { site_id:      site1,
                   description:  "轴承",
                   cstm_tpmid:   SecureRandom.random_number(300),
-                  tpm_type:     "震动",
+                  tpm_type:     "振动",
                   period:       1,
                   period_unit:  'D',
                   status:       "运转",
-                  standard:     "<= 2" } ])
+                  standard:     <<-CRITERIA
+                                  { "max":  2, "description": "振动测量" }
+                                CRITERIA
+                } ])
 
 asset2 = Asset.create({
                           tag: SecureRandom.urlsafe_base64(10),
@@ -60,7 +66,10 @@ asset2.check_points.create([
                  period:       1,
                  period_unit:  'D',
                  status:       "停止",
-                 standard:     "未断裂" } ])
+                 standard:     <<-CRITERIA
+                                  { "choice":  ["正常", "断裂"], "description": "目视" }
+                               CRITERIA
+               } ])
 
 asset3 = Asset.create({
                           tag: SecureRandom.urlsafe_base64(10),
@@ -73,11 +82,14 @@ asset3.check_points.create([
                { site_id:      site3,
                  description:  "输入端轴承",
                  cstm_tpmid:   SecureRandom.random_number(300),
-                 tpm_type:     "震动",
+                 tpm_type:     "振动",
                  period:       1,
                  period_unit:  'D',
                  status:       "运转",
-                 standard:     "<= 2" },
+                 standard:     <<-CRITERIA
+                                  { "max":  2, "description": "振动测量" }
+                               CRITERIA
+               },
                { site_id:      site3,
                  description:  "输入端轴承",
                  cstm_tpmid:   SecureRandom.random_number(300),
@@ -85,7 +97,10 @@ asset3.check_points.create([
                  period:       1,
                  period_unit:  'D',
                  status:       "运转",
-                 standard:     "<= 70" },
+                 standard:     <<-CRITERIA
+                                  { "max":  70, "description": "温度测量" }
+                               CRITERIA
+               },
                { site_id:      site3,
                  description:  "输出端轴承",
                  cstm_tpmid:   SecureRandom.random_number(300),
@@ -93,7 +108,10 @@ asset3.check_points.create([
                  period:       1,
                  period_unit:  'D',
                  status:       "运转",
-                 standard:     "<= 70" },
+                 standard:     <<-CRITERIA
+                                  { "max":  70, "description": "温度测量" }
+                               CRITERIA
+               },
                { site_id:      site3,
                  description:  "箱体",
                  cstm_tpmid:   SecureRandom.random_number(300),
@@ -101,7 +119,10 @@ asset3.check_points.create([
                  period:       1,
                  period_unit:  'D',
                  status:       "运转",
-                 standard:     "运转平稳，无杂音" } ])
+                 standard:     <<-CRITERIA
+                                 { "choice":  ["正常", "非正常"], "description": "运转平稳，无杂音" }
+                               CRITERIA
+               } ])
 
 route1 = CheckRoute.create!({description: "一工区机械8小时点巡检"})
 route1.assets << asset1
