@@ -1,0 +1,27 @@
+<%= form_for(@route_builder) do |f| %>
+  <% if @route_builder.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@route_builder.errors.count, "error") %> prohibited this route_builder from being saved:</h2>
+
+      <ul>
+      <% @route_builder.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+    <p>
+      <%= f.label :check_route_id %><br>
+      <%= f.text_field :check_route_id %>
+    </p>
+
+    <p>
+      <%= f.label :asset_id %><br>
+      <%= f.text_field :asset_id %>
+    </p>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

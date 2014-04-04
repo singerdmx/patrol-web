@@ -1,0 +1,26 @@
+<h1>Listing route_builders</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Route Id</th>
+      <th>Asset Id</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @route_builders.each do |route_builder| %>
+      <tr>
+        <td><%= route_builder.check_route_id %></td>
+        <td><%= route_builder.asset_id %></td>
+        <td><%= link_to 'Show', route_builder %></td>
+        <td><%= link_to 'Edit', edit_route_builder_path(route_builder) %></td>
+        <td><%= link_to 'Destroy', route_builder, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Route builder', new_route_builder_path %>
