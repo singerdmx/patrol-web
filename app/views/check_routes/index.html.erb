@@ -13,7 +13,9 @@
         <td><%= check_route.description %></td>
         <td><%= link_to 'Show', check_route %></td>
         <td><%= link_to 'Edit', edit_check_route_path(check_route) %></td>
-        <td><%= link_to 'Destroy', check_route, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
+        <td><%= link_to 'Destroy', { action: :destroy, id: check_route.id },
+                        method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

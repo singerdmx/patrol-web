@@ -58,10 +58,15 @@ class CheckRoutesController < ApplicationController
   # DELETE /check_routes/1.json
 
   def destroy
-    begin
-      @check_route.destroy
-    rescue Exception => e
-      render json: {:message=> e.to_s}.to_json, status: :internal_server_error
+    respond_to do |format|
+      if @check_route.destroy
+        format.html { redirect_to action: :index }
+        format.json { render :nothing => true, :status => :ok}
+      else
+        #TODO: better message for deletion failure
+        format.html { redirect_to action: :index}
+        format.json { render json: {:message=> e.to_s}.to_json, status: :internal_server_error }
+      end
     end
 
 

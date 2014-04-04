@@ -60,10 +60,16 @@ class CheckPointsController < ApplicationController
   # DELETE /check_points/1
   # DELETE /check_points/1.json
   def destroy
-    begin
-      @check_point.destroy
-    rescue Exception => e
-      render json: {:message=> e.to_s}.to_json, status: :internal_server_error
+
+    respond_to do |format|
+      if @check_point.destroy
+        format.html { redirect_to action: :index }
+        format.json { render :nothing => true, :status => :ok}
+      else
+        #TODO: better message for deletion failure
+        format.html { redirect_to action: :index}
+        format.json { render json: {:message=> e.to_s}.to_json, status: :internal_server_error }
+      end
     end
   end
 

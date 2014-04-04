@@ -19,7 +19,8 @@
         <td><%= check_result.check_route_id %></td>
         <td><%= link_to 'Show', check_result %></td>
         <td><%= link_to 'Edit', edit_check_result_path(check_result) %></td>
-        <td><%= link_to 'Destroy', check_result, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy', { action: :destroy, id: check_result.id },
+                        method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -27,4 +28,4 @@
 
 <br>
 
-<%= link_to 'New Check result', new_check_result_path %>
+
