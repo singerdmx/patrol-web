@@ -3,6 +3,7 @@
 <table border="1">
   <thead>
   <tr>
+    <td>barcode</td>
     <td>number</td>
     <td>parent</td>
     <td>serialnum</td>
@@ -20,7 +21,7 @@
     <td>ytd_cost</td>
     <td>budget_cost</td>
     <td>calnum</td>
-    <td>barcode</td>
+
 
 
 
@@ -31,6 +32,7 @@
 
   <% @assets.each do |asset| %>
       <tr>
+        <td><%= asset.barcode %></td>
         <td><%= asset.number %></td>
         <td><%= asset.parent %></td>
         <td><%= asset.serialnum %></td>
@@ -48,7 +50,7 @@
         <td><%= asset.ytd_cost %></td>
         <td><%= asset.budget_cost %></td>
         <td><%= asset.calnum %></td>
-        <td><%= asset.barcode %></td>
+
 
 
         <td><%= link_to 'Show', asset %></td>
