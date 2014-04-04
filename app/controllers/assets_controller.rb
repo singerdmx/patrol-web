@@ -19,6 +19,13 @@ class AssetsController < ApplicationController
     end
   end
 
+  def edit
+  end
+
+  def new
+    @asset = Asset.new
+  end
+
   # GET /assets/1
   # GET /assets/1.json
   def show
@@ -45,18 +52,23 @@ class AssetsController < ApplicationController
   # PATCH/PUT /assets/1
   # PATCH/PUT /assets/1.json
   def update
-    begin
-      @asset.update(asset_params)
-    rescue Exception => e
-      render json: {:message=> e.to_s}.to_json, status: :internal_server_error
+    respond_to do |format|
+      if @asset.update(asset_params)
+        format.html { redirect_to @asset, notice: 'Asset was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @asset.errors, status: :internal_server_error }
+      end
     end
-  end
+   end
 
   # DELETE /assets/1
   # DELETE /assets/1.json
   def destroy
     begin
       @asset.destroy
+      render template: 'assets/index', status: :ok
     rescue Exception => e
       render json: {:message=> e.to_s}.to_json, status: :internal_server_error
     end
@@ -70,6 +82,7 @@ class AssetsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def asset_params
-      params.select{|key,value| key.in?(Asset.column_names())}
+      request_para = params[:asset].nil? ? params : params[:asset]
+      request_para.select{|key,value| key.in?(Asset.column_names())}.symbolize_keys
     end
 end

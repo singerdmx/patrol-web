@@ -1,4 +1,74 @@
 <p id="notice"><%= notice %></p>
+<p>
+  <strong>barcode:</strong>
+  <%= @asset.barcode %>
+</p>
+<p>
+  <strong>number:</strong>
+  <%= @asset.number %>
+</p>
+
+<p>
+  <strong>parent:</strong>
+  <%= @asset.parent %>
+</p>
+
+<p>
+  <strong>serial num:</strong>
+  <%= @asset.serialnum %>
+</p>
+
+<p>
+  <strong>tag:</strong>
+  <%= @asset.tag %>
+</p>
+
+<p>
+  <strong>location:</strong>
+  <%= @asset.location %>
+</p>
+<p>
+  <strong>failure code:</strong>
+  <%= @asset.failure_code %>
+</p>
+<p>
+  <strong>manufacture:</strong>
+  <%= @asset.manufacture %>
+</p>
+<p>
+  <strong>purchase priority:</strong>
+  <%= @asset.purchase_pri %>
+</p>
+<p>
+  <strong>replace cost:</strong>
+  <%= @asset.replace_cost %>
+</p>
+<p>
+  <strong>install date:</strong>
+  <%= @asset.install_date %>
+</p>
+<p>
+  <strong>warranty expiration date:</strong>
+  <%= @asset.warranty_expire %>
+</p>
+<p>
+  <strong>total cost:</strong>
+  <%= @asset.total_cost %>
+</p>
+<p>
+  <strong>year to date cost:</strong>
+  <%= @asset.ytd_cost %>
+</p>
+<p>
+  <strong>budget cost:</strong>
+  <%= @asset.budget_cost %>
+</p>
+<p>
+  <strong>calnum:</strong>
+  <%= @asset.calnum %>
+</p>
 
 <%= link_to 'Edit', edit_asset_path(@asset) %> |
 <%= link_to 'Back', assets_path %>
+
+

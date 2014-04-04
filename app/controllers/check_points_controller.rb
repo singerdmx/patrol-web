@@ -24,13 +24,17 @@ class CheckPointsController < ApplicationController
     end
   end
 
+  def new
+    @check_point = CheckPoint.new
+  end
 
 
   # POST /check_points
   # POST /check_points.json
   def create
     begin
-      asset = Asset.find(params[:asset_id])
+      logger.info("asset id: #{check_point_params}")
+      asset = Asset.find(check_point_params[:asset_id])
       @check_point = asset.check_points.create!(check_point_params)
       render template: 'check_points/show', status: :created
     rescue Exception => e
@@ -41,11 +45,16 @@ class CheckPointsController < ApplicationController
   # PATCH/PUT /check_points/1
   # PATCH/PUT /check_points/1.json
   def update
-      begin
-        @check_point.update(check_point_params)
-      rescue Exception => e
-        render json: {:message=> e.to_s}.to_json, status: :internal_server_error
+    respond_to do |format|
+      if @check_point.update(check_point_params)
+        format.html { redirect_to @check_point, notice: 'Check Point was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @check_point.errors, status: :internal_server_error }
       end
+    end
+
   end
 
   # DELETE /check_points/1
@@ -66,6 +75,7 @@ class CheckPointsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def check_point_params
-      params.select{|key,value| key.in?(CheckPoint.column_names())}
+      request_para = params[:check_point].nil? ? params : params[:check_point]
+      request_para.select{|key,value| key.in?(CheckPoint.column_names())}.symbolize_keys
     end
 end

@@ -34,18 +34,25 @@ class CheckRoutesController < ApplicationController
     end
   end
 
+  def new
+    @check_route = CheckRoute.new
+  end
+
+
   # PATCH/PUT /check_routes/1
   # PATCH/PUT /check_routes/1.json
   def update
-    begin
-      @check_route.update(check_route_params)
-      #TODO dedup
-      @check_route.assets<< Asset.find(params[:asset_id])  if (!params[:asset_id].nil?)
-      render template: 'check_routes/show', status: :ok
-    rescue Exception => e
-      render json: {:message=> e.to_s}.to_json, status: :internal_server_error
-    end
-  end
+
+      respond_to do |format|
+        if @check_route.update(check_route_params)
+          format.html { redirect_to @check_route, notice: 'Check Route was successfully updated.' }
+          format.json { head :no_content }
+        else
+          format.html { render action: 'edit' }
+          format.json { render json: @check_route.errors, status: :internal_server_error }
+        end
+      end
+   end
 
   # DELETE /check_routes/1
   # DELETE /check_routes/1.json
@@ -68,6 +75,7 @@ class CheckRoutesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def check_route_params
-      params.select{|key,value| key.in?(CheckRoute.column_names())}
+      request_para = params[:check_route].nil? ? params : params[:check_route]
+      request_para.select{|key,value| key.in?(CheckRoute.column_names())}.symbolize_keys
     end
 end

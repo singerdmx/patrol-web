@@ -1,4 +1,24 @@
 <p id="notice"><%= notice %></p>
 
+
+<p>
+  <strong>result:</strong>
+  <%= @check_result.result %>
+</p>
+
+<p>
+  <strong>session:</strong>
+  <%= @check_result.session %>
+</p>
+<p>
+  <strong>check_point_id:</strong>
+  <%= @check_result.check_point_id %>
+</p>
+<p>
+  <strong>check_route_id:</strong>
+  <%= @check_result.check_route_id %>
+</p>
+
+
 <%= link_to 'Edit', edit_check_result_path(@check_result) %> |
 <%= link_to 'Back', check_results_path %>

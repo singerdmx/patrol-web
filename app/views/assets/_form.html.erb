@@ -1,0 +1,116 @@
+<%= form_for @asset do |f| %>
+    <% if @asset.errors.any? %>
+        <div id="errorExplanation">
+          <h2><%= pluralize(@asset.errors.count, "error") %> prohibited
+            this asset from being saved:</h2>
+          <ul>
+            <% @asset.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+    <p>
+      <%= f.label :tag %><br>
+      <%= f.text_field :tag %>
+    </p>
+
+    <p>
+      <%= f.label :barcode %><br>
+      <%= f.text_area :barcode %>
+    </p>
+
+
+    <p>
+      <%= f.label :number %><br>
+      <%= f.text_field :number %>
+    </p>
+
+    <p>
+      <%= f.label :parent %><br>
+      <%= f.text_field :parent %>
+    </p>
+
+
+    <p>
+      <%= f.label :serialnum %><br>
+      <%= f.text_field :serialnum %>
+    </p>
+
+
+    <p>
+      <%= f.label :location %><br>
+      <%= f.text_field :location %>
+    </p>
+
+
+    <p>
+      <%= f.label :description %><br>
+      <%= f.text_field :description %>
+    </p>
+
+
+    <p>
+      <%= f.label :vendor %><br>
+      <%= f.text_field :vendor %>
+    </p>
+
+
+    <p>
+      <%= f.label :failure_code %><br>
+      <%= f.text_field :failure_code %>
+    </p>
+
+    <p>
+      <%= f.label :purchase_pri %><br>
+      <%= f.text_field :purchase_pri %>
+    </p>
+
+    <p>
+      <%= f.label :replace_cost %><br>
+      <%= f.text_field :replace_cost %>
+    </p>
+
+
+
+    <p>
+      <%= f.label :install_date %><br>
+      <%= f.text_field :install_date %>
+    </p>
+
+
+    <p>
+      <%= f.label :warranty_expire %><br>
+      <%= f.text_field :warranty_expire %>
+    </p>
+
+
+    <p>
+      <%= f.label :total_cost %><br>
+      <%= f.text_field :total_cost %>
+    </p>
+
+
+    <p>
+      <%= f.label :ytd_cost %><br>
+      <%= f.text_field :ytd_cost %>
+    </p>
+
+    <p>
+      <%= f.label :budget_cost %><br>
+      <%= f.text_field :budget_cost %>
+    </p>
+
+    <p>
+      <%= f.label :calnum %><br>
+      <%= f.text_field :calnum %>
+    </p>
+
+
+
+    <p>
+      <%= f.submit %>
+    </p>
+<% end %>
+
+

@@ -19,6 +19,7 @@ class CheckResultsController < ApplicationController
   end
 
 
+
   # POST /check_results
   # POST /check_results.json
   def create
@@ -34,12 +35,14 @@ class CheckResultsController < ApplicationController
   # PATCH/PUT /check_results/1
   # PATCH/PUT /check_results/1.json
   def update
-    begin
-      @check_result.update(check_route_params)
-      #TODO : validate incoming ids of route and point
-      render template: 'check_results/show', status: :ok
-    rescue Exception => e
-      render json: {:message=> e.to_s}.to_json, status: :internal_server_error
+    respond_to do |format|
+      if @check_result.update(check_result_params)
+        format.html { redirect_to @check_result, notice: 'Check Result was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @check_result.errors, status: :internal_server_error }
+      end
     end
 
   end
@@ -62,6 +65,7 @@ class CheckResultsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def check_result_params
-      params.select{|key,value| key.in?(CheckResult.column_names())}
+      request_para = params[:check_result].nil? ? params : params[:check_result]
+      request_para.select{|key,value| key.in?(CheckResult.column_names())}.symbolize_keys
     end
 end

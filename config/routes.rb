@@ -1,10 +1,10 @@
 Blog::Application.routes.draw do
 
 
-  resources :assets,   :defaults => { :format => 'json' }
-  resources :check_routes,   :defaults => { :format => 'json' } ,  :as => :routes, :path => :routes,  :defaults => { :format => 'json' }
-  resources :check_points,   :defaults => { :format => 'json' } ,  :as => :points, :path => :points,   :defaults => { :format => 'json' }
-  resources :check_results,   :defaults => { :format => 'json' } ,  :as => :results, :path => :results,   :defaults => { :format => 'json' }
+  resources :assets
+  resources :check_routes, :path => :routes
+  resources :check_points,     :path => :points
+  resources :check_results, :path => :results
 
   devise_for :admins
   devise_for :users
