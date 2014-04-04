@@ -1,17 +1,51 @@
-<h1>Listing check_points</h1>
+<h1>Check Points</h1>
 
-<table>
+<table border="1">
   <thead>
     <tr>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th>cstm_tpmid</th>
+      <th>description</th>
+      <th>hasld</th>
+      <th>period_unit</th>
+      <th>standard</th>
+      <th>status</th>
+      <th>hi_warn</th>
+      <th>period</th>
+      <th>warn_type</th>
+      <th>site_id</th>
+      <th>tpm_num</th>
+      <th>operator</th>
+      <th>lo_warn</th>
+      <th>tpm_type</th>
+      <th>lo_danger</th>
+      <th>looknum</th>
+      <th>lo_warn</th>
+      <th>asset_id</th>
     </tr>
   </thead>
 
   <tbody>
     <% @check_points.each do |check_point| %>
+
       <tr>
+        <td><%= check_point.cstm_tpmid %></td>
+        <td><%= check_point.description %></td>
+        <td><%= check_point.hasld %></td>
+        <td><%= check_point.period_unit %></td>
+        <td><%= check_point.standard %></td>
+        <td><%= check_point.status %></td>
+        <td><%= check_point.hi_warn %></td>
+        <td><%= check_point.period %></td>
+        <td><%= check_point.warn_type %></td>
+        <td><%= check_point.site_id %></td>
+        <td><%= check_point.tpm_num %></td>
+        <td><%= check_point.operator %></td>
+        <td><%= check_point.lo_warn %></td>
+        <td><%= check_point.tpm_type %></td>
+        <td><%= check_point.lo_danger %></td>
+        <td><%= check_point.looknum %></td>
+        <td><%= check_point.lo_warn %></td>
+        <td><%= check_point.asset_id %></td>
         <td><%= link_to 'Show', check_point %></td>
         <td><%= link_to 'Edit', edit_check_point_path(check_point) %></td>
         <td><%= link_to 'Destroy', check_point, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -23,3 +57,22 @@
 <br>
 
 <%= link_to 'New Check point', new_check_point_path %>
+
+
+t.integer  "cstm_tpmid"
+t.text     "description"
+t.integer  "hasld"
+t.string   "period_unit"
+t.string   "standard"
+t.string   "status"
+t.string   "hi_warn"
+t.integer  "period"
+t.string   "warn_type"
+t.string   "site_id"
+t.string   "tpm_num"
+t.string   "operator"
+t.string   "lo_warn"
+t.string   "tpm_type"
+t.string   "lo_danger"
+t.integer  "looknum"
+t.integer  "asset_id"

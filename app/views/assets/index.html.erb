@@ -1,15 +1,7 @@
-<h1>Listing assets</h1>
+<h1>Assets</h1>
 
-<table>
+<table border="1">
   <thead>
-  <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-  </thead>
-
-  <tbody>
   <tr>
     <td>number</td>
     <td>parent</td>
@@ -28,11 +20,15 @@
     <td>ytd_cost</td>
     <td>budget_cost</td>
     <td>calnum</td>
-    <td>.barcode</td>
+    <td>barcode</td>
 
 
 
   </tr>
+  </thead>
+
+  <tbody>
+
   <% @assets.each do |asset| %>
       <tr>
         <td><%= asset.number %></td>
