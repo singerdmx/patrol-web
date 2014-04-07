@@ -3,10 +3,11 @@
 <table border="1">
   <thead>
     <tr>
-      <th>check_route_id</th>
+      <th>check_session_id</th>
       <th>check_point_id</th>
-      <th>session</th>
       <th>result</th>
+      <th>value</th>
+      <th>check time</th>
 
 
 
@@ -16,12 +17,11 @@
   <tbody>
     <% @check_results.each do |check_result| %>
       <tr>
-        <td><%= check_result.check_route_id %></td>
+        <td><%= check_result.check_session_id %></td>
         <td><%= check_result.check_point_id %></td>
-        <td><%= check_result.session %></td>
         <td><%= check_result.result %></td>
-
-
+        <td><%= check_result.value %></td>
+        <td><%= check_result.check_time %></td>
 
         <td><%= link_to 'Show', check_result %></td>
         <td><%= link_to 'Edit', edit_check_result_path(check_result) %></td>

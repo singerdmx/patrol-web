@@ -136,10 +136,23 @@ route3 = CheckRoute.create!({description: "三工区机械8小时点巡检"})
 route3.assets << asset2
 route3.assets << asset3
 
-CheckResult.create({result: 'pass', check_route_id:1,  check_point_id: 2, session: 34})
-CheckResult.create({result: 'fail', check_route_id:1,  check_point_id: 3, session: 34})
-CheckResult.create({result: 'pass', check_route_id:2,  check_point_id: 1, session: 444})
-CheckResult.create({result: 'fail', check_route_id:2,  check_point_id: 2, session: 444})
+session1 = CheckSession.create!({check_route_id: 1, start_time: '2014-04-01 15:53:29 -0700', end_time: '2014-04-02 15:53:29 -0700', user:'joel', session: '34324ar'})
+session2 = CheckSession.create!({check_route_id: 2, start_time: '2014-03-01 15:53:29 -0700', end_time: '2014-03-02 15:53:29 -0700', user:'ben', session: 'erewr43'})
+session3 = CheckSession.create!({check_route_id: 3, start_time: '2013-04-01 15:53:29 -0700', end_time: '2013-04-02 15:53:29 -0700', user:'alex', session: '2243dg'})
+
+route1.check_sessions << session1
+route1.check_sessions << session2
+route1.check_sessions << session3
+
+route2.check_sessions << session1
+route2.check_sessions << session2
+
+route3.check_sessions << session3
+
+CheckResult.create({result: 'pass', check_session_id:1,  check_point_id: 2,  value: 'sdd', check_time: '2014-04-02 15:53:29 -0700'})
+CheckResult.create({result: 'fail', check_session_id:1,  check_point_id: 3,  value: 'sdfdsf', check_time: '2011-04-02 15:53:29 -0700'})
+CheckResult.create({result: 'pass', check_session_id:2,  check_point_id: 1,  value: 'trtt', check_time: '2010-04-02 15:53:29 -0700'})
+CheckResult.create({result: 'fail', check_session_id:2,  check_point_id: 2,  value: 'gbfgg', check_time: '2019-04-02 15:53:29 -0700'})
 
 
 

@@ -1,1 +1,1 @@
-json.extract! @check_result, :id, :created_at, :updated_at , :check_route_id, :check_point_id , :session
+json.extract! @check_result, :id,  :check_session_id, :check_point_id , :check_time, :result, :value

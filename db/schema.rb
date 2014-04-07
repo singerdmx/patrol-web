@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140404220559) do
+ActiveRecord::Schema.define(version: 20140407223059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,9 +86,10 @@ ActiveRecord::Schema.define(version: 20140404220559) do
 
   create_table "check_results", force: true do |t|
     t.string   "result"
-    t.integer  "session"
+    t.integer  "value"
+    t.datetime "check_time"
     t.integer  "check_point_id"
-    t.integer  "check_route_id"
+    t.integer  "check_session_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -98,6 +99,18 @@ ActiveRecord::Schema.define(version: 20140404220559) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "check_sessions", force: true do |t|
+    t.string   "user"
+    t.string   "session"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.integer  "check_route_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "check_sessions", ["check_route_id"], name: "index_check_sessions_on_check_route_id", using: :btree
 
   create_table "route_builders", force: true do |t|
     t.integer  "check_route_id"

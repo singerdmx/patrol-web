@@ -25,8 +25,29 @@ class CheckResultsController < ApplicationController
   def create
     begin
       #TODO : validate incoming ids of route and point
-      @check_result = CheckResult.create!(check_result_params)
-      render template: 'check_results/show', status: :created
+      if params[:assets].nil?
+        @check_result = CheckResult.create!(check_result_params)
+        render template: 'check_results/show', status: :created
+      else
+        #batch upload from client with time in number of seconds since epoch time
+        route = CheckRoute.find(params[:check_route_id])
+        session = route.sessions.create!({user: params[:user],
+                                          start_time: Time.at(params[:start_time]).to_datetime,
+                                          end_time: Time.at(params[:end_time]).to_datetime,
+                                          session: params[:session]})
+        params[:assets].each { |asset|
+          asset.each{|point|
+            CheckResult.create!({check_session_id: session.id,
+                                 check_point_id: point.id,
+                                 check_time: Time.at(point.check_time).to_datetime,
+                                 result: point.result,
+                                 value: point.value})
+          }
+        }
+        render :nothing => true, :status => :created
+      end
+
+
     rescue Exception => e
       render json: {:message=> e.to_s}.to_json, status: :internal_server_error
     end
