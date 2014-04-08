@@ -36,12 +36,12 @@ class CheckResultsController < ApplicationController
                                           end_time: Time.at(params[:end_time]).to_datetime,
                                           session: params[:session]})
         params[:assets].each { |asset|
-          asset.points.each{|point|
+          asset['points'].each{|point|
             CheckResult.create!({check_session_id: session.id,
-                                 check_point_id: point.id,
-                                 check_time: Time.at(point.check_time).to_datetime,
-                                 result: point.result,
-                                 value: point.value})
+                                 check_point_id: point['id'],
+                                 check_time: Time.at(point['check_time']).to_datetime,
+                                 result: point['result'],
+                                 value: point['value']})
           }
         }
         render :nothing => true, :status => :created
