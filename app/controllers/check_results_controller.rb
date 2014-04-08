@@ -31,7 +31,7 @@ class CheckResultsController < ApplicationController
       else
         #batch upload from client with time in number of seconds since epoch time
         route = CheckRoute.find(params[:check_route_id])
-        session = route.sessions.create!({user: params[:user],
+        session = route.check_sessions.create!({user: params[:user],
                                           start_time: Time.at(params[:start_time]).to_datetime,
                                           end_time: Time.at(params[:end_time]).to_datetime,
                                           session: params[:session]})
