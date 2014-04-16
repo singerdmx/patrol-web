@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140407223059) do
+ActiveRecord::Schema.define(version: 20140415060226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,6 +80,8 @@ ActiveRecord::Schema.define(version: 20140407223059) do
     t.integer  "asset_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "type"
+    t.string   "barcode"
   end
 
   add_index "check_points", ["cstm_tpmid"], name: "index_check_points_on_cstm_tpmid", using: :btree
@@ -114,7 +116,7 @@ ActiveRecord::Schema.define(version: 20140407223059) do
 
   create_table "route_builders", force: true do |t|
     t.integer  "check_route_id"
-    t.integer  "asset_id"
+    t.integer  "check_point_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

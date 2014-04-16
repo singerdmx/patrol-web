@@ -4,9 +4,26 @@ class CheckRoutesController < ApplicationController
   # GET /check_routes
   # GET /check_routes.json
   def index
+
     @check_routes = CheckRoute.where(check_route_params)
+    if params[:group_by_asset] == 'true'
+      @route_assets = Hash.new
+      @check_routes.each do |route|
+        assets = Hash.new
+        route.check_points.each do |point|
+
+           if assets[point.asset.id].nil?
+             assets[point.asset.id] = Set.new
+           end
+           assets[point.asset.id].add(point.id)
+        end
+        @route_assets[route.id] = assets
+      end
+    else
+      @route_assets = nil
+    end
     if stale?(etag: @check_routes.to_a,
-              last_modified: @check_routes.maximum(:updated_at))
+            last_modified: @check_routes.maximum(:updated_at))
       render template: 'check_routes/index', status: :ok
     else
       head :not_modified

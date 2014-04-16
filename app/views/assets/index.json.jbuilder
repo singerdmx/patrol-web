@@ -18,9 +18,7 @@ json.array! @assets do |asset|
   json.budget_cost asset.budget_cost
   json.calnum asset.calnum
   json.barcode asset.barcode
-  json.routes asset.check_routes.map {   |route|
-      route.id
-    }
+
   json.points asset.check_points.map {   |point|
       point.id
     }

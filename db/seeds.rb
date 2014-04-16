@@ -125,16 +125,16 @@ asset3.check_points.create([
                } ])
 
 route1 = CheckRoute.create!({description: "一工区机械8小时点巡检"})
-route1.assets << asset1
-route1.assets << asset2
-route1.assets << asset3
+route1.check_points << asset1.check_points.first
+route1.check_points << asset2.check_points.first
+route1.check_points << asset3.check_points.first
 
 route2 = CheckRoute.create!({description: "二工区机械8小时点巡检"})
-route2.assets << asset1
-
+route2.check_points << asset1.check_points.last
 route3 = CheckRoute.create!({description: "三工区机械8小时点巡检"})
-route3.assets << asset2
-route3.assets << asset3
+route3.check_points << asset2.check_points.last
+route3.check_points << asset3.check_points.first
+route3.check_points << asset3.check_points.last
 
 session1 = CheckSession.create!({check_route_id: 1, start_time: '2014-04-01 15:53:29 -0700', end_time: '2014-04-02 15:53:29 -0700', user:'joel', session: '34324ar'})
 session2 = CheckSession.create!({check_route_id: 2, start_time: '2014-03-01 15:53:29 -0700', end_time: '2014-03-02 15:53:29 -0700', user:'ben', session: 'erewr43'})
