@@ -3,6 +3,7 @@
 <table border="1">
   <thead>
     <tr>
+      <th>barcode</th>
       <th>asset_id</th>
       <th>cstm_tpmid</th>
       <th>description</th>
@@ -29,6 +30,7 @@
     <% @check_points.each do |check_point| %>
 
       <tr>
+        <td><%= check_point.barcode %></td>
         <td><%= check_point.asset_id %></td>
         <td><%= check_point.cstm_tpmid %></td>
         <td><%= check_point.description %></td>
