@@ -22,7 +22,7 @@ CheckResult.delete_all
 #create routes based on 17-1.pdf page 9
 asset1 = Asset.create({
                 tag: SecureRandom.urlsafe_base64(10),
-                barcode: "1021",
+                barcode: "780672318863",
                 number: SecureRandom.random_number(5),
                 serialnum: SecureRandom.urlsafe_base64(10),
                 description: "轧机电机" })
@@ -53,13 +53,13 @@ asset1.check_points.create([
 
 asset2 = Asset.create({
                           tag: SecureRandom.urlsafe_base64(10),
-                          barcode: "2022",
                           number: SecureRandom.random_number(5),
                           serialnum: SecureRandom.urlsafe_base64(10),
                           description: "轧机联轴器" })
 site2 = SecureRandom.random_number(500)
 asset2.check_points.create([
                { site_id:      site2,
+                 barcode:      "780672318812",
                  description:  "安全销",
                  cstm_tpmid:   SecureRandom.random_number(300),
                  tpm_type:     "断裂",
@@ -73,7 +73,7 @@ asset2.check_points.create([
 
 asset3 = Asset.create({
                           tag: SecureRandom.urlsafe_base64(10),
-                          barcode: "3023",
+                          barcode: "780672318890",
                           number: SecureRandom.random_number(5),
                           serialnum: SecureRandom.urlsafe_base64(10),
                           description: "轧机减速机" })
@@ -102,6 +102,7 @@ asset3.check_points.create([
                                CRITERIA
                },
                { site_id:      site3,
+                 barcode:      "999972318873",
                  description:  "输出端轴承",
                  cstm_tpmid:   SecureRandom.random_number(300),
                  tpm_type:     "温度",
@@ -113,6 +114,7 @@ asset3.check_points.create([
                                CRITERIA
                },
                { site_id:      site3,
+                 barcode:      "999972318812",
                  description:  "箱体",
                  cstm_tpmid:   SecureRandom.random_number(300),
                  tpm_type:     "声音",
@@ -131,6 +133,7 @@ route1.check_points << asset3.check_points.first
 
 route2 = CheckRoute.create!({description: "二工区机械8小时点巡检"})
 route2.check_points << asset1.check_points.last
+
 route3 = CheckRoute.create!({description: "三工区机械8小时点巡检"})
 route3.check_points << asset2.check_points.last
 route3.check_points << asset3.check_points.first
