@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140415060226) do
+ActiveRecord::Schema.define(version: 20140407223059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,30 +61,16 @@ ActiveRecord::Schema.define(version: 20140415060226) do
   add_index "assets", ["number"], name: "index_assets_on_number", using: :btree
 
   create_table "check_points", force: true do |t|
-    t.integer  "cstm_tpmid"
     t.text     "description"
-    t.integer  "hasld"
-    t.string   "period_unit"
-    t.string   "standard"
+    t.integer  "name"
+    t.string   "type"
+    t.string   "choice"
     t.string   "status"
-    t.string   "hi_warn"
-    t.integer  "period"
-    t.string   "warn_type"
-    t.string   "site_id"
-    t.string   "tpm_num"
-    t.string   "operator"
-    t.string   "lo_warn"
-    t.string   "tpm_type"
-    t.string   "lo_danger"
-    t.integer  "looknum"
+    t.string   "barcode"
     t.integer  "asset_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "type"
-    t.string   "barcode"
   end
-
-  add_index "check_points", ["cstm_tpmid"], name: "index_check_points_on_cstm_tpmid", using: :btree
 
   create_table "check_results", force: true do |t|
     t.string   "result"

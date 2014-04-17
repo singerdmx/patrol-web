@@ -28,27 +28,15 @@ asset1 = Asset.create({
                 description: "轧机电机" })
 site1 = SecureRandom.random_number(500)
 asset1.check_points.create([
-                { site_id:      site1,
-                  description:  "轴承",
-                  cstm_tpmid:   SecureRandom.random_number(300),
-                  tpm_type:     "温度",
-                  period:       1,
-                  period_unit:  'D',
+                { description:  "轴承",
                   status:       "运转",
-                  standard:     <<-CRITERIA
-                                  { "max":  70, "description": "温度测量" }
-                                CRITERIA
+                  barcode:      "232543534543534",
                 },
-                { site_id:      site1,
+                {
                   description:  "轴承",
-                  cstm_tpmid:   SecureRandom.random_number(300),
-                  tpm_type:     "振动",
-                  period:       1,
-                  period_unit:  'D',
                   status:       "运转",
-                  standard:     <<-CRITERIA
-                                  { "max":  2, "description": "振动测量" }
-                                CRITERIA
+                  barcode:      "4563456456",
+
                 } ])
 
 asset2 = Asset.create({
@@ -58,17 +46,10 @@ asset2 = Asset.create({
                           description: "轧机联轴器" })
 site2 = SecureRandom.random_number(500)
 asset2.check_points.create([
-               { site_id:      site2,
-                 barcode:      "780672318812",
+               { barcode:      "780672318812",
                  description:  "安全销",
-                 cstm_tpmid:   SecureRandom.random_number(300),
-                 tpm_type:     "断裂",
-                 period:       1,
-                 period_unit:  'D',
-                 status:       "停止",
-                 standard:     <<-CRITERIA
-                                  { "choice":  ["正常", "断裂"], "description": "目视" }
-                               CRITERIA
+                 status:       "停止"
+
                } ])
 
 asset3 = Asset.create({
@@ -79,51 +60,22 @@ asset3 = Asset.create({
                           description: "轧机减速机" })
 site3 = SecureRandom.random_number(500)
 asset3.check_points.create([
-               { site_id:      site3,
-                 description:  "输入端轴承",
-                 cstm_tpmid:   SecureRandom.random_number(300),
-                 tpm_type:     "振动",
-                 period:       1,
-                 period_unit:  'D',
-                 status:       "运转",
-                 standard:     <<-CRITERIA
-                                  { "max":  2, "description": "振动测量" }
-                               CRITERIA
+               { description:  "输入端轴承",
+                 status:       "运转"
                },
-               { site_id:      site3,
-                 description:  "输入端轴承",
-                 cstm_tpmid:   SecureRandom.random_number(300),
-                 tpm_type:     "温度",
-                 period:       1,
-                 period_unit:  'D',
-                 status:       "运转",
-                 standard:     <<-CRITERIA
-                                  { "max":  70, "description": "温度测量" }
-                               CRITERIA
+               { description:  "输入端轴承",
+                 status:       "运转"
                },
-               { site_id:      site3,
+               {
                  barcode:      "999972318873",
                  description:  "输出端轴承",
-                 cstm_tpmid:   SecureRandom.random_number(300),
-                 tpm_type:     "温度",
-                 period:       1,
-                 period_unit:  'D',
-                 status:       "运转",
-                 standard:     <<-CRITERIA
-                                  { "max":  70, "description": "温度测量" }
-                               CRITERIA
+                 status:       "运转"
                },
-               { site_id:      site3,
+               {
                  barcode:      "999972318812",
                  description:  "箱体",
-                 cstm_tpmid:   SecureRandom.random_number(300),
-                 tpm_type:     "声音",
-                 period:       1,
-                 period_unit:  'D',
-                 status:       "运转",
-                 standard:     <<-CRITERIA
-                                 { "choice":  ["正常", "非正常"], "description": "运转平稳，无杂音" }
-                               CRITERIA
+                 status:       "运转"
+
                } ])
 
 route1 = CheckRoute.create!({description: "一工区机械8小时点巡检"})
