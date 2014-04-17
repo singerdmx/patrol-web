@@ -2,7 +2,7 @@ json.array! @check_points do |point|
   json.id point.id
   json.description point.description
   json.name point.name
-  json.status point.status
+  json.state point.state
   json.choice point.choice
   json.type point.type
   json.barcode point.barcode

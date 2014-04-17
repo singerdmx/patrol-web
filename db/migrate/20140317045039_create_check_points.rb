@@ -5,7 +5,7 @@ class CreateCheckPoints < ActiveRecord::Migration
       t.integer :name
       t.string :type
       t.string :choice
-      t.string :status
+      t.string :state
       t.string :barcode
       t.references :asset
 

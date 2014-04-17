@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 20140407223059) do
     t.integer  "name"
     t.string   "type"
     t.string   "choice"
-    t.string   "status"
+    t.string   "state"
     t.string   "barcode"
     t.integer  "asset_id"
     t.datetime "created_at"

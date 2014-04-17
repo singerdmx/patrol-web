@@ -29,12 +29,12 @@ asset1 = Asset.create({
 site1 = SecureRandom.random_number(500)
 asset1.check_points.create([
                 { description:  "轴承",
-                  status:       "运转",
+                  state:       "运转",
                   barcode:      "232543534543534",
                 },
                 {
                   description:  "轴承",
-                  status:       "运转",
+                  state:       "运转",
                   barcode:      "4563456456",
 
                 } ])
@@ -48,7 +48,7 @@ site2 = SecureRandom.random_number(500)
 asset2.check_points.create([
                { barcode:      "780672318812",
                  description:  "安全销",
-                 status:       "停止"
+                 state:       "停止"
 
                } ])
 
@@ -61,20 +61,20 @@ asset3 = Asset.create({
 site3 = SecureRandom.random_number(500)
 asset3.check_points.create([
                { description:  "输入端轴承",
-                 status:       "运转"
+                 state:       "运转"
                },
                { description:  "输入端轴承",
-                 status:       "运转"
+                 state:       "运转"
                },
                {
                  barcode:      "999972318873",
                  description:  "输出端轴承",
-                 status:       "运转"
+                 state:       "运转"
                },
                {
                  barcode:      "999972318812",
                  description:  "箱体",
-                 status:       "运转"
+                 state:       "运转"
 
                } ])
 
