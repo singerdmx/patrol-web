@@ -28,28 +28,36 @@ asset1 = Asset.create({
                 description: "轧机电机" })
 site1 = SecureRandom.random_number(500)
 asset1.check_points.create([
-                { description:  "轴承",
-                  state:       "运转",
-                  barcode:      "232543534543534",
+                {
+                  name:         "轴承",
+                  description:  "温度测量",
+                  state:        "运转",
+                  type:         50,
+                  choice:       ["", "", "", "70"],
                 },
                 {
-                  description:  "轴承",
-                  state:       "运转",
-                  barcode:      "4563456456",
-
+                  name:         "轴承",
+                  description:  "振动测量",
+                  state:        "运转",
+                  type:         50,
+                  choice:       ["", "", "", "4"],
                 } ])
 
 asset2 = Asset.create({
                           tag: SecureRandom.urlsafe_base64(10),
                           number: SecureRandom.random_number(5),
                           serialnum: SecureRandom.urlsafe_base64(10),
+                          barcode:     "780672318812",
                           description: "轧机联轴器" })
 site2 = SecureRandom.random_number(500)
 asset2.check_points.create([
-               { barcode:      "780672318812",
-                 description:  "安全销",
-                 state:       "停止"
-
+               {
+                 name:         "轧机联轴器",
+                 description:  "检查安全销",
+                 barcode:      "780672318812",
+                 state:        "停止",
+                 type:         41,
+                 choice:       ["正常", "非正常"],
                } ])
 
 asset3 = Asset.create({
@@ -60,22 +68,33 @@ asset3 = Asset.create({
                           description: "轧机减速机" })
 site3 = SecureRandom.random_number(500)
 asset3.check_points.create([
-               { description:  "输入端轴承",
-                 state:       "运转"
+               { name:         "输入端轴承",
+                 description:  "温度测量",
+                 state:        "运转",
+                 type:         50,
+                 choice:       ["", "", "", "70"],
                },
-               { description:  "输入端轴承",
-                 state:       "运转"
+               { name:         "输入端轴承",
+                 description:  "振动测量",
+                 state:        "运转",
+                 type:         50,
+                 choice:       ["", "", "", "4"],
                },
                {
                  barcode:      "999972318873",
-                 description:  "输出端轴承",
-                 state:       "运转"
+                 name:         "输出端轴承",
+                 description:  "温度测量",
+                 state:        "运转",
+                 type:         50,
+                 choice:       ["", "", "", "70"],
                },
                {
                  barcode:      "999972318812",
-                 description:  "箱体",
-                 state:       "运转"
-
+                 name:         "箱体",
+                 description:  "噪音检测",
+                 state:        "运转",
+                 type:         41,
+                 choice:       ["安静", "异常"],
                } ])
 
 route1 = CheckRoute.create!({description: "一工区机械8小时点巡检"})
