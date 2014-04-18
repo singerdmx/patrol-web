@@ -4,7 +4,7 @@ json.array! @check_points do |point|
   json.name point.name
   json.state point.state
   json.choice point.choice
-  json.type point.type
+  json.category point.category
   json.barcode point.barcode
 
   json.routes point.check_routes.map {   |route|

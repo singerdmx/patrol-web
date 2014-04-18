@@ -32,15 +32,15 @@ asset1.check_points.create([
                   name:         "轴承",
                   description:  "温度测量",
                   state:        "运转",
-                  type:         50,
-                  choice:       ["", "", "", "70"],
+                  category:         50,
+                  choice:       '["", "", "", "70"]',
                 },
                 {
                   name:         "轴承",
                   description:  "振动测量",
                   state:        "运转",
-                  type:         50,
-                  choice:       ["", "", "", "4"],
+                  category:         50,
+                  choice:       '["", "", "", "4"]',
                 } ])
 
 asset2 = Asset.create({
@@ -56,8 +56,8 @@ asset2.check_points.create([
                  description:  "检查安全销",
                  barcode:      "780672318812",
                  state:        "停止",
-                 type:         41,
-                 choice:       ["正常", "非正常"],
+                 category:         41,
+                 choice:       '["正常", "非正常"]',
                } ])
 
 asset3 = Asset.create({
@@ -71,30 +71,30 @@ asset3.check_points.create([
                { name:         "输入端轴承",
                  description:  "温度测量",
                  state:        "运转",
-                 type:         50,
-                 choice:       ["", "", "", "70"],
+                 category:         50,
+                 choice:       '["", "", "", "70"]',
                },
                { name:         "输入端轴承",
                  description:  "振动测量",
                  state:        "运转",
-                 type:         50,
-                 choice:       ["", "", "", "4"],
+                 category:         50,
+                 choice:       '["", "", "", "4"]',
                },
                {
                  barcode:      "999972318873",
                  name:         "输出端轴承",
                  description:  "温度测量",
                  state:        "运转",
-                 type:         50,
-                 choice:       ["", "", "", "70"],
+                 category:         50,
+                 choice:       '["", "", "", "70"]',
                },
                {
                  barcode:      "999972318812",
                  name:         "箱体",
                  description:  "噪音检测",
                  state:        "运转",
-                 type:         41,
-                 choice:       ["安静", "异常"],
+                 category:         41,
+                 choice:       '["安静", "异常"]',
                } ])
 
 route1 = CheckRoute.create!({description: "一工区机械8小时点巡检"})

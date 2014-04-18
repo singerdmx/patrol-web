@@ -3,7 +3,7 @@ class CreateCheckPoints < ActiveRecord::Migration
     create_table :check_points do |t|
       t.text :description
       t.string :name
-      t.string :type
+      t.integer :category
       t.string :choice
       t.string :state
       t.string :barcode
