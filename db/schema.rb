@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 20140407223059) do
 
   create_table "check_points", force: true do |t|
     t.text     "description"
-    t.integer  "name"
+    t.string   "name"
     t.string   "type"
     t.string   "choice"
     t.string   "state"
