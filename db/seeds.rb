@@ -97,6 +97,205 @@ asset3.check_points.create([
                  choice:       '["安静", "异常"]',
                } ])
 
+asset10 = Asset.create({
+                           tag: SecureRandom.urlsafe_base64(10),
+                           number: SecureRandom.random_number(5),
+                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode:     "1006723188100",
+                           description: "T40桶体" })
+asset10.check_points.create([
+                                {
+                                    name:         "T40桶体",
+                                    description:  "巡更",
+                                    barcode:      "1006723188100",
+                                    state:        "运转",
+                                    category:         10,
+                                    choice:       '',
+                                } ])
+asset11 = Asset.create({
+                           tag: SecureRandom.urlsafe_base64(10),
+                           number: SecureRandom.random_number(5),
+                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode:     "1006723188101",
+                           description: "T40桶体" })
+asset11.check_points.create([
+                                {
+                                    name:         "T40桶体",
+                                    description:  "巡更",
+                                    barcode:      "1006723188101",
+                                    state:        "运转",
+                                    category:         10,
+                                    choice:       '',
+                                } ])
+asset12 = Asset.create({
+                           tag: SecureRandom.urlsafe_base64(10),
+                           number: SecureRandom.random_number(5),
+                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode:     "1006723188102",
+                           description: "T40桶体" })
+asset12.check_points.create([
+                                {
+                                    name:         "T40桶体",
+                                    description:  "巡更",
+                                    barcode:      "1006723188102",
+                                    state:        "运转",
+                                    category:         10,
+                                    choice:       '',
+                                } ])
+asset13 = Asset.create({
+                           tag: SecureRandom.urlsafe_base64(10),
+                           number: SecureRandom.random_number(5),
+                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode:     "1006723188103",
+                           description: "T40桶体" })
+asset13.check_points.create([
+                                {
+                                    name:         "T40桶体",
+                                    description:  "巡更",
+                                    barcode:      "1006723188103",
+                                    state:        "运转",
+                                    category:         10,
+                                    choice:       '',
+                                } ])
+asset14 = Asset.create({
+                           tag: SecureRandom.urlsafe_base64(10),
+                           number: SecureRandom.random_number(5),
+                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode:     "1006723188104",
+                           description: "T40桶体" })
+asset14.check_points.create([
+                                {
+                                    name:         "T40桶体",
+                                    description:  "巡更",
+                                    barcode:      "1006723188104",
+                                    state:        "运转",
+                                    category:         10,
+                                    choice:       '',
+                                } ])
+asset15 = Asset.create({
+                           tag: SecureRandom.urlsafe_base64(10),
+                           number: SecureRandom.random_number(5),
+                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode:     "1006723188105",
+                           description: "T40桶体" })
+asset15.check_points.create([
+                                {
+                                    name:         "T40桶体",
+                                    description:  "巡更",
+                                    barcode:      "1006723188105",
+                                    state:        "运转",
+                                    category:         10,
+                                    choice:       '',
+                                } ])
+
+asset20 = Asset.create({
+                           tag: SecureRandom.urlsafe_base64(10),
+                           number: SecureRandom.random_number(5),
+                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode:     "2006723188100",
+                           description: "齿轮箱" })
+asset20.check_points.create([
+                                {
+                                    name:         "齿轮箱",
+                                    description:  "润滑",
+                                    barcode:      "2006723188100",
+                                    state:        "运转",
+                                    category:         20,
+                                    choice:       '',
+                                } ])
+asset21 = Asset.create({
+                           tag: SecureRandom.urlsafe_base64(10),
+                           number: SecureRandom.random_number(5),
+                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode:     "2006723188101",
+                           description: "齿轮箱" })
+asset21.check_points.create([
+                                {
+                                    name:         "齿轮箱",
+                                    description:  "润滑",
+                                    barcode:      "2006723188101",
+                                    state:        "运转",
+                                    category:         20,
+                                    choice:       '',
+                                } ])
+asset22 = Asset.create({
+                           tag: SecureRandom.urlsafe_base64(10),
+                           number: SecureRandom.random_number(5),
+                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode:     "2006723188102",
+                           description: "齿轮箱" })
+asset22.check_points.create([
+                                {
+                                    name:         "齿轮箱",
+                                    description:  "润滑",
+                                    barcode:      "2006723188102",
+                                    state:        "运转",
+                                    category:         20,
+                                    choice:       '',
+                                } ])
+
+asset40 = Asset.create({
+                           tag: SecureRandom.urlsafe_base64(10),
+                           number: SecureRandom.random_number(5),
+                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode:     "4006723188100",
+                           description: "均质机1" })
+asset40.check_points.create([
+                                {
+                                    name:         "均质机1",
+                                    description:  "状态",
+                                    barcode:      "4006723188100",
+                                    state:        "运转",
+                                    category:         40,
+                                    choice:       '"清洗", "除尘"',
+                                } ])
+asset41 = Asset.create({
+                           tag: SecureRandom.urlsafe_base64(10),
+                           number: SecureRandom.random_number(5),
+                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode:     "4006723188101",
+                           description: "均质机1" })
+asset41.check_points.create([
+                                {
+                                    name:         "均质机1",
+                                    description:  "状态",
+                                    barcode:      "4006723188101",
+                                    state:        "运转",
+                                    category:         40,
+                                    choice:       '"清洗", "除尘"',
+                                } ])
+
+asset30 = Asset.create({
+                           tag: SecureRandom.urlsafe_base64(10),
+                           number: SecureRandom.random_number(5),
+                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode:     "3006723188100",
+                           description: "电表1" })
+asset30.check_points.create([
+                                {
+                                    name:         "电表1",
+                                    description:  "抄表",
+                                    barcode:      "3006723188100",
+                                    state:        "运转",
+                                    category:         30,
+                                    choice:       '',
+                                } ])
+asset31 = Asset.create({
+                           tag: SecureRandom.urlsafe_base64(10),
+                           number: SecureRandom.random_number(5),
+                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode:     "3006723188101",
+                           description: "电表2" })
+asset31.check_points.create([
+                                {
+                                    name:         "电表2",
+                                    description:  "抄表",
+                                    barcode:      "3006723188101",
+                                    state:        "运转",
+                                    category:         30,
+                                    choice:       '',
+                                } ])
+
 route1 = CheckRoute.create!({description: "一工区机械8小时点巡检"})
 route1.check_points << asset1.check_points.first
 route1.check_points << asset2.check_points.first
@@ -109,6 +308,27 @@ route3 = CheckRoute.create!({description: "三工区机械8小时点巡检"})
 route3.check_points << asset2.check_points.last
 route3.check_points << asset3.check_points.first
 route3.check_points << asset3.check_points.last
+
+route4 = CheckRoute.create!({description: "调配前处理区生产前点巡检"})
+route4.check_points << asset10.check_points.first
+route4.check_points << asset11.check_points.first
+route4.check_points << asset12.check_points.first
+route4.check_points << asset13.check_points.first
+route4.check_points << asset14.check_points.first
+route4.check_points << asset15.check_points.first
+
+route5 = CheckRoute.create!({description: "调配前处理区润滑巡检"})
+route5.check_points << asset20.check_points.first
+route5.check_points << asset21.check_points.first
+route5.check_points << asset22.check_points.first
+
+route6 = CheckRoute.create!({description: "调配前处理区清洗巡检"})
+route6.check_points << asset40.check_points.first
+route6.check_points << asset41.check_points.first
+
+route7 = CheckRoute.create!({description: "调配前处理区抄表巡检"})
+route7.check_points << asset30.check_points.first
+route7.check_points << asset31.check_points.first
 
 session1 = CheckSession.create!({check_route_id: 1, start_time: '2014-04-01 15:53:29 -0700', end_time: '2014-04-02 15:53:29 -0700', user:'joel', session: '34324ar'})
 session2 = CheckSession.create!({check_route_id: 2, start_time: '2014-03-01 15:53:29 -0700', end_time: '2014-03-02 15:53:29 -0700', user:'ben', session: 'erewr43'})
