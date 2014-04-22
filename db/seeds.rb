@@ -110,7 +110,7 @@ asset10.check_points.create([
                                     barcode:      "1006723188100",
                                     state:        "运转",
                                     category:         10,
-                                    choice:       '',
+                                    choice:       '[]',
                                 } ])
 asset11 = Asset.create({
                            tag: SecureRandom.urlsafe_base64(10),
@@ -125,7 +125,7 @@ asset11.check_points.create([
                                     barcode:      "1006723188101",
                                     state:        "运转",
                                     category:         10,
-                                    choice:       '',
+                                    choice:       '[]',
                                 } ])
 asset12 = Asset.create({
                            tag: SecureRandom.urlsafe_base64(10),
@@ -140,7 +140,7 @@ asset12.check_points.create([
                                     barcode:      "1006723188102",
                                     state:        "运转",
                                     category:         10,
-                                    choice:       '',
+                                    choice:       '[]',
                                 } ])
 asset13 = Asset.create({
                            tag: SecureRandom.urlsafe_base64(10),
@@ -155,7 +155,7 @@ asset13.check_points.create([
                                     barcode:      "1006723188103",
                                     state:        "运转",
                                     category:         10,
-                                    choice:       '',
+                                    choice:       '[]',
                                 } ])
 asset14 = Asset.create({
                            tag: SecureRandom.urlsafe_base64(10),
@@ -170,7 +170,7 @@ asset14.check_points.create([
                                     barcode:      "1006723188104",
                                     state:        "运转",
                                     category:         10,
-                                    choice:       '',
+                                    choice:       '[]',
                                 } ])
 asset15 = Asset.create({
                            tag: SecureRandom.urlsafe_base64(10),
@@ -185,7 +185,7 @@ asset15.check_points.create([
                                     barcode:      "1006723188105",
                                     state:        "运转",
                                     category:         10,
-                                    choice:       '',
+                                    choice:       '[]',
                                 } ])
 
 asset20 = Asset.create({
@@ -201,7 +201,7 @@ asset20.check_points.create([
                                     barcode:      "2006723188100",
                                     state:        "运转",
                                     category:         20,
-                                    choice:       '',
+                                    choice:       '[]',
                                 } ])
 asset21 = Asset.create({
                            tag: SecureRandom.urlsafe_base64(10),
@@ -216,7 +216,7 @@ asset21.check_points.create([
                                     barcode:      "2006723188101",
                                     state:        "运转",
                                     category:         20,
-                                    choice:       '',
+                                    choice:       '[]',
                                 } ])
 asset22 = Asset.create({
                            tag: SecureRandom.urlsafe_base64(10),
@@ -231,7 +231,7 @@ asset22.check_points.create([
                                     barcode:      "2006723188102",
                                     state:        "运转",
                                     category:         20,
-                                    choice:       '',
+                                    choice:       '[]',
                                 } ])
 
 asset40 = Asset.create({
@@ -247,7 +247,7 @@ asset40.check_points.create([
                                     barcode:      "4006723188100",
                                     state:        "运转",
                                     category:         40,
-                                    choice:       '"清洗", "除尘"',
+                                    choice:       '["清洗", "除尘"]',
                                 } ])
 asset41 = Asset.create({
                            tag: SecureRandom.urlsafe_base64(10),
@@ -262,7 +262,7 @@ asset41.check_points.create([
                                     barcode:      "4006723188101",
                                     state:        "运转",
                                     category:         40,
-                                    choice:       '"清洗", "除尘"',
+                                    choice:       '["清洗", "除尘"]',
                                 } ])
 
 asset30 = Asset.create({
@@ -278,7 +278,7 @@ asset30.check_points.create([
                                     barcode:      "3006723188100",
                                     state:        "运转",
                                     category:         30,
-                                    choice:       '',
+                                    choice:       '[]',
                                 } ])
 asset31 = Asset.create({
                            tag: SecureRandom.urlsafe_base64(10),
@@ -293,7 +293,7 @@ asset31.check_points.create([
                                     barcode:      "3006723188101",
                                     state:        "运转",
                                     category:         30,
-                                    choice:       '',
+                                    choice:       '[]',
                                 } ])
 
 route1 = CheckRoute.create!({description: "一工区机械8小时点巡检"})
