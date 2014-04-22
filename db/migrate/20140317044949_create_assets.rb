@@ -6,6 +6,7 @@ class CreateAssets < ActiveRecord::Migration
       t.string :serialnum
       t.string :tag
       t.string :location
+      t.string :name
       t.text :description
       t.string :vendor
       t.string :failure_code

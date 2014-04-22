@@ -25,25 +25,33 @@ class CheckResultsController < ApplicationController
   def create
     begin
       #TODO : validate incoming ids of route and point
-      if params[:assets].nil?
+      if params[:points].nil?
         @check_result = CheckResult.create!(check_result_params)
         render template: 'check_results/show', status: :created
       else
         #batch upload from client with time in number of seconds since epoch time
-        route = CheckRoute.find(params[:check_route_id])
-        session = route.check_sessions.create!({user: params[:user],
-                                          start_time: Time.at(params[:start_time]).to_datetime,
-                                          end_time: Time.at(params[:end_time]).to_datetime,
-                                          session: params[:session]})
-        params[:assets].each { |asset|
-          asset['points'].each{|point|
+        start_time_ = Time.at(params[:start_time]).to_datetime
+        end_time_ = Time.at(params[:end_time]).to_datetime
+
+        params[:points].each { |point|
+          route_ids = point['routes']
+          check_time_ =  Time.at(point['check_time']).to_datetime
+          route_ids.each { |route_id|
+            route = CheckRoute.find(route_id)
+            session = route.check_sessions.create!({user: params[:user],
+                                                    start_time: start_time_,
+                                                    end_time: end_time_,
+                                                    session: params[:session]})
             CheckResult.create!({check_session_id: session.id,
                                  check_point_id: point['id'],
-                                 check_time: Time.at(point['check_time']).to_datetime,
+                                 check_time: check_time_,
                                  result: point['result'],
-                                 value: point['value']})
+                                 status: point['status'],
+                                 memo: point['memo']})
+
           }
         }
+
         render :nothing => true, :status => :created
       end
 

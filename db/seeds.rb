@@ -343,10 +343,12 @@ route2.check_sessions << session2
 
 route3.check_sessions << session3
 
-CheckResult.create({result: 'pass', check_session_id:1,  check_point_id: 2,  value: 'sdd', check_time: '2014-04-02 15:53:29 -0700'})
-CheckResult.create({result: 'fail', check_session_id:1,  check_point_id: 3,  value: 'sdfdsf', check_time: '2011-04-02 15:53:29 -0700'})
-CheckResult.create({result: 'pass', check_session_id:2,  check_point_id: 1,  value: 'trtt', check_time: '2010-04-02 15:53:29 -0700'})
-CheckResult.create({result: 'fail', check_session_id:2,  check_point_id: 2,  value: 'gbfgg', check_time: '2019-04-02 15:53:29 -0700'})
+CheckResult.create({result: 'pass', check_session_id:1,  check_point_id: 2,  status: 0, memo: "not much", check_time: '2014-04-02 15:53:29 -0700'})
+CheckResult.create({result: 'fail', check_session_id:1,  check_point_id: 3,  status: 1, check_time: '2011-04-02 15:53:29 -0700'})
+CheckResult.create({result: 'pass', check_session_id:2,  check_point_id: 1,  status: 3, check_time: '2010-04-02 15:53:29 -0700'})
+CheckResult.create({result: 'fail', check_session_id:2,  check_point_id: 2,  status: 2, check_time: '2019-04-02 15:53:29 -0700'})
+
+
 
 
 

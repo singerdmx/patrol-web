@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 20140407223059) do
     t.string   "serialnum"
     t.string   "tag"
     t.string   "location"
+    t.string   "name"
     t.text     "description"
     t.string   "vendor"
     t.string   "failure_code"
@@ -74,7 +75,8 @@ ActiveRecord::Schema.define(version: 20140407223059) do
 
   create_table "check_results", force: true do |t|
     t.string   "result"
-    t.integer  "value"
+    t.integer  "status"
+    t.string   "memo"
     t.datetime "check_time"
     t.integer  "check_point_id"
     t.integer  "check_session_id"

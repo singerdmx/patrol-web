@@ -33,8 +33,17 @@ class CheckPointsController < ApplicationController
   # POST /check_points.json
   def create
     begin
-      logger.info("asset id: #{check_point_params}")
-      asset = Asset.find(check_point_params[:asset_id])
+      if check_point_params[:asset_id].nil?
+        logger.info("no asset id provided when creating point:so creating dummy asset")
+        asset = Asset.create({
+                                 barcode: check_point_params[:barcode],
+                                 name: check_point_params[:name],
+                                 description: check_point_params[:description] })
+      else
+        logger.info("asset id: #{check_point_params}")
+        asset = Asset.find(check_point_params[:asset_id])
+      end
+
       @check_point = asset.check_points.create!(check_point_params)
       render template: 'check_points/show', status: :created
     rescue Exception => e

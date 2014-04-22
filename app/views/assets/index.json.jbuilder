@@ -6,6 +6,7 @@ json.array! @assets do |asset|
   json.tag asset.tag
   json.location asset.location
   json.description asset.description
+  json.name asset.name
   json.vendor asset.vendor
   json.failure_code asset.failure_code
   json.manufacture asset.manufacture
