@@ -1,6 +1,15 @@
 @import "bootstrap";
 @import "variable.css.scss";
 
+div.containerDiv {
+  margin-left: 15px;
+}
+
+img.mediaListIcon {
+  width: 32px;
+  height: 32px;
+}
+
 .sidebar {
   display: none;
   background-color: #F5F5F5;
