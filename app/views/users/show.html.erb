@@ -79,6 +79,31 @@
       </ul>
     </div>
     <div class="containerDiv" id="recordsDiv">
+      <div>
+        <div style="width: 30%;text-align: center;float: left;margin-bottom: 10px">
+          <div>起始时间</div>
+          <div id="startTime" class="input-append">
+            <input data-format="yyyy-MM-dd" type="text"/>
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+              </i>
+            </span>
+          </div>
+        </div>
+        <div style="width: 30%;text-align: center;float: left;margin-bottom: 10px">
+          <div>结束时间</div>
+          <div id="endTime" class="input-append">
+            <input data-format="yyyy-MM-dd" type="text"/>
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+              </i>
+            </span>
+          </div>
+        </div>
+        <div style="width: 15%;text-align: center;float: left;margin-bottom: 10px">
+          <button type="button" class="btn btn-primary" style="margin-top: 15px">更新数据</button>
+        </div>
+      </div>
       <table id="example"></table>
     </div>
   </div>

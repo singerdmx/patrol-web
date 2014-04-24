@@ -2,6 +2,16 @@ $ ->
   onSidebarClick()
   $('#routesDiv').hide()
 
+  $('div#startTime').datetimepicker
+    pickTime: false
+    language: 'zh',
+    pick12HourFormat: true
+
+  $('div#endTime').datetimepicker
+    pickTime: false
+    language: 'zh',
+    pick12HourFormat: true
+
   $('#example').dataTable
     "aaData": [
       [ "Trident", "Internet Explorer 4.0", "Win 95+", 4, "X" ],
