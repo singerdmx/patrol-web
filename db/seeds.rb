@@ -18,6 +18,21 @@ CheckRoute.delete_all
 Asset.delete_all
 CheckPoint.delete_all
 CheckResult.delete_all
+User.delete_all
+
+user1 = User.create! do |u|
+  u.email = 'user@test.com'
+  u.password = 'user1234'
+  u.password_confirmation = 'user1234'
+  #u.ensure_authentication_token!
+end
+
+user2 = User.create! do |u|
+  u.email = 'user2@user.com'
+  u.password = 'user1234'
+  u.password_confirmation = 'user1234'
+  #u.ensure_authentication_token!
+end
 
 #create routes based on 17-1.pdf page 9
 asset1 = Asset.create({
@@ -300,14 +315,19 @@ route1 = CheckRoute.create!({description: "一工区机械8小时点巡检"})
 route1.check_points << asset1.check_points.first
 route1.check_points << asset2.check_points.first
 route1.check_points << asset3.check_points.first
+route1.users << user1
 
 route2 = CheckRoute.create!({description: "二工区机械8小时点巡检"})
 route2.check_points << asset1.check_points.last
+route1.users << user1
 
 route3 = CheckRoute.create!({description: "三工区机械8小时点巡检"})
 route3.check_points << asset2.check_points.last
 route3.check_points << asset3.check_points.first
 route3.check_points << asset3.check_points.last
+route1.users << user1
+route1.users << user2
+
 
 route4 = CheckRoute.create!({description: "调配前处理区生产前点巡检"})
 route4.check_points << asset10.check_points.first
@@ -316,19 +336,25 @@ route4.check_points << asset12.check_points.first
 route4.check_points << asset13.check_points.first
 route4.check_points << asset14.check_points.first
 route4.check_points << asset15.check_points.first
+route1.users << user1
+route1.users << user2
 
 route5 = CheckRoute.create!({description: "调配前处理区润滑巡检"})
 route5.check_points << asset20.check_points.first
 route5.check_points << asset21.check_points.first
 route5.check_points << asset22.check_points.first
+route1.users << user1
 
 route6 = CheckRoute.create!({description: "调配前处理区清洗巡检"})
 route6.check_points << asset40.check_points.first
 route6.check_points << asset41.check_points.first
+route1.users << user1
+route1.users << user2
 
 route7 = CheckRoute.create!({description: "调配前处理区抄表巡检"})
 route7.check_points << asset30.check_points.first
 route7.check_points << asset31.check_points.first
+route1.users << user1
 
 session1 = CheckSession.create!({check_route_id: 1, start_time: '2014-04-01 15:53:29 -0700', end_time: '2014-04-02 15:53:29 -0700', user:'joel', session: '34324ar'})
 session2 = CheckSession.create!({check_route_id: 2, start_time: '2014-03-01 15:53:29 -0700', end_time: '2014-03-02 15:53:29 -0700', user:'ben', session: 'erewr43'})
@@ -347,8 +373,3 @@ CheckResult.create({result: 'pass', check_session_id:1,  check_point_id: 2,  sta
 CheckResult.create({result: 'fail', check_session_id:1,  check_point_id: 3,  status: 1, check_time: '2011-04-02 15:53:29 -0700'})
 CheckResult.create({result: 'pass', check_session_id:2,  check_point_id: 1,  status: 3, check_time: '2010-04-02 15:53:29 -0700'})
 CheckResult.create({result: 'fail', check_session_id:2,  check_point_id: 2,  status: 2, check_time: '2019-04-02 15:53:29 -0700'})
-
-
-
-
-
