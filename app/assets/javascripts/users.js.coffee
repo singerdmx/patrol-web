@@ -40,6 +40,10 @@ setupRecordsDiv = ->
   return
 
 updateRecordsTable = ->
+  startTime = $('div#startTime').data('datetimepicker').getLocalDate()
+  endTime = $('div#endTime').data('datetimepicker').getLocalDate()
+  alert startTime.toString()
+  alert endTime.toString()
   #TODO: make ajax call to get data
   data = [
     [ "Trident", "Internet Explorer 4.0", "Win 95+", 4, "X" ],
