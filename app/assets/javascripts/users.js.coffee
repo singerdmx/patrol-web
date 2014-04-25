@@ -27,6 +27,16 @@ setupRecordsDiv = ->
     pick12HourFormat: true
   $('div#startTime').datetimepicker(datetimePickerSettings)
   $('div#endTime').datetimepicker(datetimePickerSettings)
+  startTimePicker = $('div#startTime').data('datetimepicker')
+  endTimePicker = $('div#endTime').data('datetimepicker')
+  today = getToday()
+  endTimePicker.setLocalDate(today)
+  startTimePicker.setLocalDate(today.addDays(-1))
+
+  # 更新button
+  $('button#updateRecordsTableButton').click (e) ->
+    updateRecordsTable()
+    return
   return
 
 updateRecordsTable = ->

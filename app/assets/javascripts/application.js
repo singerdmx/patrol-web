@@ -175,3 +175,18 @@ if ( $.fn.DataTable.TableTools ) {
         }
     } );
 }
+
+/* Date */
+Date.prototype.addDays = function(days) {
+    var result = new Date(this);
+    result.setDate(this.getDate()+days);
+    return result;
+}
+
+function getToday() {
+    var today = new Date();
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(0);
+    return today;
+}
