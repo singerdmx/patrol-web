@@ -190,3 +190,11 @@ function getToday() {
     today.setSeconds(0);
     return today;
 }
+
+
+/* Misc */
+function getBaseURL() {
+    var url = location.href;  // entire url including querystring - also: window.location.href;
+    var baseURL = url.substring(0, url.indexOf('/', 14));
+    return baseURL;
+}

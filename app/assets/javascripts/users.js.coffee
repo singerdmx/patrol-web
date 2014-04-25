@@ -43,7 +43,7 @@ updateRecordsTable = ->
   startTime = $('div#startTime').data('datetimepicker').getLocalDate()
   endTime = $('div#endTime').data('datetimepicker').getLocalDate()
   $.ajax
-    url: 'http://localhost:3000/results.json'
+    url: getBaseURL() + '/results.json'
     beforeSend: (xhr) ->
       recordsIfNoneMatch = $('span#recordsIfNoneMatch').text()
       recordsIfModifiedSince = $('span#recordsIfModifiedSince').text()
