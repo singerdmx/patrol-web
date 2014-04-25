@@ -1,6 +1,6 @@
 $ ->
   onSidebarClick()
-  $('#routesDiv').hide()
+  $('div.containerDiv').first().show()
   setupRecordsDiv()
   return
 
@@ -9,20 +9,27 @@ onSidebarClick = ->
   $('#sidebar ul li').click (e) ->
     $('#sidebar ul li.active').removeClass('active')
     $(this).addClass('active')
+    id = $(this).attr('id')
+    containerDiv = "div##{id}Div"
+    $('div.containerDiv').hide()
+    $(containerDiv).show()
+    switch id
+      when 'records'
+        updateRecordsTable()
     return
   return
 
 setupRecordsDiv = ->
   # Calendar widget
-  datetimePickerSettings = [
+  datetimePickerSettings =
     pickTime: false
     language: 'zh',
     pick12HourFormat: true
-  ]
   $('div#startTime').datetimepicker(datetimePickerSettings)
   $('div#endTime').datetimepicker(datetimePickerSettings)
+  return
 
-  # records table
+updateRecordsTable = ->
   #TODO: make ajax call to get data
   data = [
     [ "Trident", "Internet Explorer 4.0", "Win 95+", 4, "X" ],
@@ -55,7 +62,11 @@ setupRecordsDiv = ->
         sReturn
     }
   ]
-  $('#recordsTable').dataTable
+  oTable = $('table#recordsTable').dataTable();
+  oTable.fnDestroy() unless oTable?
+  $('div#recordsTable_wrapper').remove()
+  $('div#recordsDiv > div').append('<table id="recordsTable"></table>')
+  $('table#recordsTable').dataTable
     "aaData": data,
     "aoColumns": columns
   return
