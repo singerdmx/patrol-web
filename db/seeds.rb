@@ -321,6 +321,10 @@ route2 = CheckRoute.create!({description: "二工区机械8小时点巡检"})
 route2.check_points << asset1.check_points.last
 route1.users << user1
 
+#adding preference points
+user1.check_points <<  asset1.check_points.last
+user1.check_points <<  asset3.check_points.first
+
 route3 = CheckRoute.create!({description: "三工区机械8小时点巡检"})
 route3.check_points << asset2.check_points.last
 route3.check_points << asset3.check_points.first
@@ -373,3 +377,4 @@ CheckResult.create({result: 'pass', check_session_id:1,  check_point_id: 2,  sta
 CheckResult.create({result: 'fail', check_session_id:1,  check_point_id: 3,  status: 1, check_time: '2011-04-02 15:53:29 -0700'})
 CheckResult.create({result: 'pass', check_session_id:2,  check_point_id: 1,  status: 3, check_time: '2010-04-02 15:53:29 -0700'})
 CheckResult.create({result: 'fail', check_session_id:2,  check_point_id: 2,  status: 2, check_time: '2019-04-02 15:53:29 -0700'})
+

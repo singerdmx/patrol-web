@@ -1,12 +1,15 @@
 Blog::Application.routes.draw do
 
 
+
+
   resources :route_builders
 
   resources :assets
   resources :check_routes, :path => :routes
   resources :check_points,     :path => :points
   resources :check_results, :path => :results
+  resources :user_preferences
 
   devise_for :admins
   devise_for :users

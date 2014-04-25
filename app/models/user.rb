@@ -6,4 +6,6 @@ class User < ActiveRecord::Base
 
   has_many :user_builders
   has_many :check_routes, through: :user_builders
+  has_many :user_preferences
+  has_many :check_points, through: :user_preferences
 end
