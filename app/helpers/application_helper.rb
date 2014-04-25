@@ -9,4 +9,10 @@ module ApplicationHelper
       "#{base_title} | #{page_title}"
     end
   end
+
+  def to_hash(record)
+    hash = {};
+    record.attributes.each { |k,v| hash[k] = v }
+    return hash
+  end
 end

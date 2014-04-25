@@ -1,11 +1,14 @@
 class CheckResultsController < ApplicationController
+  include CheckResultsHelper
   before_action :set_check_result, only: [:show, :edit, :update, :destroy]
 
   # GET /check_results
   # GET /check_results.json
   def index
     @check_results = CheckResult.where(check_result_params)
-    if stale?(etag: @check_results.to_a,
+    @check_results_json = index_json_builder(@check_results)
+
+    if stale?(etag: @check_results_json,
               last_modified: @check_results.maximum(:updated_at))
       render template: 'check_results/index', status: :ok
     else

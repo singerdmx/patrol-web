@@ -8,4 +8,15 @@ class User < ActiveRecord::Base
   has_many :check_routes, through: :user_builders
   has_many :user_preferences
   has_many :check_points, through: :user_preferences
+
+  def preferred_points
+    check_points
+  end
+
+
+  private :check_points, :check_points=
+
+
+
+
 end

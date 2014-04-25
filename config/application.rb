@@ -33,5 +33,10 @@ module Blog
 
     #config.i18n.enforce_available_locales = false
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
+    config.autoload_paths += %W(
+      #{config.root}/app/helpers
+        #{config.root}/app/exceptions
+        #{config.root}/app/controllers/validators
+      )
   end
 end

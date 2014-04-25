@@ -322,8 +322,8 @@ route2.check_points << asset1.check_points.last
 route1.users << user1
 
 #adding preference points
-user1.check_points <<  asset1.check_points.last
-user1.check_points <<  asset3.check_points.first
+user1.preferred_points <<  asset1.check_points.last
+user1.preferred_points <<  asset3.check_points.first
 
 route3 = CheckRoute.create!({description: "三工区机械8小时点巡检"})
 route3.check_points << asset2.check_points.last
