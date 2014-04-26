@@ -191,6 +191,10 @@ function getToday() {
     return today;
 }
 
+function getDatetimePickerEpoch(datetimePickerDiv) {
+    return parseInt($(datetimePickerDiv).data('datetimepicker').getLocalDate().getTime()/1000);
+}
+
 
 /* Misc */
 function getBaseURL() {

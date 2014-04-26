@@ -3,6 +3,12 @@
 ###
 window.defaultAjaxCallTimeout = 60000 # 1 min timeout default for Ajax call
 
+# Calendar widget
+window.datetimePickerSettings =
+  pickTime: false
+  language: 'zh',
+  pick12HourFormat: true
+
 $(document).ready ->
   alert 'Your current web browser does not support HTML5 Web Storage. This will cause malfunctioning of this site!' unless Storage?
   checkVersion()
