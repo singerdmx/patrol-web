@@ -8,6 +8,10 @@ class CheckResultsController < ApplicationController
     @check_results = CheckResult.where(check_result_params)
     @check_results_json = index_json_builder(@check_results)
 
+    if params[:ui] == 'true'
+      @check_results_json = index_ui_json_builder(@check_results_json)
+    end
+
     if stale?(etag: @check_results_json,
               last_modified: @check_results.maximum(:updated_at))
       render template: 'check_results/index', status: :ok

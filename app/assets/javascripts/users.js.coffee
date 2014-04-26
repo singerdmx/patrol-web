@@ -58,39 +58,39 @@ updateRecordsTable = ->
       ui: true
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
-        data = [
-          [ "Trident", "Internet Explorer 4.0", "Win 95+", 4, "X" ],
-          [ "Trident", "Internet Explorer 5.0", "Win 95+", 5, "C" ],
-          [ "Trident", "Internet Explorer 5.5", "Win 95+", 5.5, "A" ],
-          [ "Trident", "Internet Explorer 6.0", "Win 98+", 6, "A" ],
-          [ "Trident", "Internet Explorer 7.0", "Win XP SP2+", 7, "A" ],
-          [ "Gecko", "Firefox 1.5", "Win 98+ / OSX.2+", 1.8, "A" ],
-          [ "Gecko", "Firefox 2", "Win 98+ / OSX.2+", 1.8, "A" ],
-          [ "Gecko", "Firefox 3", "Win 2k+ / OSX.3+", 1.9, "A" ],
-          [ "Webkit", "Safari 1.2", "OSX.3", 125.5, "A" ],
-          [ "Webkit", "Safari 1.3", "OSX.3", 312.8, "A" ],
-          [ "Webkit", "Safari 2.0", "OSX.4+", 419.3, "A" ],
-          [ "Webkit", "Safari 3.0", "OSX.4+", 522.1, "A" ]
-        ]
+        aaData = data.map (record) ->
+          checkTime = new Date(record[7])
+          record[7] = "#{checkTime.getFullYear()}年#{checkTime.getMonth()+1}月#{checkTime.getDate()}日 #{checkTime.getHours()}:#{checkTime.getMinutes()}"
+          record
+
         columns = [
           { "sTitle": "名称" },
           { "sTitle": "描述" },
-          { "sTitle": "运行状态" },
+          {
+            "sTitle": "读数",
+            "sClass": "center"
+          },
+          {
+            "sTitle": "正常范围",
+            "sClass": "center"
+          },
+          {
+            "sTitle": "状态",
+            "sClass": "center"
+          }
+          { "sTitle": "备注" },
           {
             "sTitle": "条形码",
             "sClass": "center"
           },
-          {
-            "sTitle": "读数",
-            "sClass": "center"
-          }
+          { "sTitle": "检测时间" },
         ]
         oTable = $('table#recordsTable').dataTable();
         oTable.fnDestroy() unless oTable?
         $('div#recordsTable_wrapper').remove()
         $('div#recordsDiv > div').append('<table id="recordsTable"></table>')
         $('table#recordsTable').dataTable
-          "aaData": data,
+          "aaData": aaData,
           "aoColumns": columns
 
         $('span#recordsIfNoneMatch').text(jqHXR.getResponseHeader('Etag'))
