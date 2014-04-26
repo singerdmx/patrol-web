@@ -32,6 +32,9 @@ setupRecordsDiv = ->
   today = getToday()
   endTimePicker.setLocalDate(today)
   startTimePicker.setLocalDate(today.addDays(-1))
+  $('div.datepicker-days, div#startTime, div#endTime').click ->
+    $('span#recordsCalendarUpdated').text('true')
+    return
 
   # 更新button
   $('button#updateRecordsTableButton').click (e) ->
@@ -45,8 +48,16 @@ updateRecordsTable = ->
   $.ajax
     url: getBaseURL() + '/results.json'
     beforeSend: (xhr) ->
+      recordsCalendarUpdated = $('span#recordsCalendarUpdated').text() is 'true'
+
+      if recordsCalendarUpdated
+        # Force update since we changed calendar
+        $('span#recordsCalendarUpdated').text('false')
+        return
+
       recordsIfNoneMatch = $('span#recordsIfNoneMatch').text()
       recordsIfModifiedSince = $('span#recordsIfModifiedSince').text()
+
       if recordsIfNoneMatch isnt '' and recordsIfModifiedSince isnt ''
         xhr.setRequestHeader('If-None-Match', recordsIfNoneMatch)
         xhr.setRequestHeader('If-Modified-Since', recordsIfModifiedSince)
