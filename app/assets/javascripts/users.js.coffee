@@ -2,6 +2,7 @@ $ ->
   onSidebarClick()
   $('div.containerDiv').first().show()
   setupRecordsDiv('div#recordsDiv')
+  bindTreeViewClick()
   return
 
 # users show
@@ -17,6 +18,22 @@ onSidebarClick = ->
       when 'records'
         updateRecordsTable(containerDiv)
     return
+  return
+
+bindTreeViewClick = ->
+  $('ul.media-list > li.media > a.pull-left').click ->
+    img = $(this).children('img.media-object.mediaListIcon')
+    src = img.attr('src')
+    pic = src.split('/').last()
+    switch pic
+      when 'minus.png'
+        img.attr('src', src.replace(/minus.png/, 'plus.png'))
+      when 'plus.png'
+        img.attr('src', src.replace(/plus.png/, 'minus.png'))
+
+    $(this).next('div.media-body').children('ul.media-list').toggle()
+    return
+
   return
 
 setupRecordsDiv = (containerDiv) ->

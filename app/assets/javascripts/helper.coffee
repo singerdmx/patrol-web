@@ -76,3 +76,6 @@ window.showErrorPage = (errorPageContent) ->
   errorWindow.document.write(errorPageContent)
   errorWindow.document.close()
   return
+
+# Misc
+Array::last = -> @[@length - 1]
