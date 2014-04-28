@@ -1,4 +1,5 @@
 class CheckRoutesController < ApplicationController
+  include CheckRoutesHelper
   before_action :set_check_route, only: [:show, :edit, :update, :destroy]
 
   # GET /check_routes
@@ -6,8 +7,9 @@ class CheckRoutesController < ApplicationController
   def index
 
     @check_routes = CheckRoute.where(check_route_params)
+    route_assets = nil
     if params[:group_by_asset] == 'true'
-      @route_assets = Hash.new
+      route_assets = Hash.new
       @check_routes.each do |route|
         assets = Hash.new
         route.check_points.each do |point|
@@ -17,12 +19,11 @@ class CheckRoutesController < ApplicationController
            end
            assets[point.asset.id].add(point.id)
         end
-        @route_assets[route.id] = assets
+        route_assets[route.id] = assets
       end
-    else
-      @route_assets = nil
     end
-    if stale?(etag: @check_routes.to_a,
+    @check_routes_json  = index_json_builder(@check_routes, route_assets)
+    if stale?(etag: @check_routes_json.to_a,
             last_modified: @check_routes.maximum(:updated_at))
       render template: 'check_routes/index', status: :ok
     else
