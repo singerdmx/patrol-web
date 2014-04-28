@@ -9,20 +9,29 @@ class CheckRoutesController < ApplicationController
     @check_routes = CheckRoute.where(check_route_params)
     route_assets = nil
     if params[:group_by_asset] == 'true'
-      route_assets = Hash.new
+      route_assets = Hash.new # Key is route id and value is assets (Hash of key = asset id and value = points)
+      route_map = Hash.new # Key is route id and value is route
+      asset_map = Hash.new # Key is asset id and value is asset
       @check_routes.each do |route|
+        route_map[route.id] = route
         assets = Hash.new
         route.check_points.each do |point|
-
-           if assets[point.asset.id].nil?
-             assets[point.asset.id] = Set.new
+           asset_id = point.asset.id
+           if assets[asset_id].nil?
+             assets[asset_id] = []
            end
-           assets[point.asset.id].add(point.id)
+           assets[asset_id] << point
+           asset_map[asset_id] = point.asset
         end
         route_assets[route.id] = assets
       end
     end
-    @check_routes_json  = index_json_builder(@check_routes, route_assets)
+
+    if params[:ui] == 'true'
+      @check_routes_json = index_ui_json_builder(route_assets, route_map, asset_map)
+    else
+      @check_routes_json  = index_json_builder(@check_routes, route_assets)
+    end
     if stale?(etag: @check_routes_json.to_a,
             last_modified: @check_routes.maximum(:updated_at))
       render template: 'check_routes/index', status: :ok
