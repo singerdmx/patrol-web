@@ -114,6 +114,13 @@ updateRecordsTable = (containerDiv) ->
         $("#{containerDiv} table#recordsTable").dataTable
           'aaData': aaData,
           'aoColumns': columns
+          'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
+            switch aaData[4]
+              when '异常'
+                $(nRow).addClass('redBackground')
+              when '警告'
+                $(nRow).addClass('yellowBackground')
+            return
 
         $("#{containerDiv} span#recordsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} span#recordsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
