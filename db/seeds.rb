@@ -28,7 +28,7 @@ user1 = User.create! do |u|
 end
 
 user2 = User.create! do |u|
-  u.email = 'user2@user.com'
+  u.email = 'user2@test.com'
   u.password = 'user1234'
   u.password_confirmation = 'user1234'
   #u.ensure_authentication_token!
@@ -40,6 +40,7 @@ asset1 = Asset.create({
                 barcode: "780672318863",
                 number: SecureRandom.random_number(5),
                 serialnum: SecureRandom.urlsafe_base64(10),
+                name: "轧机电机",
                 description: "轧机电机" })
 site1 = SecureRandom.random_number(500)
 asset1.check_points.create([
@@ -63,6 +64,7 @@ asset2 = Asset.create({
                           number: SecureRandom.random_number(5),
                           serialnum: SecureRandom.urlsafe_base64(10),
                           barcode:     "780672318812",
+                          name: "轧机联轴器",
                           description: "轧机联轴器" })
 site2 = SecureRandom.random_number(500)
 asset2.check_points.create([
@@ -80,6 +82,7 @@ asset3 = Asset.create({
                           barcode: "780672318890",
                           number: SecureRandom.random_number(5),
                           serialnum: SecureRandom.urlsafe_base64(10),
+                          name: "轧机减速机",
                           description: "轧机减速机" })
 site3 = SecureRandom.random_number(500)
 asset3.check_points.create([
@@ -117,6 +120,7 @@ asset10 = Asset.create({
                            number: SecureRandom.random_number(5),
                            serialnum: SecureRandom.urlsafe_base64(10),
                            barcode:     "1006723188100",
+                           name: "T40桶体",
                            description: "T40桶体" })
 asset10.check_points.create([
                                 {
@@ -132,6 +136,7 @@ asset11 = Asset.create({
                            number: SecureRandom.random_number(5),
                            serialnum: SecureRandom.urlsafe_base64(10),
                            barcode:     "1006723188101",
+                           name: "T40桶体",
                            description: "T40桶体" })
 asset11.check_points.create([
                                 {
@@ -147,6 +152,7 @@ asset12 = Asset.create({
                            number: SecureRandom.random_number(5),
                            serialnum: SecureRandom.urlsafe_base64(10),
                            barcode:     "1006723188102",
+                           name: "T40桶体",
                            description: "T40桶体" })
 asset12.check_points.create([
                                 {
@@ -162,6 +168,7 @@ asset13 = Asset.create({
                            number: SecureRandom.random_number(5),
                            serialnum: SecureRandom.urlsafe_base64(10),
                            barcode:     "1006723188103",
+                           name: "T40桶体",
                            description: "T40桶体" })
 asset13.check_points.create([
                                 {
@@ -177,6 +184,7 @@ asset14 = Asset.create({
                            number: SecureRandom.random_number(5),
                            serialnum: SecureRandom.urlsafe_base64(10),
                            barcode:     "1006723188104",
+                           name: "T40桶体",
                            description: "T40桶体" })
 asset14.check_points.create([
                                 {
@@ -192,6 +200,7 @@ asset15 = Asset.create({
                            number: SecureRandom.random_number(5),
                            serialnum: SecureRandom.urlsafe_base64(10),
                            barcode:     "1006723188105",
+                           name: "T40桶体",
                            description: "T40桶体" })
 asset15.check_points.create([
                                 {
@@ -208,6 +217,7 @@ asset20 = Asset.create({
                            number: SecureRandom.random_number(5),
                            serialnum: SecureRandom.urlsafe_base64(10),
                            barcode:     "2006723188100",
+                           name: "齿轮箱",
                            description: "齿轮箱" })
 asset20.check_points.create([
                                 {
@@ -223,6 +233,7 @@ asset21 = Asset.create({
                            number: SecureRandom.random_number(5),
                            serialnum: SecureRandom.urlsafe_base64(10),
                            barcode:     "2006723188101",
+                           name: "齿轮箱",
                            description: "齿轮箱" })
 asset21.check_points.create([
                                 {
@@ -238,6 +249,7 @@ asset22 = Asset.create({
                            number: SecureRandom.random_number(5),
                            serialnum: SecureRandom.urlsafe_base64(10),
                            barcode:     "2006723188102",
+                           name: "齿轮箱",
                            description: "齿轮箱" })
 asset22.check_points.create([
                                 {
@@ -254,6 +266,7 @@ asset40 = Asset.create({
                            number: SecureRandom.random_number(5),
                            serialnum: SecureRandom.urlsafe_base64(10),
                            barcode:     "4006723188100",
+                           name: "均质机1",
                            description: "均质机1" })
 asset40.check_points.create([
                                 {
@@ -269,6 +282,7 @@ asset41 = Asset.create({
                            number: SecureRandom.random_number(5),
                            serialnum: SecureRandom.urlsafe_base64(10),
                            barcode:     "4006723188101",
+                           name: "均质机1",
                            description: "均质机1" })
 asset41.check_points.create([
                                 {
@@ -285,6 +299,7 @@ asset30 = Asset.create({
                            number: SecureRandom.random_number(5),
                            serialnum: SecureRandom.urlsafe_base64(10),
                            barcode:     "3006723188100",
+                           name: "电表1",
                            description: "电表1" })
 asset30.check_points.create([
                                 {
@@ -300,6 +315,7 @@ asset31 = Asset.create({
                            number: SecureRandom.random_number(5),
                            serialnum: SecureRandom.urlsafe_base64(10),
                            barcode:     "3006723188101",
+                           name: "电表2",
                            description: "电表2" })
 asset31.check_points.create([
                                 {
@@ -311,13 +327,15 @@ asset31.check_points.create([
                                     choice:       '[]',
                                 } ])
 
-route1 = CheckRoute.create!({description: "一工区机械8小时点巡检"})
+route1 = CheckRoute.create!(
+    {name: "一工区机械8小时点巡检", description: "一工区机械8小时点巡检"})
 route1.check_points << asset1.check_points.first
 route1.check_points << asset2.check_points.first
 route1.check_points << asset3.check_points.first
 route1.users << user1
 
-route2 = CheckRoute.create!({description: "二工区机械8小时点巡检"})
+route2 = CheckRoute.create!(
+    {name: "二工区机械8小时点巡检", description: "二工区机械8小时点巡检"})
 route2.check_points << asset1.check_points.last
 route1.users << user1
 
@@ -325,7 +343,8 @@ route1.users << user1
 user1.preferred_points <<  asset1.check_points.last
 user1.preferred_points <<  asset3.check_points.first
 
-route3 = CheckRoute.create!({description: "三工区机械8小时点巡检"})
+route3 = CheckRoute.create!(
+    {name: "三工区机械8小时点巡检", description: "三工区机械8小时点巡检"})
 route3.check_points << asset2.check_points.last
 route3.check_points << asset3.check_points.first
 route3.check_points << asset3.check_points.last
@@ -333,7 +352,8 @@ route1.users << user1
 route1.users << user2
 
 
-route4 = CheckRoute.create!({description: "调配前处理区生产前点巡检"})
+route4 = CheckRoute.create!(
+    {name: "调配前处理区生产前点巡检", description: "调配前处理区生产前点巡检"})
 route4.check_points << asset10.check_points.first
 route4.check_points << asset11.check_points.first
 route4.check_points << asset12.check_points.first
@@ -343,19 +363,22 @@ route4.check_points << asset15.check_points.first
 route1.users << user1
 route1.users << user2
 
-route5 = CheckRoute.create!({description: "调配前处理区润滑巡检"})
+route5 = CheckRoute.create!(
+    {name: "调配前处理区润滑巡检", description: "调配前处理区润滑巡检"})
 route5.check_points << asset20.check_points.first
 route5.check_points << asset21.check_points.first
 route5.check_points << asset22.check_points.first
 route1.users << user1
 
-route6 = CheckRoute.create!({description: "调配前处理区清洗巡检"})
+route6 = CheckRoute.create!(
+    {name: "调配前处理区清洗巡检", description: "调配前处理区清洗巡检"})
 route6.check_points << asset40.check_points.first
 route6.check_points << asset41.check_points.first
 route1.users << user1
 route1.users << user2
 
-route7 = CheckRoute.create!({description: "调配前处理区抄表巡检"})
+route7 = CheckRoute.create!(
+    {name: "调配前处理区抄表巡检", description: "调配前处理区抄表巡检"})
 route7.check_points << asset30.check_points.first
 route7.check_points << asset31.check_points.first
 route1.users << user1
