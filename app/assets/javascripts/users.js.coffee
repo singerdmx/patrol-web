@@ -1,8 +1,8 @@
 $ ->
   onSidebarClick()
   $('div.containerDiv').first().show()
+  setupTreeView('div#routesTree')
   setupRecordsDiv('div#recordsDiv')
-  bindTreeViewClick()
   return
 
 # users show
@@ -18,6 +18,38 @@ onSidebarClick = ->
       when 'records'
         updateRecordsTable(containerDiv)
     return
+  return
+
+setupTreeView = (containerDiv) ->
+  $.ajax
+    url: getBaseURL() + '/routes.json?group_by_asset=true&ui=true'
+    success: (data, textStatus, jqHXR) ->
+      if jqHXR.status is 200
+        $(containerDiv).html('')
+        buildTreeNode($(containerDiv), data)
+        bindTreeViewClick()
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
+
+  return
+
+buildTreeNode = (parent, data) ->
+  for nodeDatum, i in data
+    parent.append "
+    <ul class='media-list'>
+      <li class='media'>
+        <a class='pull-left'>
+          <img src='/assets/#{nodeDatum.icon}' class='media-object mediaListIcon'>
+        </a>
+        <div class='media-body'>
+        <h4 class='media-heading'>#{nodeDatum.title}</h4>
+        <span>#{nodeDatum.description}</span>"
+
+    $ul = $(parent.children('ul')[i])
+    buildTreeNode($($ul.find('li > div.media-body')[0]), nodeDatum.children)
   return
 
 bindTreeViewClick = ->

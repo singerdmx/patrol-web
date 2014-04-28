@@ -8,75 +8,10 @@
       </ul>
     </div>
     <div class="containerDiv" id="routesDiv">
-      <ul class="media-list">
-        <li class="media">
-          <a class="pull-left">
-            <%= image_tag("minus.png", :alt => "expand", :class => "media-object mediaListIcon") %>
-          </a>
-          <div class="media-body">
-            <h4 class="media-heading">路线一</h4>
-            <span>描述</span>
-            <ul class="media-list">
-              <li class="media">
-                <a class="pull-left">
-                  <%= image_tag("minus.png", :alt => "expand", :class => "media-object mediaListIcon") %>
-                </a>
-                <div class="media-body">
-                  <h4 class="media-heading">设备一</h4>
-                  描述
-                  <ul class="media-list">
-                    <li class="media">
-                      <a class="pull-left">
-                        <%= image_tag("tool.png", :alt => "expand", :class => "media-object mediaListIcon") %>
-                      </a>
-                      <div class="media-body">
-                        <h4 class="media-heading">点一</h4>
-                        描述
-                      </div>
-                    </li>
-                    <li class="media">
-                      <a class="pull-left">
-                        <%= image_tag("tool.png", :alt => "expand", :class => "media-object mediaListIcon") %>
-                      </a>
-                      <div class="media-body">
-                        <h4 class="media-heading">点二</h4>
-                        描述
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li class="media">
-                <a class="pull-left">
-                  <%= image_tag("plus.png", :alt => "expand", :class => "media-object mediaListIcon") %>
-                </a>
-                <div class="media-body">
-                  <h4 class="media-heading">设备二</h4>
-                  描述
-                </div>
-              </li>
-            </ul>
-          </div>
-        </li>
-        <li class="media">
-          <a class="pull-left">
-            <%= image_tag("plus.png", :alt => "expand", :class => "media-object mediaListIcon") %>
-          </a>
-          <div class="media-body">
-            <h4 class="media-heading">路线一</h4>
-            描述
-          </div>
-        </li>
-        <li class="media">
-          <a class="pull-left">
-            <%= image_tag("plus.png", :alt => "expand", :class => "media-object mediaListIcon") %>
-          </a>
-          <div class="media-body">
-            <h4 class="media-heading">路线一</h4>
-            描述
-          </div>
-        </li>
-      </ul>
+      <span class="hiddenSpan" id="routesTreeIfNoneMatch"></span>
+      <span class="hiddenSpan" id="routesTreeIfModifiedSince"></span>
+      <div id="routesTree">
+      </div>
     </div>
     <div class="containerDiv" id="recordsDiv">
       <div>
