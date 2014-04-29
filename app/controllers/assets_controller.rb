@@ -1,4 +1,5 @@
 class AssetsController < ApplicationController
+  include AssetsHelper
   before_action :set_asset, only: [:show, :edit, :update, :destroy]
 
   # GET /assets
@@ -7,7 +8,8 @@ class AssetsController < ApplicationController
     begin
 
       @assets = Asset.where(asset_params)
-      if stale?(etag: @assets.to_a,
+      @assets_index_json =  index_json_builder(@assets)
+      if stale?(etag: @assets_index_json,
                 last_modified: @assets.maximum(:updated_at))
         render template: 'assets/index', status: :ok
       else

@@ -40,16 +40,20 @@ class CheckResultsController < ApplicationController
         start_time_ = Time.at(params[:start_time]).to_datetime
         end_time_ = Time.at(params[:end_time]).to_datetime
 
+        route_sessions = Hash.new
+
         params[:points].each { |point|
           route_ids = point['routes']
           check_time_ =  Time.at(point['check_time']).to_datetime
           route_ids.each { |route_id|
             route = CheckRoute.find(route_id)
-            session = route.check_sessions.create!({user: params[:user],
+            if route_sessions[route_id].nil?
+              route_sessions[route_id]  = route.check_sessions.create!({user: params[:user],
                                                     start_time: start_time_,
                                                     end_time: end_time_,
                                                     session: params[:session]})
-            CheckResult.create!({check_session_id: session.id,
+            end
+            CheckResult.create!({check_session_id: route_sessions[route_id].id,
                                  check_point_id: point['id'],
                                  check_time: check_time_,
                                  result: point['result'],
