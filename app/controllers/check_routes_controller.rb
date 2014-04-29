@@ -5,8 +5,7 @@ class CheckRoutesController < ApplicationController
   # GET /check_routes
   # GET /check_routes.json
   def index
-
-    @check_routes = CheckRoute.where(check_route_params)
+    @check_routes = get_routes(check_route_params)
     route_assets = nil
     if params[:group_by_asset] == 'true'
       route_assets = Hash.new # Key is route id and value is assets (Hash of key = asset id and value = points)
@@ -102,7 +101,7 @@ class CheckRoutesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_check_route
-      @check_route = CheckRoute.find(params[:id])
+      @check_route = get_routes({id: params[:id]}).take!
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
