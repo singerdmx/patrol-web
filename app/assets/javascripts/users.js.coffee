@@ -15,6 +15,8 @@ onSidebarClick = ->
     $('div.containerDiv').hide()
     $(containerDiv).show()
     switch id
+      when 'routes'
+        setupTreeView('div#routesTree')
       when 'records'
         updateRecordsTable(containerDiv)
     return
@@ -22,15 +24,32 @@ onSidebarClick = ->
 
 setupTreeView = (containerDiv) ->
   $.ajax
-    url: getBaseURL() + '/routes.json?group_by_asset=true&ui=true'
+    url: getBaseURL() + '/routes.json'
+    data:
+      group_by_asset: true
+      ui: true
+    beforeSend: (xhr) ->
+      routesTreeIfNoneMatch = $("#{containerDiv} span#routesTreeIfNoneMatch").text()
+      routesTreeIfModifiedSince = $("#{containerDiv} span#routesTreeIfModifiedSince").text()
+
+      if routesTreeIfNoneMatch isnt '' and routesTreeIfModifiedSince isnt ''
+        xhr.setRequestHeader('If-None-Match', routesTreeIfNoneMatch)
+        xhr.setRequestHeader('If-Modified-Since', routesTreeIfModifiedSince)
+
+      return
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
         $(containerDiv).html('')
         buildTreeNode($(containerDiv), data)
         bindTreeViewClick()
+        $("#{containerDiv} span#routesTreeIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} span#routesTreeIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+
+      return
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
+    ifModified:true,
     dataType: 'json',
     timeout: defaultAjaxCallTimeout
 
@@ -49,7 +68,7 @@ buildTreeNode = (parent, data) ->
         <span>#{nodeDatum.description}</span>"
 
     $ul = $(parent.children('ul')[i])
-    buildTreeNode($($ul.find('li > div.media-body')[0]), nodeDatum.children)
+    buildTreeNode($ul.find('li > div.media-body'), nodeDatum.children)
   return
 
 bindTreeViewClick = ->
@@ -159,6 +178,7 @@ updateRecordsTable = (containerDiv) ->
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
+    ifModified:true,
     dataType: 'json',
     timeout: defaultAjaxCallTimeout
 
