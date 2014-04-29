@@ -383,21 +383,337 @@ route7.check_points << asset30.check_points.first
 route7.check_points << asset31.check_points.first
 route1.users << user1
 
-session1 = CheckSession.create!({check_route_id: 1, start_time: '2014-04-01 15:53:29 -0700', end_time: '2014-04-02 15:53:29 -0700', user:'joel', session: '34324ar'})
-session2 = CheckSession.create!({check_route_id: 2, start_time: '2014-03-01 15:53:29 -0700', end_time: '2014-03-02 15:53:29 -0700', user:'ben', session: 'erewr43'})
-session3 = CheckSession.create!({check_route_id: 3, start_time: '2013-04-01 15:53:29 -0700', end_time: '2013-04-02 15:53:29 -0700', user:'alex', session: '2243dg'})
+session1 = CheckSession.create!(
+    {check_route_id: 1,
+     start_time: "2014-04-29 06:36:09.0",
+     end_time: "2014-04-29 06:42:53.0",
+     user:'user@test.com',
+     session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
+     created_at: "2014-04-29 06:47:34.740",
+     updated_at: "2014-04-29 06:47:34.740"
+    })
+session2 = CheckSession.create!(
+    {check_route_id: 4,
+     start_time: "2014-04-29 06:36:09.0",
+     end_time: "2014-04-29 06:42:53.0",
+     user:'user@test.com',
+     session: 'b34ed3eb-36e6-445d-a9f7-79f4577c033d',
+     created_at: "2014-04-29 06:47:34.758",
+     updated_at: "2014-04-29 06:47:34.758"
+    })
+session3 = CheckSession.create!(
+    {check_route_id: 5,
+     start_time: "2014-04-29 06:36:09.0",
+     end_time: "2014-04-29 06:42:53.0",
+     user:'user@test.com',
+     session: 'b34ed3eb-36e6-445d-a9f7-79f4577c033d',
+     created_at: "2014-04-29 06:47:34.774",
+     updated_at: "2014-04-29 06:47:34.774"
+    })
+session4 = CheckSession.create!(
+    {check_route_id: 3,
+     start_time: "2014-04-29 06:43:08.0",
+     end_time: "2014-04-29 06:45:26.0",
+     user:'user@test.com',
+     session: '0a5764f4-1170-4b34-904c-fc8b2c6d5592',
+     created_at: "2014-04-29 06:47:34.864",
+     updated_at: "2014-04-29 06:47:34.864"
+    })
+session5 = CheckSession.create!(
+    {check_route_id: 5,
+     start_time: "2014-04-29 06:43:08.0",
+     end_time: "2014-04-29 06:45:26.0",
+     user:'user@test.com',
+     session: '0a5764f4-1170-4b34-904c-fc8b2c6d5592',
+     created_at: "2014-04-29 06:47:34.873",
+     updated_at: "2014-04-29 06:47:34.873"
+    })
+session6 = CheckSession.create!(
+    {check_route_id: 6,
+     start_time: "2014-04-29 06:43:08.0",
+     end_time: "2014-04-29 06:45:26.0",
+     user:'user@test.com',
+     session: '0a5764f4-1170-4b34-904c-fc8b2c6d5592',
+     created_at: "2014-04-29 06:47:34.882",
+     updated_at: "2014-04-29 06:47:34.882"
+    })
+session7 = CheckSession.create!(
+    {check_route_id: 3,
+     start_time: "2014-04-29 06:45:39.0",
+     end_time: "2014-04-29 06:47:36.0",
+     user:'user@test.com',
+     session: '515fc0e0-0506-404a-b9d3-9c56744f2232',
+     created_at: "2014-04-29 06:47:34.951",
+     updated_at: "2014-04-29 06:47:34.951"
+    })
+session8 = CheckSession.create!(
+    {check_route_id: 7,
+     start_time: "2014-04-29 06:45:39.0",
+     end_time: "2014-04-29 06:47:36.0",
+     user:'user@test.com',
+     session: '515fc0e0-0506-404a-b9d3-9c56744f2232',
+     created_at: "2014-04-29 06:47:34.963",
+     updated_at: "2014-04-29 06:47:34.963"
+    })
 
 route1.check_sessions << session1
-route1.check_sessions << session2
-route1.check_sessions << session3
+route4.check_sessions << session2
+route5.check_sessions << session3
 
-route2.check_sessions << session1
-route2.check_sessions << session2
+route3.check_sessions << session4
+route5.check_sessions << session5
+route6.check_sessions << session6
 
-route3.check_sessions << session3
+route3.check_sessions << session7
+route7.check_sessions << session8
 
-CheckResult.create({result: 'pass', check_session_id:1,  check_point_id: 2,  status: 0, memo: "not much", check_time: '2014-04-02 15:53:29 -0700'})
-CheckResult.create({result: 'fail', check_session_id:1,  check_point_id: 3,  status: 1, check_time: '2011-04-02 15:53:29 -0700'})
-CheckResult.create({result: 'pass', check_session_id:2,  check_point_id: 1,  status: 3, check_time: '2010-04-02 15:53:29 -0700'})
-CheckResult.create({result: 'fail', check_session_id:2,  check_point_id: 2,  status: 2, check_time: '2019-04-02 15:53:29 -0700'})
-
+CheckResult.create(
+    {result: "70",
+     status: 0,
+     memo: "hot",
+     check_time: "2014-04-29 06:39:41.0",
+     check_point_id: 1,
+     check_session_id: 4,
+     created_at: "2014-04-29 06:47:34.747",
+     updated_at: "2014-04-29 06:47:34.747"
+    })
+CheckResult.create(
+    {result: "60",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:40:12.0",
+     check_point_id: 4,
+     check_session_id: 4,
+     created_at: "2014-04-29 06:47:34.747",
+     updated_at: "2014-04-29 06:47:34.747"
+    })
+CheckResult.create(
+    {result: "??",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:40:27.0",
+     check_point_id: 3,
+     check_session_id: 4,
+     created_at: "2014-04-29 06:47:34.755",
+     updated_at: "2014-04-29 06:47:34.755"
+    })
+CheckResult.create(
+    {result: "",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:40:46.0",
+     check_point_id: 8,
+     check_session_id: 5,
+     created_at: "2014-04-29 06:47:34.760",
+     updated_at: "2014-04-29 06:47:34.760"
+    })
+CheckResult.create(
+    {result: "",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:41:10.0",
+     check_point_id: 9,
+     check_session_id: 5,
+     created_at: "2014-04-29 06:47:34.763",
+     updated_at: "2014-04-29 06:47:34.763"
+    })
+CheckResult.create(
+    {result: "",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:41:20.0",
+     check_point_id: 10,
+     check_session_id: 5,
+     created_at: "2014-04-29 06:47:34.765",
+     updated_at: "2014-04-29 06:47:34.765"
+    })
+CheckResult.create(
+    {result: "",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:41:29.0",
+     check_point_id: 11,
+     check_session_id: 5,
+     created_at: "2014-04-29 06:47:34.767",
+     updated_at: "2014-04-29 06:47:34.767"
+    })
+CheckResult.create(
+    {result: "",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:41:48.0",
+     check_point_id: 12,
+     check_session_id: 5,
+     created_at: "2014-04-29 06:47:34.770",
+     updated_at: "2014-04-29 06:47:34.770"
+    })
+CheckResult.create(
+    {result: "",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:41:55.0",
+     check_point_id: 13,
+     check_session_id: 5,
+     created_at: "2014-04-29 06:47:34.772",
+     updated_at: "2014-04-29 06:47:34.772"
+    })
+CheckResult.create(
+    {result: "",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:42:33.0",
+     check_point_id: 15,
+     check_session_id: 6,
+     created_at: "2014-04-29 06:47:34.776",
+     updated_at: "2014-04-29 06:47:34.776"
+    })
+CheckResult.create(
+    {result: "",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:42:24.0",
+     check_point_id: 14,
+     check_session_id: 6,
+     created_at: "2014-04-29 06:47:34.779",
+     updated_at: "2014-04-29 06:47:34.779"
+    })
+CheckResult.create(
+    {result: "",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:42:45.0",
+     check_point_id: 16,
+     check_session_id: 6,
+     created_at: "2014-04-29 06:47:34.781",
+     updated_at: "2014-04-29 06:47:34.781"
+    })
+CheckResult.create(
+    {result: "??",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:43:38.0",
+     check_point_id: 7,
+     check_session_id: 7,
+     created_at: "2014-04-29 06:47:34.866",
+     updated_at: "2014-04-29 06:47:34.866"
+    })
+CheckResult.create(
+    {result: "65",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:43:38.0",
+     check_point_id: 4,
+     check_session_id: 7,
+     created_at: "2014-04-29 06:47:34.869",
+     updated_at: "2014-04-29 06:47:34.869"
+    })
+CheckResult.create(
+    {result: "??",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:43:54.0",
+     check_point_id: 3,
+     check_session_id: 7,
+     created_at: "2014-04-29 06:47:34.871",
+     updated_at: "2014-04-29 06:47:34.871"
+    })
+CheckResult.create(
+    {result: "",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:44:30.0",
+     check_point_id: 14,
+     check_session_id: 8,
+     created_at: "2014-04-29 06:47:34.875",
+     updated_at: "2014-04-29 06:47:34.875"
+    })
+CheckResult.create(
+    {result: "",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:44:49.0",
+     check_point_id: 15,
+     check_session_id: 8,
+     created_at: "2014-04-29 06:47:34.878",
+     updated_at: "2014-04-29 06:47:34.878"
+    })
+CheckResult.create(
+    {result: "",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:44:57.0",
+     check_point_id: 16,
+     check_session_id: 8,
+     created_at: "2014-04-29 06:47:34.880",
+     updated_at: "2014-04-29 06:47:34.880"
+    })
+CheckResult.create(
+    {result: "??",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:45:10.0",
+     check_point_id: 17,
+     check_session_id: 9,
+     created_at: "2014-04-29 06:47:34.884",
+     updated_at: "2014-04-29 06:47:34.884"
+    })
+CheckResult.create(
+    {result: "??",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:45:22.0",
+     check_point_id: 18,
+     check_session_id: 9,
+     created_at: "2014-04-29 06:47:34.886",
+     updated_at: "2014-04-29 06:47:34.886"
+    })
+CheckResult.create(
+    {result: "??",
+     status: 1,
+     memo: "",
+     check_time: "2014-04-29 06:46:45.0",
+     check_point_id: 7,
+     check_session_id: 10,
+     created_at: "2014-04-29 06:47:34.954",
+     updated_at: "2014-04-29 06:47:34.954"
+    })
+CheckResult.create(
+    {result: "??",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:46:26.0",
+     check_point_id: 3,
+     check_session_id: 10,
+     created_at: "2014-04-29 06:47:34.957",
+     updated_at: "2014-04-29 06:47:34.957"
+    })
+CheckResult.create(
+    {result: "59",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:46:45.0",
+     check_point_id: 4,
+     check_session_id: 10,
+     created_at: "2014-04-29 06:47:34.960",
+     updated_at: "2014-04-29 06:47:34.960"
+    })
+CheckResult.create(
+    {result: "66",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:47:20.0",
+     check_point_id: 19,
+     check_session_id: 11,
+     created_at: "2014-04-29 06:47:34.965",
+     updated_at: "2014-04-29 06:47:34.965"
+    })
+CheckResult.create(
+    {result: "50",
+     status: 0,
+     memo: "",
+     check_time: "2014-04-29 06:47:34.0",
+     check_point_id: 19,
+     check_session_id: 11,
+     created_at: "2014-04-29 06:47:34.968",
+     updated_at: "2014-04-29 06:47:34.968"
+    })
