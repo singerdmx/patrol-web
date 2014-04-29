@@ -332,12 +332,12 @@ route1 = CheckRoute.create!(
 route1.check_points << asset1.check_points.first
 route1.check_points << asset2.check_points.first
 route1.check_points << asset3.check_points.first
-route1.users << user1
+
 
 route2 = CheckRoute.create!(
     {name: "二工区机械8小时点巡检", description: "二工区机械8小时点巡检"})
 route2.check_points << asset1.check_points.last
-route1.users << user1
+
 
 #adding preference points
 user1.preferred_points <<  asset1.check_points.last
@@ -348,8 +348,7 @@ route3 = CheckRoute.create!(
 route3.check_points << asset2.check_points.last
 route3.check_points << asset3.check_points.first
 route3.check_points << asset3.check_points.last
-route1.users << user1
-route1.users << user2
+
 
 
 route4 = CheckRoute.create!(
@@ -360,15 +359,14 @@ route4.check_points << asset12.check_points.first
 route4.check_points << asset13.check_points.first
 route4.check_points << asset14.check_points.first
 route4.check_points << asset15.check_points.first
-route1.users << user1
-route1.users << user2
+
 
 route5 = CheckRoute.create!(
     {name: "调配前处理区润滑巡检", description: "调配前处理区润滑巡检"})
 route5.check_points << asset20.check_points.first
 route5.check_points << asset21.check_points.first
 route5.check_points << asset22.check_points.first
-route1.users << user1
+
 
 route6 = CheckRoute.create!(
     {name: "调配前处理区清洗巡检", description: "调配前处理区清洗巡检"})
@@ -381,7 +379,7 @@ route7 = CheckRoute.create!(
     {name: "调配前处理区抄表巡检", description: "调配前处理区抄表巡检"})
 route7.check_points << asset30.check_points.first
 route7.check_points << asset31.check_points.first
-route1.users << user1
+
 
 session1 = CheckSession.create!(
     {check_route_id: 1,
