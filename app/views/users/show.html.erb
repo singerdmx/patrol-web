@@ -2,10 +2,43 @@
   <div class="row">
     <div class="sidebar" id="sidebar">
       <ul class="nav nav-sidebar">
-        <li class="active" id="routes">我的路线</li>
+        <li class="active" id="preferences">我的关注</li>
+        <li id="routes">我的路线</li>
         <li id="records">我的巡检纪录</li>
         <li>设备历史</li>
       </ul>
+    </div>
+    <div class="containerDiv" id="preferencesDiv">
+      <div>
+        <span class="hiddenSpan" id="recordsIfNoneMatch"></span>
+        <span class="hiddenSpan" id="recordsIfModifiedSince"></span>
+        <span class="hiddenSpan" id="recordsCalendarUpdated">false</span>
+        <div style="width: 30%" class="calendarWidgetDiv">
+          <div>起始时间</div>
+          <div id="startTime" class="input-append">
+            <input data-format="yyyy-MM-dd" type="text"/>
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+              </i>
+            </span>
+          </div>
+        </div>
+        <div style="width: 30%" class="calendarWidgetDiv">
+          <div>结束时间</div>
+          <div id="endTime" class="input-append">
+            <input data-format="yyyy-MM-dd" type="text"/>
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+              </i>
+            </span>
+          </div>
+        </div>
+        <div style="width: 15%" class="calendarWidgetDiv">
+          <button type="button" class="btn btn-primary" style="margin-top: 16px" id="updateRecordsTableButton">
+            更新数据
+          </button>
+        </div>
+      </div>
     </div>
     <div class="containerDiv" id="routesDiv">
       <span class="hiddenSpan" id="routesTreeIfNoneMatch"></span>

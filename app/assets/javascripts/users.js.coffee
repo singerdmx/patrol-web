@@ -1,7 +1,8 @@
 $ ->
   onSidebarClick()
   $('div.containerDiv').first().show()
-  setupTreeView('div#routesTree')
+  setupRecordsDiv('div#preferencesDiv')
+  updateRecordsTable('div#preferencesDiv', { preference: true })
   setupRecordsDiv('div#recordsDiv')
   return
 
@@ -16,13 +17,15 @@ onSidebarClick = ->
     $(containerDiv).show()
     switch id
       when 'routes'
-        setupTreeView('div#routesTree')
+        renderTreeView('div#routesTree')
+      when 'preferences'
+        updateRecordsTable(containerDiv, { preference: true })
       when 'records'
         updateRecordsTable(containerDiv)
     return
   return
 
-setupTreeView = (containerDiv) ->
+renderTreeView = (containerDiv) ->
   $.ajax
     url: getBaseURL() + '/routes.json'
     data:
@@ -106,7 +109,14 @@ setupRecordsDiv = (containerDiv) ->
     return
   return
 
-updateRecordsTable = (containerDiv) ->
+updateRecordsTable = (containerDiv, params) ->
+  request_params =
+    start_time: getDatetimePickerEpoch("#{containerDiv} div#startTime")
+    end_time: getDatetimePickerEpoch("#{containerDiv} div#endTime")
+    ui: true
+
+  $.extend(request_params, params) if params # merge two objects
+
   $.ajax
     url: getBaseURL() + '/results.json'
     beforeSend: (xhr) ->
@@ -125,10 +135,7 @@ updateRecordsTable = (containerDiv) ->
         xhr.setRequestHeader('If-Modified-Since', recordsIfModifiedSince)
 
       return
-    data:
-      start_time: getDatetimePickerEpoch("#{containerDiv} div#startTime")
-      end_time: getDatetimePickerEpoch("#{containerDiv} div#endTime")
-      ui: true
+    data: request_params
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
         aaData = data.map (record) ->
