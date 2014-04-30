@@ -499,7 +499,7 @@ CheckResult.create(
      updated_at: "2014-04-29 06:47:34.747"
     })
 CheckResult.create(
-    {result: "??",
+    {result: "正常",
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:40:27.0",
@@ -599,7 +599,7 @@ CheckResult.create(
      updated_at: "2014-04-29 06:47:34.781"
     })
 CheckResult.create(
-    {result: "??",
+    {result: "安静",
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:43:38.0",
@@ -619,7 +619,7 @@ CheckResult.create(
      updated_at: "2014-04-29 06:47:34.869"
     })
 CheckResult.create(
-    {result: "??",
+    {result: "正常",
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:43:54.0",
@@ -659,7 +659,7 @@ CheckResult.create(
      updated_at: "2014-04-29 06:47:34.880"
     })
 CheckResult.create(
-    {result: "??",
+    {result: "正常",
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:45:10.0",
@@ -669,7 +669,7 @@ CheckResult.create(
      updated_at: "2014-04-29 06:47:34.884"
     })
 CheckResult.create(
-    {result: "??",
+    {result: "正常",
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:45:22.0",
@@ -679,7 +679,7 @@ CheckResult.create(
      updated_at: "2014-04-29 06:47:34.886"
     })
 CheckResult.create(
-    {result: "??",
+    {result: "异常",
      status: 1,
      memo: "",
      check_time: "2014-04-29 06:46:45.0",
@@ -689,7 +689,7 @@ CheckResult.create(
      updated_at: "2014-04-29 06:47:34.954"
     })
 CheckResult.create(
-    {result: "??",
+    {result: "正常",
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:46:26.0",
