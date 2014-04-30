@@ -13,6 +13,21 @@ class User < ActiveRecord::Base
     check_points
   end
 
+  def all_points
+    points = Set.new()
+    check_routes.each { |route|
+      points.merge(route.check_points)
+
+    }
+    points
+  end
+
+  def self.validate(point_id)
+    if user_signed_in?
+      current_user.all_points.map{|point| point.id}.include?(point_id.to_i)
+    end
+    true
+  end
 
   private :check_points, :check_points=
 

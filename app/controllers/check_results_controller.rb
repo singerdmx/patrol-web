@@ -5,7 +5,7 @@ class CheckResultsController < ApplicationController
   # GET /check_results
   # GET /check_results.json
   def index
-    @check_results = CheckResult.where(check_result_params)
+    @check_results = get_results(check_result_params, params[:preference]=='true')
     @check_results_json = index_json_builder(@check_results)
 
     if params[:ui] == 'true'
@@ -33,6 +33,7 @@ class CheckResultsController < ApplicationController
     begin
       #TODO : validate incoming ids of route and point
       if params[:points].nil?
+        #TODO: this if branch need to be removed
         @check_result = CheckResult.create!(check_result_params)
         render template: 'check_results/show', status: :created
       else
@@ -43,6 +44,7 @@ class CheckResultsController < ApplicationController
         route_sessions = Hash.new
 
         params[:points].each { |point|
+          next if !User.validate(point['id'])
           route_ids = point['routes']
           check_time_ =  Time.at(point['check_time']).to_datetime
           route_ids.each { |route_id|
@@ -107,7 +109,7 @@ class CheckResultsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_check_result
-      @check_result = CheckResult.find(params[:id])
+      @check_result = get_results({id: params[:id]}).take!
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
 
   before_action :authenticate,     only: [:index, :new, :show, :edit, :update, :destroy]
-
+  #TODO: use cancan to do authorization (e.g., user cannot create routes etc)
   protected
     def authenticate
       respond_to do |format|

@@ -49,4 +49,24 @@ module CheckResultsHelper
       ]
     end
   end
+
+  def get_results(check_result_params, preferred = false)
+    if user_signed_in?
+      if preferred
+        points = current_user.preferred_points
+      else
+        points = current_user.all_points
+      end
+      points = points.map{|point| point.id}.to_a
+      if check_result_params[:check_point_id].nil?
+        check_result_params[:check_point_id] = points
+      else
+        #remember to convert to integer in order to check inclusion against integer array
+        return CheckResult.none if !points.include?(check_result_params[:check_point_id].to_i)
+      end
+    end
+    CheckResult.where(check_result_params)
+
+  end
+
 end
