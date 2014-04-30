@@ -4,16 +4,14 @@
       <%= link_to "巡检", root_path, id: "logo" %>
       <nav>
         <ul class="nav pull-right">
-          <li><%= link_to "主页", root_path %></li>
-          <li><%= link_to "帮助", help_path %></li>
           <% if signed_in? %>
             <li id="fat-menu" class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <%= current_user.email %> <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
-                <li><%= link_to "Profile", current_user %></li>
-                <li><%= link_to "Settings", edit_user_path(current_user) %></li>
+                <li><%= link_to "用户信息", current_user %></li>
+                <li><%= link_to "设置", edit_user_path(current_user) %></li>
                 <li class="divider"></li>
                 <li>
                   <%= link_to "登出", destroy_user_session_path, method: "delete" %>
@@ -23,6 +21,7 @@
           <% else %>
             <li><%= link_to "登入", new_user_session_path %></li>
           <% end %>
+          <li><%= link_to "帮助", help_path %></li>
         </ul>
       </nav>
     </div>
