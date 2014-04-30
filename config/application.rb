@@ -31,6 +31,8 @@ module Blog
 
     I18n.config.enforce_available_locales = true
 
+    config.serve_static_assets = true
+
     #config.i18n.enforce_available_locales = false
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
     config.autoload_paths += %W(
