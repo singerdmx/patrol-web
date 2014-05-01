@@ -34,7 +34,7 @@ module CheckResultsHelper
                   elsif choice[3] != ''
                     "小于#{choice[3]}"
                   else
-                    ''
+                    'N/A'
                   end
                 else ''
               end

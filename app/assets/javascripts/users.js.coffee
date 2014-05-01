@@ -92,6 +92,10 @@ bindTreeViewClick = ->
         img.attr('src', src.replace(/minus.png/, 'plus.png'))
       when 'plus.png'
         img.attr('src', src.replace(/plus.png/, 'minus.png'))
+      when 'tool.png'
+        img.attr('src', src.replace(/tool.png/, 'care.png'))
+      when 'care.png'
+        img.attr('src', src.replace(/care.png/, 'tool.png'))
 
     $(this).next('div.media-body').children('ul.media-list').toggle()
     return
