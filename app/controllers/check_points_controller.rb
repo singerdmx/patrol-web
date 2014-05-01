@@ -1,4 +1,5 @@
 class CheckPointsController < ApplicationController
+  include CheckPointsHelper
   before_action :set_check_point, only: [:show, :edit, :update, :destroy]
 
   # GET /check_points
@@ -6,7 +7,8 @@ class CheckPointsController < ApplicationController
   def index
 
     @check_points = CheckPoint.where(check_point_params)
-    if stale?(etag: @check_points.to_a,
+    @check_points_json = index_json_builder(@check_points)
+    if stale?(etag: @check_points_json,
               last_modified: @check_points.maximum(:updated_at))
       render template: 'check_points/index', status: :ok
     else
