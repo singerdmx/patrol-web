@@ -10,9 +10,31 @@ img.mediaListIcon {
   height: 32px;
 }
 
+@mixin div_box {
+  cursor: pointer;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  display: block;
+  height: 17px;
+  position: absolute;
+  right: 10px;
+  top: 7px;
+  width: 17px;
+}
+
+div.close_box {
+  @include div_box;
+  background-image: url("/assets/notice_buttons.png");
+}
+
+div.open_box {
+  @include div_box;
+  background-image: url("/assets/open_new_window.png");
+}
+
 .sidebar {
   display: none;
-  background-color: #F5F5F5;
+  background-color: $LightSteelBlue;
   border-right: 1px solid #EEEEEE;
   bottom: 0;
   display: block;
@@ -23,6 +45,10 @@ img.mediaListIcon {
   position: fixed;
   top: 51px;
   z-index: 1000;
+
+  ul {
+    margin-top: 10px;
+  }
 }
 
 .nav-sidebar {

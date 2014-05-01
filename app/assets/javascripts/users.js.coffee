@@ -1,5 +1,5 @@
 $ ->
-  onSidebarClick()
+  setupSidebar()
   $('div.containerDiv').first().show()
   setupRecordsDiv('div#preferencesDiv')
   updateRecordsTable('div#preferencesDiv', { preference: true })
@@ -7,8 +7,16 @@ $ ->
   return
 
 # users show
-onSidebarClick = ->
-  $('#sidebar ul li').click (e) ->
+setupSidebar = ->
+  $('div#sidebar > div.close_box').click ->
+    $('div#sidebar > ul').toggle()
+    $('div#sidebar').toggleClass('transparentBackground')
+    if $(this).hasClass('close_box')
+      $(this).addClass('open_box').removeClass('close_box')
+    else
+      $(this).addClass('close_box').removeClass('open_box')
+    return
+  $('div#sidebar > ul > li').click (e) ->
     $('#sidebar ul li.active').removeClass('active')
     $(this).addClass('active')
     id = $(this).attr('id')

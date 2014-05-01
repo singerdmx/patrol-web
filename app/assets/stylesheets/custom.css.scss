@@ -129,6 +129,10 @@ span.hiddenSpan {
   background-color: $LightYellow !important;
 }
 
+.transparentBackground {
+  background-color: transparent !important;
+}
+
 /* sidebar */
 
 aside {
@@ -416,3 +420,4 @@ div.dataTables_filter label input {
 span.add-on {
   height: 17px !important;
 }
+
