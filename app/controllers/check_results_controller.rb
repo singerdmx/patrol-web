@@ -44,7 +44,9 @@ class CheckResultsController < ApplicationController
         route_sessions = Hash.new
 
         params[:points].each { |point|
-          next if !User.validate(point['id'])
+          #TODO: the following validation is commented out due to that user b may submit for user a. may need better logic
+          # for this
+          #next if !User.validate(point['id'])
           route_ids = point['routes']
           check_time_ =  Time.at(point['check_time']).to_datetime
           route_ids.each { |route_id|
