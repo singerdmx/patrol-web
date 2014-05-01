@@ -22,6 +22,7 @@ $.extend( true, $.fn.dataTable.defaults, {
     "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
     "sPaginationType": "bootstrap",
     "oLanguage": {
+        "sEmptyTable": "没有符合条件的纪录",
         "sLengthMenu": "每页显示_MENU_ 条纪录",
         "sZeroRecords": "没有符合条件的纪录",
         "sInfo": "_TOTAL_ 条纪录中显示_START_ 到 _END_",

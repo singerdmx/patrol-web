@@ -122,9 +122,10 @@ setupRecordsDiv = (containerDiv) ->
   return
 
 updateRecordsTable = (containerDiv, params) ->
+  start_time = getDatetimePickerEpoch("#{containerDiv} div#startTime")
+  end_time = getDatetimePickerEpoch("#{containerDiv} div#endTime")
   request_params =
-    start_time: getDatetimePickerEpoch("#{containerDiv} div#startTime")
-    end_time: getDatetimePickerEpoch("#{containerDiv} div#endTime")
+    check_time: "#{start_time}..#{end_time}"
     ui: true
 
   $.extend(request_params, params) if params # merge two objects
