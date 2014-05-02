@@ -46,8 +46,20 @@ setupTreeViewControlButtons = (containerDiv) ->
     $("#{containerDiv} > div#routesTree > ul.media-list > li.media > a.pull-left > img[src$='plus.png']").trigger('click')
     return
   $('div#routesTreeControlButtons > button#updatePreferences').click ->
+    updatePreferences(containerDiv)
     $("#{containerDiv} > span#preferencesUpdated").text('false')
     return
+  return
+
+updatePreferences = (containerDiv) ->
+  preferences = {}
+  for img in $("#{containerDiv} > div#routesTree ul.media-list > li.media > a.pull-left > img[src$='care.png']")
+    id = $(img).attr('data-id')
+    preferences[id] = true
+
+  # TODO: make ajax call to server
+  for preference in Object.keys(preferences)
+    alert parseInt(preference)
   return
 
 renderTreeView = (containerDiv) ->
