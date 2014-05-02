@@ -52,14 +52,14 @@ setupTreeViewControlButtons = (containerDiv) ->
   return
 
 updatePreferences = (containerDiv) ->
-  preferences = {}
+  preferences = new HashSet()
   for img in $("#{containerDiv} > div#routesTree ul.media-list > li.media > a.pull-left > img[src$='care.png']")
     id = $(img).attr('data-id')
-    preferences[id] = true
+    preferences.add(id)
 
   # TODO: make ajax call to server
-  for preference in Object.keys(preferences)
-    alert parseInt(preference)
+  for preference in preferences.values()
+    alert preference
   return
 
 renderTreeView = (containerDiv) ->
