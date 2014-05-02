@@ -203,3 +203,7 @@ function getBaseURL() {
     var baseURL = url.substring(0, url.indexOf('/', 14));
     return baseURL;
 }
+
+function getPageTitle() {
+    return document.getElementsByTagName("title")[0].innerHTML;
+}

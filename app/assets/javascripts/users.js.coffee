@@ -39,10 +39,10 @@ setupSidebar = ->
 
 setupTreeViewControlButtons = (containerDiv) ->
   $('div#routesTreeControlButtons > button#collapseTree').click ->
-    $("#{containerDiv} > div#routesTree > ul.media-list > li.media > a.pull-left > img[src='/assets/minus.png']").trigger('click')
+    $("#{containerDiv} > div#routesTree > ul.media-list > li.media > a.pull-left > img[src$='minus.png']").trigger('click')
     return
   $('div#routesTreeControlButtons > button#openTree').click ->
-    $("#{containerDiv} > div#routesTree > ul.media-list > li.media > a.pull-left > img[src='/assets/plus.png']").trigger('click')
+    $("#{containerDiv} > div#routesTree > ul.media-list > li.media > a.pull-left > img[src$='plus.png']").trigger('click')
     return
   $('div#routesTreeControlButtons > button#updatePreferences').click ->
     $("#{containerDiv} > span#preferencesUpdated").text('false')
