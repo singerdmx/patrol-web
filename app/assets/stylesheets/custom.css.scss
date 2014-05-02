@@ -411,9 +411,11 @@ div.DTFC_LeftFootWrapper table {
   border-top: none;
 }
 
-
-div.dataTables_filter label input {
-  width: 80%;
+div.dataTables_filter label {
+  width: 250px !important;
+  input {
+    width: 200px !important;
+  }
 }
 
 /* calendar */

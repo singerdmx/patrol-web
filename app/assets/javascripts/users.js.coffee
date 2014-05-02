@@ -5,6 +5,9 @@ $ ->
   updateRecordsTable('div#preferencesDiv', { preference: true })
   setupTreeViewControlButtons('div#routesDiv')
   setupRecordsDiv('div#recordsDiv')
+
+  # Check on exiting page
+  window.onbeforeunload = confirmExit
   return
 
 # users show
@@ -99,7 +102,7 @@ bindTreeViewClick = (containerDiv) ->
   $("#{containerDiv} ul.media-list > li.media > a.pull-left").click ->
     img = $(this).children('img.media-object.mediaListIcon')
     src = img.attr('src')
-    pic = src.split('/').last()
+    pic = src.split('/').pop()
     switch pic
       when 'minus.png'
         img.attr('src', src.replace(/minus.png/, 'plus.png'))
@@ -175,10 +178,9 @@ updateRecordsTable = (containerDiv, params) ->
     data: request_params
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
-        aaData = data.map (record) ->
+        for record in data
           checkTime = new Date(record[7])
           record[7] = "#{checkTime.getFullYear()}年#{checkTime.getMonth()+1}月#{checkTime.getDate()}日 #{checkTime.getHours()}:#{checkTime.getMinutes()}"
-          record
 
         columns = [
           { "sTitle": "名称" },
@@ -210,7 +212,7 @@ updateRecordsTable = (containerDiv, params) ->
         $("#{containerDiv} div#recordsTable_wrapper").remove()
         $("#{containerDiv} > div").append('<table id="recordsTable"></table>')
         $("#{containerDiv} table#recordsTable").dataTable
-          'aaData': aaData,
+          'aaData': data,
           'aoColumns': columns
           'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
             switch aaData[4]
@@ -230,3 +232,7 @@ updateRecordsTable = (containerDiv, params) ->
     timeout: defaultAjaxCallTimeout
 
   return
+
+confirmExit = ->
+  if $('div#routesDiv > span#preferencesUpdated').text() is 'true'
+    '您在“我的路线”页面有更新但未点击“更新我的关注”按钮，还要继续离开本页吗？'
