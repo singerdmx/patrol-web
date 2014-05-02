@@ -1,7 +1,7 @@
 $ ->
   setupSidebar()
   $('div.containerDiv').first().show()
-  setupRecordsDiv('div#preferencesDiv')
+  setupRecordsDiv('div#preferencesDiv', { preference: true })
   updateRecordsTable('div#preferencesDiv', { preference: true })
   setupTreeViewControlButtons('div#routesDiv')
   setupRecordsDiv('div#recordsDiv')
@@ -41,6 +41,9 @@ setupTreeViewControlButtons = (containerDiv) ->
   $('div#routesTreeControlButtons > button#openTree').click ->
     $("#{containerDiv} > div#routesTree > ul.media-list > li.media > a.pull-left > img[src='/assets/plus.png']").trigger('click')
     return
+  $('div#routesTreeControlButtons > button#updatePreferences').click ->
+    $("#{containerDiv} > span#preferencesUpdated").text('false')
+    return
   return
 
 renderTreeView = (containerDiv) ->
@@ -62,9 +65,9 @@ renderTreeView = (containerDiv) ->
       if jqHXR.status is 200
         $(containerDiv).html('')
         buildTreeNode($(containerDiv), data)
-        bindTreeViewClick()
-        $("#{containerDiv} span#routesTreeIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
-        $("#{containerDiv} span#routesTreeIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+        bindTreeViewClick(containerDiv)
+        $("#{containerDiv} > span#routesTreeIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} > span#routesTreeIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 
       return
     error: (jqXHR, textStatus, errorThrown) ->
@@ -82,7 +85,7 @@ buildTreeNode = (parent, data) ->
     <ul class='media-list'>
       <li class='media'>
         <a class='pull-left'>
-          <img src='/assets/#{nodeDatum.icon}' class='media-object mediaListIcon'>
+          <img src='/assets/#{nodeDatum.icon}' class='media-object mediaListIcon' data-id='#{nodeDatum.id}'/>
         </a>
         <div class='media-body'>
         <h4 class='media-heading'>#{nodeDatum.title}</h4>
@@ -92,8 +95,8 @@ buildTreeNode = (parent, data) ->
     buildTreeNode($ul.find('li > div.media-body'), nodeDatum.children)
   return
 
-bindTreeViewClick = ->
-  $('ul.media-list > li.media > a.pull-left').click ->
+bindTreeViewClick = (containerDiv) ->
+  $("#{containerDiv} ul.media-list > li.media > a.pull-left").click ->
     img = $(this).children('img.media-object.mediaListIcon')
     src = img.attr('src')
     pic = src.split('/').last()
@@ -102,17 +105,28 @@ bindTreeViewClick = ->
         img.attr('src', src.replace(/minus.png/, 'plus.png'))
       when 'plus.png'
         img.attr('src', src.replace(/plus.png/, 'minus.png'))
-      when 'tool.png'
-        img.attr('src', src.replace(/tool.png/, 'care.png'))
-      when 'care.png'
-        img.attr('src', src.replace(/care.png/, 'tool.png'))
+      when 'tool.png', 'care.png'
+        $('div#routesDiv > span#preferencesUpdated').text('true')
+        syncSamePointImg(containerDiv, img, pic)
 
     $(this).next('div.media-body').children('ul.media-list').toggle()
     return
 
   return
 
-setupRecordsDiv = (containerDiv) ->
+syncSamePointImg = (containerDiv, img, pic) ->
+  id = img.attr('data-id')
+  for imgElem in $("#{containerDiv} ul.media-list > li.media > a.pull-left > img[data-id=#{id}]")
+    imgElem = $(imgElem)
+    src = imgElem.attr('src')
+    switch pic
+      when 'tool.png'
+        imgElem.attr('src', src.replace(/tool.png/, 'care.png'))
+      when 'care.png'
+        imgElem.attr('src', src.replace(/care.png/, 'tool.png'))
+  return
+
+setupRecordsDiv = (containerDiv, params) ->
   # Calendar widget
   $("#{containerDiv} div#startTime").datetimepicker(datetimePickerSettings)
   $("#{containerDiv} div#endTime").datetimepicker(datetimePickerSettings)
@@ -122,12 +136,12 @@ setupRecordsDiv = (containerDiv) ->
   endTimePicker.setLocalDate(today)
   startTimePicker.setLocalDate(today.addDays(-1))
   $("#{containerDiv} div#startTime > span.add-on, #{containerDiv} div#endTime > span.add-on, #{containerDiv} div#startTime, #{containerDiv} div#endTime").click ->
-    $("#{containerDiv} span#recordsCalendarUpdated").text('true')
+    $("#{containerDiv} > span#recordsCalendarUpdated").text('true')
     return
 
   # 更新button
   $("#{containerDiv} button#updateRecordsTableButton").click (e) ->
-    updateRecordsTable(containerDiv)
+    updateRecordsTable(containerDiv, params)
     return
   return
 
@@ -143,15 +157,15 @@ updateRecordsTable = (containerDiv, params) ->
   $.ajax
     url: getBaseURL() + '/results.json'
     beforeSend: (xhr) ->
-      recordsCalendarUpdated = $("#{containerDiv} span#recordsCalendarUpdated").text() is 'true'
+      recordsCalendarUpdated = $("#{containerDiv} > span#recordsCalendarUpdated").text() is 'true'
 
       if recordsCalendarUpdated
         # Force update since we changed calendar
-        $("#{containerDiv} span#recordsCalendarUpdated").text('false')
+        $("#{containerDiv} > span#recordsCalendarUpdated").text('false')
         return
 
-      recordsIfNoneMatch = $("#{containerDiv} span#recordsIfNoneMatch").text()
-      recordsIfModifiedSince = $("#{containerDiv} span#recordsIfModifiedSince").text()
+      recordsIfNoneMatch = $("#{containerDiv} > span#recordsIfNoneMatch").text()
+      recordsIfModifiedSince = $("#{containerDiv} > span#recordsIfModifiedSince").text()
 
       if recordsIfNoneMatch isnt '' and recordsIfModifiedSince isnt ''
         xhr.setRequestHeader('If-None-Match', recordsIfNoneMatch)
@@ -188,8 +202,11 @@ updateRecordsTable = (containerDiv, params) ->
           },
           { "sTitle": "检测时间" }
         ]
-        oTable = $("#{containerDiv} table#recordsTable").dataTable();
-        oTable.fnDestroy() unless oTable?
+        if $("#{containerDiv} table#recordsTable > tbody[role='alert'] td.dataTables_empty").length is 0
+          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
+          oTable = $("#{containerDiv} table#recordsTable").dataTable()
+          oTable.fnDestroy() unless oTable?
+
         $("#{containerDiv} div#recordsTable_wrapper").remove()
         $("#{containerDiv} > div").append('<table id="recordsTable"></table>')
         $("#{containerDiv} table#recordsTable").dataTable
@@ -203,8 +220,8 @@ updateRecordsTable = (containerDiv, params) ->
                 $(nRow).addClass('yellowBackground')
             return
 
-        $("#{containerDiv} span#recordsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
-        $("#{containerDiv} span#recordsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+        $("#{containerDiv} > span#recordsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} > span#recordsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
