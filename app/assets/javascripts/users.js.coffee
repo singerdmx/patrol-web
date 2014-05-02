@@ -3,6 +3,7 @@ $ ->
   $('div.containerDiv').first().show()
   setupRecordsDiv('div#preferencesDiv')
   updateRecordsTable('div#preferencesDiv', { preference: true })
+  setupTreeViewControlButtons('div#routesDiv')
   setupRecordsDiv('div#recordsDiv')
   return
 
@@ -33,6 +34,15 @@ setupSidebar = ->
     return
   return
 
+setupTreeViewControlButtons = (containerDiv) ->
+  $('div#routesTreeControlButtons > button#collapseTree').click ->
+    $("#{containerDiv} > div#routesTree > ul.media-list > li.media > a.pull-left > img[src='/assets/minus.png']").trigger('click')
+    return
+  $('div#routesTreeControlButtons > button#openTree').click ->
+    $("#{containerDiv} > div#routesTree > ul.media-list > li.media > a.pull-left > img[src='/assets/plus.png']").trigger('click')
+    return
+  return
+
 renderTreeView = (containerDiv) ->
   $.ajax
     url: getBaseURL() + '/routes.json'
@@ -40,8 +50,8 @@ renderTreeView = (containerDiv) ->
       group_by_asset: true
       ui: true
     beforeSend: (xhr) ->
-      routesTreeIfNoneMatch = $("#{containerDiv} span#routesTreeIfNoneMatch").text()
-      routesTreeIfModifiedSince = $("#{containerDiv} span#routesTreeIfModifiedSince").text()
+      routesTreeIfNoneMatch = $("#{containerDiv} > span#routesTreeIfNoneMatch").text()
+      routesTreeIfModifiedSince = $("#{containerDiv} > span#routesTreeIfModifiedSince").text()
 
       if routesTreeIfNoneMatch isnt '' and routesTreeIfModifiedSince isnt ''
         xhr.setRequestHeader('If-None-Match', routesTreeIfNoneMatch)
