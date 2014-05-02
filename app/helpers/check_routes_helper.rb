@@ -56,6 +56,10 @@ module CheckRoutesHelper
 
   def route_assets_children(assets, asset_map)
     children = []
+    preference_points = Set.new
+    current_user.preferred_points.each do |p|
+      preference_points.add(p.id)
+    end
     assets.each do |asset_id, points|
       asset = {}
       if points.size == 1 and Settings::CATEGORY_SCAN_ONLY.include? points.first.category
@@ -63,7 +67,7 @@ module CheckRoutesHelper
         point = points.first
         asset[:id] = point.id
         asset[:kind] = 'point'
-        asset[:icon] = 'tool.png'
+        asset[:icon] = preference_points.include?(point.id) ? 'care.png' : 'tool.png'
         asset[:title] = point.name
         asset[:description] = point.description
         asset[:children] = []
@@ -78,7 +82,7 @@ module CheckRoutesHelper
           {
             id: point.id,
             kind: 'point',
-            icon: 'tool.png',
+            icon: preference_points.include?(point.id) ? 'care.png' : 'tool.png',
             title: point.name,
             description: point.description,
             children: []
