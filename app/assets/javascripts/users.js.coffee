@@ -1,4 +1,5 @@
 $ ->
+  return unless getPageTitle() is '巡检 | 用户'
   setupSidebar()
   $('div.containerDiv').first().show()
   setupRecordsDiv('div#preferencesDiv', { preference: true })

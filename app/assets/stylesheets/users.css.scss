@@ -72,6 +72,11 @@ div.calendarWidgetDiv {
   text-align: center;
   float: left;
   margin-bottom: 10px;
+  div.input-append {
+    input {
+      width: 200px !important;
+    }
+  }
 }
 
 div#routesTreeControlButtons {
