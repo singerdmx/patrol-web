@@ -335,7 +335,24 @@ asset31.check_points.create([
                                 {
                                     name:         "电表2",
                                     description:  "抄表",
-                                    barcode:      "3006723188101",
+                                    barcode:      "",
+                                    state:        "运转",
+                                    category:         30,
+                                    choice:       '[]',
+                                } ])
+
+asset32 = Asset.create({
+                           tag: SecureRandom.urlsafe_base64(10),
+                           number: SecureRandom.random_number(5),
+                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode:     "3006723188101",
+                           name: "电表32",
+                           description: "电表32" })
+asset32.check_points.create([
+                                {
+                                    name:         "电表32",
+                                    description:  "抄表",
+                                    barcode:      "",
                                     state:        "运转",
                                     category:         30,
                                     choice:       '[]',
