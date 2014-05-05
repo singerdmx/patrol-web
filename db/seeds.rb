@@ -34,6 +34,13 @@ user2 = User.create! do |u|
   #u.ensure_authentication_token!
 end
 
+user3 = User.create! do |u|
+  u.email = 'user3@test.com'
+  u.password = 'user1234'
+  u.password_confirmation = 'user1234'
+  #u.ensure_authentication_token!
+end
+
 admin1 = Admin.create! do |u|
   u.email = 'admin@test.com'
   u.password = 'admin1234'
@@ -334,6 +341,23 @@ asset31.check_points.create([
                                     choice:       '[]',
                                 } ])
 
+asset32 = Asset.create({
+                           tag: SecureRandom.urlsafe_base64(10),
+                           number: SecureRandom.random_number(5),
+                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode:     "",
+                           name: "电表32",
+                           description: "电表32" })
+asset32.check_points.create([
+                                {
+                                    name:         "电表32",
+                                    description:  "抄表",
+                                    barcode:      "",
+                                    state:        "运转",
+                                    category:         30,
+                                    choice:       '[]',
+                                } ])
+
 route1 = CheckRoute.create!(
     {name: "一工区机械8小时点巡检", description: "一工区机械8小时点巡检"})
 route1.check_points << asset1.check_points.first
@@ -386,6 +410,11 @@ route7 = CheckRoute.create!(
 route7.check_points << asset30.check_points.first
 route7.check_points << asset31.check_points.first
 
+route8 = CheckRoute.create!(
+    {name: "调配前处理区抄表巡检", description: "调配前处理区抄表巡检"})
+route8.check_points << asset31.check_points.first
+route8.check_points << asset32.check_points.first
+
 route1.users << user1
 route2.users << user1
 route3.users << user1
@@ -393,6 +422,8 @@ route4.users << user1
 route5.users << user2
 route6.users << user2
 route7.users << user2
+route8.users << user3
+
 
 session1 = CheckSession.create!(
     {check_route_id: 1,
