@@ -39,13 +39,13 @@ setupSidebar = ->
   return
 
 setupTreeViewControlButtons = (containerDiv) ->
-  $('div#routesTreeControlButtons > button#collapseTree').click ->
+  $('div#routesTreeControlButtons button#collapseTree').click ->
     $("#{containerDiv} > div#routesTree > ul.media-list > li.media > a.pull-left > img[src$='minus.png']").trigger('click')
     return
-  $('div#routesTreeControlButtons > button#openTree').click ->
+  $('div#routesTreeControlButtons button#openTree').click ->
     $("#{containerDiv} > div#routesTree > ul.media-list > li.media > a.pull-left > img[src$='plus.png']").trigger('click')
     return
-  $('div#routesTreeControlButtons > button#updatePreferences').click ->
+  $('div#routesTreeControlButtons button#updatePreferences').click ->
     updatePreferences(containerDiv)
     $("#{containerDiv} > span#preferencesUpdated").text('false')
     return
@@ -58,9 +58,9 @@ updatePreferences = (containerDiv) ->
     preferences.add(id)
 
   # TODO: make ajax call to server
-  for preference in preferences.values()
-    alert preference
-  return
+#  for preference in preferences.values()
+#    alert preference
+#  return
 
 renderTreeView = (containerDiv) ->
   $.ajax
