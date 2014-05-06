@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :null_session
 
-  before_action :authenticate,     only: [:index, :new, :show, :edit, :update, :destroy]
+  #before_action :authenticate,     only: [:index, :new, :show, :edit, :update, :destroy]
   #TODO: use cancan to do authorization (e.g., user cannot create routes etc)
   protected
     def authenticate
