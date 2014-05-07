@@ -52,15 +52,30 @@ setupTreeViewControlButtons = (containerDiv) ->
   return
 
 updatePreferences = (containerDiv) ->
-  preferences = new HashSet()
+  _preferences = new HashSet()
   for img in $("#{containerDiv} > div#routesTree ul.media-list > li.media > a.pull-left > img[src$='care.png']")
     id = $(img).attr('data-id')
-    preferences.add(id)
+    _preferences.add(parseInt(id))
 
-  # TODO: make ajax call to server
-#  for preference in preferences.values()
-#    alert preference
-#  return
+  preferences = []
+  for preference in _preferences.values()
+    preferences.push(preference)
+
+  $.ajax
+    url: getBaseURL() + '/user_preferences.json'
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify({ preferences: preferences }),
+    dataType: 'text',
+    success: (data, textStatus, jqHXR) ->
+      alert '更新成功'
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    timeout: defaultAjaxCallTimeout
+
+  return
 
 renderTreeView = (containerDiv) ->
   $.ajax

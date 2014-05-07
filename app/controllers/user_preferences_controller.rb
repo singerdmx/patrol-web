@@ -38,10 +38,11 @@ class UserPreferencesController < ApplicationController
   def create
 
     begin
-      if params[:preferences].nil?
+      if !params.has_key?(:preferences)
         @user_preference = UserPreference.create!(user_preference_params)
         render template: 'user_preferences/show', status: :created
       else
+        params[:preferences] ||= []
         old_points = current_user.preferred_points.map{|point| point.id}
         to_delete = old_points - params[:preferences]
         to_add =  params[:preferences] -  old_points

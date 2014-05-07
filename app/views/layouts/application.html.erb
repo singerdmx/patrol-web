@@ -11,7 +11,10 @@
     <%= javascript_include_tag "jshashset-3.0", "data-turbolinks-track" => true %>
     <%= javascript_include_tag "jshashtable-3.0", "data-turbolinks-track" => true %>
     <!--[if lt IE 9]>
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if gt IE 8]>
+      <%= javascript_include_tag "json2", "data-turbolinks-track" => true %>
     <![endif]-->
     <!-- DataTables CSS -->
     <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
