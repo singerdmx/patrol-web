@@ -1,10 +1,11 @@
 class UserPreferencesController < ApplicationController
+  include UserPreferencesHelper
   before_action :set_user_preference, only: [:show, :edit, :update, :destroy]
 #  before_action :authenticate_admin!|| :authenticate_user!
   # GET /user_preferences
   # GET /user_preferences.json
   def index
-    @user_preferences = UserPreference.where(user_preference_params)
+    @user_preferences = get_preferences(user_preference_params)
     if stale?(etag: @user_preferences.to_a,
               last_modified: @user_preferences.maximum(:updated_at))
       render template: 'user_preferences/index', status: :ok
@@ -37,8 +38,20 @@ class UserPreferencesController < ApplicationController
   def create
 
     begin
-      @user_preference = UserPreference.create!(user_preference_params)
-      render template: 'user_preferences/show', status: :created
+      if params[:preferences].nil?
+        @user_preference = UserPreference.create!(user_preference_params)
+        render template: 'user_preferences/show', status: :created
+      else
+        old_points = current_user.preferred_points.map{|point| point.id}
+        to_delete = old_points - params[:preferences]
+        to_add =  params[:preferences] -  old_points
+        UserPreference.where({user_id: current_user.id, check_point_id: to_delete}).delete_all
+        to_add.each do |point_id|
+          UserPreference.create!({user_id: current_user.id, check_point_id: point_id})
+        end
+        render :nothing => true, :status => :created
+      end
+
     rescue Exception => e
       render json: {:message=> e.to_s}.to_json, status: :internal_server_error
     end
@@ -78,7 +91,7 @@ class UserPreferencesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user_preference
-      @user_preference = UserPreference.find(params[:id])
+      @user_preference = get_preferences({id:params[:id]}).take!
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

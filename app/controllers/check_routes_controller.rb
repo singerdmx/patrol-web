@@ -1,7 +1,7 @@
 class CheckRoutesController < ApplicationController
   include CheckRoutesHelper
   before_action :set_check_route, only: [:show, :edit, :update, :destroy]
-
+  #TODO: disable user role for D of results
   # GET /check_routes
   # GET /check_routes.json
   def index

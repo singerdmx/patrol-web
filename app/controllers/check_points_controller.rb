@@ -1,7 +1,7 @@
 class CheckPointsController < ApplicationController
   include CheckPointsHelper
   before_action :set_check_point, only: [:show, :edit, :update, :destroy]
-
+  #TODO: disable user role for CUD of points
   # GET /check_points
   # GET /check_points.json
   def index

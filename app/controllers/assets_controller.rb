@@ -1,7 +1,7 @@
 class AssetsController < ApplicationController
   include AssetsHelper
   before_action :set_asset, only: [:show, :edit, :update, :destroy]
-
+  #TODO: disable user role for CUD of assets
   # GET /assets
   # GET /assets.json
   def index
