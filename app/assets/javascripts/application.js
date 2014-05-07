@@ -207,3 +207,11 @@ function getBaseURL() {
 function getPageTitle() {
     return document.getElementsByTagName("title")[0].innerHTML;
 }
+
+// Calendar widget
+window.datetimePickerSettings = {
+    pickTime: false,
+    language: 'zh',
+    pick12HourFormat: true,
+    endDate: getToday()
+};

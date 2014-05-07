@@ -148,6 +148,17 @@ setupRecordsDiv = (containerDiv, params) ->
   $("#{containerDiv} div#endTime").datetimepicker(datetimePickerSettings)
   startTimePicker = $("#{containerDiv} div#startTime").data('datetimepicker')
   endTimePicker = $("#{containerDiv} div#endTime").data('datetimepicker')
+  $("#{containerDiv} div#startTime").on 'changeDate', (e) ->
+    start_time = e.localDate.getTime()/1000
+    end_time = getDatetimePickerEpoch("#{containerDiv} div#endTime")
+    endTimePicker.setLocalDate(new Date(start_time * 1000)) if start_time > end_time
+    return
+  $("#{containerDiv} div#endTime").on 'changeDate', (e) ->
+    end_time = e.localDate.getTime()/1000
+    start_time = getDatetimePickerEpoch("#{containerDiv} div#startTime")
+    startTimePicker.setLocalDate(new Date(end_time * 1000)) if start_time > end_time
+    return
+
   today = getToday()
   endTimePicker.setLocalDate(today)
   startTimePicker.setLocalDate(today.addDays(-1))
@@ -163,7 +174,7 @@ setupRecordsDiv = (containerDiv, params) ->
 
 updateRecordsTable = (containerDiv, params) ->
   start_time = getDatetimePickerEpoch("#{containerDiv} div#startTime")
-  end_time = getDatetimePickerEpoch("#{containerDiv} div#endTime")
+  end_time = getDatetimePickerEpoch("#{containerDiv} div#endTime") + 86400 # Add one day for 86400 seconds (60 * 60 * 24)
   request_params =
     check_time: "#{start_time}..#{end_time}"
     ui: true
