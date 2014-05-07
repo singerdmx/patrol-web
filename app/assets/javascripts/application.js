@@ -209,9 +209,11 @@ function getPageTitle() {
 }
 
 // Calendar widget
-window.datetimePickerSettings = {
-    pickTime: false,
-    language: 'zh',
-    pick12HourFormat: true,
-    endDate: getToday()
+function getDatetimePickerSettings() {
+    return {
+        pickTime: false,
+        language: 'zh',
+        pick12HourFormat: true,
+        endDate: getToday()
+    }
 };

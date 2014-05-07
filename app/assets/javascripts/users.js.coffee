@@ -144,8 +144,8 @@ syncSamePointImg = (containerDiv, img, pic) ->
 
 setupRecordsDiv = (containerDiv, params) ->
   # Calendar widget
-  $("#{containerDiv} div#startTime").datetimepicker(datetimePickerSettings)
-  $("#{containerDiv} div#endTime").datetimepicker(datetimePickerSettings)
+  $("#{containerDiv} div#startTime").datetimepicker(getDatetimePickerSettings())
+  $("#{containerDiv} div#endTime").datetimepicker(getDatetimePickerSettings())
   startTimePicker = $("#{containerDiv} div#startTime").data('datetimepicker')
   endTimePicker = $("#{containerDiv} div#endTime").data('datetimepicker')
   $("#{containerDiv} div#startTime").on 'changeDate', (e) ->
