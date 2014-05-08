@@ -22,6 +22,18 @@ class User < ActiveRecord::Base
     points
   end
 
+  def is_admin
+    read_attribute(:role) == 0
+  end
+
+  def is_leader
+    read_attribute(:role) == 1
+  end
+  def is_user
+    read_attribute(:role) == 2
+  end
+
+
   def self.validate(point_id)
     if user_signed_in?
       current_user.all_points.map{|point| point.id}.include?(point_id.to_i)

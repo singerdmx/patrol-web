@@ -24,6 +24,8 @@ user1 = User.create! do |u|
   u.email = 'user@test.com'
   u.password = 'user1234'
   u.password_confirmation = 'user1234'
+  u.role = 2
+  u.name = "u1"
   #u.ensure_authentication_token!
 end
 
@@ -31,6 +33,8 @@ user2 = User.create! do |u|
   u.email = 'user2@test.com'
   u.password = 'user1234'
   u.password_confirmation = 'user1234'
+  u.role = 2
+  u.name = "u2"
   #u.ensure_authentication_token!
 end
 
@@ -38,13 +42,17 @@ user3 = User.create! do |u|
   u.email = 'user3@test.com'
   u.password = 'user1234'
   u.password_confirmation = 'user1234'
+  u.role = 1
+  u.name = 'leader'
   #u.ensure_authentication_token!
 end
 
-admin1 = Admin.create! do |u|
+user4 = User.create! do |u|
   u.email = 'admin@test.com'
   u.password = 'admin1234'
   u.password_confirmation = 'admin1234'
+  u.role = 0
+  u.name = 'admin'
   #u.ensure_authentication_token!
 end
 
