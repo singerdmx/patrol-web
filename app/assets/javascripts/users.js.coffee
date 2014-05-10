@@ -2,17 +2,14 @@ $ ->
   return unless getPageTitle() is '巡检 | 用户'
   setupSidebar()
   $('div.containerDiv').first().show()
-  setupRecordsDiv('div#preferencesDiv', { preference: true })
+  setupRecordsDiv('div#preferencesDiv', 1, { preference: true })
   updateRecordsTable('div#preferencesDiv', { preference: true })
   setupTreeViewControlButtons('div#routesDiv')
-  setupRecordsDiv('div#recordsDiv')
+  setupRecordsDiv('div#recordsDiv', 1)
+  setupHistoryDiv('div#historyDiv')
 
   # Check on exiting page
   window.onbeforeunload = confirmExit
-  return
-
-setupHistoryDiv = ->
-  $.jqplot('chartdiv',  [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]])
   return
 
 # users show
@@ -40,7 +37,7 @@ setupSidebar = ->
       when 'records'
         updateRecordsTable(containerDiv)
       when 'history'
-        setupHistoryDiv()
+        updateChart()
     return
   return
 
@@ -163,8 +160,17 @@ syncSamePointImg = (containerDiv, img, pic) ->
         imgElem.attr('src', src.replace(/care.png/, 'tool.png'))
   return
 
-setupRecordsDiv = (containerDiv, params) ->
+setupRecordsDiv = (containerDiv, defaultCalendarDaysRange, params) ->
   # Calendar widget
+  setupCalendar(containerDiv, defaultCalendarDaysRange)
+
+  # 更新button
+  $("#{containerDiv} button#updateRecordsTableButton").click (e) ->
+    updateRecordsTable(containerDiv, params)
+    return
+  return
+
+setupCalendar = (containerDiv, defaultCalendarDaysRange) ->
   $("#{containerDiv} div#startTime").datetimepicker(getDatetimePickerSettings())
   $("#{containerDiv} div#endTime").datetimepicker(getDatetimePickerSettings())
   startTimePicker = $("#{containerDiv} div#startTime").data('datetimepicker')
@@ -182,15 +188,11 @@ setupRecordsDiv = (containerDiv, params) ->
 
   today = getToday()
   endTimePicker.setLocalDate(today)
-  startTimePicker.setLocalDate(today.addDays(-1))
+  startTimePicker.setLocalDate(today.addDays(-defaultCalendarDaysRange))
   $("#{containerDiv} div#startTime > span.add-on, #{containerDiv} div#endTime > span.add-on, #{containerDiv} div#startTime, #{containerDiv} div#endTime").click ->
     $("#{containerDiv} > span#recordsCalendarUpdated").text('true')
     return
 
-  # 更新button
-  $("#{containerDiv} button#updateRecordsTableButton").click (e) ->
-    updateRecordsTable(containerDiv, params)
-    return
   return
 
 updateRecordsTable = (containerDiv, params) ->
@@ -276,6 +278,14 @@ updateRecordsTable = (containerDiv, params) ->
     dataType: 'json',
     timeout: defaultAjaxCallTimeout
 
+  return
+
+setupHistoryDiv = (containerDiv) ->
+  setupCalendar(containerDiv, 7)
+  return
+
+updateChart = ->
+  $.jqplot('chartDiv',  [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]])
   return
 
 confirmExit = ->

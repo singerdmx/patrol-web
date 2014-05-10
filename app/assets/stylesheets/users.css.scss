@@ -85,6 +85,25 @@ div#routesTreeControlButtons {
 
 
 /* historyDiv */
-input.textInput {
-  padding: 4px 0px 7px 4px !important;
+div#historyDiv {
+  > div {
+    float: left;
+
+    &.input-group {
+      width: 280px;
+      margin-top: 16px;
+      margin-left: 22px;
+      > div {
+        float: left;
+        input#barcodeInput {
+          padding: 4px 0px 7px 4px !important;
+        }
+      }
+    }
+
+    &#chartDiv {
+      height: 450px;
+      width: 100%;
+    }
+  }
 }

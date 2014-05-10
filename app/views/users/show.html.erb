@@ -91,19 +91,39 @@
       </div>
     </div>
     <div class="containerDiv" id="historyDiv">
-      <div style="width: 280px">
-        <div class="input-group">
-          <div style="float: left; width: 40%">
-            <span class="input-group-btn">
-              <button class="btn btn-info" type="button">输入条形码</button>
+      <div style="width: 60%">
+        <div style="width: 50%" class="calendarWidgetDiv">
+          <div>起始时间</div>
+          <div id="startTime" class="input-append">
+            <input data-format="yyyy-MM-dd" type="text"/>
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+              </i>
             </span>
           </div>
-          <div style="float: left; width: 60%">
-            <input type="text" class="form-control textInput"/>
+        </div>
+        <div style="width: 50%" class="calendarWidgetDiv">
+          <div>结束时间</div>
+          <div id="endTime" class="input-append">
+            <input data-format="yyyy-MM-dd" type="text"/>
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+              </i>
+            </span>
           </div>
         </div>
       </div>
-      <div id="chartdiv" style="height:400px;width:300px; "></div>
+      <div class="input-group">
+        <div style="width: 40%">
+          <span class="input-group-btn">
+            <button class="btn btn-info" type="button" id="barcodeButton">输入条形码</button>
+          </span>
+        </div>
+        <div style="width: 60%">
+          <input type="text" class="form-control" id="barcodeInput"/>
+        </div>
+      </div>
+      <div id="chartDiv"/>
     </div>
   </div>
 </div>
