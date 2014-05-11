@@ -4,7 +4,7 @@ $ ->
   $('div.containerDiv').first().show()
   setupRecordsDiv('div#preferencesDiv', 1, { preference: true })
   updateRecordsTable('div#preferencesDiv', { preference: true })
-  setupTreeViewControlButtons('div#routesDiv')
+  setupRoutesDiv('div#routesDiv')
   setupRecordsDiv('div#recordsDiv', 1)
   setupHistoryDiv('div#historyDiv')
 
@@ -41,12 +41,17 @@ setupSidebar = ->
     return
   return
 
+setupRoutesDiv  = (containerDiv) ->
+  $("div#routeList, div#routeDetails").height($(document).height() * 0.8)
+  setupTreeViewControlButtons(containerDiv)
+  return
+
 setupTreeViewControlButtons = (containerDiv) ->
   $('div#routesTreeControlButtons button#collapseTree').click ->
-    $("#{containerDiv} > div#routesTree > ul.media-list > li.media > a.pull-left > img[src$='minus.png']").trigger('click')
+    $("#{containerDiv} div#routesTree > ul.media-list > li.media > a.pull-left > img[src$='minus.png']").trigger('click')
     return
   $('div#routesTreeControlButtons button#openTree').click ->
-    $("#{containerDiv} > div#routesTree > ul.media-list > li.media > a.pull-left > img[src$='plus.png']").trigger('click')
+    $("#{containerDiv} div#routesTree > ul.media-list > li.media > a.pull-left > img[src$='plus.png']").trigger('click')
     return
   $('div#routesTreeControlButtons button#updatePreferences').click ->
     updatePreferences(containerDiv)
@@ -56,7 +61,7 @@ setupTreeViewControlButtons = (containerDiv) ->
 
 updatePreferences = (containerDiv) ->
   _preferences = new HashSet()
-  for img in $("#{containerDiv} > div#routesTree ul.media-list > li.media > a.pull-left > img[src$='care.png']")
+  for img in $("#{containerDiv} div#routesTree ul.media-list > li.media > a.pull-left > img[src$='care.png']")
     id = $(img).attr('data-id')
     _preferences.add(parseInt(id))
 

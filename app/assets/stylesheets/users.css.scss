@@ -79,10 +79,25 @@ div.calendarWidgetDiv {
   }
 }
 
-div#routesTreeControlButtons {
-  margin-bottom: 20px;
-}
+/* routesDiv */
+div#routesDiv {
+  > div {
+    float: left;
+    overflow: auto;
+  }
 
+  > div#routeList {
+    width: 30%;
+  }
+
+  > div#routeDetails {
+    padding-left: 20px;
+    width: 65%;
+    div#routesTreeControlButtons {
+      margin-bottom: 20px;
+    }
+  }
+}
 
 /* historyDiv */
 div#historyDiv {
