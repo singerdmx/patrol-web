@@ -36,8 +36,6 @@ setupSidebar = ->
         updateRecordsTable(containerDiv, { preference: true })
       when 'records'
         updateRecordsTable(containerDiv)
-      when 'history'
-        updateChart()
     return
   return
 
@@ -335,9 +333,15 @@ updateRecordsTable = (containerDiv, params) ->
 
 setupHistoryDiv = (containerDiv) ->
   setupCalendar(containerDiv, 7)
+  $("#{containerDiv} button#barcodeButton").click ->
+    updateChart()
+    return
+
   return
 
 updateChart = ->
+  # TODO: if ajax call return empty array, hide noHistoryBanner
+  $('div#noHistoryBanner').hide()
   ohlc = [
     [1, 136.01, 139.5, 134.53, 139.48],
     [2, 143.82, 144.56, 136.04, 136.97],
