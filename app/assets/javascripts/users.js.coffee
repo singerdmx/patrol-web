@@ -48,11 +48,49 @@ setupRoutesDiv  = (containerDiv) ->
   return
 
 setupRouteList = (containerDiv) ->
+  $.ajax
+    url: getBaseURL() + '/routes.json'
+    beforeSend: (xhr) ->
+      routesIfNoneMatch = $("#{containerDiv} > span#routesIfNoneMatch").text()
+      routesIfModifiedSince = $("#{containerDiv} > span#routesIfModifiedSince").text()
+
+      if routesIfNoneMatch isnt '' and routesIfModifiedSince isnt ''
+        xhr.setRequestHeader('If-None-Match', routesIfNoneMatch)
+        xhr.setRequestHeader('If-Modified-Since', routesIfModifiedSince)
+
+      return
+    success: (data, textStatus, jqHXR) ->
+      if jqHXR.status is 200
+        _$ul = $("#{containerDiv} ul.list-group")
+        _$ul.html('')
+
+        for route in data
+          _$ul.append "
+            <li class='list-group-item'>
+              <span class='badge'>#{route.points.length}</span>
+              <span class='hiddenSpan'>#{route.id}</span>
+              #{route.name}</li>"
+
+        setupRouteListClick(containerDiv)
+        $("#{containerDiv} > span#routesIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} > span#routesIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    ifModified:true,
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
+
+  return
+
+setupRouteListClick = (containerDiv) ->
   $("#{containerDiv} ul.list-group > li.list-group-item")
-    .mouseover ->
+  .mouseover ->
       $(this).addClass('blueBackground')
       return
-    .mouseout ->
+  .mouseout ->
       $(this).removeClass('blueBackground')
       return
 
@@ -104,12 +142,12 @@ renderTreeView = (containerDiv) ->
       group_by_asset: true
       ui: true
     beforeSend: (xhr) ->
-      routesTreeIfNoneMatch = $("#{containerDiv} > span#routesTreeIfNoneMatch").text()
-      routesTreeIfModifiedSince = $("#{containerDiv} > span#routesTreeIfModifiedSince").text()
+      routesIfNoneMatch = $("#{containerDiv} > span#routesIfNoneMatch").text()
+      routesIfModifiedSince = $("#{containerDiv} > span#routesIfModifiedSince").text()
 
-      if routesTreeIfNoneMatch isnt '' and routesTreeIfModifiedSince isnt ''
-        xhr.setRequestHeader('If-None-Match', routesTreeIfNoneMatch)
-        xhr.setRequestHeader('If-Modified-Since', routesTreeIfModifiedSince)
+      if routesIfNoneMatch isnt '' and routesIfModifiedSince isnt ''
+        xhr.setRequestHeader('If-None-Match', routesIfNoneMatch)
+        xhr.setRequestHeader('If-Modified-Since', routesIfModifiedSince)
 
       return
     success: (data, textStatus, jqHXR) ->
@@ -117,8 +155,8 @@ renderTreeView = (containerDiv) ->
         $(containerDiv).html('')
         buildTreeNode($(containerDiv), data)
         bindTreeViewClick(containerDiv)
-        $("#{containerDiv} > span#routesTreeIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
-        $("#{containerDiv} > span#routesTreeIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+        $("#{containerDiv} > span#routesIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} > span#routesIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 
       return
     error: (jqXHR, textStatus, errorThrown) ->
