@@ -42,8 +42,20 @@ setupSidebar = ->
   return
 
 setupRoutesDiv  = (containerDiv) ->
-  $("div#routeList, div#routeDetails").height($(document).height() * 0.8)
+  $("#{containerDiv} div#routeList, #{containerDiv} div#routeDetails").height($(document).height() * 0.8)
+  setupRouteList(containerDiv)
   setupTreeViewControlButtons(containerDiv)
+  return
+
+setupRouteList = (containerDiv) ->
+  $("#{containerDiv} ul.list-group > li.list-group-item")
+    .mouseover ->
+      $(this).addClass('blueBackground')
+      return
+    .mouseout ->
+      $(this).removeClass('blueBackground')
+      return
+
   return
 
 setupTreeViewControlButtons = (containerDiv) ->
