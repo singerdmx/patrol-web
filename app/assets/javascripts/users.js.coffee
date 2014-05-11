@@ -31,7 +31,7 @@ setupSidebar = ->
     $(containerDiv).show()
     switch id
       when 'routes'
-        renderTreeView('div#routesTree')
+        updateRouteList(containerDiv)
       when 'preferences'
         updateRecordsTable(containerDiv, { preference: true })
       when 'records'
@@ -43,11 +43,10 @@ setupSidebar = ->
 
 setupRoutesDiv  = (containerDiv) ->
   $("#{containerDiv} div#routeList, #{containerDiv} div#routeDetails").height($(document).height() * 0.8)
-  setupRouteList(containerDiv)
   setupTreeViewControlButtons(containerDiv)
   return
 
-setupRouteList = (containerDiv) ->
+updateRouteList = (containerDiv) ->
   $.ajax
     url: getBaseURL() + '/routes.json'
     beforeSend: (xhr) ->
@@ -66,15 +65,15 @@ setupRouteList = (containerDiv) ->
 
         for route in data
           _$ul.append "
-            <li class='list-group-item'>
+            <li class='list-group-item' data-id='#{route.id}'>
               <span class='badge'>#{route.points.length}</span>
-              <span class='hiddenSpan'>#{route.id}</span>
               #{route.name}</li>"
 
         setupRouteListClick(containerDiv)
         $("#{containerDiv} > span#routesIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} > span#routesIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 
+        renderTreeView("#{containerDiv} div#routesTree")
       return
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
@@ -88,10 +87,15 @@ setupRouteList = (containerDiv) ->
 setupRouteListClick = (containerDiv) ->
   $("#{containerDiv} ul.list-group > li.list-group-item")
   .mouseover ->
-      $(this).addClass('blueBackground')
+      $(this).addClass('cyanBackground')
       return
   .mouseout ->
-      $(this).removeClass('blueBackground')
+      $(this).removeClass('cyanBackground')
+      return
+  .click ->
+      $(this).toggleClass('greenBackground')
+      route_id = $(this).attr('data-id')
+      $("#{containerDiv} div#routesTree > ul[data-id='#{route_id}']").toggle()
       return
 
   return
@@ -141,20 +145,13 @@ renderTreeView = (containerDiv) ->
     data:
       group_by_asset: true
       ui: true
-    beforeSend: (xhr) ->
-      routesIfNoneMatch = $("#{containerDiv} > span#routesIfNoneMatch").text()
-      routesIfModifiedSince = $("#{containerDiv} > span#routesIfModifiedSince").text()
-
-      if routesIfNoneMatch isnt '' and routesIfModifiedSince isnt ''
-        xhr.setRequestHeader('If-None-Match', routesIfNoneMatch)
-        xhr.setRequestHeader('If-Modified-Since', routesIfModifiedSince)
-
-      return
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
         $(containerDiv).html('')
         buildTreeNode($(containerDiv), data)
         bindTreeViewClick(containerDiv)
+
+        $("#{containerDiv} > ul").hide()
         $("#{containerDiv} > span#routesIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} > span#routesIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 
@@ -171,7 +168,7 @@ renderTreeView = (containerDiv) ->
 buildTreeNode = (parent, data) ->
   for nodeDatum, i in data
     parent.append "
-    <ul class='media-list'>
+    <ul class='media-list' data-id='#{nodeDatum.id}'>
       <li class='media'>
         <a class='pull-left'>
           <img src='/assets/#{nodeDatum.icon}' class='media-object mediaListIcon' data-id='#{nodeDatum.id}'/>
