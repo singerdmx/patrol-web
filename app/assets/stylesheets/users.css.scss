@@ -105,6 +105,14 @@ div#routesDiv {
       img.media-object.mediaListIcon {
         cursor: pointer;
       }
+      span.badge {
+        margin-left: 10px !important;
+        padding-top: 1px !important;
+        cursor: pointer;
+        &:hover {
+          background-color: $LightSkyBlue;
+        }
+      }
     }
   }
 }

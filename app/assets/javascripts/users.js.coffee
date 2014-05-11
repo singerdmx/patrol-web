@@ -167,6 +167,8 @@ renderTreeView = (containerDiv) ->
 
 buildTreeNode = (parent, data) ->
   for nodeDatum, i in data
+    historyIcon = ''
+    historyIcon = "<span class='badge' data-id='#{nodeDatum.id}'>历史</span>" if nodeDatum.kind is 'point'
     parent.append "
     <ul class='media-list' data-id='#{nodeDatum.id}'>
       <li class='media'>
@@ -174,7 +176,7 @@ buildTreeNode = (parent, data) ->
           <img src='/assets/#{nodeDatum.icon}' class='media-object mediaListIcon' data-id='#{nodeDatum.id}'/>
         </a>
         <div class='media-body'>
-        <h4 class='media-heading'>#{nodeDatum.title}</h4>
+        <h4 class='media-heading'>#{nodeDatum.title}#{historyIcon}</h4>
         <span>#{nodeDatum.description}</span>"
 
     $ul = $(parent.children('ul')[i])
