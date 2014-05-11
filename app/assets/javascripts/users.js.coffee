@@ -85,18 +85,11 @@ updateRouteList = (containerDiv) ->
   return
 
 setupRouteListClick = (containerDiv) ->
-  $("#{containerDiv} ul.list-group > li.list-group-item")
-  .mouseover ->
-      $(this).addClass('cyanBackground')
-      return
-  .mouseout ->
-      $(this).removeClass('cyanBackground')
-      return
-  .click ->
-      $(this).toggleClass('greenBackground')
-      route_id = $(this).attr('data-id')
-      $("#{containerDiv} div#routesTree > ul[data-id='#{route_id}']").toggle()
-      return
+  $("#{containerDiv} ul.list-group > li.list-group-item").click ->
+    $(this).toggleClass('greenBackground')
+    route_id = $(this).attr('data-id')
+    $("#{containerDiv} div#routesTree > ul[data-id='#{route_id}']").toggle()
+    return
 
   return
 
@@ -198,6 +191,12 @@ bindTreeViewClick = (containerDiv) ->
         syncSamePointImg(containerDiv, img, pic)
 
     $(this).next('div.media-body').children('ul.media-list').toggle()
+
+    return
+
+  $("#{containerDiv} ul.media-list > li.media span.badge").click ->
+    $('div#sidebar ul > li#history').trigger('click')
+    updateChart()
     return
 
   return

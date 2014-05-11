@@ -92,6 +92,9 @@ div#routesDiv {
 
     li.list-group-item {
       cursor: pointer;
+      &:hover {
+        background-color: $LightSkyBlue;
+      }
     }
   }
 
@@ -106,7 +109,7 @@ div#routesDiv {
         cursor: pointer;
       }
       span.badge {
-        margin-left: 10px !important;
+        margin-left: 8px !important;
         padding-top: 1px !important;
         cursor: pointer;
         &:hover {
