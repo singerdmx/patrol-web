@@ -335,17 +335,10 @@ updateChart = ->
       }],
       highlighter: {
         tooltipContentEditor: (str, seriesIndex, pointIndex) ->
-          "#{str}<tr><td>point:</td><td>#{pointIndex}</td></tr></table>"
+          "<span>point: #{pointIndex}</span>"
         show: true,
-        showMarker:true,
-        tooltipAxes: 'xy',
-        tooltipLocation: 'e',
-        yvalues: 3,
-        lineWidthAdjust: 2.5,
-        formatString: '<table class="jqplot-highlighter">
-          <tr><td>index:</td><td>%s</td></tr>
-          <tr><td>hi:</td><td>%s</td></tr>
-          <tr><td>low:</td><td>%s</td></tr>'
+        showMarker: false,
+        tooltipLocation: 'se'
       }
     }
   )
