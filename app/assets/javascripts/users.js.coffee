@@ -285,7 +285,70 @@ setupHistoryDiv = (containerDiv) ->
   return
 
 updateChart = ->
-  $.jqplot('chartDiv',  [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]])
+  ohlc = [
+    [1, 136.01, 139.5, 134.53, 139.48],
+    [2, 143.82, 144.56, 136.04, 136.97],
+    [3, 136.47, 146.4, 136, 144.67],
+    [4, 124.76, 135.9, 124.55, 135.81],
+    [5, 123.73, 129.31, 121.57, 122.5],
+    [6, 127.37, 130.96, 119.38, 122.42],
+    [7, 128.24, 133.5, 126.26, 129.19],
+    [8, 122.9, 127.95, 122.66, 127.24],
+    [9, 121.73, 127.2, 118.6, 123.9],
+    [10, 120.01, 124.25, 115.76, 123.42],
+  ]
+  for o,i in ohlc
+    n = []
+    n.push(o[0])
+    n.push(o[2])
+    n.push(o[3])
+#    n.push(o[4])
+    ohlc[i] = n
+  ticks = [[0, ' '], [1,'Dec 10'], [2,'Jan 11'], [3,'Feb 11'], [4,'Mar 11'], [5,'Apr 11'], [6,'May 11'], [7,'Jun 11'], [8,'Jul 11'], [9,'Aug 11'], [10,'Sept 11'], [11, ' ']]
+  $.jqplot(
+    'chartDiv',
+    [ohlc],
+    {
+      title: '轴承 温度测量',
+      axes: {
+        xaxis: {
+          label: '时间'
+          ticks: ticks,
+          tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+          tickOptions: {
+            angle: 30
+          },
+        },
+        yaxis: {
+          min: 110,
+          max: 150,
+          tickOptions:{
+            formatString:'%.0f'
+          }
+        }
+      }
+      series: [{
+        renderer:$.jqplot.OHLCRenderer,
+        rendererOptions:{
+          lineWidth: 5
+        }
+      }],
+      highlighter: {
+        tooltipContentEditor: (str, seriesIndex, pointIndex) ->
+          "#{str}<tr><td>point:</td><td>#{pointIndex}</td></tr></table>"
+        show: true,
+        showMarker:true,
+        tooltipAxes: 'xy',
+        tooltipLocation: 'e',
+        yvalues: 3,
+        lineWidthAdjust: 2.5,
+        formatString: '<table class="jqplot-highlighter">
+          <tr><td>index:</td><td>%s</td></tr>
+          <tr><td>hi:</td><td>%s</td></tr>
+          <tr><td>low:</td><td>%s</td></tr>'
+      }
+    }
+  )
   return
 
 confirmExit = ->
