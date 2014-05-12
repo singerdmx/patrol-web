@@ -194,7 +194,7 @@ bindTreeViewClick = (containerDiv) ->
 
   $("#{containerDiv} ul.media-list > li.media span.badge").click ->
     $('div#sidebar ul > li#history').trigger('click')
-    updateChart()
+    updateChart({id: $(this).attr('data-id')})
     return
 
   return
@@ -333,72 +333,138 @@ updateRecordsTable = (containerDiv, params) ->
 
 setupHistoryDiv = (containerDiv) ->
   setupCalendar(containerDiv, 7)
+  $("#{containerDiv} input#barcodeInput").val('')
   $("#{containerDiv} button#barcodeButton").click ->
-    updateChart()
+    updateChart({barcode: $("#{containerDiv} input#barcodeInput").val()})
     return
 
   return
 
-updateChart = ->
+updateChart = (params) ->
+#  alert params.barcode
+#  alert params.id
   # TODO: if ajax call return empty array, hide noHistoryBanner
   $('div#noHistoryBanner').hide()
-  ohlc = [
-    [1, 136.01, 139.5, 134.53, 139.48],
-    [2, 143.82, 144.56, 136.04, 136.97],
-    [3, 136.47, 146.4, 136, 144.67],
-    [4, 124.76, 135.9, 124.55, 135.81],
-    [5, 123.73, 129.31, 121.57, 122.5],
-    [6, 127.37, 130.96, 119.38, 122.42],
-    [7, 128.24, 133.5, 126.26, 129.19],
-    [8, 122.9, 127.95, 122.66, 127.24],
-    [9, 121.73, 127.2, 118.6, 123.9],
-    [10, 120.01, 124.25, 115.76, 123.42],
-  ]
-  for o,i in ohlc
-    n = []
-    n.push(o[0])
-    n.push(o[2])
-    n.push(o[3])
-#    n.push(o[4])
-    ohlc[i] = n
-  ticks = [[0, ' '], [1,'Dec 10'], [2,'Jan 11'], [3,'Feb 11'], [4,'Mar 11'], [5,'Apr 11'], [6,'May 11'], [7,'Jun 11'], [8,'Jul 11'], [9,'Aug 11'], [10,'Sept 11'], [11, ' ']]
-  $.jqplot(
-    'chartDiv',
-    [ohlc],
-    {
-      title: '轴承 温度测量',
-      axes: {
-        xaxis: {
-          label: '时间'
-          ticks: ticks,
-          tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-          tickOptions: {
-            angle: 30
-          },
+#  ohlc = [
+#    [1, 136.01, 139.5, 134.53, 139.48],
+#    [2, 143.82, 144.56, 136.04, 136.97],
+#    [3, 136.47, 146.4, 136, 144.67],
+#    [4, 124.76, 135.9, 124.55, 135.81],
+#    [5, 123.73, 129.31, 121.57, 122.5],
+#    [6, 127.37, 130.96, 119.38, 122.42],
+#    [7, 128.24, 133.5, 126.26, 129.19],
+#    [8, 122.9, 127.95, 122.66, 127.24],
+#    [9, 121.73, 127.2, 118.6, 123.9],
+#    [10, 120.01, 124.25, 115.76, 123.42],
+#  ]
+#  for o,i in ohlc
+#    n = []
+#    n.push(o[0])
+#    n.push(o[2])
+#    n.push(o[3])
+#    ohlc[i] = n
+#
+#  renderHighLowChart('chartDiv', ohlc)
+  renderLineChart('chartDiv')
+
+  return
+
+renderHighLowChart = (chartId, data) ->
+  _ticks = [[0, ' '], [1,'Dec 10'], [2,'Jan 11'], [3,'Feb 11'], [4,'Mar 11'], [5,'Apr 11'], [6,'May 11'], [7,'Jun 11'], [8,'Jul 11'], [9,'Aug 11'], [10,'Sept 11'], [11, ' ']]
+  _plot_setting = {
+    title: '轴承 温度测量',
+    axes: {
+      xaxis: {
+        ticks: _ticks,
+        tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+        tickOptions: {
+          angle: 80
         },
-        yaxis: {
-          min: 110,
-          max: 150,
-          tickOptions:{
-            formatString:'%.0f'
-          }
+      },
+      yaxis: {
+        min: 110,
+        max: 150,
+        tickOptions: {
+          formatString: '%.0f'
         }
-      }
-      series: [{
-        renderer:$.jqplot.OHLCRenderer,
-        rendererOptions:{
-          lineWidth: 5
-        }
-      }],
-      highlighter: {
-        tooltipContentEditor: (str, seriesIndex, pointIndex) ->
-          "<span>point: #{pointIndex}</span>"
-        show: true,
-        showMarker: false,
-        tooltipLocation: 'se'
       }
     }
+    series: [{
+      renderer:$.jqplot.OHLCRenderer,
+      rendererOptions:{
+        lineWidth: 5
+      }
+    }],
+    highlighter: {
+      tooltipContentEditor: (str, seriesIndex, pointIndex) ->
+        "<span>point: #{pointIndex}</span>"
+      show: true,
+      showMarker: false,
+      tooltipLocation: 'se'
+    }
+  }
+
+  $.jqplot(
+    chartId,
+    [data],
+    _plot_setting
   )
+
+  return
+
+renderLineChart = (chartId, data) ->
+  _ticks = [[0, ' '], [1,'Dec 10'], [2,'Jan 11'], [3,'Feb 11'], [4,'Mar 11'], [5,'Apr 11'], [6,'May 11'], [7,'Jun 11'], [8,'Jul 11'], [9,'Aug 11'], [10,'Sept 11'], [11, ' ']]
+  data = [
+    [1, 136.01],
+    [2, 143.82],
+    [3, 136.47],
+    [4, 124.76],
+    [5, 123.73],
+    [6, 127.37],
+    [7, 128.24],
+    [8, 122.9],
+    [9, 121.73],
+    [10, 120.01],
+  ]
+  _plot_setting = {
+    title: '轴承 温度测量',
+    axes: {
+      xaxis: {
+        ticks: _ticks,
+        tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+        tickOptions: {
+          angle: 80
+        },
+      },
+      yaxis: {
+        min: 110,
+        max: 150,
+        tickOptions: {
+          formatString: '%.0f'
+        }
+      }
+    }
+    series: [{
+      rendererOptions:{
+        lineWidth: 2,
+        markerOptions: { style:'circle' }
+      }
+    }],
+    highlighter: {
+      tooltipContentEditor: (str, seriesIndex, pointIndex) ->
+        "<span>point: #{pointIndex}</span>"
+      show: true,
+      showMarker: false,
+      tooltipLocation: 'se'
+    }
+  }
+
+  $.jqplot(
+    chartId,
+    [data],
+    _plot_setting
+  )
+
   return
 
 confirmExit = ->
