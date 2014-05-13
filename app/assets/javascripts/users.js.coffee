@@ -194,7 +194,7 @@ bindTreeViewClick = (containerDiv) ->
 
   $("#{containerDiv} ul.media-list > li.media span.badge").click ->
     $('div#sidebar ul > li#history').trigger('click')
-    updateChart({id: $(this).attr('data-id')})
+    updateChart('div#historyDiv', {id: $(this).attr('data-id')})
     return
 
   return
@@ -335,42 +335,74 @@ setupHistoryDiv = (containerDiv) ->
   setupCalendar(containerDiv, 7)
   $("#{containerDiv} input#barcodeInput").val('')
   $("#{containerDiv} button#barcodeButton").click ->
-    updateChart({barcode: $("#{containerDiv} input#barcodeInput").val()})
+    updateChart('div#historyDiv', {barcode: $("#{containerDiv} input#barcodeInput").val()})
     return
 
   return
 
-updateChart = (params) ->
+updateChart = (containerDiv, params) ->
 #  alert params.barcode
 #  alert params.id
   # TODO: if ajax call return empty array, hide noHistoryBanner
   $('div#noHistoryBanner').hide()
-#  ohlc = [
-#    [1, 136.01, 139.5, 134.53, 139.48],
-#    [2, 143.82, 144.56, 136.04, 136.97],
-#    [3, 136.47, 146.4, 136, 144.67],
-#    [4, 124.76, 135.9, 124.55, 135.81],
-#    [5, 123.73, 129.31, 121.57, 122.5],
-#    [6, 127.37, 130.96, 119.38, 122.42],
-#    [7, 128.24, 133.5, 126.26, 129.19],
-#    [8, 122.9, 127.95, 122.66, 127.24],
-#    [9, 121.73, 127.2, 118.6, 123.9],
-#    [10, 120.01, 124.25, 115.76, 123.42],
-#  ]
-#  for o,i in ohlc
-#    n = []
-#    n.push(o[0])
-#    n.push(o[2])
-#    n.push(o[3])
-#    ohlc[i] = n
-#
-#  renderHighLowChart('chartDiv', ohlc)
-  renderLineChart('chartDiv')
+
+  start_time = getDatetimePickerEpoch("#{containerDiv} div#startTime")
+  end_time = getDatetimePickerEpoch("#{containerDiv} div#endTime") + 86400 # Add one day for 86400 seconds (60 * 60 * 24)
+  request_params =
+    check_time: "#{start_time}..#{end_time}"
+    ui: true
+
+  ohlc = [
+    [1, 136.01, 139.5, 134.53, 139.48],
+    [2, 143.82, 144.56, 136.04, 136.97],
+    [3, 136.47, 146.4, 136, 144.67],
+    [4, 124.76, 135.9, 124.55, 135.81],
+    [5, 123.73, 129.31, 121.57, 122.5],
+    [6, 127.37, 130.96, 119.38, 122.42],
+    [7, 128.24, 133.5, 126.26, 129.19],
+    [8, 122.9, 127.95, 122.66, 127.24],
+    [9, 121.73, 127.2, 118.6, 123.9],
+    [10, 120.01, 124.25, 115.76, 123.42],
+    [11, 136.01, 139.5, 134.53, 139.48],
+    [12, 143.82, 144.56, 136.04, 136.97],
+    [13, 136.47, 146.4, 136, 144.67],
+    [14, 124.76, 135.9, 124.55, 135.81],
+    [15, 123.73, 129.31, 121.57, 122.5],
+    [16, 127.37, 130.96, 119.38, 122.42],
+    [17, 128.24, 133.5, 126.26, 129.19],
+    [18, 122.9, 127.95, 122.66, 127.24],
+    [19, 121.73, 127.2, 118.6, 123.9],
+    [20, 120.01, 124.25, 115.76, 123.42],
+    [21, 136.01, 139.5, 134.53, 139.48],
+    [22, 143.82, 144.56, 136.04, 136.97],
+    [23, 136.47, 146.4, 136, 144.67],
+    [24, 124.76, 135.9, 124.55, 135.81],
+    [25, 123.73, 129.31, 121.57, 122.5],
+    [26, 127.37, 130.96, 119.38, 122.42],
+    [27, 128.24, 133.5, 126.26, 129.19],
+    [28, 122.9, 127.95, 122.66, 127.24],
+    [29, 121.73, 127.2, 118.6, 123.9],
+    [30, 120.01, 124.25, 115.76, 123.42],
+  ]
+  for o,i in ohlc
+    n = []
+    n.push(o[0])
+    n.push(o[2])
+    n.push(o[3])
+    ohlc[i] = n
+
+  $('div#chartDiv').html('')
+  if Math.random() < 0.5
+    renderHighLowChart('chartDiv', ohlc)
+  else
+    renderLineChart('chartDiv')
 
   return
 
 renderHighLowChart = (chartId, data) ->
-  _ticks = [[0, ' '], [1,'Dec 10'], [2,'Jan 11'], [3,'Feb 11'], [4,'Mar 11'], [5,'Apr 11'], [6,'May 11'], [7,'Jun 11'], [8,'Jul 11'], [9,'Aug 11'], [10,'Sept 11'], [11, ' ']]
+  _ticks = [[0, ' '], [1,'Dec 10'], [2,'Jan 11'], [3,'Feb 11'], [4,'Mar 11'], [5,'Apr 11'], [6,'May 11'], [7,'Jun 11'], [8,'Jul 11'], [9,'Aug 11'], [10,'Sept 11'],
+            [10, 'Jan 10'], [11,'Dec 10'], [12,'Jan 11'], [13,'Feb 11'], [14,'Mar 11'], [15,'Apr 11'], [16,'May 11'], [17,'Jun 11'], [18,'Jul 11'], [19,'Aug 11'],
+            [20, 'Jan 12'], [21,'Dec 10'], [22,'Jan 11'], [23,'Feb 11'], [24,'Mar 11'], [25,'Apr 11'], [26,'May 11'], [27,'Jun 11'], [28,'Jul 11'], [29,'Aug 11'], [30,'Sept 11'], [31, ' ']]
   _plot_setting = {
     title: '轴承 温度测量',
     axes: {
@@ -413,7 +445,9 @@ renderHighLowChart = (chartId, data) ->
   return
 
 renderLineChart = (chartId, data) ->
-  _ticks = [[0, ' '], [1,'Dec 10'], [2,'Jan 11'], [3,'Feb 11'], [4,'Mar 11'], [5,'Apr 11'], [6,'May 11'], [7,'Jun 11'], [8,'Jul 11'], [9,'Aug 11'], [10,'Sept 11'], [11, ' ']]
+  _ticks = [[0, ' '], [1,'Dec 10'], [2,'Jan 11'], [3,'Feb 11'], [4,'Mar 11'], [5,'Apr 11'], [6,'May 11'], [7,'Jun 11'], [8,'Jul 11'], [9,'Aug 11'], [10,'Sept 11'],
+            [10, 'Jan 10'], [11,'Dec 10'], [12,'Jan 11'], [13,'Feb 11'], [14,'Mar 11'], [15,'Apr 11'], [16,'May 11'], [17,'Jun 11'], [18,'Jul 11'], [19,'Aug 11'],
+            [20, 'Jan 12'], [21,'Dec 10'], [22,'Jan 11'], [23,'Feb 11'], [24,'Mar 11'], [25,'Apr 11'], [26,'May 11'], [27,'Jun 11'], [28,'Jul 11'], [29,'Aug 11'], [30,'Sept 11'], [31, ' ']]
   data = [
     [1, 136.01],
     [2, 143.82],
@@ -425,6 +459,26 @@ renderLineChart = (chartId, data) ->
     [8, 122.9],
     [9, 121.73],
     [10, 120.01],
+    [11, 136.01],
+    [12, 143.82],
+    [13, 136.47],
+    [14, 124.76],
+    [15, 123.73],
+    [16, 127.37],
+    [17, 128.24],
+    [18, 122.9],
+    [19, 121.73],
+    [20, 120.01],
+    [21, 136.01],
+    [22, 143.82],
+    [23, 136.47],
+    [24, 124.76],
+    [25, 123.73],
+    [26, 127.37],
+    [27, 128.24],
+    [28, 122.9],
+    [29, 121.73],
+    [30, 120.01],
   ]
   _plot_setting = {
     title: '轴承 温度测量',
