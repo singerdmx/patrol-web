@@ -13,9 +13,10 @@ module CheckResultsHelper
         result.delete_if {|key, value| key.in?(['check_point_id', 'check_session_id', 'created_at', 'updated_at']) }
         results << result
       end
-    elsif params[:aggregate] > 0
-      num_per_group =  index_result.count / params[:aggregate]
-      remainder =  index_result.count % params[:aggregate]
+    elsif params[:aggregate].to_i > 0
+      group = params[:aggregate].to_i
+      num_per_group =  index_result.count / group
+      remainder =  index_result.count % group
       border = remainder * (num_per_group+1)
       aggregated_results = [];
       counter = 0
