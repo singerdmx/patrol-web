@@ -5,6 +5,10 @@ class ApplicationController < ActionController::Base
 
 #  before_action :authenticate,     only: [:index, :new, :create, :show, :edit, :update, :destroy]
 
+  #rescue_from Exception do |e|
+  #  render json: {:message=> e.to_s}.to_json, status: :internal_server_error
+  #end
+
   #TODO: use cancan to do authorization (e.g., user cannot create routes etc)
   protected
     def authenticate

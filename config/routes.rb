@@ -7,7 +7,9 @@ Blog::Application.routes.draw do
 
   resources :assets
   resources :check_routes, :path => :routes
-  resources :check_points,     :path => :points
+  resources :check_points,     :path => :points do
+    resources :history, controller: 'check_results', only: [:index]
+  end
   resources :check_results, :path => :results
   resources :user_preferences
 

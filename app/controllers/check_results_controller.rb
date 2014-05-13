@@ -5,13 +5,18 @@ class CheckResultsController < ApplicationController
   # GET /check_results
   # GET /check_results.json
   def index
+    if !params[:check_point_id].nil? && params[:barcode] == 'true'
+      params[:check_point_id] = CheckPoint.where({:barcode => params[:check_point_id]}).take!.id
+    end
+
     index_para = check_result_params
+
     if !index_para[:check_time].nil?&&index_para[:check_time].include?('..')
        time_window = index_para[:check_time].split('..')
        index_para[:check_time] = Time.at(time_window[0].to_i).to_datetime..Time.at(time_window[1].to_i).to_datetime
     end
     @check_results = get_results(index_para, params[:preference]=='true')
-    @check_results_json = index_json_builder(@check_results)
+    @check_results_json = index_json_builder(@check_results, params)
 
     if params[:ui] == 'true'
       @check_results_json = index_ui_json_builder(@check_results_json)
