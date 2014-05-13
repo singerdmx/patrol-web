@@ -85,7 +85,7 @@ updateRouteList = (containerDiv) ->
 setupRouteListClick = (containerDiv) ->
   $("#{containerDiv} ul.list-group > li.list-group-item").click ->
     $(this).toggleClass('greenBackground')
-    route_id = $(this).attr('data-id')
+    route_id = $(this).data('id')
     $("#{containerDiv} div#routesTree > ul[data-id='#{route_id}']").toggle()
     return
 
@@ -107,7 +107,7 @@ setupTreeViewControlButtons = (containerDiv) ->
 updatePreferences = (containerDiv) ->
   _preferences = new HashSet()
   for img in $("#{containerDiv} div#routesTree ul.media-list > li.media > a.pull-left > img[src$='care.png']")
-    id = $(img).attr('data-id')
+    id = $(img).data('id')
     _preferences.add(parseInt(id))
 
   preferences = []
@@ -194,13 +194,13 @@ bindTreeViewClick = (containerDiv) ->
 
   $("#{containerDiv} ul.media-list > li.media span.badge").click ->
     $('div#sidebar ul > li#history').trigger('click')
-    updateChart('div#historyDiv', {id: $(this).attr('data-id')})
+    updateChart('div#historyDiv', {id: $(this).data('id')})
     return
 
   return
 
 syncSamePointImg = (containerDiv, img, pic) ->
-  id = img.attr('data-id')
+  id = img.data('id')
   for imgElem in $("#{containerDiv} ul.media-list > li.media > a.pull-left > img[data-id=#{id}]")
     imgElem = $(imgElem)
     src = imgElem.attr('src')
