@@ -41,6 +41,18 @@ setupSidebar = ->
 
 setupRoutesDiv  = (containerDiv) ->
   $("#{containerDiv} div#routeList, #{containerDiv} div#routeDetails").height($(document).height() * 0.8)
+  $("#{containerDiv} ul#routeListGroup").sortable(
+    helper : 'clone',
+    update: (event, ui) ->
+      route_id = $(ui.item[0]).data('id')
+      for _li, i in $("#{containerDiv} ul#routeListGroup > li")
+        if $(_li).data('id') is route_id
+          _treeNode = $("#{containerDiv} div#routesTree > ul[data-id='#{route_id}']")
+          $("#{containerDiv} div#routesTree > ul:nth-child(#{i+1})").before(_treeNode)
+          break
+
+      return
+  )
   setupTreeViewControlButtons(containerDiv)
   return
 
