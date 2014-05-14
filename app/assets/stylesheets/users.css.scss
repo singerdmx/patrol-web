@@ -90,10 +90,15 @@ div#routesDiv {
     width: 30%;
     margin-top: 10px;
 
-    li.list-group-item {
-      cursor: pointer;
-      &:hover {
-        background-color: $LightSkyBlue;
+    ul#routeListGroup {
+      margin-left: 3px;
+      margin-right: 10px;
+
+      li.list-group-item {
+        cursor: pointer;
+        &:hover {
+          background-color: $LightSkyBlue;
+        }
       }
     }
   }

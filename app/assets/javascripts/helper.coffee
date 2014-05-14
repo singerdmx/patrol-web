@@ -12,3 +12,16 @@ window.showErrorPage = (errorPageContent) ->
 
 # Misc
 Array::last = -> @[@length - 1]
+  
+  
+window.dateToString = (date) ->
+  "#{date.getFullYear()}年#{date.getMonth()+1}月#{date.getDate()}日 #{date.getHours()}:#{date.getMinutes()}"
+
+window.dateToShortString = (date) ->
+  "#{date.getFullYear()}年#{date.getMonth()+1}月#{date.getDate()}日"
+
+window.dateRangeToString = (start_time, end_time) ->
+  start_time_string = dateToShortString(start_time)
+  end_time_string = dateToShortString(end_time)
+  return start_time_string if start_time_string is end_time_string
+  "#{start_time_string} － #{end_time_string}"

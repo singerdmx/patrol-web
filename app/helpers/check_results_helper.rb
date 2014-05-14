@@ -15,13 +15,16 @@ module CheckResultsHelper
       end
     elsif params[:aggregate].to_i > 0
       results = {}
+      group = params[:aggregate].to_i
+      results['group'] = false
+      results['group'] = true if index_result.size() > group
+
       if !params[:check_point_id].nil?
         results['point'] = to_hash(CheckPoint.find(check_result_params[:check_point_id]))
       end
-
       case results['point']['category']
         when 30, 50
-          results['result'] = aggregate_numeric_results(index_result)
+          results['result'] = aggregate_numeric_results(index_result, group)
         else
           results['result'] = []
       end
@@ -59,7 +62,7 @@ module CheckResultsHelper
         status,
         result['memo'],
         result['point']['barcode'],
-        result['check_time'].to_i * 1000
+        result['check_time']
       ]
     end
   end
@@ -85,8 +88,7 @@ module CheckResultsHelper
 
   private
 
-  def aggregate_numeric_results(index_result)
-    group = params[:aggregate].to_i
+  def aggregate_numeric_results(index_result, group)
     num_per_group =  index_result.count / group
     remainder =  index_result.count % group
     border = remainder * (num_per_group+1)
