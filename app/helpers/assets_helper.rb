@@ -7,7 +7,6 @@ module AssetsHelper
       entry['points'] =  result.check_points.map {   |point|
                             point.id
                           }
-      entry.delete_if {|key, value| key.in?(['created_at', 'updated_at']) }
       results << entry
     end
 

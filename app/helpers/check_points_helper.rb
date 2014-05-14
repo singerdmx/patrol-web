@@ -9,7 +9,6 @@ module CheckPointsHelper
       entry['routes'] = result.check_routes.map {   |route|
                 route.id
               }
-      entry.delete_if {|key, value| key.in?([ 'created_at', 'updated_at']) }
       results << entry
     end
 

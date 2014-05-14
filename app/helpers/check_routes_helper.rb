@@ -9,9 +9,6 @@ module CheckRoutesHelper
     results = []
     check_routes.each do |route|
       entry = to_hash(route)
-
-      entry.delete_if {|key, value| key.in?(['created_at', 'updated_at']) }
-
       if route_assets.nil?
         entry['points'] = route.check_points.map do |point|
           point.id

@@ -4,66 +4,28 @@ module CheckResultsHelper
   include ApplicationHelper
   #replacement of the index.json.jbuilder for complicated converting logic
   def index_json_builder(index_result, params)
-    results = []
     if params[:aggregate].nil?
+      results = []
       index_result.each do |entry|
         result = to_hash(entry)
         result['point'] = entry.check_point
         result['session'] = entry.check_session
-        result.delete_if {|key, value| key.in?(['check_point_id', 'check_session_id', 'created_at', 'updated_at']) }
+        result.delete_if {|key, value| key.in?(['check_point_id', 'check_session_id']) }
         results << result
       end
     elsif params[:aggregate].to_i > 0
-      group = params[:aggregate].to_i
-      num_per_group =  index_result.count / group
-      remainder =  index_result.count % group
-      border = remainder * (num_per_group+1)
-      aggregated_results = [];
-      counter = 0
-      total = 0
-      index_result.each do |entry|
-        if counter == 0
-          #TODO if result is not of numerical type, we cannot really compare for min/max so need to return a different
-          #type of aggregation
-          min_val = entry
-          max_val = entry
-          min_time = entry.check_time.to_i
-          max_time = entry.check_time.to_i
-        elsif !entry.result.nil? && is_number?(entry.result)
-          min_val = min_val.result.to_f < entry.result.to_f ? min_val: entry
-          max_val = max_val.result.to_f > entry.result.to_f ? max_val: entry
-          min_time = [min_time, entry.check_time.to_i].min
-          max_time = [max_time, entry.check_time.to_i].max
-        end
-        counter = counter+1
-        total = total+1
-        if  total <= border
-          num_per_group_ = num_per_group + 1
-        else
-          num_per_group_ = num_per_group
-        end
-
-        if counter == num_per_group_ || total == index_result.count
-          aggregated_results << {
-              'min' => min_val,
-              'max'=> max_val,
-              'start_time'=> min_time,
-              'end_time'=> max_time,
-              'count' => counter
-          }
-          counter = 0
-        end
-      end
-      results = {'result' => aggregated_results}
-
-
+      results = {}
       if !params[:check_point_id].nil?
-        results['point'] = CheckPoint.find(check_result_params[:check_point_id])
+        results['point'] = to_hash(CheckPoint.find(check_result_params[:check_point_id]))
       end
 
-
+      case results['point']['category']
+        when 30, 50
+          results['result'] = aggregate_numeric_results(index_result)
+        else
+          results['result'] = []
+      end
     end
-
 
     results
   end
@@ -103,7 +65,6 @@ module CheckResultsHelper
   end
 
   def get_results(check_result_params, preferred = false)
-
     if user_signed_in?
       if preferred
         points = current_user.preferred_points
@@ -118,14 +79,60 @@ module CheckResultsHelper
         return CheckResult.none if !points.include?(check_result_params[:check_point_id].to_i)
       end
     end
-    results = CheckResult.where(check_result_params).order(check_time: :asc)
 
-    results
-
+    CheckResult.where(check_result_params).order(check_time: :asc)
   end
+
   private
-    def is_number?(object)
-      true if Float(object) rescue false
+
+  def aggregate_numeric_results(index_result)
+    group = params[:aggregate].to_i
+    num_per_group =  index_result.count / group
+    remainder =  index_result.count % group
+    border = remainder * (num_per_group+1)
+    aggregated_results = []
+    total = counter = 0
+    min_val = max_val = min_time = max_time = nil
+    index_result.each do |entry|
+      result = to_hash(entry)
+      result['check_time'] = result['check_time'].to_i
+      result['result'] = result['result'].to_f
+      if counter == 0
+        min_time = max_time = result['check_time']
+        min_val = max_val = result
+      else
+        min_val = result if result['result'] < min_val['result']
+        max_val = result if result['result'] > max_val['result']
+        min_time = [min_time, result['check_time']].min
+        max_time = [max_time, result['check_time']].max
+      end
+
+      counter += 1
+      total += 1
+      if total <= border
+        num_per_group_ = num_per_group + 1
+      else
+        num_per_group_ = num_per_group
+      end
+
+      if counter == num_per_group_ || total == index_result.count
+        aggregated_results << {
+          'min' => min_val,
+          'max'=> max_val,
+          'start_time'=> min_time,
+          'end_time'=> max_time,
+          'count' => counter
+        }
+        counter = 0
+      end
     end
+
+    aggregated_results
+  end
+
+  #def is_number?(object)
+  #  return false if object.nil?
+  #  true if Float(object) rescue false
+  #end
 
 end
