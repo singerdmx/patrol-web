@@ -413,39 +413,31 @@ renderHighLowChart = (chartId, title, data) ->
   _ticks.push([data.length+1, ' '])
   _min *= if _min > 0 then 0.98 else 1.02
   _max *= if _max > 0 then 1.02 else 0.98
-  _plot_setting = {
-    title: title,
-    axes: {
-      xaxis: {
+  _plot_setting =
+    title: title
+    axes:
+      xaxis:
         ticks: _ticks,
         tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-        tickOptions: {
+        tickOptions:
           angle: 80
-        },
-      },
-      yaxis: {
+      yaxis:
         min: _min,
         max: _max,
-        tickOptions: {
+        tickOptions:
           formatString: '%.0f'
-        }
-      }
-    }
     series: [{
       renderer:$.jqplot.OHLCRenderer,
-      rendererOptions:{
+      rendererOptions:
         lineWidth: 5
-      }
-    }],
-    highlighter: {
+    }]
+    highlighter:
       tooltipContentEditor: (str, seriesIndex, pointIndex) ->
         _hightlight_note[pointIndex]
       show: true,
       showMarker: false,
       tooltipLocation: 'se',
       formatString:'%s'
-    }
-  }
 
   $.jqplot(
     chartId,
@@ -473,38 +465,30 @@ renderLineChart = (chartId, title, data) ->
   _ticks.push([data.length+1, ' '])
   _min *= if _min > 0 then 0.98 else 1.02
   _max *= if _max > 0 then 1.02 else 0.98
-  _plot_setting = {
-    title: title,
-    axes: {
-      xaxis: {
+  _plot_setting =
+    title: title
+    axes:
+      xaxis:
         ticks: _ticks,
         tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-        tickOptions: {
+        tickOptions:
           angle: 80
-        },
-      },
-      yaxis: {
+      yaxis:
         min: _min,
         max: _max,
-        tickOptions: {
+        tickOptions:
           formatString: '%.0f'
-        }
-      }
-    }
     series: [{
-      rendererOptions:{
+      rendererOptions:
         lineWidth: 2,
         markerOptions: { style:'circle' }
-      }
-    }],
-    highlighter: {
+    }]
+    highlighter:
       tooltipContentEditor: (str, seriesIndex, pointIndex) ->
         _hightlight_note[pointIndex]
       show: true,
       showMarker: false,
       tooltipLocation: 'se'
-    }
-  }
 
   $.jqplot(
     chartId,
