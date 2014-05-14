@@ -112,7 +112,7 @@ asset3.check_points.create([
                  description:  "温度测量",
                  state:        "运转",
                  category:         50,
-                 choice:       '["", "", "", "70"]',
+                 choice:       '["0", "10", "60", "70"]',
                },
                { name:         "输入端轴承",
                  description:  "振动测量",
