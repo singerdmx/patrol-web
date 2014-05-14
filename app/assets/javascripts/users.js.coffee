@@ -351,6 +351,56 @@ setupHistoryDiv = (containerDiv) ->
 
   return
 
+getCanvasOverlayObjects = (_point) ->
+  canvasOverlayObjects = []
+  _choice = JSON.parse(_point.choice)
+  min = max = null
+  unless _choice[0] is ''
+    min = parseFloat(_choice[0])
+    canvasOverlayObjects.push(
+      dashedHorizontalLine:
+        name: 'min'
+        y: min
+        lineWidth: 1,
+        color: 'rgb(220, 20, 60)',
+        shadow: false
+    )
+
+  unless _choice[1] is ''
+    low = parseFloat(_choice[1])
+    canvasOverlayObjects.push(
+      dashedHorizontalLine:
+        name: 'low'
+        y: low
+        lineWidth: 1,
+        color: 'rgb(255, 255, 0)',
+        shadow: false
+    )
+
+  unless _choice[2] is ''
+    high = parseFloat(_choice[2])
+    canvasOverlayObjects.push(
+      dashedHorizontalLine:
+        name: 'high'
+        y: high
+        lineWidth: 1,
+        color: 'rgb(255, 255, 0)',
+        shadow: false
+    )
+
+  unless _choice[3] is ''
+    max = parseFloat(_choice[3])
+    canvasOverlayObjects.push(
+      dashedHorizontalLine:
+        name: 'max'
+        y: max
+        lineWidth: 1,
+        color: 'rgb(220, 20, 60)',
+        shadow: false
+    )
+
+  [min, max, canvasOverlayObjects]
+
 updateChart = (containerDiv, params) ->
   start_time = getDatetimePickerEpoch("#{containerDiv} div#startTime")
   end_time = getDatetimePickerEpoch("#{containerDiv} div#endTime") + 86400 # Add one day for 86400 seconds (60 * 60 * 24)
@@ -376,10 +426,12 @@ updateChart = (containerDiv, params) ->
            title = "#{_point.name}   #{_point.description}"
            switch _point.category
              when 30, 50
+               [min, max, canvasOverlayObjects] = getCanvasOverlayObjects(_point)
+
                if data.group
-                 renderHighLowChart('chartDiv', title, data.result)
+                 renderHighLowChart('chartDiv', title, data.result, min, max, canvasOverlayObjects)
                else
-                 renderLineChart('chartDiv', title, data.result)
+                 renderLineChart('chartDiv', title, data.result, min, max, canvasOverlayObjects)
              else
                $('div#noHistoryBanner').show()
 
@@ -392,12 +444,12 @@ updateChart = (containerDiv, params) ->
 
   return
 
-renderHighLowChart = (chartId, title, data) ->
+renderHighLowChart = (chartId, title, data, _min, _max, canvasOverlayObjects) ->
   _ticks = [[0, ' ']]
   _hightlight_note = []
   _line = []
-  _min = data[0].min.result
-  _max = data[0].max.result
+  _min = data[0].min.result if _min is null
+  _max = data[0].max.result if _max is null
 
   for datum, i in data
     _range = dateRangeToString(new Date(datum.start_time * 1000), new Date(datum.end_time * 1000))
@@ -438,6 +490,9 @@ renderHighLowChart = (chartId, title, data) ->
       showMarker: false,
       tooltipLocation: 'se',
       formatString:'%s'
+    canvasOverlay:
+      show: true,
+      objects: canvasOverlayObjects
 
   $.jqplot(
     chartId,
@@ -447,11 +502,12 @@ renderHighLowChart = (chartId, title, data) ->
 
   return
 
-renderLineChart = (chartId, title, data) ->
+renderLineChart = (chartId, title, data, _min, _max, canvasOverlayObjects) ->
   _ticks = [[0, ' ']]
   _hightlight_note = []
   _line = []
-  _max = _min = data[0].min.result
+  _min = data[0].min.result if _min is null
+  _max = data[0].min.result if _max is null
 
   for datum, i in data
     _range = dateToString(new Date(datum.start_time * 1000))
@@ -489,6 +545,9 @@ renderLineChart = (chartId, title, data) ->
       show: true,
       showMarker: false,
       tooltipLocation: 'se'
+    canvasOverlay:
+      show: true,
+      objects: canvasOverlayObjects
 
   $.jqplot(
     chartId,
