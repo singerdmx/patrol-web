@@ -3,7 +3,7 @@ require 'json'
 module CheckResultsHelper
   include ApplicationHelper
   #replacement of the index.json.jbuilder for complicated converting logic
-  def index_json_builder(index_result, params)
+  def index_json_builder(index_result)
     if params[:aggregate].nil?
       results = []
       index_result.each do |entry|
@@ -26,7 +26,7 @@ module CheckResultsHelper
         when 30, 50
           results['result'] = aggregate_numeric_results(index_result, group)
         else
-          results['result'] = []
+          raise "point category #{results['point']['category']} not supported for aggregated view"
       end
     end
 
