@@ -1,3 +1,5 @@
+chart_x_tick_angle = 45
+
 $ ->
   return unless getPageTitle() is '巡检 | 用户'
   setupSidebar()
@@ -497,7 +499,7 @@ renderHighLowChart = (chartId, title, data, _min, _max, canvasOverlayObjects) ->
         ticks: _ticks,
         tickRenderer: $.jqplot.CanvasAxisTickRenderer,
         tickOptions:
-          angle: 80
+          angle: chart_x_tick_angle
       yaxis:
         min: _min,
         max: _max,
@@ -553,7 +555,7 @@ renderLineChart = (chartId, title, data, _min, _max, canvasOverlayObjects) ->
         ticks: _ticks,
         tickRenderer: $.jqplot.CanvasAxisTickRenderer,
         tickOptions:
-          angle: 80
+          angle: chart_x_tick_angle
       yaxis:
         min: _min,
         max: _max,
