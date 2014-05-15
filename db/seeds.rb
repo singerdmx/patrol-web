@@ -112,6 +112,7 @@ asset3.check_points.create([
                  description:  "温度测量",
                  state:        "运转",
                  category:         50,
+                 barcode:      "999972318875",
                  choice:       '["20", "30", "60", "70"]',
                },
                { name:         "输入端轴承",
@@ -749,3 +750,32 @@ session3.check_results.create(
      created_at: "2014-04-29 06:47:34.968",
      updated_at: "2014-04-29 06:47:34.968"
     })
+
+(0..200).each do |i|
+  now = Time.now
+  session = route1.check_sessions.create!(
+    {
+      start_time: now - 3600 * 24 * 200,
+      end_time: now,
+      user:'user@test.com',
+      session: SecureRandom.uuid,
+    })
+
+  check_time = now - i * 24 * 3600
+  result = rand(100)
+  if result > 70 || result < 20
+    status = 1
+  elsif result > 60 || result < 30
+    status = 2
+  else
+    status = 0
+  end
+
+  session.check_results.create(
+    {result: result,
+     status: status,
+     memo: "",
+     check_time: check_time,
+     check_point_id: 4,
+    })
+end
