@@ -4,7 +4,7 @@ $ ->
   $('div.containerDiv').first().show()
   setupRecordsDiv('div#preferencesDiv', 1, { preference: true })
   updateRecordsTable('div#preferencesDiv', { preference: true })
-  setupRoutesDiv('div#routesDiv')
+  setupRoutesDiv('div#routes')
   setupRecordsDiv('div#recordsDiv', 1)
   setupHistoryDiv('div#historyDiv')
 
@@ -171,8 +171,8 @@ renderTreeView = (containerDiv) ->
         bindTreeViewClick(containerDiv)
 
         $("#{containerDiv} > ul").hide()
-        $("#{containerDiv} > span#routesIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
-        $("#{containerDiv} > span#routesIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+        $("#{containerDiv} span#routesIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} span#routesIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 
       return
     error: (jqXHR, textStatus, errorThrown) ->
@@ -213,7 +213,7 @@ bindTreeViewClick = (containerDiv) ->
       when 'plus.png'
         img.attr('src', src.replace(/plus.png/, 'minus.png'))
       when 'tool.png', 'care.png'
-        $('div#routesDiv > span#preferencesUpdated').text('true')
+        $('div#routes > span#preferencesUpdated').text('true')
         syncSamePointImg(containerDiv, img, pic)
 
     $(this).next('div.media-body').children('ul.media-list').toggle()
@@ -577,5 +577,5 @@ renderBarChart = (chartId, title, data) ->
   return
 
 confirmExit = ->
-  if $('div#routesDiv > span#preferencesUpdated').text() is 'true'
+  if $('div#routes > span#preferencesUpdated').text() is 'true'
     '您在“我的路线”页面有更新但未点击“更新我的关注”按钮，还要继续离开本页吗？'
