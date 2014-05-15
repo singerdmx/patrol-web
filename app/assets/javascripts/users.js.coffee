@@ -5,6 +5,7 @@ $ ->
   setupRecordsDiv('div#preferencesDiv', 1, { preference: true })
   updateRecordsTable('div#preferencesDiv', { preference: true })
   setupRoutesDiv('div#routes')
+  setupFactoriesDiv('div#factories')
   setupRecordsDiv('div#recordsDiv', 1)
   setupHistoryDiv('div#historyDiv')
 
@@ -39,6 +40,10 @@ setupSidebar = ->
     return
   return
 
+setupFactoriesDiv = (containerDiv) ->
+  setupTreeViewControlButtons(containerDiv)
+  return
+
 setupRoutesDiv  = (containerDiv) ->
   $("#{containerDiv} div#routeList, #{containerDiv} div#routeDetails").height($(document).height() * 0.8)
   $("#{containerDiv} ul#routeListGroup").sortable(
@@ -70,6 +75,10 @@ setupRoutesDiv  = (containerDiv) ->
       return
   )
   setupTreeViewControlButtons(containerDiv)
+  $('div#routesTreeControlButtons button#updatePreferences').click ->
+    updatePreferences(containerDiv)
+    $("#{containerDiv} > span#preferencesUpdated").text('false')
+    return
   return
 
 updateRouteList = (containerDiv) ->
@@ -120,15 +129,15 @@ setupRouteListClick = (containerDiv) ->
   return
 
 setupTreeViewControlButtons = (containerDiv) ->
-  $('div#routesTreeControlButtons button#collapseTree').click ->
-    $("#{containerDiv} div#routesTree ul.media-list > li.media > a.pull-left > img[src$='minus.png']").trigger('click')
+  $("#{containerDiv} button#collapseTree").click ->
+    $("#{containerDiv} ul.media-list > li.media > a.pull-left > img[src$='minus.png']").trigger('click')
     return
-  $('div#routesTreeControlButtons button#openTree').click ->
-    $("#{containerDiv} div#routesTree ul.media-list > li.media > a.pull-left > img[src$='plus.png']").trigger('click')
+  $("#{containerDiv} button#openTree").click ->
+    $("#{containerDiv} ul.media-list > li.media > a.pull-left > img[src$='plus.png']").trigger('click')
     return
-  $('div#routesTreeControlButtons button#updatePreferences').click ->
-    updatePreferences(containerDiv)
-    $("#{containerDiv} > span#preferencesUpdated").text('false')
+  $("#{containerDiv} button#toOtherDiv").click ->
+    $('div#routes').toggle()
+    $('div#factories').toggle()
     return
   return
 
