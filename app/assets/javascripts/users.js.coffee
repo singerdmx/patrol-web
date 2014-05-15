@@ -57,7 +57,7 @@ setupRoutesDiv  = (containerDiv) ->
             # move down
             if end_pos + 2 > $("#{containerDiv} div#routesTree > ul").size()
               # move it to the last
-              _treeNode.remove().insertAfter($("#{containerDiv} div#routesTree > ul:last"))
+             ($("#{containerDiv} div#routesTree > ul:last")).after(_treeNode)
             else
               # end_pos + 2 since we need to count _treeNode itself
               $("#{containerDiv} div#routesTree > ul:nth-child(#{end_pos+2})").before(_treeNode)
@@ -121,10 +121,10 @@ setupRouteListClick = (containerDiv) ->
 
 setupTreeViewControlButtons = (containerDiv) ->
   $('div#routesTreeControlButtons button#collapseTree').click ->
-    $("#{containerDiv} div#routesTree > ul.media-list > li.media > a.pull-left > img[src$='minus.png']").trigger('click')
+    $("#{containerDiv} div#routesTree ul.media-list > li.media > a.pull-left > img[src$='minus.png']").trigger('click')
     return
   $('div#routesTreeControlButtons button#openTree').click ->
-    $("#{containerDiv} div#routesTree > ul.media-list > li.media > a.pull-left > img[src$='plus.png']").trigger('click')
+    $("#{containerDiv} div#routesTree ul.media-list > li.media > a.pull-left > img[src$='plus.png']").trigger('click')
     return
   $('div#routesTreeControlButtons button#updatePreferences').click ->
     updatePreferences(containerDiv)
