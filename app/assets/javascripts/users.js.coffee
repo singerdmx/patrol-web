@@ -42,13 +42,29 @@ setupSidebar = ->
 setupRoutesDiv  = (containerDiv) ->
   $("#{containerDiv} div#routeList, #{containerDiv} div#routeDetails").height($(document).height() * 0.8)
   $("#{containerDiv} ul#routeListGroup").sortable(
-    helper : 'clone',
+    helper : 'clone'
+    start: (event, ui) ->
+      start_pos = ui.item.index()
+      ui.item.data('start_pos', start_pos)
     update: (event, ui) ->
+      start_pos = ui.item.data('start_pos')
       route_id = $(ui.item[0]).data('id')
       for _li, i in $("#{containerDiv} ul#routeListGroup > li")
         if $(_li).data('id') is route_id
+          end_pos = i
           _treeNode = $("#{containerDiv} div#routesTree > ul[data-id='#{route_id}']")
-          $("#{containerDiv} div#routesTree > ul:nth-child(#{i+1})").before(_treeNode)
+          if start_pos < end_pos
+            # move down
+            if end_pos + 2 > $("#{containerDiv} div#routesTree > ul").size()
+              # move it to the last
+              _treeNode.remove().insertAfter($("#{containerDiv} div#routesTree > ul:last"))
+            else
+              # end_pos + 2 since we need to count _treeNode itself
+              $("#{containerDiv} div#routesTree > ul:nth-child(#{end_pos+2})").before(_treeNode)
+          else
+            # move up
+            $("#{containerDiv} div#routesTree > ul:nth-child(#{end_pos+1})").before(_treeNode)
+
           break
 
       return
@@ -555,6 +571,9 @@ renderLineChart = (chartId, title, data, _min, _max, canvasOverlayObjects) ->
     _plot_setting
   )
 
+  return
+
+renderBarChart = (chartId, title, data) ->
   return
 
 confirmExit = ->
