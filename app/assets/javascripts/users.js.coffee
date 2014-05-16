@@ -373,7 +373,12 @@ setupHistoryDiv = (containerDiv) ->
   setupCalendar(containerDiv, 100)
   $("#{containerDiv} input#barcodeInput").val('')
   $("#{containerDiv} button#barcodeButton").click ->
-    updateChart('div#historyDiv', {barcode: $("#{containerDiv} input#barcodeInput").val()})
+    _val = $("#{containerDiv} input#barcodeInput").val()
+    unless $.trim(_val)
+      alert '条形码不能为空！'
+      return
+
+    updateChart('div#historyDiv', {barcode: _val})
     return
 
   return
@@ -434,7 +439,7 @@ updateChart = (containerDiv, params) ->
   request_params = { check_time: "#{start_time}..#{end_time}" }
   _id = params.id
   _barcode = params.barcode
-  if _barcode
+  unless _barcode is undefined
     request_params.barcode = true
     _id = _barcode
 
