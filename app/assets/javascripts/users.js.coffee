@@ -491,19 +491,30 @@ renderHighLowChart = (chartId, title, data, _min, _max, canvasOverlayObjects) ->
   _max = data[0].max.result if _max is null
 
   for datum, i in data
-    _range = dateRangeToString(new Date(datum.start_time * 1000), new Date(datum.end_time * 1000))
     _min = datum.min.result if datum.min.result < _min
     _max = datum.max.result if datum.max.result > _max
+
+  _min *= if _min > 0 then 0.95 else 1.05
+  _max *= if _max > 0 then 1.05 else 0.95
+  _height = (_max - _min) * 0.01
+
+  for datum, i in data
+    _range = dateRangeToString(new Date(datum.start_time * 1000), new Date(datum.end_time * 1000))
     _ticks.push([i+1, _range])
-    _line.push([i+1, datum.max.result, datum.min.result])
+    if datum.max.result - datum.min.result < _height
+      _min_factor = datum.min.result * (if datum.min.result > 0 then 0.99 else 1.01)
+      _max_factor = datum.max.result * (if datum.max.result > 0 then 1.01 else 0.99)
+      _max_factor = _min_factor + _height if _max_factor - _min_factor < _height
+      _line.push([i+1, _max_factor, _min_factor])
+    else
+      _line.push([i+1, datum.max.result, datum.min.result])
+
     _hightlight_note.push("&nbsp;#{_range}<br/>
       &nbsp;#{datum.count}个巡检点<br/>
       &nbsp;最大值： #{datum.max.result}  （#{dateToString(new Date(datum.max.check_time * 1000))}）<br/>
       &nbsp;最小值： #{datum.min.result}   （#{dateToString(new Date(datum.min.check_time * 1000))}）")
 
   _ticks.push([data.length+1, ' '])
-  _min *= if _min > 0 then 0.98 else 1.02
-  _max *= if _max > 0 then 1.02 else 0.98
   _plot_setting =
     title: title
     axes:
