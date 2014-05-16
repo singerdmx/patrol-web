@@ -465,6 +465,8 @@ updateChart = (containerDiv, params) ->
                  renderHighLowChart('chartDiv', title, data.result, min, max, canvasOverlayObjects)
                else
                  renderLineChart('chartDiv', title, data.result, min, max, canvasOverlayObjects)
+             when 40,41
+               renderBarChart('chartDiv', title, data.result, JSON.parse(_point.choice))
              else
                $('div#noHistoryBanner').show()
 
@@ -607,7 +609,48 @@ renderLineChart = (chartId, title, data, _min, _max, canvasOverlayObjects) ->
 
   return
 
-renderBarChart = (chartId, title, data) ->
+renderBarChart = (chartId, title, data, choice) ->
+  _line = new Array(3)
+  _line[0] = [20, 60, 70, 10, 20, 60, 70, 10, 20, 60, 70, 10, 20, 60, 70, 10,20, 60, 70, 10]
+  _line[1] = [40, 10, 90, 20, 20, 60, 70, 10, 20, 60, 70, 10, 20, 60, 70, 10,20, 60, 70, 10]
+  _line[2] = [60, 40, 20, 20, 20, 60, 70, 10, 20, 60, 70, 10, 20, 60, 70, 10,20, 60, 70, 10]
+  _ticks = ['May', 'June', 'July', 'August', 'May', 'June', 'July', 'August', 'May', 'June', 'July', 'August', 'May', 'June', 'July', 'August']
+  _plot_setting =
+    title: title
+    stackSeries: true
+    captureRightClick: true
+    seriesDefaults:
+      renderer: $.jqplot.BarRenderer
+      rendererOptions:
+        barMargin: 10
+      pointLabels: {show: true}
+    series:[
+      {label:'Hotel'},
+      {label:'Event Regristration'},
+      {label:'Airfare'}
+    ]
+    axes:
+      xaxis:
+        renderer: $.jqplot.CategoryAxisRenderer
+        ticks: _ticks
+      yaxis:
+        padMin: 0
+        tickOptions: {formatString: '%d'}
+    highlighter:
+      tooltipLocation: 'se'
+      tooltipAxes: 'y'
+      tooltipFormatString: '<b><i><span style="color:red;">hello</span></i></b> %d'
+      useAxesFormatters: false
+    legend:
+      show: true,
+      location: 'e',
+      placement: 'outside'
+
+  $.jqplot(
+    chartId,
+    _line,
+    _plot_setting
+  )
   return
 
 confirmExit = ->
