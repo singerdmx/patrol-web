@@ -449,6 +449,7 @@ updateChart = (containerDiv, params) ->
     data: request_params
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
+         $('div#errorBanner').hide()
          if data.result.length is 0
            $('div#noHistoryBanner').show()
          else
@@ -469,7 +470,13 @@ updateChart = (containerDiv, params) ->
 
       return
     error: (jqXHR, textStatus, errorThrown) ->
-      showErrorPage(jqXHR.responseText)
+      if jqXHR.status is 404
+        $('div#noHistoryBanner').hide()
+        $('div#errorBanner').text(jqXHR.responseJSON.error)
+        $('div#errorBanner').show()
+      else
+        showErrorPage(jqXHR.responseText)
+
       return
     dataType: 'json',
     timeout: defaultAjaxCallTimeout

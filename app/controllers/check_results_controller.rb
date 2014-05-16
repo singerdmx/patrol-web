@@ -6,8 +6,16 @@ class CheckResultsController < ApplicationController
   # GET /check_results.json
   def index
     begin
-      if !params[:check_point_id].nil? && params[:barcode] == 'true'
-        params[:check_point_id] = CheckPoint.where({:barcode => params[:check_point_id]}).take!.id
+      if !params[:check_point_id].nil?
+        if params[:barcode] == 'true'
+          point = CheckPoint.find_by(barcode: params[:check_point_id])
+          if point.nil?
+            render json: { error: "无法找到条形码为\"#{params[:check_point_id]}\"的巡检点", status: 404 }.to_json, status: 404
+            return
+          else
+            params[:check_point_id] = point.id
+          end
+        end
       end
 
       index_para = check_result_params
