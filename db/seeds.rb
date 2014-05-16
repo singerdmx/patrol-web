@@ -6,6 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 require 'securerandom'
+require 'json'
 
 #route_descriptions = ['一工区机械8小时点巡检', '二工区机械8小时点巡检','三工区机械8小时点巡检' ]
 #asset_descriptions = ['轧机电机','轧机联轴器','轧机减速机']
@@ -13,6 +14,7 @@ require 'securerandom'
 #tpm_types = ['震动','温度','声音','断裂']
 #asset_status = ['运转','停止']
 #point_standard = ['<=70', '安静']
+check_point_7_choice = '["安静","轻微噪音","大幅杂音","异常"]'
 
 CheckRoute.delete_all
 Asset.delete_all
@@ -135,7 +137,7 @@ asset3.check_points.create([
                  description:  "噪音检测",
                  state:        "运转",
                  category:         41,
-                 choice:       '["安静", "异常"]',
+                 choice:       check_point_7_choice,
                } ])
 
 asset10 = Asset.create({
@@ -777,5 +779,30 @@ session3.check_results.create(
      memo: "",
      check_time: check_time,
      check_point_id: 4,
+    })
+end
+
+check_point_7_choice_json = JSON.parse(check_point_7_choice)
+(0..200).each do |i|
+  now = Time.now
+  session = route3.check_sessions.create!(
+    {
+      start_time: now - 3600 * 24 * 200,
+      end_time: now,
+      user:'user@test.com',
+      session: SecureRandom.uuid,
+    })
+
+  check_time = now - i * 24 * 3600
+  result = rand(check_point_7_choice_json.size())
+  status = 1
+  status = 0 if result == 0
+
+  session.check_results.create(
+    {result: check_point_7_choice_json[result],
+     status: status,
+     memo: "",
+     check_time: check_time,
+     check_point_id: 7,
     })
 end
