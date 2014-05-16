@@ -25,8 +25,10 @@ module CheckResultsHelper
       case results['point']['category']
         when 30, 50
           results['result'] = aggregate_numeric_results(index_result, group)
+        when 40, 41
+          results['result'] = aggregate_enumerable_results(index_result, group, JSON.parse(results['point']['choice']))
         else
-          raise "point category #{results['point']['category']} not supported for aggregated view"
+          results['result'] = []
       end
     end
 
@@ -132,9 +134,48 @@ module CheckResultsHelper
     aggregated_results
   end
 
-  #def is_number?(object)
-  #  return false if object.nil?
-  #  true if Float(object) rescue false
-  #end
+  def aggregate_enumerable_results(index_result, group, choice)
+    num_per_group =  index_result.count / group
+    remainder =  index_result.count % group
+    border = remainder * (num_per_group+1)
+    aggregated_results = []
+    total = counter = 0
+    min_time = max_time = nil
+    selection = Array.new(choice.size(), 0)
+    index_result.each do |entry|
+      result = to_hash(entry)
+      logger.info(result)
+      index = choice.index(result['result'])
+      result['check_time'] = result['check_time'].to_i
+      if counter == 0
+        min_time = max_time = result['check_time']
+      else
+        min_time = [min_time, result['check_time']].min
+        max_time = [max_time, result['check_time']].max
+      end
+
+      selection[index] += 1
+      counter += 1
+      total += 1
+      if total <= border
+        num_per_group_ = num_per_group + 1
+      else
+        num_per_group_ = num_per_group
+      end
+
+      if counter == num_per_group_ || total == index_result.count
+        aggregated_results << {
+          'selection' => selection,
+          'start_time' => min_time,
+          'end_time' => max_time,
+          'count' => counter
+        }
+        selection = Array.new(choice.size(), 0)
+        counter = 0
+      end
+    end
+
+    aggregated_results
+  end
 
 end
