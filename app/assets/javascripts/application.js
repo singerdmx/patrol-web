@@ -238,3 +238,9 @@ $(function() {
         });
     }
 })
+
+// Pad a number to two digits
+function pad2(number) {
+    return (number < 10 ? '0' : '') + number
+
+}
