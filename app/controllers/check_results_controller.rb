@@ -10,7 +10,7 @@ class CheckResultsController < ApplicationController
         if params[:barcode] == 'true'
           point = CheckPoint.find_by(barcode: params[:check_point_id])
           if point.nil?
-            render json: { error: "无法找到条形码为\"#{params[:check_point_id]}\"的巡检点", status: 404 }.to_json, status: 404
+            render json: { error: "无法找到条形码为\"#{params[:check_point_id]}\"的巡检点" }.to_json, status: :not_found
             return
           else
             params[:check_point_id] = point.id
