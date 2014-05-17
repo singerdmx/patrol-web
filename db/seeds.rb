@@ -14,6 +14,7 @@ require 'json'
 #tpm_types = ['震动','温度','声音','断裂']
 #asset_status = ['运转','停止']
 #point_standard = ['<=70', '安静']
+check_point_3_choice = '["正常", "非正常"]'
 check_point_7_choice = '["安静","轻微噪音","大幅杂音","异常"]'
 
 CheckRoute.delete_all
@@ -98,7 +99,7 @@ asset2.check_points.create([
                  barcode:      "780672318812",
                  state:        "停止",
                  category:         41,
-                 choice:       '["正常", "非正常"]',
+                 choice:       check_point_3_choice,
                } ])
 
 asset3 = Asset.create({
@@ -753,6 +754,7 @@ session3.check_results.create(
      updated_at: "2014-04-29 06:47:34.968"
     })
 
+check_point_3_choice_json = JSON.parse(check_point_3_choice)
 (0..200).each do |i|
   now = Time.now
   session = route1.check_sessions.create!(
@@ -779,6 +781,19 @@ session3.check_results.create(
      memo: "",
      check_time: check_time,
      check_point_id: 4,
+    })
+
+  check_time = now - i * 24 * 3600
+  result = rand(check_point_3_choice_json.size())
+  status = 1
+  status = 0 if result == 0
+
+  session.check_results.create(
+    {result: check_point_3_choice_json[result],
+     status: status,
+     memo: "",
+     check_time: check_time,
+     check_point_id: 3,
     })
 end
 

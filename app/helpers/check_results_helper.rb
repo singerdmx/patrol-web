@@ -64,7 +64,7 @@ module CheckResultsHelper
         status,
         result['memo'],
         result['point']['barcode'],
-        result['check_time']
+        result['check_time'].to_i
       ]
     end
   end

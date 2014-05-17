@@ -238,9 +238,3 @@ $(function() {
         });
     }
 })
-
-// assign a default values to arrays
-Array.prototype.repeat= function(what, L){
-    while(L) this[--L]= what;
-    return this;
-}

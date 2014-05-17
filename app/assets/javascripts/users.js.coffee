@@ -466,7 +466,7 @@ updateChart = (containerDiv, params) ->
                else
                  renderLineChart('chartDiv', title, data.result, min, max, canvasOverlayObjects)
              when 40,41
-               renderBarChart('chartDiv', title, data.result, JSON.parse(_point.choice))
+               renderBarChart('chartDiv', title, data.result, data.group, JSON.parse(_point.choice))
              else
                $('div#noHistoryBanner').show()
 
@@ -609,12 +609,22 @@ renderLineChart = (chartId, title, data, _min, _max, canvasOverlayObjects) ->
 
   return
 
-renderBarChart = (chartId, title, data, choice) ->
-  _line = new Array(3)
-  _line[0] = [20, 60, 70, 10, 20, 60, 70, 10, 20, 60, 70, 10, 20, 60, 70, 10,20, 60, 70, 10]
-  _line[1] = [40, 10, 90, 20, 20, 60, 70, 10, 20, 60, 70, 10, 20, 60, 70, 10,20, 60, 70, 10]
-  _line[2] = [60, 40, 20, 20, 20, 60, 70, 10, 20, 60, 70, 10, 20, 60, 70, 10,20, 60, 70, 10]
-  _ticks = ['May', 'June', 'July', 'August', 'May', 'June', 'July', 'August', 'May', 'June', 'July', 'August', 'May', 'June', 'July', 'August']
+renderBarChart = (chartId, title, data, group, choice) ->
+  _line = []
+  _line.push(new Array()) for [1..choice.length]
+
+  _ticks = []
+  for datum, i in data
+    if group
+      _range = dateRangeToString(new Date(datum.start_time * 1000), new Date(datum.end_time * 1000))
+    else
+      _range = dateToString(new Date(datum.start_time * 1000))
+
+    _ticks.push(_range)
+    for select, i in datum.selection
+      _line[i].push(select)
+
+  _series = ({label: c} for c in choice)
   _plot_setting =
     title: title
     stackSeries: true
@@ -622,28 +632,26 @@ renderBarChart = (chartId, title, data, choice) ->
     seriesDefaults:
       renderer: $.jqplot.BarRenderer
       rendererOptions:
-        barMargin: 10
-      pointLabels: {show: true}
-    series:[
-      {label:'Hotel'},
-      {label:'Event Regristration'},
-      {label:'Airfare'}
-    ]
+        barMargin: 8
+      pointLabels:
+        show: true
+        hideZeros: true
+    series: _series
+#    seriesColors: ['rgb(220, 20, 60)', 'rgb(220, 30, 60)', 'rgb(20, 20, 60)', 'rgb(220, 20, 20)']
+    axesDefaults:
+      tickRenderer: $.jqplot.CanvasAxisTickRenderer
     axes:
       xaxis:
         renderer: $.jqplot.CategoryAxisRenderer
         ticks: _ticks
+        tickOptions:
+          angle: chart_x_tick_angle
       yaxis:
         padMin: 0
         tickOptions: {formatString: '%d'}
-    highlighter:
-      tooltipLocation: 'se'
-      tooltipAxes: 'y'
-      tooltipFormatString: '<b><i><span style="color:red;">hello</span></i></b> %d'
-      useAxesFormatters: false
     legend:
       show: true,
-      location: 'e',
+      location: 'ne',
       placement: 'outside'
 
   $.jqplot(
