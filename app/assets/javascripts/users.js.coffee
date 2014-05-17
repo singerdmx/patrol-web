@@ -449,7 +449,7 @@ updateChart = (containerDiv, params) ->
     data: request_params
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
-         $('div#errorBanner').hide()
+         $('div#errorBanner, div#infoBanner').hide()
          if data.result.length is 0
            $('div#noHistoryBanner').show()
          else
@@ -467,13 +467,16 @@ updateChart = (containerDiv, params) ->
                  renderLineChart('chartDiv', title, data.result, min, max, canvasOverlayObjects)
              when 40,41
                renderBarChart('chartDiv', title, data.result, data.group, JSON.parse(_point.choice))
+             when 10,30
+               $('div#infoBanner').text("在选择时间范围内共巡检了#{data.result}次")
+               $('div#infoBanner').show()
              else
                $('div#noHistoryBanner').show()
 
       return
     error: (jqXHR, textStatus, errorThrown) ->
       if jqXHR.status is 404
-        $('div#noHistoryBanner').hide()
+        $('div#noHistoryBanner,div#infoBanner').hide()
         $('div#errorBanner').text(jqXHR.responseJSON.error)
         $('div#errorBanner').show()
       else

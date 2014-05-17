@@ -27,6 +27,8 @@ module CheckResultsHelper
           results['result'] = aggregate_numeric_results(index_result, group)
         when 40, 41
           results['result'] = aggregate_enumerable_results(index_result, group, JSON.parse(results['point']['choice']))
+        when 10,20
+          results['result'] = index_result.size()
         else
           results['result'] = []
       end
