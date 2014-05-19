@@ -93,7 +93,7 @@ module CheckRoutesHelper
   end
 
   def get_routes(check_route_params)
-    if user_signed_in?
+    if user_signed_in? && current_user.is_user?
       current_user.check_routes.where(check_route_params)
     else
       CheckRoute.where(check_route_params)
