@@ -74,16 +74,17 @@ module CheckResultsHelper
   def get_results(check_result_params, preferred = false)
     if user_signed_in?
       if preferred
-        points = current_user.preferred_points
-      else
-        points = current_user.all_points
-      end
-      points = points.map{|point| point.id}.to_a
-      if check_result_params[:check_point_id].nil?
-        check_result_params[:check_point_id] = points
-      else
-        #remember to convert to integer in order to check inclusion against integer array
-        return CheckResult.none if !points.include?(check_result_params[:check_point_id].to_i)
+        check_result_params[:check_point_id] = current_user
+                                                 .preferred_points
+                                                 .map { |p| p.id }
+      elsif current_user.is_user?
+        points = current_user.all_points.map { |p| p.id }
+        if check_result_params[:check_point_id].nil?
+          check_result_params[:check_point_id] = points
+        else
+          # Restrict normal user to view own points only. Here assume check_result_params[:check_point_id] has one id only, not array
+          return CheckResult.none if !points.include?(check_result_params[:check_point_id].to_i)
+        end
       end
     end
 
