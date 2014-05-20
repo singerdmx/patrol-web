@@ -1,0 +1,254 @@
+<div class="containerDiv" id="preferencesDiv">
+  <div>
+    <span class="hiddenSpan" id="recordsIfNoneMatch"></span>
+    <span class="hiddenSpan" id="recordsIfModifiedSince"></span>
+    <span class="hiddenSpan" id="recordsCalendarUpdated">false</span>
+    <div style="width: 30%" class="calendarWidgetDiv">
+      <div>起始时间</div>
+      <div id="startTime" class="input-append">
+        <input data-format="yyyy-MM-dd" type="text"/>
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+              </i>
+            </span>
+      </div>
+    </div>
+    <div style="width: 30%" class="calendarWidgetDiv">
+      <div>结束时间</div>
+      <div id="endTime" class="input-append">
+        <input data-format="yyyy-MM-dd" type="text"/>
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+              </i>
+            </span>
+      </div>
+    </div>
+    <div style="width: 15%" class="calendarWidgetDiv">
+      <button type="button" class="btn btn-primary" style="margin-top: 16px" id="updateRecordsTableButton">
+        更新数据
+      </button>
+    </div>
+  </div>
+</div>
+<div class="containerDiv" id="routesDiv">
+  <%if @show_full_view %>
+    <div id="factories" style="display: <%= @show_full_view ? 'inline' : 'none' %>">
+      <div class="btn-toolbar" id="factoriesTreeControlButtons">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default" id="openTree">全部展开</button>
+          <button type="button" class="btn btn-default" id="collapseTree">全部合拢</button>
+        </div>
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary" id="toOtherDiv">查看选中路线</button>
+        </div>
+      </div>
+      <div id="factoriesTree">
+        <ul data-id="1" class="media-list" style="display: block;">
+          <li class="media">
+            <a class="pull-left">
+              <img data-id="1" class="media-object mediaListIcon" src="/assets/minus.png">
+            </a>
+
+            <div class="media-body">
+              <h4 class="media-heading">工厂</h4>
+              <span>工厂一</span>
+              <ul data-id="1" class="media-list">
+                <li class="media">
+                  <a class="pull-left">
+                    <img data-id="1" class="media-object mediaListIcon" src="/assets/minus.png">
+                  </a>
+
+                  <div class="media-body">
+                    <h4 class="media-heading">分区</h4>
+                    <span>东区</span>
+                    <ul data-id="1" class="media-list">
+                      <li class="media"><a class="pull-left">
+                        <img data-id="1" class="media-object mediaListIcon" src="/assets/tool.png"> </a>
+
+                        <div class="media-body">
+                          <h4 class="media-heading">分组</h4>
+                          <span>组一</span></div>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+              <ul data-id="2" class="media-list">
+                <li class="media">
+                  <a class="pull-left">
+                    <img data-id="2" class="media-object mediaListIcon" src="/assets/minus.png">
+                  </a>
+
+                  <div class="media-body">
+                    <h4 class="media-heading">分区</h4>
+                    <span>西区</span>
+                    <ul data-id="3" class="media-list">
+                      <li class="media"><a class="pull-left">
+                        <img data-id="3" class="media-object mediaListIcon" src="/assets/tool.png"> </a>
+
+                        <div class="media-body">
+                          <h4 class="media-heading">分组</h4>
+                          <span>组二</span></div>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+              <ul data-id="3" class="media-list">
+                <li class="media">
+                  <a class="pull-left">
+                    <img data-id="3" class="media-object mediaListIcon" src="/assets/minus.png">
+                  </a>
+                  <div class="media-body">
+                    <h4 class="media-heading">分区</h4>
+                    <span>南区</span>
+                    <ul data-id="4" class="media-list">
+                      <li class="media"><a class="pull-left">
+                        <img data-id="4" class="media-object mediaListIcon" src="/assets/care.png"> </a>
+                        <div class="media-body">
+                          <h4 class="media-heading">分组</h4>
+                          <span>组三</span>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+        <ul data-id="2" class="media-list" style="display: block;">
+          <li class="media">
+            <a class="pull-left"> <img data-id="2" class="media-object mediaListIcon" src="/assets/minus.png"> </a>
+            <div class="media-body">
+              <h4 class="media-heading">工厂</h4>
+              <span>厂二</span>
+              <ul data-id="1" class="media-list">
+                <li class="media">
+                  <a class="pull-left"> <img data-id="1" class="media-object mediaListIcon" src="/assets/minus.png">
+                  </a>
+                  <div class="media-body">
+                    <h4 class="media-heading">分区</h4>
+                    <span>北区</span>
+                    <ul data-id="2" class="media-list">
+                      <li class="media"><a class="pull-left">
+                        <img data-id="2" class="media-object mediaListIcon" src="/assets/care.png"> </a>
+                        <div class="media-body">
+                          <h4 class="media-heading">分组</h4>
+                          <span>组六</span></div>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+  <div id="routes" style="display: <%= @show_full_view ? 'none' : 'inline' %>">
+    <span class="hiddenSpan" id="routesIfNoneMatch"></span>
+    <span class="hiddenSpan" id="routesIfModifiedSince"></span>
+    <span class="hiddenSpan" id="preferencesUpdated">false</span>
+    <div id="routeList">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">路线</h3>
+        </div>
+        <div class="panel-body">
+          <ul class="list-group" id="routeListGroup">
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="routeDetails">
+      <div class="btn-toolbar" id="routesTreeControlButtons">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default" id="openTree">全部展开</button>
+          <button type="button" class="btn btn-default" id="collapseTree">全部合拢</button>
+        </div>
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary" id="updatePreferences">更新我的关注</button>
+        </div>
+        <% if @show_full_view %>
+          <div class="btn-group">
+            <button type="button" class="btn btn-info" id="toOtherDiv">返回到工厂列表</button>
+          </div>
+        <% end %>
+      </div>
+      <div id="routesTree">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="containerDiv" id="recordsDiv">
+  <div>
+    <span class="hiddenSpan" id="recordsIfNoneMatch"></span>
+    <span class="hiddenSpan" id="recordsIfModifiedSince"></span>
+    <span class="hiddenSpan" id="recordsCalendarUpdated">false</span>
+    <div style="width: 30%" class="calendarWidgetDiv">
+      <div>起始时间</div>
+      <div id="startTime" class="input-append">
+        <input data-format="yyyy-MM-dd" type="text"/>
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+              </i>
+            </span>
+      </div>
+    </div>
+    <div style="width: 30%" class="calendarWidgetDiv">
+      <div>结束时间</div>
+      <div id="endTime" class="input-append">
+        <input data-format="yyyy-MM-dd" type="text"/>
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+              </i>
+            </span>
+      </div>
+    </div>
+    <div style="width: 15%" class="calendarWidgetDiv">
+      <button type="button" class="btn btn-primary" style="margin-top: 16px" id="updateRecordsTableButton">
+        更新数据
+      </button>
+    </div>
+  </div>
+</div>
+<div class="containerDiv" id="historyDiv">
+  <div style="width: 60%">
+    <div style="width: 50%" class="calendarWidgetDiv">
+      <div>起始时间</div>
+      <div id="startTime" class="input-append">
+        <input data-format="yyyy-MM-dd" type="text"/>
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+              </i>
+            </span>
+      </div>
+    </div>
+    <div style="width: 50%" class="calendarWidgetDiv">
+      <div>结束时间</div>
+      <div id="endTime" class="input-append">
+        <input data-format="yyyy-MM-dd" type="text"/>
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+              </i>
+            </span>
+      </div>
+    </div>
+  </div>
+  <div class="input-group">
+    <div style="width: 20%">
+          <span class="input-group-btn">
+            <button class="btn btn-info" type="button" id="barcodeButton">更新</button>
+          </span>
+    </div>
+    <div style="width: 80%">
+      <input type="text" class="form-control" id="barcodeInput" placeholder="条形码"/>
+    </div>
+  </div>
+  <div class="alert alert-warning" id="noHistoryBanner">没有历史纪录</div>
+  <div class="alert alert-danger" id="errorBanner" style="display: none"></div>
+  <div class="alert alert-info" id="infoBanner" style="display: none"></div>
+  <div id="chartDiv"/>
+</div>
