@@ -1,7 +1,7 @@
 chart_x_tick_angle = 45
 
 $ ->
-  return unless getPageTitle() is '巡检 | 用户'
+  return unless getPageTitle() is '巡检 | 用户' or getPageTitle() is '巡检 | 管理员'
   setupSidebar()
   $('div.containerDiv').first().show()
   setupRecordsDiv('div#preferencesDiv', 1, { preference: true })

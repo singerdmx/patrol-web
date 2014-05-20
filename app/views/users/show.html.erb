@@ -1,4 +1,8 @@
-<% provide(:title, '用户') %>
+<% if current_user.is_admin?
+     provide(:title, '管理员')
+   else
+     provide(:title, '用户')
+   end %>
 <div class="container-fluid">
   <div class="row">
     <div class="sidebar" id="sidebar">
