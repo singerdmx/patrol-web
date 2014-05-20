@@ -9,6 +9,9 @@
       <div class="close_box"></div>
       <ul class="nav nav-sidebar">
         <%= render 'users/left_sidebar_menu' %>
+        <% if current_user.is_admin? %>
+          <%= render 'users/left_sidebar_admin_menu' %>
+        <% end %>
       </ul>
     </div>
     <%= render 'users/right_container_divs' %>
