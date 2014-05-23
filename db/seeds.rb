@@ -75,6 +75,7 @@ asset1.check_points.create([
                   state:        "运转",
                   category:         50,
                   choice:       '["", "", "", "70"]',
+                  frequency:   24*3
                 },
                 {
                   name:         "轴承",

@@ -15,10 +15,18 @@ class User < ActiveRecord::Base
 
   def all_points
     points = Set.new()
-    check_routes.each { |route|
+    if is_user?
+      routes = check_routes
+    else
+      #TODO what about leader?
+      routes = CheckRoute.all
+    end
+
+    routes.each { |route|
       points.merge(route.check_points)
 
     }
+
     points
   end
 

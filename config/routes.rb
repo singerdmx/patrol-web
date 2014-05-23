@@ -4,7 +4,7 @@ Blog::Application.routes.draw do
 
 
   resources :route_builders
-
+  resources :notification
   resources :assets
   resources :check_routes, :path => :routes
   resources :check_points,     :path => :points do
@@ -14,7 +14,7 @@ Blog::Application.routes.draw do
   resources :user_preferences
 
   devise_for :admins
-  devise_for :users, controllers: { sessions: "users/sessions" }
+  devise_for :users
 
   root to: 'static_pages#home'
 
