@@ -9,7 +9,7 @@ class NotificationController < ApplicationController
       last_check_time = point.check_results.maximum(:check_time)
 
       if !last_check_time.nil? && last_check_time + point.frequency * 3600 < now && (previous_modified.nil? || last_check_time> previous_modified)
-          @notifications_json<<  "#{point.name}  #{point.barcode}  巡检到期, 上次检查时间 : #{last_check_time.localtime}"
+          @notifications_json<<  "#{point.name}  #{point.barcode}  巡检到期, 上次检查时间 #{last_check_time.in_time_zone("Beijing").strftime("%Y-%m-%d %H:%M")}"
           if  last_modified.nil?
             last_modified = last_check_time
           else
