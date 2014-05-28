@@ -13,7 +13,6 @@ Blog::Application.routes.draw do
   resources :check_results, :path => :results
   resources :user_preferences
 
-  devise_for :admins
   devise_for :users, controllers: { sessions: "users/sessions" }
 
   root to: 'static_pages#home'
