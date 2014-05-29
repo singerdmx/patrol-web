@@ -17,6 +17,23 @@ require 'json'
 check_point_3_choice = '["正常", "非正常"]'
 check_point_7_choice = '["安静","轻微噪音","大幅杂音","异常"]'
 
+
+Factory.delete_all
+Subfactory.delete_all
+Area.delete_all
+
+factory = Factory.create({name: "总工厂"})
+
+subfactory1 = factory.subfactories.create( name: "分工厂 一" )
+subfactory2 = factory.subfactories.create( name: "分工厂 二" )
+
+area1 = subfactory1.areas.create( name: "一工区" )
+area2 = subfactory1.areas.create( name: "二工区" )
+area3 = subfactory1.areas.create( name: "三工区" )
+area4 = subfactory2.areas.create( name: "四工区" )
+area5 = subfactory2.areas.create( name: "五工区" )
+
+
 CheckRoute.delete_all
 Asset.delete_all
 CheckPoint.delete_all
@@ -388,14 +405,14 @@ asset32.check_points.create([
                                     choice:       '[]',
                                 } ])
 
-route1 = CheckRoute.create!(
+route1 = area1.check_routes.create!(
     {name: "一工区机械8小时点巡检", description: "一工区机械8小时点巡检"})
 route1.check_points << asset1.check_points.first
 route1.check_points << asset2.check_points.first
 route1.check_points << asset3.check_points.first
 
 
-route2 = CheckRoute.create!(
+route2 = area2.check_routes.create!(
     {name: "二工区机械8小时点巡检", description: "二工区机械8小时点巡检"})
 route2.check_points << asset1.check_points.last
 
@@ -404,7 +421,7 @@ route2.check_points << asset1.check_points.last
 user1.preferred_points <<  asset1.check_points.last
 user1.preferred_points <<  asset3.check_points.first
 
-route3 = CheckRoute.create!(
+route3 = area3.check_routes.create(
     {name: "三工区机械8小时点巡检", description: "三工区机械8小时点巡检"})
 route3.check_points << asset2.check_points.last
 route3.check_points << asset3.check_points.first
@@ -412,7 +429,7 @@ route3.check_points << asset3.check_points.last
 
 
 
-route4 = CheckRoute.create!(
+route4 = area4.check_routes.create(
     {name: "调配前处理区生产前点巡检", description: "调配前处理区生产前点巡检"})
 route4.check_points << asset10.check_points.first
 route4.check_points << asset11.check_points.first
@@ -422,26 +439,26 @@ route4.check_points << asset14.check_points.first
 route4.check_points << asset15.check_points.first
 
 
-route5 = CheckRoute.create!(
+route5 = area4.check_routes.create(
     {name: "调配前处理区润滑巡检", description: "调配前处理区润滑巡检"})
 route5.check_points << asset20.check_points.first
 route5.check_points << asset21.check_points.first
 route5.check_points << asset22.check_points.first
 
 
-route6 = CheckRoute.create!(
+route6 = area4.check_routes.create(
     {name: "调配前处理区清洗巡检", description: "调配前处理区清洗巡检"})
 route6.check_points << asset40.check_points.first
 route6.check_points << asset41.check_points.first
 
 
-route7 = CheckRoute.create!(
+route7 = area4.check_routes.create(
     {name: "调配前处理区抄表巡检", description: "调配前处理区抄表巡检"})
 route7.check_points << asset30.check_points.first
 route7.check_points << asset31.check_points.first
 
-route8 = CheckRoute.create!(
-    {name: "调配前处理区抄表巡检", description: "调配前处理区抄表巡检"})
+route8 = area5.check_routes.create(
+    {name: "调配后处理区抄表巡检", description: "调配后处理区抄表巡检"})
 route8.check_points << asset31.check_points.first
 route8.check_points << asset32.check_points.first
 
@@ -822,3 +839,4 @@ check_point_7_choice_json = JSON.parse(check_point_7_choice)
      check_point_id: 7,
     })
 end
+
