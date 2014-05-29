@@ -6,4 +6,6 @@ class CheckRoute < ActiveRecord::Base
 
   has_many :user_builders
   has_many :users, through: :user_builders
+
+  belongs_to :area
 end
