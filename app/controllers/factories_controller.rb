@@ -1,5 +1,6 @@
 class FactoriesController < ApplicationController
   include ApplicationHelper
+  include FactoriesHelper
 
   # GET /factoriess.json
   def index
@@ -27,6 +28,10 @@ class FactoriesController < ApplicationController
       end
 
       @factories_json << entry
+    end
+
+    if params[:ui] == 'true'
+      @factories_json = index_ui_json_builder(@factories_json)
     end
 
     if stale?(etag: @factories_json.to_a,
