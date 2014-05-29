@@ -34,7 +34,8 @@ setupSidebar = ->
     $(containerDiv).show()
     switch id
       when 'routes'
-        updateRouteList(containerDiv)
+        updateFactoriesTree(containerDiv) if getPageTitle() is '巡检 | 管理员'
+        updateRouteList("#{containerDiv} div#routes")
       when 'preferences'
         updateRecordsTable(containerDiv, { preference: true })
       when 'records'
@@ -83,6 +84,10 @@ setupRoutesDiv  = (containerDiv) ->
     return
   return
 
+updateFactoriesTree = (containerDiv) ->
+  renderTreeView('/factories.json', "#{containerDiv} div#factoriesTree", "#{containerDiv} span#factories")
+  return
+
 updateRouteList = (containerDiv) ->
   $.ajax
     url: getBaseURL() + '/routes.json'
@@ -97,12 +102,12 @@ updateRouteList = (containerDiv) ->
       return
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
-        _$ul = $("#{containerDiv} ul.list-group")
+        _$ul = $("div#routesDiv ul.list-group")
         _$ul.html('')
 
         for route in data
           _$ul.append "
-            <li class='list-group-item' data-id='#{route.id}'>
+            <li class='list-group-item' data-id='#{route.id}' data-group='#{route.area_id}'>
               <span class='badge'>#{route.points.length}</span>
               #{route.name}</li>"
 
@@ -110,7 +115,7 @@ updateRouteList = (containerDiv) ->
         $("#{containerDiv} > span#routesIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} > span#routesIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 
-        renderTreeView("#{containerDiv} div#routesTree")
+        renderTreeView('/routes.json', "#{containerDiv} div#routesTree", null, {group_by_asset: true}, true)
       return
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
@@ -169,21 +174,32 @@ updatePreferences = (containerDiv) ->
 
   return
 
-renderTreeView = (containerDiv) ->
+renderTreeView = (url, containerDiv, ifModifiedSinceSpanId, params, hideTree) ->
+  request_params = { ui: true }
+  $.extend(request_params, params) if params # merge two objects
   $.ajax
-    url: getBaseURL() + '/routes.json'
-    data:
-      group_by_asset: true
-      ui: true
+    url: getBaseURL() + url
+    data: request_params
+    beforeSend: (xhr) ->
+      return if ifModifiedSinceSpanId is null
+      ifNoneMatch = $("#{ifModifiedSinceSpanId}IfNoneMatch").text()
+      ifModifiedSince = $("#{ifModifiedSinceSpanId}routesIfModifiedSince").text()
+
+      if ifNoneMatch isnt '' and ifModifiedSince isnt ''
+        xhr.setRequestHeader('If-None-Match', ifNoneMatch)
+        xhr.setRequestHeader('If-Modified-Since', ifModifiedSince)
+
+      return
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
         $(containerDiv).html('')
         buildTreeNode($(containerDiv), data)
         bindTreeViewClick(containerDiv)
 
-        $("#{containerDiv} > ul").hide()
-        $("#{containerDiv} span#routesIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
-        $("#{containerDiv} span#routesIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+        $("#{containerDiv} > ul").hide() if hideTree is true
+        unless ifModifiedSinceSpanId is null
+          $("#{ifModifiedSinceSpanId}IfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+          $("#{ifModifiedSinceSpanId}IfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 
       return
     error: (jqXHR, textStatus, errorThrown) ->

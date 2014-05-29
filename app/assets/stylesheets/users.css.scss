@@ -80,6 +80,63 @@ div.calendarWidgetDiv {
 }
 
 /* routesDiv */
+@mixin mediaList {
+  h4.media-heading {
+    font-size: 16px !important;
+    line-height: 16px !important;
+  }
+  img.media-object.mediaListIcon {
+    cursor: pointer;
+  }
+  span.badge {
+    margin-left: 8px !important;
+    padding-top: 1px !important;
+    cursor: pointer;
+    &:hover {
+      background-color: $LightSkyBlue;
+    }
+  }
+}
+
+@mixin listGroup {
+  margin-left: 3px;
+  margin-right: 10px;
+
+  li.list-group-item {
+    &:hover {
+      background-color: $LightSkyBlue;
+    }
+  }
+}
+
+div#factories {
+  > div {
+    float: left;
+    overflow: auto;
+  }
+
+  > div#factoryDetails {
+    width: 65%;
+    div#factoriesTreeControlButtons {
+      margin-bottom: 20px;
+    }
+
+    div#factoriesTree {
+      @include mediaList;
+    }
+  }
+
+  > div#routeListInFactory {
+    width: 30%;
+    margin-top: 10px;
+
+    ul#routeListGroupInFactory {
+      @include listGroup;
+    }
+  }
+
+}
+
 div#routes {
   > div {
     float: left;
@@ -91,14 +148,9 @@ div#routes {
     margin-top: 10px;
 
     ul#routeListGroup {
-      margin-left: 3px;
-      margin-right: 10px;
-
+      @include listGroup;
       li.list-group-item {
         cursor: pointer;
-        &:hover {
-          background-color: $LightSkyBlue;
-        }
       }
     }
   }
@@ -110,21 +162,7 @@ div#routes {
       margin-bottom: 20px;
     }
     div#routesTree {
-      h4.media-heading {
-        font-size: 16px !important;
-        line-height: 16px !important;
-      }
-      img.media-object.mediaListIcon {
-        cursor: pointer;
-      }
-      span.badge {
-        margin-left: 8px !important;
-        padding-top: 1px !important;
-        cursor: pointer;
-        &:hover {
-          background-color: $LightSkyBlue;
-        }
-      }
+      @include mediaList;
     }
   }
 }
