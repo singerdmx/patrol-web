@@ -116,7 +116,7 @@ div#factories {
   }
 
   > div#factoryDetails {
-    width: 65%;
+    width: 35%;
     div#factoriesTreeControlButtons {
       margin-bottom: 20px;
     }
@@ -128,7 +128,7 @@ div#factories {
 
   > div#routeListInFactory {
     width: 30%;
-    margin-top: 10px;
+    margin-top: 55px;
 
     ul#routeListGroupInFactory {
       @include listGroup;
