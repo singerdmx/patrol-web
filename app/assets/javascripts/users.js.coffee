@@ -1,4 +1,5 @@
 chart_x_tick_angle = 45
+fade_speed = 'slow'
 
 $ ->
   return unless getPageTitle() is '巡检 | 用户' or getPageTitle() is '巡检 | 管理员'
@@ -54,13 +55,18 @@ setupFactoriesDiv = (containerDiv) ->
       alert '没有路线选中'
       return
 
+    $('div#routesDiv div#routeList h3.panel-title').text($('div#routesDiv div#routeListInFactory h3.panel-title').text())
     $('div#routesDiv div#routeList ul.list-group > li.greenBackground').trigger('click')
     $('div#routesDiv div#routeList ul.list-group > li').hide()
     for id in _selectedRouteIds
       $("div#routesDiv div#routeList ul#routeListGroup > li.list-group-item[data-id='#{id}']").show()
 
-    $('div#routes').toggle()
-    $('div#factories').toggle()
+    $('div#factories').fadeOut(fade_speed,
+      ->
+        $('div#routes').fadeIn(fade_speed)
+        return
+    )
+
     return
 
   return
@@ -97,8 +103,11 @@ setupRoutesDiv  = (containerDiv) ->
   )
   setupTreeViewControlButtons(containerDiv)
   $("#{containerDiv} button#toFactories").click ->
-    $('div#routes').toggle()
-    $('div#factories').toggle()
+    $('div#routes').fadeOut(fade_speed,
+      ->
+        $('div#factories').fadeIn(fade_speed)
+        return
+    )
     return
 
   $('div#routesTreeControlButtons button#updatePreferences').click ->
