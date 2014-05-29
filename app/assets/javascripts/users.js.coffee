@@ -35,7 +35,7 @@ setupSidebar = ->
     $(containerDiv).show()
     switch id
       when 'routes'
-        updateFactoriesTree(containerDiv) if getPageTitle() is '巡检 | 管理员'
+        updateFactoriesTree(containerDiv) if $('div#factories').is(':visible')
         updateRouteList("#{containerDiv} div#routes")
       when 'preferences'
         updateRecordsTable(containerDiv, { preference: true })
