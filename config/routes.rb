@@ -1,8 +1,4 @@
 Blog::Application.routes.draw do
-
-
-
-
   resources :route_builders
   resources :notification
   resources :assets
@@ -12,6 +8,7 @@ Blog::Application.routes.draw do
   end
   resources :check_results, :path => :results
   resources :user_preferences
+  resources :factories, only: [:index]
 
   devise_for :users, controllers: { sessions: "users/sessions" }
 
