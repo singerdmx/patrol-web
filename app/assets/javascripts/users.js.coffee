@@ -45,6 +45,24 @@ setupSidebar = ->
 
 setupFactoriesDiv = (containerDiv) ->
   setupTreeViewControlButtons(containerDiv)
+  $("#{containerDiv} button#toRoutes").click ->
+    _selectedRouteIds = []
+    for _li in $('div#routesDiv div#routeListInFactory ul.list-group > li:visible')
+      _selectedRouteIds.push($(_li).data('id'))
+
+    if _selectedRouteIds.length is 0
+      alert '没有路线选中'
+      return
+
+    $('div#routesDiv div#routeList ul.list-group > li.greenBackground').trigger('click')
+    $('div#routesDiv div#routeList ul.list-group > li').hide()
+    for id in _selectedRouteIds
+      $("div#routesDiv div#routeList ul#routeListGroup > li.list-group-item[data-id='#{id}']").show()
+
+    $('div#routes').toggle()
+    $('div#factories').toggle()
+    return
+
   return
 
 setupRoutesDiv  = (containerDiv) ->
@@ -78,6 +96,11 @@ setupRoutesDiv  = (containerDiv) ->
       return
   )
   setupTreeViewControlButtons(containerDiv)
+  $("#{containerDiv} button#toFactories").click ->
+    $('div#routes').toggle()
+    $('div#factories').toggle()
+    return
+
   $('div#routesTreeControlButtons button#updatePreferences').click ->
     updatePreferences(containerDiv)
     $("#{containerDiv} > span#preferencesUpdated").text('false')
@@ -86,6 +109,8 @@ setupRoutesDiv  = (containerDiv) ->
 
 updateFactoriesTree = (containerDiv) ->
   renderTreeView('/factories.json', "#{containerDiv} div#factoriesTree", "#{containerDiv} span#factories")
+  $('div#routesDiv div#routeListInFactory ul.list-group > li').hide()
+  $('div#routesDiv div#routeListInFactory h3.panel-title').text('路线')
   return
 
 updateRouteList = (containerDiv) ->
@@ -110,6 +135,8 @@ updateRouteList = (containerDiv) ->
             <li class='list-group-item' data-id='#{route.id}' data-group='#{route.area_id}'>
               <span class='badge'>#{route.points.length}</span>
               #{route.name}</li>"
+
+        $('div#routesDiv div#routeListInFactory ul.list-group > li').hide()
 
         setupRouteListClick(containerDiv)
         $("#{containerDiv} > span#routesIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
@@ -141,10 +168,6 @@ setupTreeViewControlButtons = (containerDiv) ->
     return
   $("#{containerDiv} button#openTree").click ->
     $("#{containerDiv} ul.media-list > li.media > a.pull-left > img[src$='plus.png']").trigger('click')
-    return
-  $("#{containerDiv} button#toOtherDiv").click ->
-    $('div#routes').toggle()
-    $('div#factories').toggle()
     return
   return
 
@@ -242,6 +265,11 @@ bindTreeViewClick = (containerDiv) ->
       when 'tool.png', 'care.png'
         $('div#routes > span#preferencesUpdated').text('true')
         syncSamePointImg(containerDiv, img, pic)
+      when 'location.png'
+        $('div#routesDiv div#routeListInFactory ul.list-group > li').hide()
+        id = img.data('id')
+        $("div#routesDiv ul#routeListGroupInFactory > li.list-group-item[data-group='#{id}']").show()
+        $('div#routesDiv div#routeListInFactory h3.panel-title').text($(this).next().children('span').text())
 
     $(this).next('div.media-body').children('ul.media-list').toggle()
 
