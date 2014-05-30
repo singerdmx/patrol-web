@@ -68,7 +68,7 @@ setupFactoriesDiv = (containerDiv) ->
 
     $('div#factories').hide('drop', {}, fade_speed,
       ->
-        $('div#routes').show('drop', {}, fade_speed)
+        $('div#routes').show('drop', {direction: 'right'}, fade_speed)
         return
     )
     return
@@ -107,7 +107,7 @@ setupRoutesDiv  = (containerDiv) ->
   )
   setupTreeViewControlButtons(containerDiv)
   $("#{containerDiv} button#toFactories").click ->
-    $('div#routes').hide('drop', {}, fade_speed,
+    $('div#routes').hide('drop', {direction: 'right'}, fade_speed,
       ->
         $('div#factories').show('drop', {}, fade_speed)
         return
