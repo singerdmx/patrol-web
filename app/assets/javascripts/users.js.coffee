@@ -1,8 +1,8 @@
 chart_x_tick_angle = 45
-fade_speed = 'slow'
+fade_speed = 400
 
 $ ->
-  return unless getPageTitle() is '巡检 | 用户' or getPageTitle() is '巡检 | 管理员'
+  return unless isUserPage()
   setupSidebar()
   $('div.containerDiv').first().show()
   setupRecordsDiv('div#preferencesDiv', 1, { preference: true })
@@ -15,6 +15,11 @@ $ ->
   # Check on exiting page
   window.onbeforeunload = confirmExit
   return
+
+isUserPage = ->
+  _pageTitle = getPageTitle()
+  return true if _pageTitle in ['巡检 | 用户', '巡检 | 管理员', '巡检 | 高级用户']
+  return false
 
 # users show
 setupSidebar = ->
@@ -61,12 +66,11 @@ setupFactoriesDiv = (containerDiv) ->
     for id in _selectedRouteIds
       $("div#routesDiv div#routeList ul#routeListGroup > li.list-group-item[data-id='#{id}']").show()
 
-    $('div#factories').fadeOut(fade_speed,
+    $('div#factories').hide('drop', {}, fade_speed,
       ->
-        $('div#routes').fadeIn(fade_speed)
+        $('div#routes').show('drop', {}, fade_speed)
         return
     )
-
     return
 
   return
@@ -103,9 +107,9 @@ setupRoutesDiv  = (containerDiv) ->
   )
   setupTreeViewControlButtons(containerDiv)
   $("#{containerDiv} button#toFactories").click ->
-    $('div#routes').fadeOut(fade_speed,
+    $('div#routes').hide('drop', {}, fade_speed,
       ->
-        $('div#factories').fadeIn(fade_speed)
+        $('div#factories').show('drop', {}, fade_speed)
         return
     )
     return

@@ -1,5 +1,7 @@
 <% if current_user.is_admin?
      provide(:title, '管理员')
+   elsif current_user.is_leader?
+     provide(:title, '高级用户')
    else
      provide(:title, '用户')
    end %>
