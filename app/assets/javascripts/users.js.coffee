@@ -12,6 +12,10 @@ $ ->
   setupRecordsDiv('div#recordsDiv', 1)
   setupHistoryDiv('div#historyDiv')
 
+  # Admin tabs
+  return unless getPageTitle() is '巡检 | 管理员'
+  setupManageDataDiv()
+
   # Check on exiting page
   window.onbeforeunload = confirmExit
   return
@@ -724,3 +728,19 @@ renderBarChart = (chartId, title, data, group, choice) ->
 confirmExit = ->
   if $('div#routes > span#preferencesUpdated').text() is 'true'
     '您在“我的路线”页面有更新但未点击“更新我的关注”按钮，还要继续离开本页吗？'
+
+
+###
+  Admin tabs
+###
+
+setupManageDataDiv = ->
+  $('form#uploadFile').fileupload
+    url: getBaseURL() + '/file.json',
+    dataType: 'json',
+    done: (e, data)->
+      console.log "Done", data.result
+      $('div#uploadInfo').addClass('alert-success').text('上传成功！').show()
+      return
+
+  return

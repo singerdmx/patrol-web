@@ -23,4 +23,5 @@ Blog::Application.routes.draw do
 
   resources :admins, only: :index
   resources :users
+  resources :file
 end
