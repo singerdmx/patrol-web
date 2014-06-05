@@ -167,14 +167,29 @@
   <div id="chartDiv"></div>
 </div>
 <div class="containerDiv" id="manageDataDiv">
-  <%= form_tag "/", method: "post", id: "uploadFile" do %>
+  <div style="float: left; width: 15%; min-width: 120px">
     <div>
-      <span class="btn btn-success fileinput-button" style="float: left">
-          <i class="icon-upload icon-white"></i>
-          <span>上传数据</span>
-        <%= file_field_tag "files[]", multiple: true %>
-        </span>
+      <%= form_tag "/", method: "post", id: "uploadFile" do %>
+        <div>
+          <span class="btn btn-success fileinput-button">
+              <i class="icon-upload icon-white"></i>
+              <span>上传数据</span>
+            <%= file_field_tag "files[]", multiple: true %>
+            </span>
+        </div>
+      <% end %>
     </div>
-    <div class="alert" style="float: left; display: none" id="uploadInfo"></div>
-  <% end %>
+    <div>
+      <div>
+          <span class="btn btn-info fileinput-button">
+              <i class="icon-download icon-white"></i>
+              <span>导出数据</span>
+          </span>
+      </div>
+    </div>
+  </div>
+  <div style="float: left; width: 80%">
+    <div class="alert" style="display: none" id="uploadInfo">
+    </div>
+  </div>
 </div>
