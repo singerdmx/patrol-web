@@ -202,3 +202,23 @@ div#historyDiv {
 table.jqplot-table-legend {
   width: 60px !important;
 }
+
+
+/* Admin tabs */
+
+/* manageDataDiv */
+
+div#manageDataDiv {
+  > div {
+    float: left;
+  }
+
+  div#managementButtons {
+    width: 15%;
+    min-width: 120px;
+  }
+
+  div#managementData {
+    width: 80%;
+  }
+}

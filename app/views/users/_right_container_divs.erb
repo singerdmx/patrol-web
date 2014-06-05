@@ -167,7 +167,7 @@
   <div id="chartDiv"></div>
 </div>
 <div class="containerDiv" id="manageDataDiv">
-  <div style="float: left; width: 15%; min-width: 120px">
+  <div id="managementButtons">
     <div>
       <%= form_tag "/", method: "post", id: "uploadFile" do %>
         <div>
@@ -175,7 +175,7 @@
               <i class="icon-upload icon-white"></i>
               <span>上传数据</span>
             <%= file_field_tag "files[]", multiple: true %>
-            </span>
+          </span>
         </div>
       <% end %>
     </div>
@@ -188,7 +188,7 @@
       </div>
     </div>
   </div>
-  <div style="float: left; width: 80%">
+  <div id="managementData">
     <div class="alert" style="display: none" id="uploadInfo">
     </div>
   </div>
