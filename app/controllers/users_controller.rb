@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  include ApplicationHelper
+  include UsersHelper
 
   def show
     @show_full_view = current_user.is_admin? || current_user.is_leader?
@@ -11,6 +11,10 @@ class UsersController < ApplicationController
       if show_full_view?
         @users = User.all
         @users_index_json = to_json(@users)
+      end
+
+      if params[:ui] == 'true'
+        @users_index_json = index_ui_json_builder(@users_index_json)
       end
 
       if stale?(etag: @users_index_json,
@@ -34,7 +38,7 @@ class UsersController < ApplicationController
   def to_json(users)
     hash = []
     users.each do |u|
-      hash << to_hash(u)
+      hash << to_hash(u, false)
     end
     hash
   end

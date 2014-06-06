@@ -12,10 +12,10 @@ module ApplicationHelper
     end
   end
 
-  def to_hash(record)
+  def to_hash(record, exclusion = false)
     hash = {}
     record.attributes.each do |k,v|
-      hash[k] = v unless k.in? HASH_EXCLUSION
+      hash[k] = v unless exclusion and k.in? HASH_EXCLUSION
     end
 
     hash
