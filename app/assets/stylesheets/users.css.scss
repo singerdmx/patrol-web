@@ -208,12 +208,24 @@ table.jqplot-table-legend {
 
 /* manageUsersDiv */
 
-table#usersTable {
-  > tbody {
-    > tr {
-      &:hover {
-        cursor: pointer;
-        background-color: $SpringGreen !important;
+div#manageUsersDiv {
+  div#createUserDiv {
+    text-align: center;
+    width: 40%;
+    min-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  div#usersTableDiv {
+    table#usersTable {
+      > tbody {
+        > tr {
+          &:hover {
+            cursor: pointer;
+            background-color: $SpringGreen !important;
+          }
+        }
       }
     }
   }

@@ -751,6 +751,16 @@ setupManageUsersDiv = (containerDiv) ->
 
     return
 
+  $("#{containerDiv} button#btnAddNewUser").click ->
+    $("#{containerDiv} div#createUserDiv").show()
+    $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_buttons").hide()
+    return
+
+  $("#{containerDiv} button#btnCancelCreateUser").click ->
+    $("#{containerDiv} div#createUserDiv").hide()
+    $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_buttons").show()
+    return
+
   return
 
 updateUsersTable = (containerDiv) ->
@@ -787,9 +797,9 @@ updateUsersTable = (containerDiv) ->
             "sTitle": "用户级别",
             "sClass": "center"
           },
-          { "sTitle": "此次登入时间" },
+          { "sTitle": "本次登入时间" },
           { "sTitle": "上次登入时间" },
-          { "sTitle": "此次登入IP地址" },
+          { "sTitle": "本次登入IP地址" },
           { "sTitle": "上次登入IP地址" },
           { "sTitle": "创建时间" },
           { "sTitle": "最近更新时间" }
@@ -808,18 +818,18 @@ updateUsersTable = (containerDiv) ->
           'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
             switch aaData[3]
               when '高级用户'
-                $(nRow).addClass('blueBackground')
+                $(nRow).addClass('darkBlueTextColor')
               when '管理员'
-                $(nRow).addClass('turquoiseBackground')
+                $(nRow).addClass('darkGreenTextColor')
               when '用户'
-                $(nRow).addClass('cyanBackground')
+                $(nRow).addClass('darkCyanTextColor')
             return
 
         oTable = $("#{containerDiv} table#usersTable").dataTable()
         oTable.fnSetColumnVis(0, false)
         $('table#usersTable > tbody > tr').click (e) ->
-          $('table#usersTable > tbody > tr').removeClass('mediumSeaGreenBackground')
-          $(this).removeClass('blueBackground').removeClass('turquoiseBackground').removeClass('cyanBackground').addClass('mediumSeaGreenBackground')
+          $('table#usersTable > tbody > tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
+          $(this).addClass('mediumSeaGreenBackground')
           return
 
         $("#{containerDiv} > span#usersIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
