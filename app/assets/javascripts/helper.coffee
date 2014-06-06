@@ -14,7 +14,7 @@ window.showErrorPage = (errorPageContent) ->
 Array::last = -> @[@length - 1]
 
 window.dateToShortString = (date) ->
-  "#{date.getFullYear()}年#{date.getMonth()+1}月#{date.getDate()}日"
+  "#{date.getFullYear()}年#{pad2(date.getMonth()+1)}月#{pad2(date.getDate())}日"
 
 window.dateToString = (date) ->
   "#{dateToShortString(date)} #{pad2(date.getHours())}:#{pad2(date.getMinutes())}"

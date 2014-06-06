@@ -18,7 +18,7 @@ $ ->
   # Admn tabs
   return unless getPageTitle() is '巡检 | 管理员'
 
-  setupManageUsersDiv()
+  setupManageUsersDiv('div#manageUsersDiv')
   setupManageDataDiv()
   return
 
@@ -738,7 +738,19 @@ confirmExit = ->
   Admin tabs
 ###
 
-setupManageUsersDiv = ->
+setupManageUsersDiv = (containerDiv) ->
+  $("#{containerDiv} button#btnDeleteUser").click ->
+    _selectedTr = $('table#usersTable > tbody > tr.mediumSeaGreenBackground')
+    if _selectedTr.length == 0
+      alert '请选择用户！'
+    else
+      oTable = $("#{containerDiv} table#usersTable").dataTable()
+      row = oTable.fnGetData(_selectedTr[0])
+      if confirm("您确定要删除用户 #{row[1]} #{row[2]} 吗？")
+        alert row[0]
+
+    return
+
   return
 
 updateUsersTable = (containerDiv) ->
@@ -788,7 +800,7 @@ updateUsersTable = (containerDiv) ->
           oTable.fnDestroy() unless oTable?
 
         $("#{containerDiv} div#recordsTable_wrapper").remove()
-        $("#{containerDiv} > div").append('<table id="usersTable"></table>')
+        $("#{containerDiv} div#usersTableDiv").append('<table id="usersTable"></table>')
         $("#{containerDiv} table#usersTable").dataTable
           'aaData': data
           'aoColumns': columns
@@ -805,6 +817,11 @@ updateUsersTable = (containerDiv) ->
 
         oTable = $("#{containerDiv} table#usersTable").dataTable()
         oTable.fnSetColumnVis(0, false)
+        $('table#usersTable > tbody > tr').click (e) ->
+          $('table#usersTable > tbody > tr').removeClass('mediumSeaGreenBackground')
+          $(this).removeClass('blueBackground').removeClass('turquoiseBackground').removeClass('cyanBackground').addClass('mediumSeaGreenBackground')
+          return
+
         $("#{containerDiv} > span#usersIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} > span#usersIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
     error: (jqXHR, textStatus, errorThrown) ->

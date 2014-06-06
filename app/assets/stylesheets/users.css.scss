@@ -206,6 +206,19 @@ table.jqplot-table-legend {
 
 /* Admin tabs */
 
+/* manageUsersDiv */
+
+table#usersTable {
+  > tbody {
+    > tr {
+      &:hover {
+        cursor: pointer;
+        background-color: $SpringGreen !important;
+      }
+    }
+  }
+}
+
 /* manageDataDiv */
 
 div#manageDataDiv {
