@@ -52,6 +52,8 @@ setupSidebar = ->
         updateRecordsTable(containerDiv, { preference: true })
       when 'records'
         updateRecordsTable(containerDiv)
+      when 'manageUsers'
+        updateUsersTable(containerDiv)
     return
   return
 
@@ -737,6 +739,81 @@ confirmExit = ->
 ###
 
 setupManageUsersDiv = ->
+  return
+
+updateUsersTable = (containerDiv) ->
+  $.ajax
+    url: getBaseURL() + '/users.json?ui=true'
+    beforeSend: (xhr) ->
+      usersIfNoneMatch = $("#{containerDiv} > span#usersIfNoneMatch").text()
+      usersIfModifiedSince = $("#{containerDiv} > span#usersIfModifiedSince").text()
+
+      if usersIfNoneMatch isnt '' and usersIfModifiedSince isnt ''
+        xhr.setRequestHeader('If-None-Match', usersIfNoneMatch)
+        xhr.setRequestHeader('If-Modified-Since', usersIfModifiedSince)
+
+      return
+    success: (data, textStatus, jqHXR) ->
+      if jqHXR.status is 200
+        for record in data
+          for i in [4, 5, 8, 9]
+            record[i] = dateToString(new Date(record[i] * 1000))
+
+          switch record[3]
+            when 0
+              record[3] = '管理员'
+            when 1
+              record[3] = '高级用户'
+            when 2
+              record[3] = '用户'
+
+        columns = [
+          { "sTitle": "ID" },
+          { "sTitle": "用户名" },
+          { "sTitle": "邮箱" },
+          {
+            "sTitle": "用户级别",
+            "sClass": "center"
+          },
+          { "sTitle": "此次登入时间" },
+          { "sTitle": "上次登入时间" },
+          { "sTitle": "此次登入IP地址" },
+          { "sTitle": "上次登入IP地址" },
+          { "sTitle": "创建时间" },
+          { "sTitle": "最近更新时间" }
+        ]
+        if $("#{containerDiv} table#usersTable > tbody[role='alert'] td.dataTables_empty").length is 0
+          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
+          oTable = $("#{containerDiv} table#usersTable").dataTable()
+          oTable.fnDestroy() unless oTable?
+
+        $("#{containerDiv} div#recordsTable_wrapper").remove()
+        $("#{containerDiv} > div").append('<table id="usersTable"></table>')
+        $("#{containerDiv} table#usersTable").dataTable
+          'aaData': data
+          'aoColumns': columns
+          'aaSorting': [[ 3, 'desc' ]]
+          'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
+            switch aaData[3]
+              when '高级用户'
+                $(nRow).addClass('blueBackground')
+              when '管理员'
+                $(nRow).addClass('turquoiseBackground')
+              when '用户'
+                $(nRow).addClass('cyanBackground')
+            return
+
+        oTable = $("#{containerDiv} table#usersTable").dataTable()
+        oTable.fnSetColumnVis(0, false)
+        $("#{containerDiv} > span#usersIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} > span#usersIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    ifModified:true,
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
+
   return
 
 setupManageDataDiv = ->
