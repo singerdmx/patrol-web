@@ -172,6 +172,10 @@
     <input type="text" value="" required="required" placeholder="用户名" name="user[name]" id="user_name" class="form-control" autofocus="autofocus"/>
     <input type="email" value="" required="required" placeholder="电子邮箱" name="user[email]" id="user_email" class="form-control"/>
     <input type="password" required="required" placeholder="密码" name="user[password]" id="user_password" class="form-control">
+    <span style="display: block; margin-bottom: 8px">
+      <input type="checkbox" name="option" value='1' onchange="changePasswordType('div#createUserDiv input#user_password')" style="margin-top: -2px" />
+      显示密码
+    </span>
 
     <button class="btn btn-warning" type="button" id="btnCancelCreateUser"/>取消</button>
     <button class="btn btn-primary" type="button"/>提交</button>

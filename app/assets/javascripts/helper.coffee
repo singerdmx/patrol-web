@@ -24,3 +24,12 @@ window.dateRangeToString = (start_time, end_time) ->
   end_time_string = dateToShortString(end_time)
   return start_time_string if start_time_string is end_time_string
   "#{start_time_string} － #{end_time_string}"
+
+window.changePasswordType = (element) ->
+  switch $(element).attr('type')
+    when 'password'
+      $(element).attr('type', 'text')
+    when 'text'
+      $(element).attr('type', 'password')
+
+  return
