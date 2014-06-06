@@ -1,10 +1,9 @@
 class FactoriesController < ApplicationController
-  include ApplicationHelper
   include FactoriesHelper
 
   # GET /factoriess.json
   def index
-    if current_user.is_leader?
+    if show_full_view?
       factories = Factory.all
 
       @factories_json = []

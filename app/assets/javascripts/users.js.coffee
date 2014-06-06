@@ -12,12 +12,14 @@ $ ->
   setupRecordsDiv('div#recordsDiv', 1)
   setupHistoryDiv('div#historyDiv')
 
-  # Admin tabs
-  return unless getPageTitle() is '巡检 | 管理员'
-  setupManageDataDiv()
-
   # Check on exiting page
   window.onbeforeunload = confirmExit
+
+  # Admn tabs
+  return unless getPageTitle() is '巡检 | 管理员'
+
+  setupManageUsersDiv()
+  setupManageDataDiv()
   return
 
 isUserPage = ->
@@ -733,6 +735,9 @@ confirmExit = ->
 ###
   Admin tabs
 ###
+
+setupManageUsersDiv = ->
+  return
 
 setupManageDataDiv = ->
   $('form#uploadFile').fileupload

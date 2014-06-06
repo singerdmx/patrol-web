@@ -20,4 +20,8 @@ module ApplicationHelper
 
     hash
   end
+
+  def show_full_view?
+    current_user.is_admin? || current_user.is_leader?
+  end
 end

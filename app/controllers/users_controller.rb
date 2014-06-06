@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   include UsersHelper
 
   def show
-    @show_full_view = current_user.is_admin? || current_user.is_leader?
+    @show_full_view = show_full_view?
   end
 
   # GET /users.json
@@ -30,10 +30,6 @@ class UsersController < ApplicationController
   end
 
   private
-
-  def show_full_view?
-    current_user.is_admin? || current_user.is_leader?
-  end
 
   def to_json(users)
     hash = []
