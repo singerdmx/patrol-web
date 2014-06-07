@@ -764,11 +764,13 @@ setupManageUsersDiv = (containerDiv) ->
 
   $("#{containerDiv} button#btnCreateUser").click ->
     createUserDiv = "#{containerDiv} div#createUserDiv"
-    return unless validateUserForm(createUserDiv)
+    userInfo = {}
+    return unless validateUserForm(createUserDiv, userInfo)
 
     user_role = $("#{createUserDiv} select#userRole option:selected").val()
-    alert user_role
+    console.log userInfo
 
+    # TODO: ajax call
     $("#{createUserDiv} input#user_name, #{createUserDiv} input#user_email, #{createUserDiv} input#user_password").val('')
     $(createUserDiv).hide()
     $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_buttons").show()
