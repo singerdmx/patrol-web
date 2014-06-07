@@ -10,6 +10,30 @@ window.showErrorPage = (errorPageContent) ->
   errorWindow.document.close()
   return
 
+# validate entries in user form before submission, return true/false
+window.validateUserForm = (containerDiv) ->
+  user_name = $("#{containerDiv} input#user_name").val()
+  if user_name is '用户名' or $.trim(user_name) is ''
+    alert '请填写用户名！'
+    return false
+
+  user_email = $("#{containerDiv} input#user_email").val()
+  unless isValidEmailAddress(user_email)
+    alert '您填写的电子邮箱无效，请修正！'
+    return false
+
+  user_password = $("#{containerDiv} input#user_password").val()
+  if $.trim(user_password) is ''
+    alert '请填写密码！'
+    return false
+
+  $user_password_confirmation = $("#{containerDiv} input#user_password_confirmation")
+  if $user_password_confirmation.size() > 0 and $user_password_confirmation.val() isnt user_password
+    alert '密码不相符！'
+    return false
+
+  true
+
 # Misc
 window.removeFlashNotice = ->
   setTimeout( ->

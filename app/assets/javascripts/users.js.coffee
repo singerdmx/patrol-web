@@ -764,20 +764,7 @@ setupManageUsersDiv = (containerDiv) ->
 
   $("#{containerDiv} button#btnCreateUser").click ->
     createUserDiv = "#{containerDiv} div#createUserDiv"
-    user_name = $("#{createUserDiv} input#user_name").val()
-    if user_name is '用户名'
-      alert '请填写用户名！'
-      return
-
-    user_email = $("#{createUserDiv} input#user_email").val()
-    unless isValidEmailAddress(user_email)
-      alert '您填写的电子邮箱无效，请修正！'
-      return
-
-    user_password = $("#{createUserDiv} input#user_password").val()
-    if user_password is ''
-      alert '请填写密码！'
-      return
+    return unless validateUserForm(createUserDiv)
 
     user_role = $("#{createUserDiv} select#userRole option:selected").val()
     alert user_role

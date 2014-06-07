@@ -1,8 +1,8 @@
 <% provide(:title, "编辑用户信息") %>
-<h1>更新信息</h1>
+<h1>用户信息</h1>
 
 <div class="row">
-  <div class="span6 offset3">
+  <div class="span6 offset3" id="userEditDiv">
     <%= form_for(current_user) do |f| %>
       <%= render 'shared/error_messages', object: f.object %>
 
@@ -22,3 +22,17 @@
     <% end %>
   </div>
 </div>
+
+<script>
+  $(document).ready(function() {
+    $("form.edit_user").submit(function(e) {
+      if (validateUserForm('div#userEditDiv')) {
+        return true;
+      } else {
+        //Prevent the submit event and remain on the screen
+        e.preventDefault();
+        return false;
+      }
+    });
+  });
+</script>
