@@ -11,6 +11,14 @@ window.showErrorPage = (errorPageContent) ->
   return
 
 # Misc
+window.removeFlashNotice = ->
+  setTimeout( ->
+    $('div.alert.alert-notice').remove()
+    return
+  , 3000)
+
+  return
+
 Array::last = -> @[@length - 1]
 
 window.dateToShortString = (date) ->

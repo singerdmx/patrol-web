@@ -14,6 +14,7 @@ $ ->
 
   # Check on exiting page
   window.onbeforeunload = confirmExit
+  removeFlashNotice()
 
   # Admn tabs
   return unless getPageTitle() is '巡检 | 管理员'
