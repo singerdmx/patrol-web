@@ -15,7 +15,7 @@ window.removeFlashNotice = ->
   setTimeout( ->
     $('div.alert.alert-notice').remove()
     return
-  , 3000)
+  , 15000)
 
   return
 
