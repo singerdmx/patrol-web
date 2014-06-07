@@ -169,8 +169,20 @@
 <div class="containerDiv" id="manageUsersDiv">
   <div id="createUserDiv" style="display: none">
     <h2 class="form-signin-heading">创建用户</h2>
-    <input type="text" value="" required="required" placeholder="用户名" name="user[name]" id="user_name" class="form-control" autofocus="autofocus"/>
+    <input type="text" value="" required="required" placeholder="用户名" name="user[name]" id="user_name" class="form-control"/>
     <input type="email" value="" required="required" placeholder="电子邮箱" name="user[email]" id="user_email" class="form-control"/>
+    <div id="userRoleSelection">
+      <div style="width: 100px; margin-top: 8px">
+        <span style="font-size: 15px">用户级别</span>
+      </div>
+      <div style="width: 70%">
+        <select class="form-control">
+          <option value="2">普通用户</option>
+          <option value="1">高级用户</option>
+          <option value="0">管理员</option>
+        </select>
+      </div>
+    </div>
     <input type="password" required="required" placeholder="密码" name="user[password]" id="user_password" class="form-control">
     <span style="display: block; margin-bottom: 8px">
       <input type="checkbox" name="option" value='1' onchange="changePasswordType('div#createUserDiv input#user_password')" style="margin-top: -2px" />

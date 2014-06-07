@@ -787,7 +787,7 @@ updateUsersTable = (containerDiv) ->
             when 1
               record[3] = '高级用户'
             when 2
-              record[3] = '用户'
+              record[3] = '普通用户'
 
         columns = [
           { "sTitle": "ID" },
