@@ -13,7 +13,7 @@ window.showErrorPage = (errorPageContent) ->
 # Misc
 window.removeFlashNotice = ->
   setTimeout( ->
-    $('div.alert.alert-notice').remove()
+    $('div.alert.alert-notice, div.alert.alert-success').remove()
     return
   , 15000)
 

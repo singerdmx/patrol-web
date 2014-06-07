@@ -29,7 +29,18 @@ class UsersController < ApplicationController
     end
   end
 
+  def update
+    puts user_params
+    flash[:success] = '更新成功'
+    render 'edit'
+  end
+
   private
+
+  def user_params
+    params.require(:user).permit(:name, :email, :password,
+                                 :password_confirmation)
+  end
 
   def to_json(users)
     hash = []
