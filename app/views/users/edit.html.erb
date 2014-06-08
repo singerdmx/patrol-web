@@ -26,11 +26,12 @@
 <script>
   $(document).ready(function() {
     $("form.edit_user").submit(function(e) {
+      e.preventDefault();
       if (validateUserForm('div#userEditDiv')) {
+        this.submit();
         return true;
       } else {
         //Prevent the submit event and remain on the screen
-        e.preventDefault();
         return false;
       }
     });

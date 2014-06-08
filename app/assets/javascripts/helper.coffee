@@ -12,7 +12,7 @@ window.showErrorPage = (errorPageContent) ->
 
 # validate entries in user form before submission, return true/false
 window.validateUserForm = (containerDiv, userInfo) ->
-  userInfo = {} if userInfo is null
+  userInfo = {} unless userInfo
   user_name = $("#{containerDiv} input#user_name").val()
   if user_name is '用户名' or $.trim(user_name) is ''
     alert '请填写用户名！'
