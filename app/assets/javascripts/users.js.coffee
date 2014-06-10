@@ -768,12 +768,26 @@ setupManageUsersDiv = (containerDiv) ->
     return unless validateUserForm(createUserDiv, userInfo)
 
     user_role = $("#{createUserDiv} select#userRole option:selected").val()
-    console.log userInfo
+    userInfo['role'] = user_role
 
-    # TODO: ajax call
-    $("#{createUserDiv} input#user_name, #{createUserDiv} input#user_email, #{createUserDiv} input#user_password").val('')
-    $(createUserDiv).hide()
-    $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_buttons").show()
+    $.ajax
+      url: getBaseURL() + '/users.json'
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(userInfo),
+      dataType: 'json',
+      success: (data, textStatus, jqHXR) ->
+        updateUsersTable(containerDiv)
+        alert '用户创建成功'
+        $("#{createUserDiv} input#user_name, #{createUserDiv} input#user_email, #{createUserDiv} input#user_password").val('')
+        $(createUserDiv).hide()
+        $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_buttons").show()
+        return
+      error: (jqXHR, textStatus, errorThrown) ->
+        alert jqXHR.responseJSON.message
+        return
+      timeout: defaultAjaxCallTimeout
+
     return
 
   return
@@ -794,7 +808,7 @@ updateUsersTable = (containerDiv) ->
       if jqHXR.status is 200
         for record in data
           for i in [4, 5, 8, 9]
-            record[i] = dateToString(new Date(record[i] * 1000))
+            record[i] = dateToString(new Date(record[i] * 1000)) if record[i]
 
           switch record[3]
             when 0
@@ -824,7 +838,7 @@ updateUsersTable = (containerDiv) ->
           oTable = $("#{containerDiv} table#usersTable").dataTable()
           oTable.fnDestroy() unless oTable?
 
-        $("#{containerDiv} div#recordsTable_wrapper").remove()
+        $("#{containerDiv} div#usersTable_wrapper").remove()
         $("#{containerDiv} div#usersTableDiv").append('<table id="usersTable"></table>')
         $("#{containerDiv} table#usersTable").dataTable
           'aaData': data

@@ -39,6 +39,33 @@ class UsersController < ApplicationController
     render 'edit'
   end
 
+  # POST /users
+  # POST /users.json
+  def create
+    unless current_user.is_admin?
+      render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      return
+    end
+
+    user = User.find_by_email(params[:email])
+    unless user.nil?
+      render json: {:message => "用户 #{params[:email]} 已经存在！"}.to_json, status: :unprocessable_entity
+      return
+    end
+
+    User.create! do |u|
+      u.email = params[:email]
+      u.password = params[:password]
+      u.role = params[:role]
+      u.name = params[:name]
+    end
+
+    render json: { success: true }.to_json, status: :ok
+  rescue Exception => e
+    Rails.logger.error("Encountered an error while creating user #{params.inspect}: #{e}")
+    render json: {:message => e.to_s}.to_json, status: :unprocessable_entity
+  end
+
   private
 
   def user_params

@@ -18,13 +18,13 @@ window.validateUserForm = (containerDiv, userInfo) ->
     alert '请填写用户名！'
     return false
 
-  userInfo['user_name'] = user_name
+  userInfo['name'] = user_name
   user_email = $("#{containerDiv} input#user_email").val()
   unless isValidEmailAddress(user_email)
     alert '您填写的电子邮箱无效，请修正！'
     return false
 
-  userInfo['user_email'] = user_email
+  userInfo['email'] = user_email
   user_password = $("#{containerDiv} input#user_password").val()
   if $.trim(user_password) is ''
     alert '请填写密码！'
@@ -34,7 +34,7 @@ window.validateUserForm = (containerDiv, userInfo) ->
     alert '密码太短！至少需要八个字符。'
     return false
 
-  userInfo['user_password'] = user_password
+  userInfo['password'] = user_password
   $user_password_confirmation = $("#{containerDiv} input#user_password_confirmation")
   if $user_password_confirmation.size() > 0 and $user_password_confirmation.val() isnt user_password
     alert '密码不相符！'
