@@ -30,6 +30,10 @@ window.validateUserForm = (containerDiv, userInfo) ->
     alert '请填写密码！'
     return false
 
+  if $.trim(user_password).length < 8
+    alert '密码太短！至少需要八个字符。'
+    return false
+
   userInfo['user_password'] = user_password
   $user_password_confirmation = $("#{containerDiv} input#user_password_confirmation")
   if $user_password_confirmation.size() > 0 and $user_password_confirmation.val() isnt user_password
