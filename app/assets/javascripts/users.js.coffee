@@ -739,6 +739,22 @@ confirmExit = ->
   Admin tabs
 ###
 
+deleteUser = (userId, containerDiv) ->
+  $.ajax
+    url: getBaseURL() + "/users/#{userId}.json"
+    type: 'DELETE',
+    contentType: 'application/json',
+    dataType: 'json',
+    success: (data, textStatus, jqHXR) ->
+      updateUsersTable(containerDiv)
+      alert '用户已经成功删除！'
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      alert jqXHR.responseJSON.message
+      return
+    timeout: defaultAjaxCallTimeout
+  return
+
 setupManageUsersDiv = (containerDiv) ->
   $("#{containerDiv} button#btnDeleteUser").click ->
     _selectedTr = $('table#usersTable > tbody > tr.mediumSeaGreenBackground')
@@ -747,8 +763,7 @@ setupManageUsersDiv = (containerDiv) ->
     else
       oTable = $("#{containerDiv} table#usersTable").dataTable()
       row = oTable.fnGetData(_selectedTr[0])
-      if confirm("您确定要删除用户 #{row[1]} #{row[2]} 吗？")
-        alert row[0]
+      deleteUser(row[0], containerDiv) if confirm("您确定要删除用户 #{row[1]} #{row[2]} 吗？")
 
     return
 
