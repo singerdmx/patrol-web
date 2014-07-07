@@ -6,7 +6,7 @@ class NotificationController < ApplicationController
     last_modified = nil
     previous_modified = request.headers["If-Modified-Since"]
     previous_modified = Time.parse(previous_modified) if  !previous_modified.nil?
-    current_user.all_points.each { |point|
+    current_user.all_points.each do |point|
       last_check_time = point.check_results.maximum(:check_time)
 
       if !last_check_time.nil?
@@ -17,16 +17,16 @@ class NotificationController < ApplicationController
           else
             last_modified = [last_modified, last_check_time].max
           end
-        end
 
-        last_check_result = point.check_results.order("check_time DESC").first
-        if last_check_result.status == 1
-          @notifications_json << "|1|#{point.name}  #{point.barcode}  上次检查结果异常， 时间 #{last_check_time.in_time_zone("Beijing").strftime("%Y-%m-%d %H:%M")}"
-        elsif last_check_result.status == 2
-          @notifications_json << "|2|#{point.name}  #{point.barcode}  上次检查结果处于警告状态， 时间 #{last_check_time.in_time_zone("Beijing").strftime("%Y-%m-%d %H:%M")}"
+          last_check_result = point.check_results.order("check_time DESC").first
+          if last_check_result.status == 1
+            @notifications_json << "|1|#{point.name}  #{point.barcode}  上次检查结果异常， 时间 #{last_check_time.in_time_zone("Beijing").strftime("%Y-%m-%d %H:%M")}"
+          elsif last_check_result.status == 2
+            @notifications_json << "|2|#{point.name}  #{point.barcode}  上次检查结果处于警告状态， 时间 #{last_check_time.in_time_zone("Beijing").strftime("%Y-%m-%d %H:%M")}"
+          end
         end
       end
-    }
+    end
 
     last_modified = previous_modified if  @notifications_json.empty?
     if stale?(etag: @notifications_json, last_modified: last_modified)
