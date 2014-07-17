@@ -239,6 +239,10 @@ div#manageUsersDiv {
 
 /* manageDataDiv */
 
+.mediumWidth {
+  width: 100px;
+}
+
 div#manageDataDiv {
   > div {
     float: left;
@@ -247,6 +251,14 @@ div#manageDataDiv {
   div#managementButtons {
     width: 15%;
     min-width: 120px;
+
+    > div {
+      margin-bottom: 5px;
+
+      form#uploadFile {
+        margin-bottom: 0px;
+      }
+    }
   }
 
   div#managementData {

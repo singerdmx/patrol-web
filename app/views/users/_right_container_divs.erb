@@ -204,6 +204,46 @@
 <div class="containerDiv" id="manageDataDiv">
   <div id="managementButtons">
     <div>
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle mediumWidth" type="button" data-toggle="dropdown">
+          <span class="caret"></span>
+          路线
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+          <li role="presentation"><a role="menuitem" data-index="0">创建</a></li>
+          <li role="presentation"><a role="menuitem" data-index="1">连接到工区</a></li>
+          <li role="presentation"><a role="menuitem" data-index="2">删除</a></li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle mediumWidth" type="button" data-toggle="dropdown">
+          <span class="caret"></span>
+          设备
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+          <li role="presentation"><a role="menuitem" data-index="0">创建</a></li>
+          <li role="presentation"><a role="menuitem" data-index="1">连接到路线</a></li>
+          <li role="presentation"><a role="menuitem" data-index="2">删除</a></li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle mediumWidth" type="button" id="routesDropdownMenu" data-toggle="dropdown">
+          <span class="caret"></span>
+          检点
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+          <li role="presentation"><a role="menuitem" data-index="0">创建</a></li>
+          <li role="presentation"><a role="menuitem" data-index="1">连接到设备</a></li>
+          <li role="presentation"><a role="menuitem" data-index="1">连接到工厂</a></li>
+          <li role="presentation"><a role="menuitem" data-index="2">删除</a></li>
+        </ul>
+      </div>
+    </div>
+    <div>
       <%= form_tag "/", method: "post", id: "uploadFile" do %>
         <div>
           <span class="btn btn-success fileinput-button">
