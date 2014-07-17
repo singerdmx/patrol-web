@@ -310,12 +310,26 @@ bindTreeViewClick = (containerDiv) ->
         $('div#sidebar ul > li#history').trigger('click')
         updateChart('div#historyDiv', {id: $(this).data('id')})
       when 'moveOut'
-        routeNode = findParentRoute($(this))
-        console.log routeNode.data('id')
-        console.log $(this).data('id')
-        # remove the <ul> elment
-        $(this).parent().parent().parent().remove()
+        detachPoint($(this))
     return
+
+  return
+
+detachPoint = (point) ->
+  routeNode = findParentRoute(point)
+  $.ajax
+    url: getBaseURL() + "/routes/#{routeNode.data('id')}/detach_point.json?point=#{point.data('id')}"
+    type: 'PUT',
+    contentType: 'application/json',
+    dataType: 'json',
+    success: (data, textStatus, jqHXR) ->
+      # remove the <ul> elment
+      point.parent().parent().parent().remove()
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      alert jqXHR.responseJSON.message
+      return
+    timeout: defaultAjaxCallTimeout
 
   return
 
