@@ -219,6 +219,11 @@ updatePreferences = (containerDiv) ->
 
   return
 
+findParentRoute = (elem) ->
+  parent = elem.parent()
+  return elem if parent.is('div') and parent.attr('id') is "routesTree"
+  findParentRoute(parent)
+
 renderTreeView = (url, containerDiv, ifModifiedSinceSpanId, params, hideTree) ->
   request_params = { ui: true }
   $.extend(request_params, params) if params # merge two objects
@@ -261,7 +266,7 @@ buildTreeNode = (parent, data) ->
     historyIcon = ''
     historyIcon = "<span class='badge' data-type='history' data-id='#{nodeDatum.id}'>历史</span>" if nodeDatum.kind is 'point'
     moveOutIcon = ''
-    moveOutIcon = "<span class='badge' data-type='moveOut' data-id='#{nodeDatum.id}'>移出</span>" if nodeDatum.kind is 'point'
+    moveOutIcon = "<span class='badge' data-type='moveOut' data-id='#{nodeDatum.id}'>移出</span>" if nodeDatum.kind is 'point' and getPageTitle() is '巡检 | 管理员'
     parent.append "
     <ul class='media-list' data-id='#{nodeDatum.id}'>
       <li class='media'>
@@ -305,7 +310,9 @@ bindTreeViewClick = (containerDiv) ->
         $('div#sidebar ul > li#history').trigger('click')
         updateChart('div#historyDiv', {id: $(this).data('id')})
       when 'moveOut'
-        alert 'move out'
+        routeNode = findParentRoute($(this))
+        alert routeNode.data('id')
+        alert $(this).data('id')
     return
 
   return
@@ -764,7 +771,7 @@ deleteUser = (userId, containerDiv) ->
 setupManageUsersDiv = (containerDiv) ->
   $("#{containerDiv} button#btnDeleteUser").click ->
     _selectedTr = $('table#usersTable > tbody > tr.mediumSeaGreenBackground')
-    if _selectedTr.length == 0
+    if _selectedTr.length is 0
       alert '请选择用户！'
     else
       oTable = $("#{containerDiv} table#usersTable").dataTable()
