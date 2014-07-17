@@ -6,8 +6,13 @@ class RouteOperationController < ApplicationController
       return
     end
 
-    params[:check_route_id]
-    params[:point]
+    attachment = RouteBuilder.find_by(check_point_id: params[:point], check_route_id: params[:check_route_id])
+    if attachment.nil?
+      render json: {:message => "Point #{params[:point]} is not attached to route #{params[:check_route_id]}"}.to_json, status: :bad_request
+      return
+    end
+
+    attachment.destroy
     render json: { success: true }.to_json, status: :ok
   end
 end
