@@ -2,7 +2,9 @@ Blog::Application.routes.draw do
   resources :route_builders
   resources :notification
   resources :assets
-  resources :check_routes, :path => :routes
+  resources :check_routes, :path => :routes do
+    resource :detach_point, only: [:update], controller: 'route_operation'
+  end
   resources :check_points,     :path => :points do
     resources :history, controller: 'check_results', only: [:index]
   end
