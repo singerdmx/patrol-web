@@ -259,7 +259,9 @@ renderTreeView = (url, containerDiv, ifModifiedSinceSpanId, params, hideTree) ->
 buildTreeNode = (parent, data) ->
   for nodeDatum, i in data
     historyIcon = ''
-    historyIcon = "<span class='badge' data-id='#{nodeDatum.id}'>历史</span>" if nodeDatum.kind is 'point'
+    historyIcon = "<span class='badge' data-type='history' data-id='#{nodeDatum.id}'>历史</span>" if nodeDatum.kind is 'point'
+    moveOutIcon = ''
+    moveOutIcon = "<span class='badge' data-type='moveOut' data-id='#{nodeDatum.id}'>移出</span>" if nodeDatum.kind is 'point'
     parent.append "
     <ul class='media-list' data-id='#{nodeDatum.id}'>
       <li class='media'>
@@ -267,7 +269,7 @@ buildTreeNode = (parent, data) ->
           <img src='/assets/#{nodeDatum.icon}' class='media-object mediaListIcon' data-id='#{nodeDatum.id}'/>
         </a>
         <div class='media-body'>
-        <h4 class='media-heading'>#{nodeDatum.title}#{historyIcon}</h4>
+        <h4 class='media-heading'>#{nodeDatum.title}#{historyIcon}#{moveOutIcon}</h4>
         <span>#{nodeDatum.description}</span>"
 
     $ul = $(parent.children('ul')[i])
@@ -298,8 +300,12 @@ bindTreeViewClick = (containerDiv) ->
     return
 
   $("#{containerDiv} ul.media-list > li.media span.badge").click ->
-    $('div#sidebar ul > li#history').trigger('click')
-    updateChart('div#historyDiv', {id: $(this).data('id')})
+    switch $(this).data('type')
+      when 'history'
+        $('div#sidebar ul > li#history').trigger('click')
+        updateChart('div#historyDiv', {id: $(this).data('id')})
+      when 'moveOut'
+        alert 'move out'
     return
 
   return
