@@ -311,8 +311,10 @@ bindTreeViewClick = (containerDiv) ->
         updateChart('div#historyDiv', {id: $(this).data('id')})
       when 'moveOut'
         routeNode = findParentRoute($(this))
-        alert routeNode.data('id')
-        alert $(this).data('id')
+        console.log routeNode.data('id')
+        console.log $(this).data('id')
+        # remove the <ul> elment
+        $(this).parent().parent().parent().remove()
     return
 
   return
