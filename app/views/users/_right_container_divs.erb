@@ -210,9 +210,9 @@
           路线
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-          <li role="presentation"><a role="menuitem" data-index="0">创建</a></li>
-          <li role="presentation"><a role="menuitem" data-index="1">连接到工区</a></li>
-          <li role="presentation"><a role="menuitem" data-index="2">删除</a></li>
+          <li role="presentation"><a role="menuitem" data-div="createRoute">创建</a></li>
+          <li role="presentation"><a role="menuitem" data-div="attachRouteToArea">连接到工区</a></li>
+          <li role="presentation"><a role="menuitem" data-div="deleteRoute">删除</a></li>
         </ul>
       </div>
     </div>
@@ -223,9 +223,9 @@
           设备
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-          <li role="presentation"><a role="menuitem" data-index="0">创建</a></li>
-          <li role="presentation"><a role="menuitem" data-index="1">连接到路线</a></li>
-          <li role="presentation"><a role="menuitem" data-index="2">删除</a></li>
+          <li role="presentation"><a role="menuitem" data-div="createAsset">创建</a></li>
+          <li role="presentation"><a role="menuitem" data-div="attachAssetToRoute">连接到路线</a></li>
+          <li role="presentation"><a role="menuitem" data-div="deleteAsset">删除</a></li>
         </ul>
       </div>
     </div>
@@ -236,10 +236,10 @@
           检点
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-          <li role="presentation"><a role="menuitem" data-index="0">创建</a></li>
-          <li role="presentation"><a role="menuitem" data-index="1">连接到设备</a></li>
-          <li role="presentation"><a role="menuitem" data-index="1">连接到工厂</a></li>
-          <li role="presentation"><a role="menuitem" data-index="2">删除</a></li>
+          <li role="presentation"><a role="menuitem" data-div="createPoint">创建</a></li>
+          <li role="presentation"><a role="menuitem" data-div="attachPointToAsset">连接到设备</a></li>
+          <li role="presentation"><a role="menuitem" data-div="attachPointToRoute">连接到路线</a></li>
+          <li role="presentation"><a role="menuitem" data-div="deletePoint">删除</a></li>
         </ul>
       </div>
     </div>
@@ -265,6 +265,36 @@
   </div>
   <div id="managementData">
     <div class="alert" style="display: none" id="uploadInfo">
+    </div>
+    <div id="createRoute" style="display: none">
+      Create Route
+    </div>
+    <div id="attachRouteToArea" style="display: none">
+      attachRouteToArea
+    </div>
+    <div id="deleteRoute" style="display: none">
+      deleteRoute
+    </div>
+    <div id="createAsset" style="display: none">
+      Create Asset
+    </div>
+    <div id="attachAssetToRoute" style="display: none">
+      attachAssetToRoute
+    </div>
+    <div id="deleteAsset" style="display: none">
+      deleteAsset
+    </div>
+    <div id="createPoint" style="display: none">
+      Create Point
+    </div>
+    <div id="attachPointToAsset" style="display: none">
+      attachPointToAsset
+    </div>
+    <div id="attachPointToRoute" style="display: none">
+      attachPointToRoute
+    </div>
+    <div id="deletePoint" style="display: none">
+      deletePoint
     </div>
   </div>
 </div>

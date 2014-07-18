@@ -917,6 +917,11 @@ updateUsersTable = (containerDiv) ->
   return
 
 setupManageDataDiv = ->
+  $('div#managementButtons ul.dropdown-menu > li > a').click ->
+    $('div#managementData > div').hide()
+    $("div#managementData > div##{$(this).data('div')}").show()
+    return
+
   $('form#uploadFile').fileupload
     url: getBaseURL() + '/file.json',
     dataType: 'json',
