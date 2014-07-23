@@ -13,30 +13,30 @@ window.showErrorPage = (errorPageContent) ->
 # validate entries in user form before submission, return true/false
 window.validateUserForm = (containerDiv, userInfo) ->
   userInfo = {} unless userInfo
-  user_name = $("#{containerDiv} input#user_name").val()
-  if user_name is '用户名' or $.trim(user_name) is ''
+  userName = $("#{containerDiv} input#user_name")
+  if isInputValueEmpty(userName)
     alert '请填写用户名！'
     return false
 
-  userInfo['name'] = user_name
-  user_email = $("#{containerDiv} input#user_email").val()
-  unless isValidEmailAddress(user_email)
+  userInfo['name'] = userName.val()
+  userEmail = $("#{containerDiv} input#user_email")
+  unless isValidEmailAddress(userEmail.val())
     alert '您填写的电子邮箱无效，请修正！'
     return false
 
-  userInfo['email'] = user_email
-  user_password = $("#{containerDiv} input#user_password").val()
-  if $.trim(user_password) is ''
+  userInfo['email'] = userEmail.val()
+  userPassword = $("#{containerDiv} input#user_password")
+  if isInputValueEmpty(userPassword)
     alert '请填写密码！'
     return false
 
-  if $.trim(user_password).length < 8
+  if $.trim(userPassword.val()).length < 8
     alert '密码太短！至少需要八个字符。'
     return false
 
-  userInfo['password'] = user_password
+  userInfo['password'] = userPassword.val()
   $user_password_confirmation = $("#{containerDiv} input#user_password_confirmation")
-  if $user_password_confirmation.size() > 0 and $user_password_confirmation.val() isnt user_password
+  if $user_password_confirmation.size() > 0 and $user_password_confirmation.val() isnt userPassword.val()
     alert '密码不相符！'
     return false
 
@@ -73,3 +73,17 @@ window.changePasswordType = (element) ->
       $(element).attr('type', 'password')
 
   return
+
+window.resetToPlaceholderValue = (elements) ->
+  for element in elements
+    placeholder_val = $(element).attr('placeholder')
+    $(element).val(placeholder_val) if placeholder_val
+  return
+
+window.isInputValueEmpty = (input_element) ->
+  placeholder_val = $(input_element).attr('placeholder')
+  input = $(input_element).val()
+  return true if $.trim(input) is ''
+  if placeholder_val
+    return true if input is placeholder_val
+  false

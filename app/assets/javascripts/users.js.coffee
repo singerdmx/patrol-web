@@ -935,7 +935,6 @@ setupManageDataDiv = ->
   return
 
 setupCreatePointDiv = ->
-  $('div#categorySelection select#pointCategory').val(10) # set to select first item
   $('div#categorySelection select#pointCategory').change ->
     switch $(this).val()
       when '40','41'
@@ -960,4 +959,18 @@ setupCreatePointDiv = ->
       $(this).parent().remove()
       return
     return
+
+  $("div#createPoint button#btnCancelCreatePoint").click(clearCreatePointForm)
+  $("div#createPoint button#btnCreatePoint").click ->
+    alert 'submit'
+    return
+
+  $('div#categorySelection select#pointCategory').val(10) # set to select first item
+  return
+
+clearCreatePointForm = ->
+  $('div#categorySelection select#pointCategory').val(10) # set to select first item
+  $('div#addPointChoiceDiv, div#fourChoicesDiv').hide()
+  resetToPlaceholderValue($('div#createPoint input'))
+  $('div#pointChoiceDiv > div:first > span').remove()
   return
