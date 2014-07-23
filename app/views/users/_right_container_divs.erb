@@ -167,7 +167,7 @@
   <div id="chartDiv"></div>
 </div>
 <div class="containerDiv" id="manageUsersDiv">
-  <div id="createUserDiv" style="display: none">
+  <div id="createUserDiv" style="display: none" class="submissionForm">
     <h2 class="form-signin-heading">创建用户</h2>
     <input type="text" value="" required="required" placeholder="用户名" name="user[name]" id="user_name" class="form-control"/>
     <input type="email" value="" required="required" placeholder="电子邮箱" name="user[email]" id="user_email" class="form-control"/>
@@ -284,8 +284,65 @@
     <div id="deleteAsset" style="display: none">
       deleteAsset
     </div>
-    <div id="createPoint" style="display: none">
-      Create Point
+    <div id="createPoint" style="display: none" class="submissionForm">
+      <h2 class="form-signin-heading">创建检点</h2>
+      <input type="text" value="" required="required" placeholder="名称" id="pointName" class="form-control"/>
+      <input type="text" value="" placeholder="描述" id="pointDescription" class="form-control"/>
+      <input type="text" value="" placeholder="条形码" id="pointBarcode" class="form-control"/>
+      <div id="categorySelection">
+        <div style="width: 100px; margin-top: 8px; padding-left: 5px">
+          <span style="font-size: 15px">类型</span>
+        </div>
+        <div style="width: 70%">
+          <select class="form-control" id="pointCategory">
+            <option value="10" selected="selected">巡更</option>
+            <option value="20">润滑</option>
+            <option value="30">抄表</option>
+            <option value="40">状态</option>
+            <option value="41">普通巡检</option>
+            <option value="50">日常巡检</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <div id="addPointChoiceDiv">
+          <div id="addChoiceButtonDiv">
+            <button type="button" class="btn btn-info btn-lg">
+              添加
+            </button>
+          </div>
+          <div id="pointChoiceDiv">
+            <input type="text" value="" placeholder="填写选项" class="form-control"/>
+            <div>
+              <span class="lavenderBackground">
+                <i class="icon-remove"></i>异常
+              </span>
+              <span class="lavenderBackground">
+                <i class="icon-remove"></i>异常
+              </span>
+              <span class="lavenderBackground">
+                <i class="icon-remove"></i>异常
+              </span>
+              <span class="lavenderBackground">
+                <i class="icon-remove"></i>异常
+              </span>
+              <span class="lavenderBackground">
+                <i class="icon-remove"></i>异常
+              </span>
+              <span class="lavenderBackground">
+                <i class="icon-remove"></i>异常
+              </span>
+            </div>
+          </div>
+        </div>
+        <div id="fourChoicesDiv">
+        </div>
+      </div>
+
+      <div style="margin-top: 5px; display: block">
+        <button class="btn btn-warning" type="button" id="btnCancelCreateUser"/>取消</button>
+        <button class="btn btn-primary" type="button" id="btnCreateUser"/>提交</button>
+      </div>
     </div>
     <div id="attachPointToAsset" style="display: none">
       attachPointToAsset

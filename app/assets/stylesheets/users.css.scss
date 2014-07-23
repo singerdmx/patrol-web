@@ -208,21 +208,22 @@ table.jqplot-table-legend {
 
 /* manageUsersDiv */
 
-div#manageUsersDiv {
-  div#createUserDiv {
-    text-align: center;
-    width: 40%;
-    min-width: 450px;
-    margin-left: auto;
-    margin-right: auto;
-    div#userRoleSelection {
-      > div {
-        float: left;
-        text-align: left;
-      }
-    }
-  }
+div.submissionForm {
+  text-align: center;
+  width: 40%;
+  min-width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
+div#userRoleSelection, div#categorySelection {
+  > div {
+    float: left;
+    text-align: left;
+  }
+}
+
+div#manageUsersDiv {
   div#usersTableDiv {
     table#usersTable {
       > tbody {
@@ -263,5 +264,37 @@ div#manageDataDiv {
 
   div#managementData {
     width: 80%;
+  }
+}
+
+div#createPoint{
+  div#addPointChoiceDiv {
+    > div {
+      float: left;
+      text-align: left;
+    }
+
+    div#addChoiceButtonDiv {
+      width: 20%;
+    }
+
+    div#pointChoiceDiv {
+      margin-left: 2%;
+      width: 78%;
+    }
+  }
+}
+
+span.lavenderBackground {
+  display: inline-block;
+  padding: 5px;
+  margin: 5px;
+  color: $BlueViolet;
+  background-color: $Lavender;
+  border-color: $Azure;
+  tab-size: 15px;
+
+  > i {
+    cursor: pointer;
   }
 }
