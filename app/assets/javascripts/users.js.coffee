@@ -930,4 +930,21 @@ setupManageDataDiv = ->
       $('div#uploadInfo').addClass('alert-success').text('上传成功！').show()
       return
 
+  setupCreatePointDiv()
+
+  return
+
+setupCreatePointDiv = ->
+  $('div#categorySelection select#pointCategory').change ->
+    switch $(this).val()
+      when '40','41'
+        $('div#addPointChoiceDiv').show()
+        $('div#fourChoicesDiv').hide()
+      when '50'
+        $('div#addPointChoiceDiv').hide()
+        $('div#fourChoicesDiv').show()
+      else
+        $('div#addPointChoiceDiv, div#fourChoicesDiv').hide()
+    return
+
   return

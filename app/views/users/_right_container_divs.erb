@@ -305,7 +305,7 @@
         </div>
       </div>
       <div>
-        <div id="addPointChoiceDiv">
+        <div id="addPointChoiceDiv" style="display: none">
           <div id="addChoiceButtonDiv">
             <button type="button" class="btn btn-info btn-lg">
               添加
@@ -335,7 +335,11 @@
             </div>
           </div>
         </div>
-        <div id="fourChoicesDiv">
+        <div id="fourChoicesDiv" style="display: none">
+          <input type="text" value="" placeholder="正常上限" id="pointMax" class="form-control"/>
+          <input type="text" value="" placeholder="警戒上限" id="pointHigh" class="form-control"/>
+          <input type="text" value="" placeholder="警戒下限" id="pointLow" class="form-control"/>
+          <input type="text" value="" placeholder="正常下限" id="pointMin" class="form-control"/>
         </div>
       </div>
 
