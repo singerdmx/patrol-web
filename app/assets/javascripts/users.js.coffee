@@ -935,6 +935,7 @@ setupManageDataDiv = ->
   return
 
 setupCreatePointDiv = ->
+  $('div#categorySelection select#pointCategory').val(10) # set to select first item
   $('div#categorySelection select#pointCategory').change ->
     switch $(this).val()
       when '40','41'
@@ -947,4 +948,16 @@ setupCreatePointDiv = ->
         $('div#addPointChoiceDiv, div#fourChoicesDiv').hide()
     return
 
+  $('div#addChoiceButtonDiv button#addChoiceButton').click ->
+    input = $('div#pointChoiceDiv > input').val()
+    if input is '填写选项'
+      alert '请填写选项！'
+      return
+
+    $('div#pointChoiceDiv > div:first').append("<span class='lavenderBackground'>
+        <i class='icon-remove'></i>#{input}</span>")
+    $('div#pointChoiceDiv > div:first > span:last > i').click ->
+      $(this).parent().remove()
+      return
+    return
   return
