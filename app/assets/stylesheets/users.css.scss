@@ -79,6 +79,15 @@ div.calendarWidgetDiv {
   }
 }
 
+li.blueVioletBackground {
+  display: inline-block;
+  padding: 5px;
+  margin: 5px 5px 5px 15px;
+  color: $Snow;
+  background-color: $BlueViolet;
+  border-color: $Azure;
+}
+
 /* routesDiv */
 @mixin mediaList {
   h4.media-heading {

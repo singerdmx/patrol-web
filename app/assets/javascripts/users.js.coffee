@@ -38,6 +38,9 @@ setupSidebar = ->
     else
       $(this).addClass('close_box').removeClass('open_box')
     return
+  $('div#sidebar > ul > li#return').click ->
+    location.reload(true)
+    return
   $('div#sidebar > ul > li').click (e) ->
     $('#sidebar ul li.active').removeClass('active')
     $(this).addClass('active')
