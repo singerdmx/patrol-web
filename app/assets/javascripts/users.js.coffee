@@ -968,6 +968,10 @@ setupCreatePointDiv = ->
     pointInfo = {}
     return unless validateCreatePointForm('div#createPoint', pointInfo)
     pointInfo['choice'] = JSON.stringify(pointInfo['choice'])
+    $pointDescription = $('div#createPoint input#pointDescription')
+    pointInfo['description'] = $pointDescription.val() unless isInputValueEmpty($pointDescription)
+    $pointBarcode = $('div#createPoint input#pointBarcode')
+    pointInfo['barcode'] = $pointBarcode.val() unless isInputValueEmpty($pointBarcode)
     $.ajax
       url: getBaseURL() + '/points.json'
       type: 'POST',
@@ -999,10 +1003,18 @@ validateCreatePointForm = (containerDiv, pointInfo) ->
   pointInfo['category'] = pointCategory
   pointInfo['choice'] = []
   switch pointCategory
+    when '40','41'
+      for span in $("#{containerDiv} div#pointChoiceDiv > div:first > span")
+        choice = $.trim($(span).text())
+        if choice in pointInfo['choice']
+          alert "您有重复的选项： #{choice}"
+          return false
+
+        pointInfo['choice'].push(choice)
     when '50'
       nums = []
       for num in ['Min', 'Low', 'High', 'Max']
-        $inputNumber = $("input#point#{num}")
+        $inputNumber = $("#{containerDiv} input#point#{num}")
         if isInputValueEmpty($inputNumber)
           pointInfo['choice'].push(null)
           continue
