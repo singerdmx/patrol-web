@@ -286,7 +286,7 @@
     </div>
     <div id="createPoint" style="display: none" class="submissionForm">
       <h2 class="form-signin-heading">创建检点</h2>
-      <input type="text" value="" required="required" placeholder="名称" id="pointName" class="form-control"/>
+      <input type="text" value="" required="required" placeholder="名称（必填）" id="pointName" class="form-control"/>
       <input type="text" value="" placeholder="描述" id="pointDescription" class="form-control"/>
       <input type="text" value="" placeholder="条形码" id="pointBarcode" class="form-control"/>
       <div id="categorySelection">
@@ -314,6 +314,12 @@
           <div id="pointChoiceDiv">
             <input type="text" value="" placeholder="填写选项" class="form-control"/>
             <div>
+              <span class="lavenderBackground">
+                <i class="icon-remove"></i>正常
+              </span>
+              <span class="lavenderBackground">
+                <i class="icon-remove"></i>非正常
+              </span>
             </div>
           </div>
         </div>
