@@ -35,6 +35,11 @@ class CheckPointsController < ApplicationController
   # POST /check_points.json
   def create
     begin
+      unless current_user.is_admin?
+        render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+        return
+      end
+
       if check_point_params[:asset_id].nil?
         logger.info("no asset id provided when creating point:so creating dummy asset")
         asset = Asset.create({

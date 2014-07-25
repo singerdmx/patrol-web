@@ -965,27 +965,49 @@ setupCreatePointDiv = ->
 
   $("div#createPoint button#btnCancelCreatePoint").click(clearCreatePointForm)
   $("div#createPoint button#btnCreatePoint").click ->
-    return unless validateCreatePointForm('div#createPoint')
-    alert 'submit'
+    pointInfo = {}
+    return unless validateCreatePointForm('div#createPoint', pointInfo)
+    pointInfo['choice'] = JSON.stringify(pointInfo['choice'])
+    $.ajax
+      url: getBaseURL() + '/points.json'
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(pointInfo),
+      dataType: 'json',
+      success: (data, textStatus, jqHXR) ->
+        alert '检点创建成功'
+        clearCreatePointForm()
+        return
+      error: (jqXHR, textStatus, errorThrown) ->
+        alert jqXHR.responseJSON.message
+        return
+      timeout: defaultAjaxCallTimeout
     return
 
   $('div#categorySelection select#pointCategory').val(10) # set to select first item
   return
 
-validateCreatePointForm = (containerDiv) ->
+validateCreatePointForm = (containerDiv, pointInfo) ->
+  pointInfo = {} unless pointInfo
   pointName = $("#{containerDiv} input#pointName")
   if isInputValueEmpty(pointName)
     alert '请填写名称！'
     return false
 
+  pointInfo['name'] = pointName.val()
   pointCategory = $("#{containerDiv} div#categorySelection select#pointCategory").val()
+  pointInfo['category'] = pointCategory
+  pointInfo['choice'] = []
   switch pointCategory
     when '50'
       nums = []
       for num in ['Min', 'Low', 'High', 'Max']
         $inputNumber = $("input#point#{num}")
-        continue if isInputValueEmpty($inputNumber)
+        if isInputValueEmpty($inputNumber)
+          pointInfo['choice'].push(null)
+          continue
         inputNumber = $inputNumber.val()
+        pointInfo['choice'].push(inputNumber)
         if inputNumber
           n = parseFloat(inputNumber)
           if isNaN(n)
@@ -995,7 +1017,7 @@ validateCreatePointForm = (containerDiv) ->
 
       for num, i in nums
         if i != 0 and num < nums[i-1]
-          alert "数字 '#{nums}' 不符合逻辑。应该递减排列！"
+          alert "数字 '#{nums}' 不符合逻辑。应该递增排列！"
           return false
 
   true
