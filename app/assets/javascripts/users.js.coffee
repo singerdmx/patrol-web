@@ -965,11 +965,40 @@ setupCreatePointDiv = ->
 
   $("div#createPoint button#btnCancelCreatePoint").click(clearCreatePointForm)
   $("div#createPoint button#btnCreatePoint").click ->
+    return unless validateCreatePointForm('div#createPoint')
     alert 'submit'
     return
 
   $('div#categorySelection select#pointCategory').val(10) # set to select first item
   return
+
+validateCreatePointForm = (containerDiv) ->
+  pointName = $("#{containerDiv} input#pointName")
+  if isInputValueEmpty(pointName)
+    alert '请填写名称！'
+    return false
+
+  pointCategory = $("#{containerDiv} div#categorySelection select#pointCategory").val()
+  switch pointCategory
+    when '50'
+      nums = []
+      for num in ['Min', 'Low', 'High', 'Max']
+        $inputNumber = $("input#point#{num}")
+        continue if isInputValueEmpty($inputNumber)
+        inputNumber = $inputNumber.val()
+        if inputNumber
+          n = parseFloat(inputNumber)
+          if isNaN(n)
+            alert "#{inputNumber} 不是数字！"
+            return false
+          nums.push parseFloat(n)
+
+      for num, i in nums
+        if i != 0 and num < nums[i-1]
+          alert "数字 '#{nums}' 不符合逻辑。应该递减排列！"
+          return false
+
+  true
 
 clearCreatePointForm = ->
   $('div#categorySelection select#pointCategory').val(10) # set to select first item
