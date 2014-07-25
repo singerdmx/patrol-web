@@ -1047,4 +1047,7 @@ clearCreatePointForm = ->
           <i class='icon-remove'></i>正常</span>")
   $('div#pointChoiceDiv > div:first').append("<span class='lavenderBackground'>
             <i class='icon-remove'></i>非正常</span>")
+  $('div#pointChoiceDiv > div:first > span > i').click ->
+    $(this).parent().remove()
+    return
   return
