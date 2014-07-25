@@ -963,6 +963,10 @@ setupCreatePointDiv = ->
       return
     return
 
+  $('div#pointChoiceDiv > div:first > span > i').click ->
+    $(this).parent().remove()
+    return
+
   $("div#createPoint button#btnCancelCreatePoint").click(clearCreatePointForm)
   $("div#createPoint button#btnCreatePoint").click ->
     pointInfo = {}
@@ -1039,4 +1043,8 @@ clearCreatePointForm = ->
   $('div#addPointChoiceDiv, div#fourChoicesDiv').hide()
   resetToPlaceholderValue($('div#createPoint input'))
   $('div#pointChoiceDiv > div:first > span').remove()
+  $('div#pointChoiceDiv > div:first').append("<span class='lavenderBackground'>
+          <i class='icon-remove'></i>正常</span>")
+  $('div#pointChoiceDiv > div:first').append("<span class='lavenderBackground'>
+            <i class='icon-remove'></i>非正常</span>")
   return
