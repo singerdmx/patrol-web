@@ -275,8 +275,17 @@
     <div id="deleteRoute" style="display: none">
       deleteRoute
     </div>
-    <div id="createAsset" style="display: none">
-      Create Asset
+    <div id="createAsset" style="display: none" class="submissionForm">
+      <h2 class="form-signin-heading">创建设备</h2>
+      <input type="text" value="" required="required" placeholder="名称（必填）" id="assetName" class="form-control"/>
+      <input type="text" value="" placeholder="描述" id="assetDescription" class="form-control"/>
+      <input type="text" value="" placeholder="条形码" id="assetBarcode" class="form-control"/>
+
+      <div style="margin-top: 5px; display: block">
+        <button class="btn btn-warning" type="button" id="btnCancelCreateAsset"/>重置</button>
+        <button class="btn btn-info" type="button" id="btnAddPointToAsset"/>添加检点</button>
+        <button class="btn btn-primary" type="button" id="btnCreateAsset"/>提交</button>
+      </div>
     </div>
     <div id="attachAssetToRoute" style="display: none">
       attachAssetToRoute

@@ -87,3 +87,7 @@ window.isInputValueEmpty = (input_element) ->
   if placeholder_val
     return true if input is placeholder_val
   false
+
+window.removeParent = ->
+  $(this).parent().remove()
+  return
