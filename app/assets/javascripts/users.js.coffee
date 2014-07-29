@@ -922,7 +922,9 @@ updateUsersTable = (containerDiv) ->
 setupManageDataDiv = ->
   $('div#managementButtons ul.dropdown-menu > li > a').click ->
     $('div#managementData > div').hide()
-    $("div#managementData > div##{$(this).data('div')}").show()
+    divId = $(this).data('div')
+    $("div#managementData > div##{divId}").show()
+    $('div#managementData span#addPointToAssetSpan').text('false') if divId is 'createPoint'
     return
 
   $('form#uploadFile').fileupload
@@ -934,6 +936,16 @@ setupManageDataDiv = ->
       return
 
   setupCreatePointDiv()
+  setupCreateAssetDiv()
+
+  return
+
+setupCreateAssetDiv = ->
+  $('div#createAsset button#btnAddPointToAsset').click ->
+    $('div#managementData span#addPointToAssetSpan').text('true')
+    $('div#createAsset').hide()
+    $('div#createPoint').show()
+    return
 
   return
 
@@ -963,7 +975,16 @@ setupCreatePointDiv = ->
 
   $('div#pointChoiceDiv > div:first > span > i').click(removeParent)
 
-  $("div#createPoint button#btnCancelCreatePoint").click(clearCreatePointForm)
+  $("div#createPoint button#btnCancelCreatePoint").click ->
+    clearCreatePointForm()
+    if $('div#managementData span#addPointToAssetSpan').text() is 'true'
+      $('div#managementData span#addPointToAssetSpan').text('false')
+      $('div#createAsset').show()
+      $('div#createPoint').hide()
+      return
+
+    return
+
   $("div#createPoint button#btnCreatePoint").click ->
     pointInfo = {}
     return unless validateCreatePointForm('div#createPoint', pointInfo)
@@ -981,6 +1002,12 @@ setupCreatePointDiv = ->
       success: (data, textStatus, jqHXR) ->
         alert '检点创建成功'
         clearCreatePointForm()
+        if $('div#managementData span#addPointToAssetSpan').text() is 'true'
+          $('div#managementData span#addPointToAssetSpan').text('false')
+          $('div#createAsset').show()
+          $('div#createPoint').hide()
+          $('div#addedPointDiv').append("<span class='lavenderBackground'>
+          <span class='hiddenSpan'>#{data.id}</span>#{data.name}</span>"                      )
         return
       error: (jqXHR, textStatus, errorThrown) ->
         alert jqXHR.responseJSON.message

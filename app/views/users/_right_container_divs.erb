@@ -264,6 +264,7 @@
     </div>
   </div>
   <div id="managementData">
+    <span class="hiddenSpan" id="addPointToAssetSpan">false</span>
     <div class="alert" style="display: none" id="uploadInfo">
     </div>
     <div id="createRoute" style="display: none">
@@ -281,6 +282,8 @@
       <input type="text" value="" placeholder="描述" id="assetDescription" class="form-control"/>
       <input type="text" value="" placeholder="条形码" id="assetBarcode" class="form-control"/>
 
+      <div id="addedPointDiv">
+      </div>
       <div style="margin-top: 5px; display: block">
         <button class="btn btn-warning" type="button" id="btnCancelCreateAsset"/>重置</button>
         <button class="btn btn-info" type="button" id="btnAddPointToAsset"/>添加检点</button>
