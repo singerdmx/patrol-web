@@ -44,7 +44,13 @@ class AssetsController < ApplicationController
   # POST /assets.json
   def create
     begin
+      unless current_user.is_admin?
+        render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+        return
+      end
+
       @asset = Asset.create!(asset_params)
+      params[:points]
       render template: 'assets/show', status: :created
     rescue Exception => e
       render json: {:message=> e.to_s}.to_json, status: :internal_server_error

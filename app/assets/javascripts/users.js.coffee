@@ -947,10 +947,7 @@ setupCreateAssetDiv = ->
     $('div#createPoint').show()
     return
 
-  $('div#createAsset button#btnCancelCreateAsset').click ->
-    resetToPlaceholderValue($('div#createAsset input'))
-    $('div#createAsset div#addedPointDiv > span').remove()
-    return
+  $('div#createAsset button#btnCancelCreateAsset').click(clearCreateAssetForm)
 
   $('div#createAsset button#btnCreateAsset').click ->
     assetName = $('div#createAsset input#assetName')
@@ -958,9 +955,33 @@ setupCreateAssetDiv = ->
       alert '请填写名称！'
       return
 
-    alert 'create'
+    assetInfo = {}
+    assetInfo['name'] = assetName.val()
+
+    pointIds = (parseInt($(pointId).text()) for pointId in $('div#createAsset div#addedPointDiv > span > span'))
+    alert pointIds
+    assetInfo['points'] = pointIds
+    $.ajax
+      url: getBaseURL() + '/assets.json'
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(assetInfo),
+      dataType: 'json',
+      success: (data, textStatus, jqHXR) ->
+        alert '设备创建成功'
+        clearCreateAssetForm()
+        return
+      error: (jqXHR, textStatus, errorThrown) ->
+        alert jqXHR.responseJSON.message
+        return
+      timeout: defaultAjaxCallTimeout
     return
 
+  return
+
+clearCreateAssetForm = ->
+  resetToPlaceholderValue($('div#createAsset input'))
+  $('div#createAsset div#addedPointDiv > span').remove()
   return
 
 setupCreatePointDiv = ->
