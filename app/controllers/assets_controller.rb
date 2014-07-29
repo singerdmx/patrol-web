@@ -50,7 +50,12 @@ class AssetsController < ApplicationController
       end
 
       @asset = Asset.create!(asset_params)
-      params[:points]
+      for pointId in params[:points]
+        point = CheckPoint.find(pointId)
+        point.asset_id = @asset.id
+        point.save
+      end
+
       render template: 'assets/show', status: :created
     rescue Exception => e
       render json: {:message=> e.to_s}.to_json, status: :internal_server_error

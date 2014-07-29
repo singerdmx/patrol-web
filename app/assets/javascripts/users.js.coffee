@@ -959,7 +959,6 @@ setupCreateAssetDiv = ->
     assetInfo['name'] = assetName.val()
 
     pointIds = (parseInt($(pointId).text()) for pointId in $('div#createAsset div#addedPointDiv > span > span'))
-    alert pointIds
     assetInfo['points'] = pointIds
     $.ajax
       url: getBaseURL() + '/assets.json'
