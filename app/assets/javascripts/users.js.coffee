@@ -947,6 +947,20 @@ setupCreateAssetDiv = ->
     $('div#createPoint').show()
     return
 
+  $('div#createAsset button#btnCancelCreateAsset').click ->
+    resetToPlaceholderValue($('div#createAsset input'))
+    $('div#createAsset div#addedPointDiv > span').remove()
+    return
+
+  $('div#createAsset button#btnCreateAsset').click ->
+    assetName = $('div#createAsset input#assetName')
+    if isInputValueEmpty(assetName)
+      alert '请填写名称！'
+      return
+
+    alert 'create'
+    return
+
   return
 
 setupCreatePointDiv = ->
@@ -975,7 +989,7 @@ setupCreatePointDiv = ->
 
   $('div#pointChoiceDiv > div:first > span > i').click(removeParent)
 
-  $("div#createPoint button#btnCancelCreatePoint").click ->
+  $('div#createPoint button#btnCancelCreatePoint').click ->
     clearCreatePointForm()
     if $('div#managementData span#addPointToAssetSpan').text() is 'true'
       $('div#managementData span#addPointToAssetSpan').text('false')
@@ -985,7 +999,7 @@ setupCreatePointDiv = ->
 
     return
 
-  $("div#createPoint button#btnCreatePoint").click ->
+  $('div#createPoint button#btnCreatePoint').click ->
     pointInfo = {}
     return unless validateCreatePointForm('div#createPoint', pointInfo)
     pointInfo['choice'] = JSON.stringify(pointInfo['choice'])
@@ -1007,7 +1021,7 @@ setupCreatePointDiv = ->
           $('div#createAsset').show()
           $('div#createPoint').hide()
           $('div#addedPointDiv').append("<span class='lavenderBackground'>
-          <span class='hiddenSpan'>#{data.id}</span>#{data.name}</span>"                      )
+          <span class='hiddenSpan'>#{data.id}</span>#{data.name}</span>")
         return
       error: (jqXHR, textStatus, errorThrown) ->
         alert jqXHR.responseJSON.message
