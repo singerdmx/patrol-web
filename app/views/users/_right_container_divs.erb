@@ -267,8 +267,15 @@
     <span class="hiddenSpan" id="addPointToAssetSpan">false</span>
     <div class="alert" style="display: none" id="uploadInfo">
     </div>
-    <div id="createRoute" style="display: none">
-      Create Route
+    <div id="createRoute" style="display: none" class="submissionForm">
+      <h2 class="form-signin-heading">创建路线</h2>
+      <input type="text" value="" required="required" placeholder="名称（必填）" id="routeName" class="form-control"/>
+      <input type="text" value="" placeholder="描述" id="routeDescription" class="form-control"/>
+
+      <div style="margin-top: 5px; display: block">
+        <button class="btn btn-warning" type="button" id="btnCancelCreateRoute"/>重置</button>
+        <button class="btn btn-primary" type="button" id="btnCreateRoute"/>提交</button>
+      </div>
     </div>
     <div id="attachRouteToArea" style="display: none">
       attachRouteToArea
