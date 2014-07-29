@@ -937,7 +937,43 @@ setupManageDataDiv = ->
 
   setupCreatePointDiv()
   setupCreateAssetDiv()
+  setupCreateRouteDiv()
 
+  return
+
+setupCreateRouteDiv = ->
+  $('div#createRoute button#btnCancelCreateRoute').click(clearCreateRouteForm)
+
+  $('div#createRoute button#btnCreateRoute').click ->
+    $routeName = $('div#createRoute input#routeName')
+    if isInputValueEmpty($routeName)
+      alert '请填写名称！'
+      return
+
+    routeInfo = {}
+    routeInfo['name'] = $routeName.val()
+    $routeDescription = $('div#createRoute input#routeDescription')
+    routeInfo['description'] = $routeDescription.val() unless isInputValueEmpty($routeDescription)
+    $.ajax
+      url: getBaseURL() + '/routes.json'
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(routeInfo),
+      dataType: 'json',
+      success: (data, textStatus, jqHXR) ->
+        alert '路线创建成功'
+        clearCreateRouteForm()
+        return
+      error: (jqXHR, textStatus, errorThrown) ->
+        alert jqXHR.responseJSON.message
+        return
+      timeout: defaultAjaxCallTimeout
+    return
+
+  return
+
+clearCreateRouteForm = ->
+  resetToPlaceholderValue($('div#createRoute input'))
   return
 
 setupCreateAssetDiv = ->
@@ -950,13 +986,18 @@ setupCreateAssetDiv = ->
   $('div#createAsset button#btnCancelCreateAsset').click(clearCreateAssetForm)
 
   $('div#createAsset button#btnCreateAsset').click ->
-    assetName = $('div#createAsset input#assetName')
-    if isInputValueEmpty(assetName)
+    $assetName = $('div#createAsset input#assetName')
+    if isInputValueEmpty($assetName)
       alert '请填写名称！'
       return
 
     assetInfo = {}
-    assetInfo['name'] = assetName.val()
+    assetInfo['name'] = $assetName.val()
+
+    $assetDescription = $('div#createAsset input#assetDescription')
+    assetInfo['description'] = $assetDescription.val() unless isInputValueEmpty($assetDescription)
+    $assetBarcode = $('div#createAsset input#assetBarcode')
+    assetInfo['barcode'] = $assetBarcode.val() unless isInputValueEmpty($assetBarcode)
 
     pointIds = (parseInt($(pointId).text()) for pointId in $('div#createAsset div#addedPointDiv > span > span'))
     assetInfo['points'] = pointIds
