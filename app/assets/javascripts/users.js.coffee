@@ -789,11 +789,11 @@ deleteUser = (userId, containerDiv) ->
 
 setupManageUsersDiv = (containerDiv) ->
   $("#{containerDiv} button#btnDeleteUser").click ->
-    _selectedTr = $('table#usersTable > tbody > tr.mediumSeaGreenBackground')
+    oTable = $("#{containerDiv} table#usersTable").dataTable()
+    _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
     if _selectedTr.length is 0
       alert '请选择用户！'
     else
-      oTable = $("#{containerDiv} table#usersTable").dataTable()
       row = oTable.fnGetData(_selectedTr[0])
       deleteUser(row[0], containerDiv) if confirm("您确定要删除用户 #{row[1]} #{row[2]} 吗？")
 
@@ -903,10 +903,6 @@ updateUsersTable = (containerDiv) ->
 
         oTable = $("#{containerDiv} table#usersTable").dataTable()
         oTable.fnSetColumnVis(0, false)
-        $('table#usersTable > tbody > tr').click (e) ->
-          $('table#usersTable > tbody > tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
-          $(this).addClass('mediumSeaGreenBackground')
-          return
 
         $("#{containerDiv} table#usersTable > tbody").on(
             'click',
@@ -950,13 +946,39 @@ setupManageDataDiv = ->
       return
 
   setupCreatePointDiv()
-  setupDeletePointDiv()
+  setupDeletePointDiv('div#managementData div#deletePoint')
   setupCreateAssetDiv()
   setupCreateRouteDiv()
 
   return
 
 setupDeletePointDiv = (containerDiv) ->
+  $("#{containerDiv} button#btnDeletePoint").click ->
+    oTable = $("#{containerDiv} table#pointsTable").dataTable()
+    _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
+    if _selectedTr.length is 0
+      alert '请选择检点！'
+    else
+      row = oTable.fnGetData(_selectedTr[0])
+      deletePoint(row[0], containerDiv) if confirm("您确定要删除检点 '#{row[1]}' 条形码 '#{row[2]}' 吗？")
+
+    return
+  return
+
+deletePoint = (pointId, containerDiv) ->
+  $.ajax
+    url: getBaseURL() + "/points/#{pointId}.json"
+    type: 'DELETE',
+    contentType: 'application/json',
+    dataType: 'json',
+    success: (data, textStatus, jqHXR) ->
+      updatePointsTable(containerDiv)
+      alert '检点已经成功删除！'
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      alert jqXHR.responseJSON.message
+      return
+    timeout: defaultAjaxCallTimeout
   return
 
 updatePointsTable = (containerDiv) ->
@@ -1021,7 +1043,7 @@ updatePointsTable = (containerDiv) ->
           'tr',
           ->
             oTable = $("#{containerDiv} table#pointsTable").dataTable()
-            oTable.$('tr').removeClass('mediumSeaGreenBackground')
+            oTable.$('tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
             $(this).addClass('mediumSeaGreenBackground')
             return
         )

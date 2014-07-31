@@ -71,7 +71,6 @@ class UsersController < ApplicationController
     end
 
     User.find(params[:id]).destroy
-    flash[:success] = "用户已经成功删除！"
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
     Rails.logger.error("Encountered an error while deleting user #{params.inspect}: #{e}")
