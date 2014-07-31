@@ -32,7 +32,7 @@ module CheckPointsHelper
       if entry['category'] == 50
         prefix = ['正常下限', '警戒下限', '警戒上限', '正常上限']
         choice = choice.each_with_index.map do |c, i|
-          "#{prefix[i]}： #{c.nil? or c.empty? ? '无' : c}"
+          "#{prefix[i]}： #{(c.nil? or c.empty?) ? '无' : c}"
         end
       end
       results << [
