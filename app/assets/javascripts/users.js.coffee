@@ -908,6 +908,16 @@ updateUsersTable = (containerDiv) ->
           $(this).addClass('mediumSeaGreenBackground')
           return
 
+        $("#{containerDiv} table#usersTable > tbody").on(
+            'click',
+            'tr',
+          ->
+            oTable = $("#{containerDiv} table#usersTable").dataTable()
+            oTable.$('tr').removeClass('mediumSeaGreenBackground')
+            $(this).addClass('mediumSeaGreenBackground')
+            return
+        )
+
         $("#{containerDiv} > span#usersIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} > span#usersIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
     error: (jqXHR, textStatus, errorThrown) ->
@@ -989,7 +999,7 @@ updatePointsTable = (containerDiv) ->
         $("#{containerDiv} table#pointsTable").dataTable
           'aaData': data
           'aoColumns': columns
-          'aaSorting': [[ 3, 'desc' ]]
+          'aaSorting': [[ 5, 'desc' ]]
           'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
             switch aaData[3]
               when '日常巡检'
@@ -1002,10 +1012,15 @@ updatePointsTable = (containerDiv) ->
 
         oTable = $("#{containerDiv} table#pointsTable").dataTable()
         oTable.fnSetColumnVis(0, false)
-        $('table#pointsTable > tbody > tr').click (e) ->
-          $('table#pointsTable > tbody > tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
-          $(this).addClass('mediumSeaGreenBackground')
-          return
+        $("#{containerDiv} table#pointsTable > tbody").on(
+          'click',
+          'tr',
+          ->
+            oTable = $("#{containerDiv} table#pointsTable").dataTable()
+            oTable.$('tr').removeClass('mediumSeaGreenBackground')
+            $(this).addClass('mediumSeaGreenBackground')
+            return
+        )
 
         $("#{containerDiv} > span#pointsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} > span#pointsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
