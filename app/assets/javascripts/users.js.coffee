@@ -924,7 +924,11 @@ setupManageDataDiv = ->
     $('div#managementData > div').hide()
     divId = $(this).data('div')
     $("div#managementData > div##{divId}").show()
-    $('div#managementData span#addPointToAssetSpan').text('false') if divId is 'createPoint'
+    switch divId
+      when 'createPoint'
+        $('div#managementData span#addPointToAssetSpan').text('false')
+      when 'deletePoint'
+        updatePointsTable('div#managementData div#deletePoint')
     return
 
   $('form#uploadFile').fileupload
@@ -946,6 +950,71 @@ setupDeletePointDiv = (containerDiv) ->
   return
 
 updatePointsTable = (containerDiv) ->
+  $.ajax
+    url: getBaseURL() + '/points.json?ui=true'
+    beforeSend: (xhr) ->
+      pointsIfNoneMatch = $("#{containerDiv} > span#pointsIfNoneMatch").text()
+      pointsIfModifiedSince = $("#{containerDiv} > span#pointsIfModifiedSince").text()
+
+      if pointsIfNoneMatch isnt '' and pointsIfModifiedSince isnt ''
+        xhr.setRequestHeader('If-None-Match', pointsIfNoneMatch)
+        xhr.setRequestHeader('If-Modified-Since', pointsIfModifiedSince)
+
+      return
+    success: (data, textStatus, jqHXR) ->
+      if jqHXR.status is 200
+        for record in data
+          record[4] = record[4].join()
+          record[6] = record[6].join()
+
+        columns = [
+          { "sTitle": "ID" },
+          { "sTitle": "名称" },
+          { "sTitle": "条形码" },
+          {
+            "sTitle": "类型",
+            "sClass": "center"
+          },
+          { "sTitle": "选项" },
+          { "sTitle": "设备" },
+          { "sTitle": "路线" }
+        ]
+        if $("#{containerDiv} table#pointsTable > tbody[role='alert'] td.dataTables_empty").length is 0
+          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
+          oTable = $("#{containerDiv} table#pointsTable").dataTable()
+          oTable.fnDestroy() unless oTable?
+
+        $("#{containerDiv} div#pointsTable_wrapper").remove()
+        $("#{containerDiv} div#pointsTableDiv").append('<table id="pointsTable"></table>')
+        $("#{containerDiv} table#pointsTable").dataTable
+          'aaData': data
+          'aoColumns': columns
+          'aaSorting': [[ 3, 'desc' ]]
+          'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
+            switch aaData[3]
+              when '日常巡检'
+                $(nRow).addClass('darkBlueTextColor')
+              when '普通巡检'
+                $(nRow).addClass('darkGreenTextColor')
+              when '状态'
+                $(nRow).addClass('darkCyanTextColor')
+            return
+
+        oTable = $("#{containerDiv} table#pointsTable").dataTable()
+        oTable.fnSetColumnVis(0, false)
+        $('table#pointsTable > tbody > tr').click (e) ->
+          $('table#pointsTable > tbody > tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
+          $(this).addClass('mediumSeaGreenBackground')
+          return
+
+        $("#{containerDiv} > span#pointsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} > span#pointsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    ifModified:true,
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
   return
 
 setupCreateRouteDiv = ->
