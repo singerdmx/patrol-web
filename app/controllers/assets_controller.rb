@@ -8,7 +8,12 @@ class AssetsController < ApplicationController
     begin
 
       @assets = Asset.where(asset_params)
-      @assets_index_json =  index_json_builder(@assets)
+      if params[:ui] == 'true'
+        @assets_index_json =  index_ui_json_builder(@assets)
+      else
+        @assets_index_json =  index_json_builder(@assets)
+      end
+
       if stale?(etag: @assets_index_json,
                 last_modified: @assets.maximum(:updated_at))
         render template: 'assets/index', status: :ok
