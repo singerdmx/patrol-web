@@ -974,8 +974,8 @@ updatePointsTable = (containerDiv) ->
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
         for record in data
-          record[4] = record[4].join()
-          record[6] = record[6].join()
+          record[4] = record[4].join('<br/>')
+          record[6] = record[6].join('<br/>')
 
         columns = [
           { "sTitle": "ID" },
@@ -983,9 +983,13 @@ updatePointsTable = (containerDiv) ->
           { "sTitle": "条形码" },
           {
             "sTitle": "类型",
-            "sClass": "center"
+            "sClass": "center",
+            "sWidth": "45px"
           },
-          { "sTitle": "选项" },
+          {
+            "sTitle": "选项",
+            "sWidth": "20%"
+          },
           { "sTitle": "设备" },
           { "sTitle": "路线" }
         ]
