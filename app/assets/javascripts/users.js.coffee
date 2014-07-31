@@ -801,12 +801,12 @@ setupManageUsersDiv = (containerDiv) ->
 
   $("#{containerDiv} button#btnAddNewUser").click ->
     $("#{containerDiv} div#createUserDiv").show()
-    $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_buttons").hide()
+    $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_user_buttons").hide()
     return
 
   $("#{containerDiv} button#btnCancelCreateUser").click ->
     $("#{containerDiv} div#createUserDiv").hide()
-    $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_buttons").show()
+    $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_user_buttons").show()
     return
 
   $("#{containerDiv} button#btnCreateUser").click ->
@@ -828,7 +828,7 @@ setupManageUsersDiv = (containerDiv) ->
         alert '用户创建成功'
         $("#{createUserDiv} input#user_name, #{createUserDiv} input#user_email, #{createUserDiv} input#user_password").val('')
         $(createUserDiv).hide()
-        $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_buttons").show()
+        $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_user_buttons").show()
         return
       error: (jqXHR, textStatus, errorThrown) ->
         alert jqXHR.responseJSON.message
@@ -936,9 +936,16 @@ setupManageDataDiv = ->
       return
 
   setupCreatePointDiv()
+  setupDeletePointDiv()
   setupCreateAssetDiv()
   setupCreateRouteDiv()
 
+  return
+
+setupDeletePointDiv = (containerDiv) ->
+  return
+
+updatePointsTable = (containerDiv) ->
   return
 
 setupCreateRouteDiv = ->

@@ -13,9 +13,7 @@ class UsersController < ApplicationController
         @users_index_json = to_json(@users)
       end
 
-      if params[:ui] == 'true'
-        @users_index_json = index_ui_json_builder(@users_index_json)
-      end
+      @users_index_json = index_ui_json_builder(@users_index_json) if params[:ui] == 'true'
 
       if stale?(etag: @users_index_json,
                 last_modified: @users.maximum(:updated_at))

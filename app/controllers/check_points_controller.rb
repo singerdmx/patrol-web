@@ -5,9 +5,14 @@ class CheckPointsController < ApplicationController
   # GET /check_points
   # GET /check_points.json
   def index
-
     @check_points = CheckPoint.where(check_point_params)
-    @check_points_json = index_json_builder(@check_points)
+
+    if params[:ui] == 'true'
+      @check_points_json = index_ui_json_builder(@check_points)
+    else
+      @check_points_json = index_json_builder(@check_points)
+    end
+
     if stale?(etag: @check_points_json,
               last_modified: @check_points.maximum(:updated_at))
       render template: 'check_points/index', status: :ok

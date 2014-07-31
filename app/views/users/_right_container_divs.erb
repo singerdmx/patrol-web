@@ -196,7 +196,7 @@
     <span class="hiddenSpan" id="usersIfNoneMatch"></span>
     <span class="hiddenSpan" id="usersIfModifiedSince"></span>
   </div>
-  <div id="add_delete_buttons">
+  <div id="add_delete_user_buttons">
     <button id="btnAddNewUser" class="btn btn-info" type="button">添加用户</button>
     <button id="btnDeleteUser" class="btn btn-danger" type="button">删除用户</button>
   </div>
@@ -314,12 +314,24 @@
         </div>
         <div style="width: 70%">
           <select class="form-control" id="pointCategory">
-            <option value="10" selected="selected">巡更</option>
-            <option value="20">润滑</option>
-            <option value="30">抄表</option>
-            <option value="40">状态</option>
-            <option value="41">普通巡检</option>
-            <option value="50">日常巡检</option>
+            <option value="10" selected="selected">
+              <%= get_category_string(10) %>
+            </option>
+            <option value="20">
+              <%= get_category_string(20) %>
+            </option>
+            <option value="30">
+              <%= get_category_string(30) %>
+            </option>
+            <option value="40">
+              <%= get_category_string(40) %>
+            </option>
+            <option value="41">
+              <%= get_category_string(41) %>
+            </option>
+            <option value="50">
+              <%= get_category_string(50) %>
+            </option>
           </select>
         </div>
       </div>
@@ -362,7 +374,13 @@
       attachPointToRoute
     </div>
     <div id="deletePoint" style="display: none">
-      deletePoint
+      <div id="pointsTableDiv">
+        <span class="hiddenSpan" id="pointsIfNoneMatch"></span>
+        <span class="hiddenSpan" id="pointsIfModifiedSince"></span>
+      </div>
+      <div id="add_delete_point_buttons">
+        <button id="btnDeletePoint" class="btn btn-danger" type="button">删除检点</button>
+      </div>
     </div>
   </div>
 </div>

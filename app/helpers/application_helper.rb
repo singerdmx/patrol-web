@@ -24,4 +24,16 @@ module ApplicationHelper
   def show_full_view?
     current_user.is_admin? || current_user.is_leader?
   end
+
+  def get_category_string(category)
+    case category
+      when 10 then '巡更'
+      when 20 then '润滑'
+      when 30 then '抄表'
+      when 40 then '状态'
+      when 41 then '普通巡检'
+      when 50 then '日常巡检'
+      else "#{category}"
+    end
+  end
 end
