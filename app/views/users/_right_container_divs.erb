@@ -301,7 +301,13 @@
       attachAssetToRoute
     </div>
     <div id="deleteAsset" style="display: none">
-      deleteAsset
+      <div id="assetsTableDiv">
+        <span class="hiddenSpan" id="assetsIfNoneMatch"></span>
+        <span class="hiddenSpan" id="assetsIfModifiedSince"></span>
+      </div>
+      <div id="add_delete_asset_buttons">
+        <button id="btnDeleteAsset" class="btn btn-danger" type="button">删除设备</button>
+      </div>
     </div>
     <div id="createPoint" style="display: none" class="submissionForm">
       <h2 class="form-signin-heading">创建检点</h2>

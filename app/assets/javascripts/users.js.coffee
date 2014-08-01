@@ -935,6 +935,8 @@ setupManageDataDiv = ->
         $('div#managementData span#addPointToAssetSpan').text('false')
       when 'deletePoint'
         updatePointsTable('div#managementData div#deletePoint')
+      when 'deleteAsset'
+        updateAssetsTable('div#managementData div#deleteAsset')
     return
 
   $('form#uploadFile').fileupload
@@ -948,8 +950,70 @@ setupManageDataDiv = ->
   setupCreatePointDiv()
   setupDeletePointDiv('div#managementData div#deletePoint')
   setupCreateAssetDiv()
+  setupDeleteAssetDiv('div#managementData div#deleteAsset')
   setupCreateRouteDiv()
 
+  return
+
+setupDeleteAssetDiv = (containerDiv) ->
+
+  return
+
+updateAssetsTable = (containerDiv) ->
+  $.ajax
+    url: getBaseURL() + '/assets.json?ui=true'
+    beforeSend: (xhr) ->
+      assetsIfNoneMatch = $("#{containerDiv} span#assetsIfNoneMatch").text()
+      assetsIfModifiedSince = $("#{containerDiv} span#assetsIfModifiedSince").text()
+
+      if assetsIfNoneMatch isnt '' and assetsIfModifiedSince isnt ''
+        xhr.setRequestHeader('If-None-Match', assetsIfNoneMatch)
+        xhr.setRequestHeader('If-Modified-Since', assetsIfModifiedSince)
+
+      return
+    success: (data, textStatus, jqHXR) ->
+      if jqHXR.status is 200
+        for record in data
+          record[3] = record[3].join('<br/>')
+
+        columns = [
+          { "sTitle": "ID" },
+          { "sTitle": "名称" },
+          { "sTitle": "条形码" },
+          { "sTitle": "检点" }
+        ]
+        if $("#{containerDiv} table#assetsTable > tbody[role='alert'] td.dataTables_empty").length is 0
+          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
+          oTable = $("#{containerDiv} table#assetsTable").dataTable()
+          oTable.fnDestroy() unless oTable?
+
+        $("#{containerDiv} div#assetsTable_wrapper").remove()
+        $("#{containerDiv} div#assetsTableDiv").append('<table id="assetsTable"></table>')
+        $("#{containerDiv} table#assetsTable").dataTable
+          'aaData': data
+          'aoColumns': columns
+          'aaSorting': [[ 1, 'desc' ]]
+
+        oTable = $("#{containerDiv} table#assetsTable").dataTable()
+        oTable.fnSetColumnVis(0, false)
+        $("#{containerDiv} table#assetsTable > tbody").on(
+          'click',
+          'tr',
+          ->
+            oTable = $("#{containerDiv} table#assetsTable").dataTable()
+            oTable.$('tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
+            $(this).addClass('mediumSeaGreenBackground')
+            return
+        )
+
+        $("#{containerDiv} span#assetsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} span#assetsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    ifModified:true,
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
   return
 
 setupDeletePointDiv = (containerDiv) ->
@@ -985,8 +1049,8 @@ updatePointsTable = (containerDiv) ->
   $.ajax
     url: getBaseURL() + '/points.json?ui=true'
     beforeSend: (xhr) ->
-      pointsIfNoneMatch = $("#{containerDiv} > span#pointsIfNoneMatch").text()
-      pointsIfModifiedSince = $("#{containerDiv} > span#pointsIfModifiedSince").text()
+      pointsIfNoneMatch = $("#{containerDiv} span#pointsIfNoneMatch").text()
+      pointsIfModifiedSince = $("#{containerDiv} span#pointsIfModifiedSince").text()
 
       if pointsIfNoneMatch isnt '' and pointsIfModifiedSince isnt ''
         xhr.setRequestHeader('If-None-Match', pointsIfNoneMatch)
@@ -1048,8 +1112,8 @@ updatePointsTable = (containerDiv) ->
             return
         )
 
-        $("#{containerDiv} > span#pointsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
-        $("#{containerDiv} > span#pointsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+        $("#{containerDiv} span#pointsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} span#pointsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
