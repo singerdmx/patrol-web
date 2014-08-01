@@ -84,17 +84,16 @@ class AssetsController < ApplicationController
   # DELETE /assets/1
   # DELETE /assets/1.json
   def destroy
-
-    respond_to do |format|
-      if @asset.destroy
-        format.html { redirect_to action: :index }
-        format.json { render :nothing => true, :status => :ok}
-      else
-        #TODO: better message for deletion failure
-        format.html { redirect_to action: :index}
-        format.json { render json: {:message=> e.to_s}.to_json, status: :internal_server_error }
-      end
+    unless current_user.is_admin?
+      render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      return
     end
+
+    @asset.destroy
+    render json: { success: true }.to_json, status: :ok
+  rescue Exception => e
+    Rails.logger.error("Encountered an error while deleting user #{params.inspect}: #{e}")
+    render json: {:message => e.to_s}.to_json, status: :unprocessable_entity
   end
 
   private

@@ -956,6 +956,33 @@ setupManageDataDiv = ->
   return
 
 setupDeleteAssetDiv = (containerDiv) ->
+  $("#{containerDiv} button#btnDeleteAsset").click ->
+    oTable = $("#{containerDiv} table#assetsTable").dataTable()
+    _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
+    if _selectedTr.length is 0
+      alert '请选择设备！'
+    else
+      row = oTable.fnGetData(_selectedTr[0])
+      deleteAsset(row[0], containerDiv) if confirm("您确定要删除设备 '#{row[1]}' 条形码 '#{row[2]}' 吗？")
+
+    return
+
+  return
+
+deleteAsset = (assetId, containerDiv) ->
+  $.ajax
+    url: getBaseURL() + "/assets/#{assetId}.json"
+    type: 'DELETE',
+    contentType: 'application/json',
+    dataType: 'json',
+    success: (data, textStatus, jqHXR) ->
+      updateAssetsTable(containerDiv)
+      alert '设备已经成功删除！'
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      alert jqXHR.responseJSON.message
+      return
+    timeout: defaultAjaxCallTimeout
 
   return
 
