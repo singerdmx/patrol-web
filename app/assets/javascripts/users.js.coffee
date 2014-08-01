@@ -133,7 +133,8 @@ setupRoutesDiv  = (containerDiv) ->
   return
 
 updateFactoriesTree = (containerDiv) ->
-  renderTreeView('/factories.json', "#{containerDiv} div#factoriesTree", "#{containerDiv} span#factories")
+  renderTreeView('/factories.json', "#{containerDiv} div#factoriesTree",
+    "#{containerDiv} span#factories", null, false, false)
   $('div#routesDiv div#routeListInFactory ul.list-group > li').hide()
   $('div#routesDiv div#routeListInFactory h3.panel-title').text('路线')
   return
@@ -167,7 +168,8 @@ updateRouteList = (containerDiv) ->
         $("#{containerDiv} > span#routesIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} > span#routesIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 
-        renderTreeView('/routes.json', "#{containerDiv} div#routesTree", null, {group_by_asset: true}, true)
+        renderTreeView('/routes.json', "#{containerDiv} div#routesTree",
+          null, {group_by_asset: true}, true, true)
       return
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
@@ -227,7 +229,7 @@ findParentRoute = (elem) ->
   return elem if parent.is('div') and parent.attr('id') is "routesTree"
   findParentRoute(parent)
 
-renderTreeView = (url, containerDiv, ifModifiedSinceSpanId, params, hideTree) ->
+renderTreeView = (url, containerDiv, ifModifiedSinceSpanId, params, hideTree, showDeleteIcon) ->
   request_params = { ui: true }
   $.extend(request_params, params) if params # merge two objects
   $.ajax
@@ -246,7 +248,7 @@ renderTreeView = (url, containerDiv, ifModifiedSinceSpanId, params, hideTree) ->
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
         $(containerDiv).html('')
-        buildTreeNode($(containerDiv), data)
+        buildTreeNode($(containerDiv), data, showDeleteIcon)
         bindTreeViewClick(containerDiv)
 
         $("#{containerDiv} > ul").hide() if hideTree is true
@@ -264,12 +266,16 @@ renderTreeView = (url, containerDiv, ifModifiedSinceSpanId, params, hideTree) ->
 
   return
 
-buildTreeNode = (parent, data) ->
+buildTreeNode = (parent, data, showDeleteIcon) ->
   for nodeDatum, i in data
     historyIcon = ''
     historyIcon = "<span class='badge' data-type='history' data-id='#{nodeDatum.id}'>历史</span>" if nodeDatum.kind is 'point'
     moveOutIcon = ''
-    moveOutIcon = "<span class='badge' data-type='moveOut' data-id='#{nodeDatum.id}'>移出</span>" if nodeDatum.kind is 'point' and getPageTitle() is '巡检 | 管理员'
+    if nodeDatum.kind is 'point' and getPageTitle() is '巡检 | 管理员'
+      moveOutIcon = "<span class='badge' data-type='moveOut' data-id='#{nodeDatum.id}'>移出</span>"
+    deleteIcon = ''
+    if getPageTitle() is '巡检 | 管理员' and showDeleteIcon
+      deleteIcon = "<span class='badge' data-type='delete' data-id='#{nodeDatum.id}' data-kind='#{nodeDatum.kind}'>删除</span>"
     parent.append "
     <ul class='media-list' data-id='#{nodeDatum.id}'>
       <li class='media'>
@@ -277,11 +283,11 @@ buildTreeNode = (parent, data) ->
           <img src='/assets/#{nodeDatum.icon}' class='media-object mediaListIcon' data-id='#{nodeDatum.id}'/>
         </a>
         <div class='media-body'>
-        <h4 class='media-heading'>#{nodeDatum.title}#{historyIcon}#{moveOutIcon}</h4>
+        <h4 class='media-heading'>#{nodeDatum.title}#{deleteIcon}#{historyIcon}#{moveOutIcon}</h4>
         <span>#{nodeDatum.description}</span>"
 
     $ul = $(parent.children('ul')[i])
-    buildTreeNode($ul.find('li > div.media-body'), nodeDatum.children)
+    buildTreeNode($ul.find('li > div.media-body'), nodeDatum.children, showDeleteIcon)
   return
 
 bindTreeViewClick = (containerDiv) ->
