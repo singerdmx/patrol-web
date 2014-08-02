@@ -270,6 +270,20 @@
       <h2 class="form-signin-heading">创建路线</h2>
       <input type="text" value="" required="required" placeholder="名称（必填）" id="routeName" class="form-control"/>
       <input type="text" value="" placeholder="描述" id="routeDescription" class="form-control"/>
+      <div id="areaSelection">
+        <div style="width: 100px; margin-top: 8px; padding-left: 5px">
+          <span style="font-size: 15px">工区</span>
+        </div>
+        <div style="width: 70%">
+          <select class="form-control" id="routeArea">
+            <% Area.all.each do |a| %>
+              <option value="<%= a.id %>">
+                <%= a.name %>
+              </option>
+            <% end %>
+          </select>
+        </div>
+      </div>
 
       <div style="margin-top: 5px; display: block">
         <button class="btn btn-warning" type="button" id="btnCancelCreateRoute"/>重置</button>
@@ -316,24 +330,11 @@
         </div>
         <div style="width: 70%">
           <select class="form-control" id="pointCategory">
-            <option value="10" selected="selected">
-              <%= get_category_string(10) %>
-            </option>
-            <option value="20">
-              <%= get_category_string(20) %>
-            </option>
-            <option value="30">
-              <%= get_category_string(30) %>
-            </option>
-            <option value="40">
-              <%= get_category_string(40) %>
-            </option>
-            <option value="41">
-              <%= get_category_string(41) %>
-            </option>
-            <option value="50">
-              <%= get_category_string(50) %>
-            </option>
+            <% [10, 20, 30, 40, 41, 50].each do |category| %>
+              <option value="<%= category %>">
+                <%= get_category_string(category) %>
+              </option>
+            <% end %>
           </select>
         </div>
       </div>

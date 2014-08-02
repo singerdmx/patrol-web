@@ -12,19 +12,19 @@ class FactoriesController < ApplicationController
         entry['subfactories'] = []
 
         f.subfactories.reverse.each do |subf|
-          subfentry = to_hash(subf)
-          subfentry['areas'] = []
+          subf_entry = to_hash(subf)
+          subf_entry['areas'] = []
 
           subf.areas.reverse.each do |area|
-            areaentry = to_hash(area)
-            areaentry['routes'] = []
+            area_entry = to_hash(area)
+            area_entry['routes'] = []
             area.check_routes.reverse.each do |r|
-              areaentry['routes'] << to_hash(r)
+              area_entry['routes'] << to_hash(r)
             end
-            subfentry['areas'] << areaentry
+            subf_entry['areas'] << area_entry
           end
 
-          entry['subfactories'] << subfentry
+          entry['subfactories'] << subf_entry
         end
 
         @factories_json << entry
