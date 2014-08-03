@@ -1168,6 +1168,7 @@ setupCreateRouteDiv = ->
     routeInfo['name'] = $routeName.val()
     $routeDescription = $('div#createRoute input#routeDescription')
     routeInfo['description'] = $routeDescription.val() unless isInputValueEmpty($routeDescription)
+    routeInfo['area'] = $('div#createRoute div#areaSelection select#routeArea').val()
     $.ajax
       url: getBaseURL() + '/routes.json'
       type: 'POST',

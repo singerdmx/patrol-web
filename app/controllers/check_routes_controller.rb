@@ -54,6 +54,10 @@ class CheckRoutesController < ApplicationController
   def create
     begin
       @check_route = CheckRoute.create!(check_route_params)
+      unless params[:area].nil?
+        @check_route.area_id = params[:area].to_i
+        @check_route.save
+      end
       render template: 'check_routes/show', status: :created
     rescue Exception => e
       render json: {:message=> e.to_s}.to_json, status: :internal_server_error
