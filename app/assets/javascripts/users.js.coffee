@@ -319,9 +319,29 @@ bindTreeViewClick = (containerDiv) ->
         $('div#sidebar ul > li#history').trigger('click')
         updateChart('div#historyDiv', {id: $(this).data('id')})
       when 'moveOut'
-        detachPoint($(this))
+        detachPoint($(this)) if confirm("确认移出？")
+      when 'delete'
+        deleteTreeNode($(this)) if confirm("确认删除？")
+
     return
 
+  return
+
+deleteTreeNode = (node) ->
+  $.ajax
+    url: getBaseURL() + "/#{node.data('kind')}s/#{node.data('id')}.json"
+    type: 'DELETE',
+    contentType: 'application/json',
+    dataType: 'json',
+    success: (data, textStatus, jqHXR) ->
+      # remove the <ul> elment
+      node.parent().parent().parent().remove()
+      $("div#routesDiv div#routeList ul#routeListGroup > li.list-group-item[data-id='#{node.data('id')}']").remove()
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      alert jqXHR.responseJSON.message
+      return
+    timeout: defaultAjaxCallTimeout
   return
 
 detachPoint = (point) ->
