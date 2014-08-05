@@ -981,6 +981,29 @@ setupManageDataDiv = ->
   setupCreateAssetDiv()
   setupDeleteAssetDiv('div#managementData div#deleteAsset')
   setupCreateRouteDiv()
+  setupAttachPointToAssetDiv('div#managementData div#attachPointToAsset')
+
+  return
+
+setupAttachPointToAssetDiv = (containerDiv) ->
+  $("#{containerDiv} button#btnAttachPointToAsset").click ->
+    oTable1 = $("#{containerDiv} table#assetsTable").dataTable()
+    _selectedTr1 = oTable1.$('tr.mediumSeaGreenBackground')
+    if _selectedTr1.length is 0
+      alert '请选择设备！'
+      return
+
+    oTable2 = $("#{containerDiv} table#pointsTable").dataTable()
+    _selectedTr2 = oTable2.$('tr.mediumSeaGreenBackground')
+    if _selectedTr2.length is 0
+      alert '请选择检点！'
+      return
+
+    row1 = oTable1.fnGetData(_selectedTr1[0])
+    row2 = oTable2.fnGetData(_selectedTr2[0])
+    confirm("连接检点 '#{row2[1]}' 条形码 '#{row2[2]}' 到设备 '#{row1[1]}' 条形码 '#{row1[2]}' 吗？")
+
+    return
 
   return
 
