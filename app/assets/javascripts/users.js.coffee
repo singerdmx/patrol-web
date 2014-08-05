@@ -963,6 +963,9 @@ setupManageDataDiv = ->
         updatePointsTable('div#managementData div#deletePoint')
       when 'deleteAsset'
         updateAssetsTable('div#managementData div#deleteAsset')
+      when 'attachPointToAsset'
+        updateAssetsTable('div#managementData div#attachPointToAsset')
+        updatePointsTable('div#managementData div#attachPointToAsset')
     return
 
   $('form#uploadFile').fileupload
@@ -1046,6 +1049,8 @@ updateAssetsTable = (containerDiv) ->
           'aaData': data
           'aoColumns': columns
           'aaSorting': [[ 1, 'desc' ]]
+          'iDisplayLength': 5
+          'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, '全部']]
 
         oTable = $("#{containerDiv} table#assetsTable").dataTable()
         oTable.fnSetColumnVis(0, false)
@@ -1143,6 +1148,8 @@ updatePointsTable = (containerDiv) ->
           'aaData': data
           'aoColumns': columns
           'aaSorting': [[ 5, 'desc' ]]
+          'iDisplayLength': 5
+          'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, '全部']]
           'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
             switch aaData[3]
               when '日常巡检'
