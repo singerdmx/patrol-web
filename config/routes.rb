@@ -1,7 +1,9 @@
 Blog::Application.routes.draw do
   resources :route_builders
   resources :notification
-  resources :assets
+  resources :assets do
+    put "attach_point"
+  end
   resources :check_routes, :path => :routes do
     resource :detach_point, only: [:update], controller: 'route_operation'
   end

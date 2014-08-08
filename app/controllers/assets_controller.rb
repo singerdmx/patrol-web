@@ -96,15 +96,27 @@ class AssetsController < ApplicationController
     render json: {:message => e.to_s}.to_json, status: :unprocessable_entity
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_asset
-      @asset = Asset.find(params[:id])
-    end
+  #PUT /assets/1/attach_point?point=id
+  def attach_point
+    point = CheckPoint.find(params[:point])
+    point.asset_id = @asset.id
+    point.save
+    render json: {:message => 'attached'}.to_json
+  rescue ActiveRecord::RecordNotFound
+    Rails.logger.error("Bad point id from parameter #{params[:point]}")
+    render json: {:message => "Bad point id from parameter #{params[:point]}"}, status: :bad_request
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def asset_params
-      request_para = params[:asset].nil? ? params : params[:asset]
-      request_para.select{|key,value| key.in?(Asset.column_names())}.symbolize_keys
-    end
+  private
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_asset
+    @asset = Asset.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def asset_params
+    request_para = params[:asset].nil? ? params : params[:asset]
+    request_para.select{|key,value| key.in?(Asset.column_names())}.symbolize_keys
+  end
 end
