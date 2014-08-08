@@ -101,7 +101,7 @@ class AssetsController < ApplicationController
     point = CheckPoint.find(params[:point])
     point.asset_id = @asset.id
     point.save
-    render json: {:message => 'attached'}.to_json
+    render json: { success: true }.to_json, status: :ok
   rescue ActiveRecord::RecordNotFound
     Rails.logger.error("Bad point id from parameter #{params[:point]}")
     render json: {:message => "Bad point id from parameter #{params[:point]}"}, status: :bad_request

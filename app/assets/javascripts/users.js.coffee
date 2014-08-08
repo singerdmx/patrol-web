@@ -1001,10 +1001,27 @@ setupAttachPointToAssetDiv = (containerDiv) ->
 
     row1 = oTable1.fnGetData(_selectedTr1[0])
     row2 = oTable2.fnGetData(_selectedTr2[0])
-    confirm("连接检点 '#{row2[1]}' 条形码 '#{row2[2]}' 到设备 '#{row1[1]}' 条形码 '#{row1[2]}' 吗？")
+    attachPointToAsset(row2[0], row1[0], containerDiv) if confirm("连接检点 '#{row2[1]}' 条形码 '#{row2[2]}' 到设备 '#{row1[1]}' 条形码 '#{row1[2]}' 吗？")
 
     return
 
+  return
+
+attachPointToAsset = (pointId, assetId, containerDiv) ->
+  $.ajax
+    url: getBaseURL() + "/assets/#{assetId}.json?point=#{pointId}"
+    type: 'PUT',
+    contentType: 'application/json',
+    dataType: 'json',
+    success: (data, textStatus, jqHXR) ->
+      updateAssetsTable(containerDiv)
+      updatePointsTable(containerDiv)
+      alert '已经成功连接检点到设备！'
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      alert jqXHR.responseJSON.message
+      return
+    timeout: defaultAjaxCallTimeout
   return
 
 setupDeleteAssetDiv = (containerDiv) ->
