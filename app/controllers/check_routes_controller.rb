@@ -29,7 +29,7 @@ class CheckRoutesController < ApplicationController
     if params[:ui] == 'true'
       @check_routes_json = index_ui_json_builder(route_assets, route_map, asset_map)
     else
-      @check_routes_json  = index_json_builder(@check_routes, route_assets)
+      @check_routes_json  = index_json_builder(@check_routes, route_assets, params[:show_name] == 'true')
     end
     if stale?(etag: @check_routes_json.to_a,
             last_modified: @check_routes.maximum(:updated_at))

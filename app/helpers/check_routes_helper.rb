@@ -5,13 +5,17 @@ module CheckRoutesHelper
   include Config
 
   #replacement of the index.json.jbuilder for complicated converting logic
-  def index_json_builder(check_routes, route_assets)
+  def index_json_builder(check_routes, route_assets, show_name = false)
     results = []
     check_routes.each do |route|
       entry = to_hash(route)
       if route_assets.nil?
         entry['points'] = route.check_points.map do |point|
-          point.id
+          if show_name
+            point.name
+          else
+            point.id
+          end
         end
       else
         entry['assets'] = []
@@ -23,6 +27,7 @@ module CheckRoutesHelper
             }
         end
       end
+      entry['area_name'] = Area.find(route.area_id).name if show_name
       results << entry
     end
 
