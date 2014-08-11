@@ -1009,7 +1009,7 @@ setupAttachPointToAssetDiv = (containerDiv) ->
 
 attachPointToAsset = (pointId, assetId, containerDiv) ->
   $.ajax
-    url: getBaseURL() + "/assets/#{assetId}.json?point=#{pointId}"
+    url: getBaseURL() + "/assets/#{assetId}/attach_point?point=#{pointId}"
     type: 'PUT',
     contentType: 'application/json',
     dataType: 'json',
