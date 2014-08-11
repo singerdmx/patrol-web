@@ -99,7 +99,7 @@ class AssetsController < ApplicationController
   #PUT /assets/1/attach_point?point=id
   def attach_point
     point = CheckPoint.find(params[:point])
-    point.asset_id = @asset.id
+    point.asset_id = params[:asset_id]
     point.save
     render json: { success: true }.to_json, status: :ok
   rescue ActiveRecord::RecordNotFound
