@@ -966,6 +966,9 @@ setupManageDataDiv = ->
       when 'attachPointToAsset'
         updateAssetsTable('div#managementData div#attachPointToAsset')
         updatePointsTable('div#managementData div#attachPointToAsset')
+      when 'attachPointToRoute'
+        updateRoutesTable('div#managementData div#attachPointToRoute')
+        updatePointsTable('div#managementData div#attachPointToRoute')
     return
 
   $('form#uploadFile').fileupload
@@ -982,7 +985,71 @@ setupManageDataDiv = ->
   setupDeleteAssetDiv('div#managementData div#deleteAsset')
   setupCreateRouteDiv()
   setupAttachPointToAssetDiv('div#managementData div#attachPointToAsset')
+  setupAttachPointToRouteDiv('div#managementData div#attachPointToRoute')
 
+  return
+
+setupAttachPointToRouteDiv = (containerDiv) ->
+
+  return
+
+updateRoutesTable = (containerDiv) ->
+  $.ajax
+    url: getBaseURL() + '/routes.json?show_name=true'
+    beforeSend: (xhr) ->
+      routesIfNoneMatch = $("#{containerDiv} span#routesIfNoneMatch").text()
+      routesIfModifiedSince = $("#{containerDiv} span#routesIfModifiedSince").text()
+
+      if routesIfNoneMatch isnt '' and routesIfModifiedSince isnt ''
+        xhr.setRequestHeader('If-None-Match', routesIfNoneMatch)
+        xhr.setRequestHeader('If-Modified-Since', routesIfModifiedSince)
+
+      return
+    success: (data, textStatus, jqHXR) ->
+      if jqHXR.status is 200
+        records = ([record['id'], record['name'], record['description'], record['area_name'], record['points']] for record in data)
+
+        columns = [
+          { "sTitle": "ID" },
+          { "sTitle": "名称" },
+          { "sTitle": "描述" },
+          { "sTitle": "工区" },
+          { "sTitle": "检点" }
+        ]
+        if $("#{containerDiv} table#routesTable > tbody[role='alert'] td.dataTables_empty").length is 0
+          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
+          oTable = $("#{containerDiv} table#routesTable").dataTable()
+          oTable.fnDestroy() unless oTable?
+
+        $("#{containerDiv} div#routesTable_wrapper").remove()
+        $("#{containerDiv} div#routesTableDiv").append('<table id="routesTable"></table>')
+        $("#{containerDiv} table#routesTable").dataTable
+          'aaData': records
+          'aoColumns': columns
+          'aaSorting': [[ 1, 'desc' ]]
+          'iDisplayLength': 5
+          'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, '全部']]
+
+        oTable = $("#{containerDiv} table#routesTable").dataTable()
+        oTable.fnSetColumnVis(0, false)
+        $("#{containerDiv} table#routesTable > tbody").on(
+          'click',
+          'tr',
+        ->
+          oTable = $("#{containerDiv} table#routesTable").dataTable()
+          oTable.$('tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
+          $(this).addClass('mediumSeaGreenBackground')
+          return
+        )
+
+        $("#{containerDiv} span#routesIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} span#routesIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    ifModified:true,
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
   return
 
 setupAttachPointToAssetDiv = (containerDiv) ->
@@ -1150,9 +1217,8 @@ updatePointsTable = (containerDiv) ->
       pointsIfNoneMatch = $("#{containerDiv} span#pointsIfNoneMatch").text()
       pointsIfModifiedSince = $("#{containerDiv} span#pointsIfModifiedSince").text()
 
-      if pointsIfNoneMatch isnt '' and pointsIfModifiedSince isnt ''
-        xhr.setRequestHeader('If-None-Match', pointsIfNoneMatch)
-        xhr.setRequestHeader('If-Modified-Since', pointsIfModifiedSince)
+      xhr.setRequestHeader('If-None-Match', pointsIfNoneMatch)
+      xhr.setRequestHeader('If-Modified-Since', pointsIfModifiedSince)
 
       return
     success: (data, textStatus, jqHXR) ->
