@@ -139,17 +139,19 @@ updateFactoriesTree = (containerDiv) ->
   $('div#routesDiv div#routeListInFactory h3.panel-title').text('路线')
   return
 
+setXhrRequestHeader = (xhr, containerDiv, spanName) ->
+  ifNoneMatch = $("#{containerDiv} span##{spanName}IfNoneMatch").text()
+  ifModifiedSince = $("#{containerDiv} span##{spanName}IfModifiedSince").text()
+
+  xhr.setRequestHeader('If-None-Match', ifNoneMatch)
+  xhr.setRequestHeader('If-Modified-Since', ifModifiedSince)
+  return
+
 updateRouteList = (containerDiv) ->
   $.ajax
     url: getBaseURL() + '/routes.json'
     beforeSend: (xhr) ->
-      routesIfNoneMatch = $("#{containerDiv} > span#routesIfNoneMatch").text()
-      routesIfModifiedSince = $("#{containerDiv} > span#routesIfModifiedSince").text()
-
-      if routesIfNoneMatch isnt '' and routesIfModifiedSince isnt ''
-        xhr.setRequestHeader('If-None-Match', routesIfNoneMatch)
-        xhr.setRequestHeader('If-Modified-Since', routesIfModifiedSince)
-
+      setXhrRequestHeader(xhr, containerDiv, 'routes')
       return
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
@@ -237,12 +239,12 @@ renderTreeView = (url, containerDiv, ifModifiedSinceSpanId, params, hideTree, sh
     data: request_params
     beforeSend: (xhr) ->
       return if ifModifiedSinceSpanId is null
+
       ifNoneMatch = $("#{ifModifiedSinceSpanId}IfNoneMatch").text()
       ifModifiedSince = $("#{ifModifiedSinceSpanId}routesIfModifiedSince").text()
 
-      if ifNoneMatch isnt '' and ifModifiedSince isnt ''
-        xhr.setRequestHeader('If-None-Match', ifNoneMatch)
-        xhr.setRequestHeader('If-Modified-Since', ifModifiedSince)
+      xhr.setRequestHeader('If-None-Match', ifNoneMatch)
+      xhr.setRequestHeader('If-Modified-Since', ifModifiedSince)
 
       return
     success: (data, textStatus, jqHXR) ->
@@ -428,13 +430,7 @@ updateRecordsTable = (containerDiv, params) ->
         $("#{containerDiv} > span#recordsCalendarUpdated").text('false')
         return
 
-      recordsIfNoneMatch = $("#{containerDiv} > span#recordsIfNoneMatch").text()
-      recordsIfModifiedSince = $("#{containerDiv} > span#recordsIfModifiedSince").text()
-
-      if recordsIfNoneMatch isnt '' and recordsIfModifiedSince isnt ''
-        xhr.setRequestHeader('If-None-Match', recordsIfNoneMatch)
-        xhr.setRequestHeader('If-Modified-Since', recordsIfModifiedSince)
-
+      setXhrRequestHeader(xhr, containerDiv, 'records')
       return
     data: request_params
     success: (data, textStatus, jqHXR) ->
@@ -869,13 +865,7 @@ updateUsersTable = (containerDiv) ->
   $.ajax
     url: getBaseURL() + '/users.json?ui=true'
     beforeSend: (xhr) ->
-      usersIfNoneMatch = $("#{containerDiv} > span#usersIfNoneMatch").text()
-      usersIfModifiedSince = $("#{containerDiv} > span#usersIfModifiedSince").text()
-
-      if usersIfNoneMatch isnt '' and usersIfModifiedSince isnt ''
-        xhr.setRequestHeader('If-None-Match', usersIfNoneMatch)
-        xhr.setRequestHeader('If-Modified-Since', usersIfModifiedSince)
-
+      setXhrRequestHeader(xhr, containerDiv, 'users')
       return
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
@@ -997,13 +987,7 @@ updateRoutesTable = (containerDiv) ->
   $.ajax
     url: getBaseURL() + '/routes.json?show_name=true'
     beforeSend: (xhr) ->
-      routesIfNoneMatch = $("#{containerDiv} span#routesIfNoneMatch").text()
-      routesIfModifiedSince = $("#{containerDiv} span#routesIfModifiedSince").text()
-
-      if routesIfNoneMatch isnt '' and routesIfModifiedSince isnt ''
-        xhr.setRequestHeader('If-None-Match', routesIfNoneMatch)
-        xhr.setRequestHeader('If-Modified-Since', routesIfModifiedSince)
-
+      setXhrRequestHeader(xhr, containerDiv, 'routes')
       return
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
@@ -1126,13 +1110,7 @@ updateAssetsTable = (containerDiv) ->
   $.ajax
     url: getBaseURL() + '/assets.json?ui=true'
     beforeSend: (xhr) ->
-      assetsIfNoneMatch = $("#{containerDiv} span#assetsIfNoneMatch").text()
-      assetsIfModifiedSince = $("#{containerDiv} span#assetsIfModifiedSince").text()
-
-      if assetsIfNoneMatch isnt '' and assetsIfModifiedSince isnt ''
-        xhr.setRequestHeader('If-None-Match', assetsIfNoneMatch)
-        xhr.setRequestHeader('If-Modified-Since', assetsIfModifiedSince)
-
+      setXhrRequestHeader(xhr, containerDiv, 'assets')
       return
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
@@ -1214,12 +1192,7 @@ updatePointsTable = (containerDiv) ->
   $.ajax
     url: getBaseURL() + '/points.json?ui=true'
     beforeSend: (xhr) ->
-      pointsIfNoneMatch = $("#{containerDiv} span#pointsIfNoneMatch").text()
-      pointsIfModifiedSince = $("#{containerDiv} span#pointsIfModifiedSince").text()
-
-      xhr.setRequestHeader('If-None-Match', pointsIfNoneMatch)
-      xhr.setRequestHeader('If-Modified-Since', pointsIfModifiedSince)
-
+      setXhrRequestHeader(xhr, containerDiv, 'points')
       return
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
