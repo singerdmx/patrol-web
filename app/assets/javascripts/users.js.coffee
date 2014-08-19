@@ -980,7 +980,42 @@ setupManageDataDiv = ->
   return
 
 setupAttachPointToRouteDiv = (containerDiv) ->
+  $("#{containerDiv} button#btnAttachPointToRoute").click ->
+    oTable1 = $("#{containerDiv} table#routesTable").dataTable()
+    _selectedTr1 = oTable1.$('tr.mediumSeaGreenBackground')
+    if _selectedTr1.length is 0
+      alert '请选择路线！'
+      return
 
+    oTable2 = $("#{containerDiv} table#pointsTable").dataTable()
+    _selectedTr2 = oTable2.$('tr.mediumSeaGreenBackground')
+    if _selectedTr2.length is 0
+      alert '请选择检点！'
+      return
+
+    row1 = oTable1.fnGetData(_selectedTr1[0])
+    row2 = oTable2.fnGetData(_selectedTr2[0])
+    attachPointToRoute(row2[0], row1[0], containerDiv) if confirm("连接检点 '#{row2[1]}' 条形码 '#{row2[2]}' 到路线 '#{row1[1]}' 吗？")
+
+    return
+
+  return
+
+attachPointToRoute = (pointId, routeId, containerDiv) ->
+  $.ajax
+    url: getBaseURL() + "/routes/#{routeId}/attach_point?point=#{pointId}"
+    type: 'PUT',
+    contentType: 'application/json',
+    dataType: 'json',
+    success: (data, textStatus, jqHXR) ->
+      updateRoutesTable(containerDiv)
+      updatePointsTable(containerDiv)
+      alert '已经成功连接检点到设备！'
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      alert jqXHR.responseJSON.message
+      return
+    timeout: defaultAjaxCallTimeout
   return
 
 updateRoutesTable = (containerDiv) ->
