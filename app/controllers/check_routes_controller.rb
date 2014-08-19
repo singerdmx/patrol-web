@@ -86,7 +86,6 @@ class CheckRoutesController < ApplicationController
 
   # DELETE /check_routes/1
   # DELETE /check_routes/1.json
-
   def destroy
     unless current_user.is_admin?
       render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
@@ -98,6 +97,49 @@ class CheckRoutesController < ApplicationController
   rescue Exception => e
     Rails.logger.error("Encountered an error while deleting user #{params.inspect}: #{e}")
     render json: {:message => e.to_s}.to_json, status: :unprocessable_entity
+  end
+
+  #PUT /routes/#{routeId}/detach_point?point=#{id}
+  def detach_point
+    unless current_user.is_admin?
+      render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      return
+    end
+
+    attachment = RouteBuilder.find_by(check_point_id: params[:point], check_route_id: params[:check_route_id])
+    if attachment.nil?
+      render json: {:message => "Point #{params[:point]} is not attached to route #{params[:check_route_id]}"}.to_json, status: :bad_request
+      return
+    end
+
+    attachment.destroy
+    render json: { success: true }.to_json, status: :ok
+  end
+
+  #PUT /routes/#{routeId}/attach_point?point=#{id}
+  def attach_point
+    unless current_user.is_admin?
+      render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      return
+    end
+
+    route = CheckRoute.find_by(check_route_id: params[:check_route_id])
+    if route.nil?
+      render json: {:message => "Route #{params[:check_route_id]} not found"}.to_json, status: :bad_request
+      return
+    end
+    point = CheckPoint.find_by(check_point_id: params[:point])
+    if point.nil?
+      render json: {:message => "Point #{params[:point]} not found"}.to_json, status: :bad_request
+      return
+    end
+
+    attachment = RouteBuilder.find_by(check_point_id: params[:point], check_route_id: params[:check_route_id])
+    if attachment.nil?
+      route.check_points << point
+    end
+
+    render json: { success: true }.to_json, status: :ok
   end
 
   private
