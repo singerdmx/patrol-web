@@ -123,12 +123,12 @@ class CheckRoutesController < ApplicationController
       return
     end
 
-    route = CheckRoute.find_by(check_route_id: params[:check_route_id])
+    route = CheckRoute.find_by(id: params[:check_route_id])
     if route.nil?
       render json: {:message => "Route #{params[:check_route_id]} not found"}.to_json, status: :bad_request
       return
     end
-    point = CheckPoint.find_by(check_point_id: params[:point])
+    point = CheckPoint.find_by(id: params[:point])
     if point.nil?
       render json: {:message => "Point #{params[:point]} not found"}.to_json, status: :bad_request
       return
