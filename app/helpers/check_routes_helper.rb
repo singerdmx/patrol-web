@@ -80,7 +80,6 @@ module CheckRoutesHelper
         asset[:title] = '设备'
         asset[:description] = asset_map[asset_id].name
         asset[:children] = points.map do |point|
-          next if Settings::CATEGORY_SCAN_ONLY.include? point.category
           {
             id: point.id,
             kind: 'point',
