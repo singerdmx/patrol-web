@@ -423,7 +423,8 @@ asset2.check_points.create([
                                    name:         "室内温度",
                                    description:  "是否正常",
                                    state:        "运转",
-                                   category:     20,
+                                   category:     51,
+                                   default_value:20,
                                    choice:       '[]',
                                    frequency:    336
                                },
