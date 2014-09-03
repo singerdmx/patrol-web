@@ -114,7 +114,7 @@ end
 
 asset01 = Asset.create({
                            serialnum: "GXWY1408291020016",
-                           barcode: "GXWY1408291020016",                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode: "GXWY1408291020016",
                            name: "生活泵",
                            description: "生活泵" })
 asset01.check_points.create([
@@ -137,7 +137,7 @@ asset01.check_points.create([
 
 asset02 = Asset.create({
                            serialnum: "GXWY1408291020017",
-                           barcode: "GXWY1408291020017",                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode: "GXWY1408291020017",
                            name: "喷淋泵",
                            description: "喷淋泵" })
 asset02.check_points.create([
@@ -160,7 +160,7 @@ asset02.check_points.create([
 
 asset03 = Asset.create({
                            serialnum: "GXWY1408291020018",
-                           barcode: "GXWY1408291020018",                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode: "GXWY1408291020018",
                            name: "消防泵",
                            description: "消防泵" })
 asset03.check_points.create([
@@ -183,7 +183,7 @@ asset03.check_points.create([
 
 asset04 = Asset.create({
                            serialnum: "GXWY1408291020019",
-                           barcode: "GXWY1408291020019",                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode: "GXWY1408291020019",
                            name: "集水井",
                            description: "集水井" })
 asset04.check_points.create([
@@ -205,7 +205,7 @@ asset04.check_points.create([
                                 } ])
 asset05 = Asset.create({
                            serialnum: "GXWY1408291020020",
-                           barcode: "GXWY1408291020020",                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode: "GXWY1408291020020",
                            name: "双切电源",
                            description: "双切电源" })
 asset05.check_points.create([
@@ -228,7 +228,7 @@ asset05.check_points.create([
 
 asset06 = Asset.create({
                            serialnum: "GXWY1408291020021",
-                           barcode: "GXWY1408291020021",                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode: "GXWY1408291020021",
                            name: "控 制 柜",
                            description: "控 制 柜" })
 asset06.check_points.create([
@@ -275,7 +275,7 @@ asset06.check_points.create([
 
 asset07 = Asset.create({
                            serialnum: "GXWY1408291020022",
-                           barcode: "GXWY1408291020022",                           serialnum: SecureRandom.urlsafe_base64(10),
+                           barcode: "GXWY1408291020022",
                            name: "水泵房",
                            description: "水泵房" })
 asset07.check_points.create([
