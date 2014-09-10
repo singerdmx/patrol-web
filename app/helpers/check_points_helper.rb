@@ -7,6 +7,8 @@ module CheckPointsHelper
     results = []
     index_result.each do |result|
       entry = to_hash(result)
+      entry['state'] = "" if entry['state'].nil?
+      entry['default_value'] = "" if entry['default_value'].nil?
       entry['asset'] = result.asset.id
       entry['routes'] = result.check_routes.map do |route|
         route.id
