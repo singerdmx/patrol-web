@@ -225,7 +225,9 @@ div.submissionForm {
   margin-right: auto;
 }
 
-div#userRoleSelection, div#categorySelection, div#areaSelection {
+div#userRoleSelection, div#categorySelection,
+div#areaSelection, div#userRoutesDeletion,
+div#userRoutesAddition {
   > div {
     float: left;
     text-align: left;

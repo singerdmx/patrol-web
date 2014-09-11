@@ -859,6 +859,43 @@ setupManageUsersDiv = (containerDiv) ->
 
     return
 
+  $("#{containerDiv} button#btnEditUserRoutes").click ->
+    oTable = $("#{containerDiv} table#usersTable").dataTable()
+    _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
+    if _selectedTr.length is 0
+      alert '请选择用户！'
+    else
+      row = oTable.fnGetData(_selectedTr[0])
+      $("#{containerDiv} span#userName").text("编辑用户 #{row[1]} #{row[2]}")
+      $("#{containerDiv} span#userId").text("#{row[0]}")
+      $("#{containerDiv} div#editUserRoutesDiv").show()
+      $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_user_buttons").hide()
+
+    return
+
+  $("#{containerDiv} button#btnReturn").click ->
+    $("#{containerDiv} div#editUserRoutesDiv").hide()
+    $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_user_buttons").show()
+    return
+
+  $("#{containerDiv} button#btnDeleteUserRoute").click ->
+    $route = $("#{containerDiv} select#routeToDelete option:selected")
+    routeId = $route.val()
+    routeName = $route.text()
+    alert routeId
+    alert "删除路线 #{routeName} ？"
+
+    return
+
+  $("#{containerDiv} button#btnAddUserRoute").click ->
+    $route = $("#{containerDiv} select#routeToAdd option:selected")
+    routeId = $route.val()
+    routeName = $route.text()
+    alert routeId
+    alert "添加路线 #{routeName} ？"
+
+    return
+
   return
 
 updateUsersTable = (containerDiv) ->
