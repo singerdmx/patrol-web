@@ -34,6 +34,24 @@ user1 = User.create! do |u|
   #u.ensure_authentication_token!
 end
 
+user2 = User.create! do |u|
+  u.email = 'user1@shibei.com'
+  u.password = 'shibei1234'
+  u.password_confirmation = 'shibei1234'
+  u.role = 2
+  u.name = "User1"
+  #u.ensure_authentication_token!
+end
+
+user3 = User.create! do |u|
+  u.email = 'user2@shibei.com'
+  u.password = 'shibei1234'
+  u.password_confirmation = 'shibei1234'
+  u.role = 2
+  u.name = "User2"
+  #u.ensure_authentication_token!
+end
+
 user4 = User.create! do |u|
   u.email = 'admin@test.com'
   u.password = 'admin1234'
@@ -635,8 +653,42 @@ user1.preferred_points << asset33.check_points
 user1.preferred_points << asset34.check_points
 user1.preferred_points << asset35.check_points
 
+user2.preferred_points << asset21.check_points
+user2.preferred_points << asset22.check_points
+user2.preferred_points << asset23.check_points
+user2.preferred_points << asset24.check_points
+user2.preferred_points << asset25.check_points
+user2.preferred_points << asset26.check_points
+user2.preferred_points << asset27.check_points
+user2.preferred_points << asset28.check_points
+user2.preferred_points << asset29.check_points
+user2.preferred_points << asset30.check_points
+user2.preferred_points << asset31.check_points
+user2.preferred_points << asset32.check_points
+user2.preferred_points << asset33.check_points
+user2.preferred_points << asset34.check_points
+user2.preferred_points << asset35.check_points
+
+user3.preferred_points << asset21.check_points
+user3.preferred_points << asset22.check_points
+user3.preferred_points << asset23.check_points
+user3.preferred_points << asset24.check_points
+user3.preferred_points << asset25.check_points
+user3.preferred_points << asset26.check_points
+user3.preferred_points << asset27.check_points
+user3.preferred_points << asset28.check_points
+user3.preferred_points << asset29.check_points
+user3.preferred_points << asset30.check_points
+user3.preferred_points << asset31.check_points
+user3.preferred_points << asset32.check_points
+user3.preferred_points << asset33.check_points
+user3.preferred_points << asset34.check_points
+user3.preferred_points << asset35.check_points
+
 #adding user to route
 route2.users << user1
+route2.users << user2
+route2.users << user3
 
 asset01 = Asset.create({
                            serialnum: "WY141020016",
@@ -870,9 +922,15 @@ route0.check_points << asset07.check_points
 #adding preference points
 user1.preferred_points <<  asset01.check_points
 user1.preferred_points <<  asset02.check_points
+user2.preferred_points <<  asset01.check_points
+user2.preferred_points <<  asset02.check_points
+user3.preferred_points <<  asset01.check_points
+user3.preferred_points <<  asset02.check_points
 
 #adding user to route
 route0.users << user1
+route0.users << user2
+route0.users << user3
 
 
 
@@ -973,6 +1031,12 @@ route1.check_points << asset2.check_points
 #adding preference points
 user1.preferred_points <<  asset1.check_points
 user1.preferred_points <<  asset2.check_points
+user2.preferred_points <<  asset1.check_points
+user2.preferred_points <<  asset2.check_points
+user3.preferred_points <<  asset1.check_points
+user3.preferred_points <<  asset2.check_points
 
 #adding user to route
 route1.users << user1
+route1.users << user2
+route1.users << user3
