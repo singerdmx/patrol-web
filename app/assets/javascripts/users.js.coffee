@@ -866,7 +866,7 @@ setupManageUsersDiv = (containerDiv) ->
       alert '请选择用户！'
     else
       row = oTable.fnGetData(_selectedTr[0])
-      $("#{containerDiv} span#userName").text("编辑用户 #{row[1]} #{row[2]}")
+      $("#{containerDiv} span#userName").text("编辑用户 #{row[1]} #{row[2]} 的路线")
       $("#{containerDiv} span#userId").text("#{row[0]}")
       $("#{containerDiv} div#editUserRoutesDiv").show()
       $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_user_buttons").hide()
