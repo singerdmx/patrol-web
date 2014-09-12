@@ -199,16 +199,16 @@
     </h2>
     <div>
       <div class="dragBox">
-        <h2>已有路线</h2>
-        <div class="containerss high"
-             data-bind="template: { name: 'routesTmplRight', foreach: highPriorityTasks, templateOptions: { parentList: highPriorityTasks} }, sortableList: highPriorityTasks">
+        <h2>已分配路线</h2>
+        <div class="draggableBox"
+             data-bind="template: { name: 'routesTmplRight', foreach: leftRoutes, templateOptions: { parentList: leftRoutes} }, sortableList: leftRoutes">
         </div>
       </div>
 
       <div class="dragBox">
-        <h2>未有路线</h2>
-        <div class="containerss"
-             data-bind="template: { name: 'routesTmplLeft', foreach: normalPriorityTasks, templateOptions: { parentList: normalPriorityTasks} }, sortableList: normalPriorityTasks">
+        <h2>可分配路线</h2>
+        <div class="draggableBox"
+             data-bind="template: { name: 'routesTmplLeft', foreach: rightRoutes, templateOptions: { parentList: rightRoutes} }, sortableList: rightRoutes">
         </div>
       </div>
 
@@ -217,7 +217,6 @@
           <i class='icon-chevron-right'></i>
           <span class="lavenderBackground" data-bind="text: name, visible: $data !== viewModel.selectedTask()">
           </span>
-          <input data-bind="value: name, visibleAndSelect: $data === viewModel.selectedTask(), event: { blur: function() { viewModel.selectTask(''); } }" />
         </div>
       </script>
       <script id="routesTmplLeft" type="text/html">
@@ -225,7 +224,6 @@
           <i class='icon-chevron-left'></i>
           <span class="lavenderBackground" data-bind="text: name, visible: $data !== viewModel.selectedTask()">
           </span>
-          <input data-bind="value: name, visibleAndSelect: $data === viewModel.selectedTask(), event: { blur: function() { viewModel.selectTask(''); } }" />
         </div>
       </script>
     </div>
@@ -455,7 +453,7 @@
     this.name = ko.observable(name);
   }
   var viewModel = {
-    highPriorityTasks: ko.observableArray([
+    leftRoutes: ko.observableArray([
       new Task("路线一"),
       new Task("路线二"),
       new Task("路线三"),
@@ -467,7 +465,7 @@
       new Task("路线九"),
       new Task("路线十")
     ]),
-    normalPriorityTasks: ko.observableArray([
+    rightRoutes: ko.observableArray([
       new Task("路线十一"),
       new Task("路线十二"),
       new Task("路线十三"),
@@ -506,7 +504,7 @@
             ui.item.remove();
           }
         },
-        connectWith: '.containerss'
+        connectWith: '.draggableBox'
       });
     }
   };
