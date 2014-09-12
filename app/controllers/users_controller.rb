@@ -83,10 +83,13 @@ class UsersController < ApplicationController
       return
     end
 
+    User.find(params[:user_id])
     curr_routes = CheckRoute.joins(:users).where("users.id = #{params[:user_id]}")
     rest_routes = CheckRoute.all - curr_routes
-    @routes_json = { :curr_routes => routes_to_json(curr_routes),
-                     :rest_routes => routes_to_json(rest_routes) }
+    @routes_json = { curr_routes: routes_to_json(curr_routes),
+                     rest_routes: routes_to_json(rest_routes) }
+
+    render json: @routes_json, status: :ok
   end
 
   private
@@ -104,10 +107,8 @@ class UsersController < ApplicationController
   end
 
   def routes_to_json(routes)
-    hash = []
-    routes.each do |r|
-      hash << to_hash(r, false)
+    routes.map do |r|
+      to_hash(r, false)
     end
-    hash
   end
 end
