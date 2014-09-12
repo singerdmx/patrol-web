@@ -316,10 +316,12 @@ span.lavenderBackground {
   }
 }
 
-.containerss {  width: 125px; min-height: 50px; background-color: #AAA;}
-.high { background-color: red; }
-.trash { background-color: #000;  }
-.item { background-color: #DDD; cursor: move; }
-.item input { width: 100px; }
-#main { float: left; }
-#results { margin-left: 175px; width: 150px; }
+div.dragBox {
+  float: left;
+  width: 42%;
+  max-height: 200px;
+  background-color: $grayMediumLight;
+  margin: 10px;
+  padding: 5px;
+  overflow-y: scroll;
+}

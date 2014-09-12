@@ -197,44 +197,43 @@
       <span id="userName"></span>
       <span class="hiddenSpan" id="userId"></span>
     </h2>
-    <div id="main">
-      <h2>High Priority Tasks</h2>
-      <div class="containerss high"
-           data-bind="template: { name: 'taskTmpl', foreach: highPriorityTasks, templateOptions: { parentList: highPriorityTasks} }, sortableList: highPriorityTasks">
+    <div>
+      <div class="dragBox">
+        <h2>已有路线</h2>
+        <div class="containerss high"
+             data-bind="template: { name: 'routesTmplRight', foreach: highPriorityTasks, templateOptions: { parentList: highPriorityTasks} }, sortableList: highPriorityTasks">
+        </div>
       </div>
 
-      <h2>Tasks</h2>
-      <div class="containerss"
-           data-bind="template: { name: 'taskTmpl', foreach: normalPriorityTasks, templateOptions: { parentList: normalPriorityTasks} }, sortableList: normalPriorityTasks">
+      <div class="dragBox">
+        <h2>未有路线</h2>
+        <div class="containerss"
+             data-bind="template: { name: 'routesTmplLeft', foreach: normalPriorityTasks, templateOptions: { parentList: normalPriorityTasks} }, sortableList: normalPriorityTasks">
+        </div>
       </div>
 
-      <a href="#" data-bind="click: addTask">Add Task</a>
-      <hr />
-      <h2>Trash</h2>
-      <div class="containerss trash" data-bind="sortableList: trash"></div>
-
-      <script id="taskTmpl" type="text/html">
-        <div class="item" data-bind="sortableItem: { item: $data, parentList: $item.parentList }" >
-          <a href="#"
-             data-bind="text: name, click: function() { viewModel.selectTask($data); }, visible: $data !== viewModel.selectedTask()">
-          </a>
+      <script id="routesTmplRight" type="text/html">
+        <div data-bind="sortableItem: { item: $data, parentList: $item.parentList }" >
+          <i class='icon-chevron-right'></i>
+          <span class="lavenderBackground" data-bind="text: name, visible: $data !== viewModel.selectedTask()">
+          </span>
+          <input data-bind="value: name, visibleAndSelect: $data === viewModel.selectedTask(), event: { blur: function() { viewModel.selectTask(''); } }" />
+        </div>
+      </script>
+      <script id="routesTmplLeft" type="text/html">
+        <div data-bind="sortableItem: { item: $data, parentList: $item.parentList }" >
+          <i class='icon-chevron-left'></i>
+          <span class="lavenderBackground" data-bind="text: name, visible: $data !== viewModel.selectedTask()">
+          </span>
           <input data-bind="value: name, visibleAndSelect: $data === viewModel.selectedTask(), event: { blur: function() { viewModel.selectTask(''); } }" />
         </div>
       </script>
     </div>
 
-    <div id="results">
-      <h2>High Priority Tasks</h2>
-      <ul data-bind="template: { name: 'resultTmpl', foreach: highPriorityTasks }"></ul>
-      <h2>Tasks</h2>
-      <ul data-bind="template: { name: 'resultTmpl', foreach: normalPriorityTasks }"></ul>
+    <div style="margin-top: 10px">
+      <button class="btn btn-warning" type="button" id="btnReturn"/>返回</button>
+      <button class="btn btn-primary" type="button" id="btnSubmit"/>提交</button>
     </div>
-
-    <script id="resultTmpl" type="text/html">
-      <li data-bind="text: name"></li>
-    </script>
-
-    <button class="btn btn-warning" type="button" id="btnReturn"/>返回</button>
   </div>
   <div id="usersTableDiv">
     <span class="hiddenSpan" id="usersIfNoneMatch"></span>
@@ -457,25 +456,33 @@
   }
   var viewModel = {
     highPriorityTasks: ko.observableArray([
-      new Task("Get dog food"),
-      new Task("Mow lawn"),
-      new Task("Fix car")
+      new Task("路线一"),
+      new Task("路线二"),
+      new Task("路线三"),
+      new Task("路线四"),
+      new Task("路线五"),
+      new Task("路线六"),
+      new Task("路线七"),
+      new Task("路线八"),
+      new Task("路线九"),
+      new Task("路线十")
     ]),
     normalPriorityTasks: ko.observableArray([
-      new Task("Fix fence"),
-      new Task("Walk dog"),
-      new Task("Read book")
+      new Task("路线十一"),
+      new Task("路线十二"),
+      new Task("路线十三"),
+      new Task("路线十四"),
+      new Task("路线十五"),
+      new Task("路线十六"),
+      new Task("路线十七"),
+      new Task("路线十八"),
+      new Task("路线十九"),
+      new Task("路线二十")
     ]),
     selectedTask: ko.observable(),
     selectTask: function(task) {
       this.selectedTask(task);
-    },
-    addTask: function() {
-      var task = new Task("new");
-      this.selectedTask(task);
-      this.normalPriorityTasks.push(task);
-    },
-    trash: []
+    }
   };
 
   //connect items with observableArrays
@@ -525,6 +532,5 @@
     }
   }
 
-  alert(viewModel);
   ko.applyBindings(viewModel);
 </script>
