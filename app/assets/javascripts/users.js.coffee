@@ -868,6 +868,7 @@ setupManageUsersDiv = (containerDiv) ->
       row = oTable.fnGetData(_selectedTr[0])
       $("#{containerDiv} span#userName").text("编辑用户 #{row[1]} #{row[2]} 的路线")
       $("#{containerDiv} span#userId").text("#{row[0]}")
+      setupDraggableRoutes()
       $("#{containerDiv} div#editUserRoutesDiv").show()
       $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_user_buttons").hide()
 
@@ -878,86 +879,45 @@ setupManageUsersDiv = (containerDiv) ->
     $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_user_buttons").show()
     return
 
-#  v = {
-#    highPriorityTasks: ko.observableArray(
-#      [
-#        new Task("Get dog food"),
-#        new Task("Fix car")
-#      ]
-#    )
-#    normalPriorityTasks: ko.observableArray(
-#      [
-#        new Task("Fix fence"),
-#        new Task("Walk dog"),
-#        new Task("Read book")
-#      ]
-#    )
-#    selectedTask: ko.observable()
-#    selectTask: (task) ->
-#      this.selectedTask(task)
-#      return
-#    addTask: ->
-#      task = new Task("new")
-#      this.selectedTask(task)
-#      this.normalPriorityTasks.push(task)
-#      return
-#    trash: []
-#  }
-#
-#  # connect items with observableArrays
-#  ko.bindingHandlers.sortableList = {
-#    init: (element, valueAccessor, allBindingsAccessor, context) ->
-#      $(element).data("sortList", valueAccessor()) # attach meta-data
-#      $(element).sortable(
-#        {
-#          update: (event, ui) ->
-#            item = ui.item.data("sortItem")
-#            if item
-#              # identify parent
-#              originalParent = ui.item.data("parentList")
-#              newParent = ui.item.parent().data("sortList")
-#              # figure out its new position
-#              position = ko.utils.arrayIndexOf(ui.item.parent().children(), ui.item[0])
-#              if position >= 0
-#                originalParent.remove(item)
-#                newParent.splice(position, 0, item)
-#
-#              ui.item.remove()
-#
-#            return
-#          connectWith: '.containerss'
-#        }
-#      )
-#
-#      return
-#  }
-#
-#  # attach meta-data
-#  ko.bindingHandlers.sortableItem = {
-#    init: (element, valueAccessor) ->
-#      options = valueAccessor()
-#      $(element).data("sortItem", options.item)
-#      $(element).data("parentList", options.parentList)
-#      return
-#  }
-#
-#  # control visibility, give element focus, and select the contents (in order)
-#  ko.bindingHandlers.visibleAndSelect = {
-#    update: (element, valueAccessor) ->
-#      ko.bindingHandlers.visible.update(element, valueAccessor)
-#
-#      if valueAccessor()
-#        setTimeout(
-#          ->
-#            $(element).focus().select()
-#            return
-#          ,
-#          0) # new tasks are not in DOM yet
-#
-#      return
-#  }
-#
-#  ko.applyBindings(v)
+  $("#{containerDiv} button#btnSubmit").click ->
+    return
+
+  return
+
+setupDraggableRoutes = ->
+  v = {
+    leftRoutes: ko.observableArray(
+      [
+        new Route(1, "路线一"),
+        new Route(2, "路线二"),
+        new Route(3, "路线三"),
+        new Route(4, "路线四"),
+        new Route(5, "路线五"),
+        new Route(6, "路线六"),
+        new Route(7, "路线七"),
+        new Route(8, "路线八"),
+        new Route(9, "路线九"),
+        new Route(10, "路线十")
+      ]
+    )
+    rightRoutes: ko.observableArray(
+      [
+        new Route(11, "路线十一"),
+        new Route(12, "路线十二"),
+        new Route(13, "路线十三"),
+        new Route(14, "路线十四"),
+        new Route(15, "路线十五"),
+        new Route(16, "路线十六"),
+        new Route(17, "路线十七"),
+        new Route(18, "路线十八"),
+        new Route(19, "路线十九"),
+        new Route(20, "路线二十")
+      ]
+    )
+    selectedRoute: ko.observable()
+  }
+
+  ko.applyBindings(v)
   return
 
 updateUsersTable = (containerDiv) ->
@@ -1603,6 +1563,7 @@ clearCreatePointForm = ->
   $('div#pointChoiceDiv > div:first > span > i').click(removeParent)
   return
 
-#Task = (name) ->
-#  this.name = ko.observable(name)
-#  return
+Route = (id, name) ->
+  this.id = ko.observable(id)
+  this.name = ko.observable(name)
+  return
