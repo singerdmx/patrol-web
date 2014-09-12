@@ -880,6 +880,10 @@ setupManageUsersDiv = (containerDiv) ->
     return
 
   $("#{containerDiv} button#btnSubmit").click ->
+    routes = ($(s).attr("routeId") for s in $("#{containerDiv} div.dragBox:first span.lavenderBackground"))
+    alert routes
+    availableRoutes = ($(s).attr("routeId") for s in $("#{containerDiv} div.dragBox:last span.lavenderBackground"))
+    alert availableRoutes
     return
 
   return
