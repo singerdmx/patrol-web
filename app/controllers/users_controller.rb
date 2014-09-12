@@ -77,6 +77,18 @@ class UsersController < ApplicationController
     render json: {:message => e.to_s}.to_json, status: :unprocessable_entity
   end
 
+  def routes
+    unless current_user.is_admin?
+      render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      return
+    end
+
+    curr_routes = CheckRoute.joins(:users).where("users.id = #{params[:user_id]}")
+    rest_routes = CheckRoute.all - curr_routes
+    @routes_json = { :curr_routes => routes_to_json(curr_routes),
+                     :rest_routes => routes_to_json(rest_routes) }
+  end
+
   private
 
   def user_params
@@ -87,6 +99,14 @@ class UsersController < ApplicationController
     hash = []
     users.each do |u|
       hash << to_hash(u, false)
+    end
+    hash
+  end
+
+  def routes_to_json(routes)
+    hash = []
+    routes.each do |r|
+      hash << to_hash(r, false)
     end
     hash
   end

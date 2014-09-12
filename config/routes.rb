@@ -27,6 +27,8 @@ Blog::Application.routes.draw do
   match '/contact', to: 'static_pages#contact', via: 'get'
 
   resources :admins, only: :index
-  resources :users
+  resources :users do
+    get :routes
+  end
   resources :file
 end
