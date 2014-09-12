@@ -878,24 +878,86 @@ setupManageUsersDiv = (containerDiv) ->
     $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_user_buttons").show()
     return
 
-  $("#{containerDiv} button#btnDeleteUserRoute").click ->
-    $route = $("#{containerDiv} select#routeToDelete option:selected")
-    routeId = $route.val()
-    routeName = $route.text()
-    alert routeId
-    alert "删除路线 #{routeName} ？"
-
-    return
-
-  $("#{containerDiv} button#btnAddUserRoute").click ->
-    $route = $("#{containerDiv} select#routeToAdd option:selected")
-    routeId = $route.val()
-    routeName = $route.text()
-    alert routeId
-    alert "添加路线 #{routeName} ？"
-
-    return
-
+#  v = {
+#    highPriorityTasks: ko.observableArray(
+#      [
+#        new Task("Get dog food"),
+#        new Task("Fix car")
+#      ]
+#    )
+#    normalPriorityTasks: ko.observableArray(
+#      [
+#        new Task("Fix fence"),
+#        new Task("Walk dog"),
+#        new Task("Read book")
+#      ]
+#    )
+#    selectedTask: ko.observable()
+#    selectTask: (task) ->
+#      this.selectedTask(task)
+#      return
+#    addTask: ->
+#      task = new Task("new")
+#      this.selectedTask(task)
+#      this.normalPriorityTasks.push(task)
+#      return
+#    trash: []
+#  }
+#
+#  # connect items with observableArrays
+#  ko.bindingHandlers.sortableList = {
+#    init: (element, valueAccessor, allBindingsAccessor, context) ->
+#      $(element).data("sortList", valueAccessor()) # attach meta-data
+#      $(element).sortable(
+#        {
+#          update: (event, ui) ->
+#            item = ui.item.data("sortItem")
+#            if item
+#              # identify parent
+#              originalParent = ui.item.data("parentList")
+#              newParent = ui.item.parent().data("sortList")
+#              # figure out its new position
+#              position = ko.utils.arrayIndexOf(ui.item.parent().children(), ui.item[0])
+#              if position >= 0
+#                originalParent.remove(item)
+#                newParent.splice(position, 0, item)
+#
+#              ui.item.remove()
+#
+#            return
+#          connectWith: '.containerss'
+#        }
+#      )
+#
+#      return
+#  }
+#
+#  # attach meta-data
+#  ko.bindingHandlers.sortableItem = {
+#    init: (element, valueAccessor) ->
+#      options = valueAccessor()
+#      $(element).data("sortItem", options.item)
+#      $(element).data("parentList", options.parentList)
+#      return
+#  }
+#
+#  # control visibility, give element focus, and select the contents (in order)
+#  ko.bindingHandlers.visibleAndSelect = {
+#    update: (element, valueAccessor) ->
+#      ko.bindingHandlers.visible.update(element, valueAccessor)
+#
+#      if valueAccessor()
+#        setTimeout(
+#          ->
+#            $(element).focus().select()
+#            return
+#          ,
+#          0) # new tasks are not in DOM yet
+#
+#      return
+#  }
+#
+#  ko.applyBindings(v)
   return
 
 updateUsersTable = (containerDiv) ->
@@ -1540,3 +1602,7 @@ clearCreatePointForm = ->
             <i class='icon-remove'></i>非正常</span>")
   $('div#pointChoiceDiv > div:first > span > i').click(removeParent)
   return
+
+#Task = (name) ->
+#  this.name = ko.observable(name)
+#  return

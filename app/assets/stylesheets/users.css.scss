@@ -315,3 +315,11 @@ span.lavenderBackground {
     cursor: pointer;
   }
 }
+
+.containerss {  width: 125px; min-height: 50px; background-color: #AAA;}
+.high { background-color: red; }
+.trash { background-color: #000;  }
+.item { background-color: #DDD; cursor: move; }
+.item input { width: 100px; }
+#main { float: left; }
+#results { margin-left: 175px; width: 150px; }
