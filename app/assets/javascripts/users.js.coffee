@@ -136,6 +136,7 @@ updateFactoriesTree = (containerDiv) ->
   renderTreeView('/factories.json', "#{containerDiv} div#factoriesTree",
     "#{containerDiv} span#factories", null, false, false)
   $('div#routesDiv div#routeListInFactory ul.list-group > li').hide()
+  $('div#routesDiv div#factoriesTree li.lawnGreenBackground').removeClass('lawnGreenBackground')
   $('div#routesDiv div#routeListInFactory h3.panel-title').text('路线')
   return
 
@@ -308,6 +309,8 @@ bindTreeViewClick = (containerDiv) ->
       when 'location.png'
         $('div#routesDiv div#routeListInFactory ul.list-group > li').hide()
         id = img.data('id')
+        $('div#routesDiv div#factoriesTree li.lawnGreenBackground').removeClass('lawnGreenBackground')
+        img.parent().parent().addClass('lawnGreenBackground')
         $("div#routesDiv ul#routeListGroupInFactory > li.list-group-item[data-group='#{id}']").show()
         $('div#routesDiv div#routeListInFactory h3.panel-title').text($(this).next().children('span').text())
 
