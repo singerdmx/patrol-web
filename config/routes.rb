@@ -29,6 +29,7 @@ Blog::Application.routes.draw do
   resources :admins, only: :index
   resources :users do
     get :routes
+    put :set_routes
   end
   resources :file
 end

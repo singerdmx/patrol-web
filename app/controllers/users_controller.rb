@@ -92,6 +92,10 @@ class UsersController < ApplicationController
     render json: @routes_json, status: :ok
   end
 
+  #PUT /users/#{id}/set_routes
+  def set_routes
+  end
+
   private
 
   def user_params
