@@ -83,7 +83,6 @@ class UsersController < ApplicationController
       return
     end
 
-    User.find(params[:user_id])
     curr_routes = CheckRoute.joins(:users).where("users.id = #{params[:user_id]}")
     rest_routes = CheckRoute.all - curr_routes
     @routes_json = { curr_routes: routes_to_json(curr_routes),
@@ -99,8 +98,20 @@ class UsersController < ApplicationController
       return
     end
 
-    puts params[:user_id].to_i
-    puts params[:routes].map { |r| r.to_i }
+    user  = User.find(params[:user_id])
+    if user.nil?
+      render json: {:message => "User #{params[:user_id]} not found"}.to_json, status: :bad_request
+      return
+    end
+
+    user.check_routes.delete_all
+
+    if params[:routes]
+      params[:routes].each do |r|
+        route = CheckRoute.find(r)
+        user.check_routes << route if route
+      end
+    end
 
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
