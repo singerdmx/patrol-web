@@ -436,14 +436,14 @@
 <script id="routesTmplRight" type="text/html">
   <div data-bind="sortableItem: { item: $data, parentList: $item.parentList }" >
     <i class='icon-chevron-right'></i>
-          <span class="lavenderBackground" style="cursor: move" data-bind="text: name, visible: $data !== v.selectedRoute(), attr: { routeId: id }">
+          <span class="lavenderBackground" style="cursor: move; display: inline" data-bind="text: name, visible: $data !== v.selectedRoute(), attr: { routeId: id }">
           </span>
   </div>
 </script>
 <script id="routesTmplLeft" type="text/html">
   <div data-bind="sortableItem: { item: $data, parentList: $item.parentList }" >
     <i class='icon-chevron-left'></i>
-          <span class="lavenderBackground" style="cursor: move" data-bind="text: name, visible: $data !== v.selectedRoute(), attr: { routeId: id }">
+          <span class="lavenderBackground" style="cursor: move; display: inline" data-bind="text: name, visible: $data !== v.selectedRoute(), attr: { routeId: id }">
           </span>
   </div>
 </script>
