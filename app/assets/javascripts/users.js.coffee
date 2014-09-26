@@ -884,9 +884,21 @@ setupManageUsersDiv = (containerDiv) ->
 
   $("#{containerDiv} button#btnSubmit").click ->
     routes = ($(s).attr("routeId") for s in $("#{containerDiv} div.dragBox:first span.lavenderBackground"))
-    alert routes
-    availableRoutes = ($(s).attr("routeId") for s in $("#{containerDiv} div.dragBox:last span.lavenderBackground"))
-    alert availableRoutes
+    userId = $("#{containerDiv} span#userId").text()
+    $.ajax
+      url: getBaseURL() + "/users/#{userId}/set_routes.json"
+      type: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify({ routes: routes }),
+      dataType: 'text',
+      success: (data, textStatus, jqHXR) ->
+        alert '更新成功'
+        return
+      error: (jqXHR, textStatus, errorThrown) ->
+        showErrorPage(jqXHR.responseText)
+        return
+      timeout: defaultAjaxCallTimeout
+
     return
 
   return

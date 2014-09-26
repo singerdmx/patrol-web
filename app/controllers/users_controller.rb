@@ -94,6 +94,18 @@ class UsersController < ApplicationController
 
   #PUT /users/#{id}/set_routes
   def set_routes
+    unless current_user.is_admin?
+      render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      return
+    end
+
+    puts params[:user_id].to_i
+    puts params[:routes].map { |r| r.to_i }
+
+    render json: { success: true }.to_json, status: :ok
+  rescue Exception => e
+    Rails.logger.error("Encountered an error while editing user routes #{params.inspect}: #{e}")
+    render json: {:message => e.to_s}.to_json, status: :internal_server_error
   end
 
   private
