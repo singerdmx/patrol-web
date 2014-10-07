@@ -15,7 +15,7 @@ Blog::Application.routes.draw do
   resources :user_preferences
   resources :factories, only: [:index]
 
-  match :graph,     to: 'graphs#show',          via: 'get'
+  match :graphs,     to: 'graphs#show',          via: 'get'
 
   devise_for :users, controllers: { sessions: "users/sessions" }
 
