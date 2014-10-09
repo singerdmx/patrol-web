@@ -18,6 +18,13 @@ class ApplicationController < ActionController::Base
     response.headers['X-CSRF-Token'] = form_authenticity_token
   end
 
+  def update_check_time(params)
+    if !params[:check_time].nil? && params[:check_time].include?('..')
+      time_window = params[:check_time].split('..')
+      params[:check_time] = Time.at(time_window[0].to_i).to_datetime..Time.at(time_window[1].to_i).to_datetime
+    end
+  end
+
   private
 
   def authenticate_user_from_token!
