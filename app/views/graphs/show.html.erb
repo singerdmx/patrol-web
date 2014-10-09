@@ -1,1 +1,22 @@
 <% provide(:title, '图表') %>
+
+<%= @results %>
+
+<canvas id="graph" width="300" height="300">
+  Your web-browser does not support the HTML 5 canvas element.
+</canvas>
+
+<script type="application/javascript">
+  function drawMyChart(){
+    if(!!document.createElement('canvas').getContext){ //check that the canvas
+      // element is supported
+      var chart = new AwesomeChart('graph');
+      chart.title = "Product Sales - 2010";
+      chart.data = [1532, 3251, 3460, 1180, 6543];
+      chart.labels = ["Desktops", "Laptops", "Netbooks", "Tablets", "Smartphones"];
+      chart.draw();
+    }
+  }
+
+  window.onload = drawMyChart;
+</script>
