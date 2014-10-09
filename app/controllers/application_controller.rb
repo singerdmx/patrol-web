@@ -25,6 +25,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def check_result_params
+    request_para = params[:check_result].nil? ? params : params[:check_result]
+    request_para.select{|key,value| key.in?(CheckResult.column_names())}.symbolize_keys
+  end
+
   private
 
   def authenticate_user_from_token!

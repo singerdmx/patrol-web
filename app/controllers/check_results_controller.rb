@@ -133,9 +133,4 @@ class CheckResultsController < ApplicationController
       @check_result = get_results({id: params[:id]}).take!
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def check_result_params
-      request_para = params[:check_result].nil? ? params : params[:check_result]
-      request_para.select{|key,value| key.in?(CheckResult.column_names())}.symbolize_keys
-    end
 end
