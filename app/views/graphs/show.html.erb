@@ -1,21 +1,21 @@
 <% provide(:title, '图表') %>
 
+<div style="text-align: center; margin: 20px">
+  <h3>
+    <%= @point.name %> <%= @point.description %>
+  </h3>
+</div>
 <div style="text-align: center">
   <canvas id="graph" width="500px" height="400px">
     Your web-browser does not support the HTML 5 canvas element.
   </canvas>
 </div>
 
-<script id="results_json" type="text/json">
-  <%= @results.to_json %>
-</script>
-
 <script type="application/javascript">
   function drawMyChart(){
     if(!!document.createElement('canvas').getContext){ //check that the canvas
       // element is supported
       var chart = new AwesomeChart('graph');
-      chart.title = '<%= @point.name %> <%= @point.description %>';
       chart.chartType = '<%= @type %>';
       chart.data = <%= @results.map {|k,v| v} %>;
       chart.labels = <%= @results.map {|k,v| k}.to_s.html_safe %>
