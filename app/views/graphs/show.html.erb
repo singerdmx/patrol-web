@@ -1,8 +1,10 @@
 <% provide(:title, '图表') %>
 
-<canvas id="graph" width="300" height="300">
-  Your web-browser does not support the HTML 5 canvas element.
-</canvas>
+<div style="text-align: center">
+  <canvas id="graph" width="500px" height="400px">
+    Your web-browser does not support the HTML 5 canvas element.
+  </canvas>
+</div>
 
 <script id="results_json" type="text/json">
   <%= @results.to_json %>
