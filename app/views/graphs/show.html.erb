@@ -11,8 +11,12 @@
   </canvas>
 </div>
 
+<div style="text-align: center">
+  <h5><span id="dateRange"></span></h5>
+</div>
+
 <script type="application/javascript">
-  function drawMyChart(){
+  function drawChart() {
     if(!!document.createElement('canvas').getContext){ //check that the canvas
       // element is supported
       var chart = new AwesomeChart('graph');
@@ -23,5 +27,14 @@
     }
   }
 
-  window.onload = drawMyChart;
+  function showDateRange() {
+    $("span#dateRange").text(dateRangeToString(new Date(<%= @startTime %>), new Date(<%= @endTime %>)))
+  }
+
+  function onLoad() {
+    drawChart();
+    showDateRange();
+  }
+
+  window.onload = onLoad;
 </script>

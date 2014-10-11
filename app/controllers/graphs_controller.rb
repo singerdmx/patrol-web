@@ -7,6 +7,8 @@ class GraphsController < ApplicationController
     @type = params[:type]
     unless params[:check_time].nil?
       update_check_time(params)
+      @startTime = params[:check_time].first.to_i * 1000
+      @endTime = params[:check_time].last.to_i * 1000
     end
 
     fail "Invalid type #{@type}" unless ['default', 'horizontal bars', 'pareto', 'pie', 'exploded pie', 'doughnut'].include?(@type)
