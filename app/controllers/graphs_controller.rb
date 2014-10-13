@@ -13,11 +13,12 @@ class GraphsController < ApplicationController
 
     fail "Invalid type #{@type}" unless ['default', 'horizontal bars', 'pareto', 'pie', 'exploded pie', 'doughnut'].include?(@type)
 
+    @results = []
     case @point.category
       when 40, 41
         @results = CheckResult.where(check_result_params).group(:result).count
       else
-        fail "Category #{point.category} is supported!"
+        fail "Category #{@point.category} is supported!"
     end
   rescue Exception => e
     flash[:error] = e.message
