@@ -10,7 +10,7 @@
                 <%= current_user.email %> <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
-                <li><%= link_to "用户主页", current_user %></li>
+                <li><%= link_to "用户主页", nil, :onclick => 'location.href="/"' %></li>
                 <li><%= link_to "设置", edit_user_path(current_user) %></li>
                 <li class="divider"></li>
                 <li>
