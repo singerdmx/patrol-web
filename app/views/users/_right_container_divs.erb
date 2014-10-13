@@ -165,6 +165,21 @@
   <div class="alert alert-danger" id="errorBanner" style="display: none"></div>
   <div class="alert alert-info" id="infoBanner" style="display: none"></div>
   <div id="chartDiv"></div>
+  <div>
+    <div class="dropdown" id="historicalDataGraphBtn" style="display: none">
+      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+        <span class="caret"></span>
+        历史数据图
+      </button>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+        <li role="presentation"><a role="menuitem" data-param="pareto">帕累托图</a></li>
+        <li role="presentation"><a role="menuitem" data-param="horizontal%20bars">横条图</a></li>
+        <li role="presentation"><a role="menuitem" data-param="pie">饼图</a></li>
+        <li role="presentation"><a role="menuitem" data-param="exploded%20pie">爆炸饼图</a></li>
+        <li role="presentation"><a role="menuitem" data-param="doughnut">圆环图</a></li>
+      </ul>
+    </div>
+  </div>
 </div>
 <div class="containerDiv" id="manageUsersDiv">
   <div id="createUserDiv" style="display: none" class="submissionForm">

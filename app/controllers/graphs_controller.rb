@@ -11,9 +11,8 @@ class GraphsController < ApplicationController
       @endTime = params[:check_time].last.to_i * 1000
     end
 
-    fail "Invalid type #{@type}" unless ['default', 'horizontal bars', 'pareto', 'pie', 'exploded pie', 'doughnut'].include?(@type)
-
     @results = []
+    fail "Invalid type #{@type}" unless ['default', 'horizontal bars', 'pareto', 'pie', 'exploded pie', 'doughnut'].include?(@type)
     case @point.category
       when 40, 41
         @results = CheckResult.where(check_result_params).group(:result).count

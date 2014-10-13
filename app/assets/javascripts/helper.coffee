@@ -45,7 +45,7 @@ window.validateUserForm = (containerDiv, userInfo) ->
 # Misc
 window.removeFlashNotice = ->
   setTimeout( ->
-    $('div.alert.alert-notice, div.alert.alert-success').remove()
+    $('div.alert.alert-notice, div.alert.alert-success, div.alert.alert-error').remove()
     return
   , 15000)
 

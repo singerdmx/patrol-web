@@ -506,6 +506,9 @@ setupHistoryDiv = (containerDiv) ->
   return
 
 updateChart = (containerDiv, params) ->
+  $dataGraphBtn = $("#{containerDiv} div#historicalDataGraphBtn")
+  $dataGraphBtn.hide()
+
   start_time = getDatetimePickerEpoch("#{containerDiv} div#startTime")
   end_time = getDatetimePickerEpoch("#{containerDiv} div#endTime") + 86400 # Add one day for 86400 seconds (60 * 60 * 24)
   request_params = { check_time: "#{start_time}..#{end_time}" }
@@ -538,6 +541,14 @@ updateChart = (containerDiv, params) ->
                else
                  renderLineChart('chartDiv', title, data.result, min, max, canvasOverlayObjects)
              when 40,41
+               $dataGraphBtn.show()
+               $("#{containerDiv} div#historicalDataGraphBtn ul.dropdown-menu > li > a").click ->
+                 _type = $(this).data('param')
+                 _start_time = getDatetimePickerEpoch("#{containerDiv} div#startTime")
+                 _end_time = getDatetimePickerEpoch("#{containerDiv} div#endTime") + 86400
+                 window.open("/graphs?check_point_id=#{_point.id}&type=#{_type}&check_time=#{_start_time}..#{_end_time}")
+                 return
+
                renderBarChart('chartDiv', title, data.result, data.group, JSON.parse(_point.choice))
              when 10,30
                $('div#infoBanner').text("在选择时间范围内共巡检了#{data.result}次")
