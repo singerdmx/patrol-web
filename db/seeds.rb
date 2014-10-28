@@ -138,7 +138,23 @@ asset21 = Asset.create({
                            description: "甲进线" })
 asset21.check_points.create([
                                 {
-                                    name:         "电压（KV）ab",
+                                    name:         "功率因数",
+                                    description:  "是否正常",
+                                    category:     51,
+                                    state:        "运转",
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "变压器温度",
+                                    description:  "是否正常",
+                                    category:     51,
+                                    state:        "运转",
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "变压器电压（KV）ab",
                                     description:  "是否正常",
                                     category:     51,
                                     state:        "运转",
@@ -147,7 +163,7 @@ asset21.check_points.create([
                                     frequency:    24
                                 },
                                 {
-                                    name:         "电压（KV）bc",
+                                    name:         "变压器电压（KV）bc",
                                     description:  "是否正常",
                                     category:     51,
                                     state:        "运转",
@@ -156,23 +172,7 @@ asset21.check_points.create([
                                     frequency:    24
                                 },
                                 {
-                                    name:         "电压（KV）ca",
-                                    description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
-                                    default_value:10,
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                } ])
-
-asset22 = Asset.create({
-                           serialnum: "WY141010002",
-                           barcode: "WY141010002",
-                           name: "甲进线",
-                           description: "甲进线" })
-asset22.check_points.create([
-                                {
-                                    name:         "电流（A）a",
+                                    name:         "变压器电压（KV）ca",
                                     description:  "是否正常",
                                     category:     51,
                                     state:        "运转",
@@ -181,7 +181,25 @@ asset22.check_points.create([
                                     frequency:    24
                                 },
                                 {
-                                    name:         "电流（A）b",
+                                    name:         "变压器电流（A）a",
+                                    description:  "是否正常",
+                                    category:     51,
+                                    state:        "运转",
+                                    default_value:10,
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "变压器电流（A）b",
+                                    description:  "是否正常",
+                                    category:     51,
+                                    state:        "变压器运转",
+                                    default_value:12,
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "变压器电流（A）c",
                                     description:  "是否正常",
                                     category:     51,
                                     state:        "运转",
@@ -190,7 +208,52 @@ asset22.check_points.create([
                                     frequency:    24
                                 },
                                 {
-                                    name:         "电流（A）c",
+                                    name:         "进线电压（KV）ab",
+                                    description:  "是否正常",
+                                    category:     51,
+                                    state:        "运转",
+                                    default_value:10,
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "进线器电压（KV）bc",
+                                    description:  "是否正常",
+                                    category:     51,
+                                    state:        "运转",
+                                    default_value:10,
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "进线电压（KV）ca",
+                                    description:  "是否正常",
+                                    category:     51,
+                                    state:        "运转",
+                                    default_value:10,
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "进线电流（A）a",
+                                    description:  "是否正常",
+                                    category:     51,
+                                    state:        "运转",
+                                    default_value:10,
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "进线电流（A）b",
+                                    description:  "是否正常",
+                                    category:     51,
+                                    state:        "变压器运转",
+                                    default_value:12,
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "进线电流（A）c",
                                     description:  "是否正常",
                                     category:     51,
                                     state:        "运转",
@@ -206,7 +269,7 @@ asset23 = Asset.create({
                            description: "乙进线" })
 asset23.check_points.create([
                                 {
-                                    name:         "电压（KV）ab",
+                                    name:         "功率因数",
                                     description:  "是否正常",
                                     category:     51,
                                     state:        "运转",
@@ -214,7 +277,7 @@ asset23.check_points.create([
                                     frequency:    24
                                 },
                                 {
-                                    name:         "电压（KV）bc",
+                                    name:         "变压器温度",
                                     description:  "是否正常",
                                     category:     51,
                                     state:        "运转",
@@ -222,96 +285,110 @@ asset23.check_points.create([
                                     frequency:    24
                                 },
                                 {
-                                    name:         "电压（KV）ca",
+                                    name:         "变压器电压（KV）ab",
                                     description:  "是否正常",
                                     category:     51,
                                     state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                } ])
-
-asset24 = Asset.create({
-                           serialnum: "WY141010004",
-                           barcode: "WY141010004",
-                           name: "乙进线",
-                           description: "乙进线" })
-asset24.check_points.create([
-                                {
-                                    name:         "电流（A）a",
-                                    description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
+                                    default_value:10,
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "电流（A）b",
+                                    name:         "变压器电压（KV）bc",
                                     description:  "是否正常",
                                     category:     51,
                                     state:        "运转",
+                                    default_value:10,
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "电流（A）c",
+                                    name:         "变压器电压（KV）ca",
                                     description:  "是否正常",
                                     category:     51,
                                     state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                } ])
-
-asset25 = Asset.create({
-                           serialnum: "WY141010005",
-                           barcode: "WY141010005",
-                           name: "甲电量柜",
-                           description: "甲电量柜" })
-asset25.check_points.create([
-                                {
-                                    name:         "有功",
-                                    description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
+                                    default_value:10,
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "峰时",
+                                    name:         "变压器电流（A）a",
                                     description:  "是否正常",
                                     category:     51,
                                     state:        "运转",
+                                    default_value:10,
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "平时",
+                                    name:         "变压器电流（A）b",
                                     description:  "是否正常",
                                     category:     51,
-                                    state:        "运转",
+                                    state:        "变压器运转",
+                                    default_value:12,
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "谷时",
+                                    name:         "变压器电流（A）c",
                                     description:  "是否正常",
                                     category:     51,
                                     state:        "运转",
+                                    default_value:12,
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "MD",
+                                    name:         "进线电压（KV）ab",
                                     description:  "是否正常",
                                     category:     51,
                                     state:        "运转",
+                                    default_value:10,
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "无功",
+                                    name:         "进线器电压（KV）bc",
                                     description:  "是否正常",
                                     category:     51,
                                     state:        "运转",
+                                    default_value:10,
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "进线电压（KV）ca",
+                                    description:  "是否正常",
+                                    category:     51,
+                                    state:        "运转",
+                                    default_value:10,
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "进线电流（A）a",
+                                    description:  "是否正常",
+                                    category:     51,
+                                    state:        "运转",
+                                    default_value:10,
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "进线电流（A）b",
+                                    description:  "是否正常",
+                                    category:     51,
+                                    state:        "变压器运转",
+                                    default_value:12,
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "进线电流（A）c",
+                                    description:  "是否正常",
+                                    category:     51,
+                                    state:        "运转",
+                                    default_value:12,
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 } ])
@@ -319,237 +396,62 @@ asset25.check_points.create([
 asset26 = Asset.create({
                            serialnum: "WY141010006",
                            barcode: "WY141010006",
-                           name: "乙电量柜",
-                           description: "乙电量柜" })
+                           name: "上墙资料、劳防及用具",
+                           description: "上墙资料、劳防及用具" })
+
 asset26.check_points.create([
                                 {
-                                    name:         "有功",
+                                    name:         "绝缘手套",
                                     description:  "是否正常",
-                                    category:     51,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "峰时",
+                                    name:         "绝缘鞋",
                                     description:  "是否正常",
-                                    category:     51,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "平时",
+                                    name:         "高压验电笔",
                                     description:  "是否正常",
-                                    category:     51,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "谷时",
+                                    name:         "接地线",
                                     description:  "是否正常",
-                                    category:     51,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "MD",
+                                    name:         "外来人员进出登记表",
                                     description:  "是否正常",
-                                    category:     51,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "无功",
+                                    name:         "缺陷记录表",
                                     description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                } ])
-
-asset27 = Asset.create({
-                           serialnum: "WY141010007",
-                           barcode: "WY141010007",
-                           name: "甲变压器",
-                           description: "甲变压器" })
-asset27.check_points.create([
-                                {
-                                    name:         "电压（V）ab",
-                                    description:  "是否正常",
-                                    category:     51,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "电压（V）bc",
+                                    name:         "清洁用具",
                                     description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                },
-                                {
-                                    name:         "电压（V）ca",
-                                    description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                } ])
-
-asset28 = Asset.create({
-                           serialnum: "WY141010008",
-                           barcode: "WY141010008",
-                           name: "甲变压器",
-                           description: "甲变压器" })
-asset28.check_points.create([
-                                {
-                                    name:         "电流（A）",
-                                    description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                } ])
-
-asset29 = Asset.create({
-                           serialnum: "WY141010009",
-                           barcode: "WY141010009",
-                           name: "甲变压器",
-                           description: "甲变压器" })
-asset29.check_points.create([
-                                {
-                                    name:         "功率因素%",
-                                    description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                } ])
-
-asset30 = Asset.create({
-                           serialnum: "WY141010010",
-                           barcode: "WY141010010",
-                           name: "甲变压器",
-                           description: "甲变压器" })
-asset30.check_points.create([
-                                {
-                                    name:         "变压器温度（T）a",
-                                    description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                },
-                                {
-                                    name:         "变压器温度（T）b",
-                                    description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                },
-                                {
-                                    name:         "变压器温度（T）c",
-                                    description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                } ])
-
-asset31 = Asset.create({
-                           serialnum: "WY141010011",
-                           barcode: "WY141010011",
-                           name: "乙变压器",
-                           description: "乙变压器" })
-asset31.check_points.create([
-                                {
-                                    name:         "电压（V）ab",
-                                    description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                },
-                                {
-                                    name:         "电压（V）bc",
-                                    description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                },
-                                {
-                                    name:         "电压（V）ca",
-                                    description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                } ])
-
-asset32 = Asset.create({
-                           serialnum: "WY141010012",
-                           barcode: "WY141010012",
-                           name: "乙变压器",
-                           description: "乙变压器" })
-asset32.check_points.create([
-                                {
-                                    name:         "电流（A）",
-                                    description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                } ])
-
-asset33 = Asset.create({
-                           serialnum: "WY141010013",
-                           barcode: "WY141010013",
-                           name: "乙变压器",
-                           description: "乙变压器" })
-asset33.check_points.create([
-                                {
-                                    name:         "功率因素%",
-                                    description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                } ])
-
-asset34 = Asset.create({
-                           serialnum: "WY141010014",
-                           barcode: "WY141010014",
-                           name: "乙变压器",
-                           description: "乙变压器" })
-asset34.check_points.create([
-                                {
-                                    name:         "变压器温度（T）a",
-                                    description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                },
-                                {
-                                    name:         "变压器温度（T）b",
-                                    description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                },
-                                {
-                                    name:         "变压器温度（T）c",
-                                    description:  "是否正常",
-                                    category:     51,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
@@ -570,14 +472,6 @@ asset35.check_points.create([
                                     frequency:    24
                                 },
                                 {
-                                    name:         "室外温度（T）",
-                                    description:  "是否正常",
-                                    category:     51,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                },
-                                {
                                     name:         "室内湿度（%）",
                                     description:  "是否正常",
                                     category:     51,
@@ -586,103 +480,59 @@ asset35.check_points.create([
                                     frequency:    24
                                 },
                                 {
-                                    name:         "消防用具",
+                                    name:         "机房照明",
                                     description:  "是否正常",
-                                    category:     51,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "变压器排风运行",
+                                    name:         "应急照明",
                                     description:  "是否正常",
-                                    category:     51,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "配套工具",
+                                    name:         "灭火器有效期",
                                     description:  "是否正常",
-                                    category:     51,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "照明",
+                                    name:         "机房灭火器压力表",
                                     description:  "是否正常",
-                                    category:     51,
+                                    category:     41,
                                     state:        "运转",
-                                    choice:       '["正常","异常"]',
+                                    choice:       '["绿","黄","红"]',
                                     frequency:    24
                                 } ])
 
 route2 = area1.check_routes.create!(
     {name: "高配电设备巡检（二路进线配电房）", description: "高配电设备巡检（二路进线配电房）"})
 route2.check_points << asset21.check_points
-route2.check_points << asset22.check_points
 route2.check_points << asset23.check_points
-route2.check_points << asset24.check_points
-route2.check_points << asset25.check_points
 route2.check_points << asset26.check_points
-route2.check_points << asset27.check_points
-route2.check_points << asset28.check_points
-route2.check_points << asset29.check_points
-route2.check_points << asset30.check_points
-route2.check_points << asset31.check_points
-route2.check_points << asset32.check_points
-route2.check_points << asset33.check_points
-route2.check_points << asset34.check_points
 route2.check_points << asset35.check_points
 
 #adding preference points
 user1.preferred_points << asset21.check_points
-user1.preferred_points << asset22.check_points
 user1.preferred_points << asset23.check_points
-user1.preferred_points << asset24.check_points
-user1.preferred_points << asset25.check_points
 user1.preferred_points << asset26.check_points
-user1.preferred_points << asset27.check_points
-user1.preferred_points << asset28.check_points
-user1.preferred_points << asset29.check_points
-user1.preferred_points << asset30.check_points
-user1.preferred_points << asset31.check_points
-user1.preferred_points << asset32.check_points
-user1.preferred_points << asset33.check_points
-user1.preferred_points << asset34.check_points
 user1.preferred_points << asset35.check_points
 
 user2.preferred_points << asset21.check_points
-user2.preferred_points << asset22.check_points
 user2.preferred_points << asset23.check_points
-user2.preferred_points << asset24.check_points
-user2.preferred_points << asset25.check_points
 user2.preferred_points << asset26.check_points
-user2.preferred_points << asset27.check_points
-user2.preferred_points << asset28.check_points
-user2.preferred_points << asset29.check_points
-user2.preferred_points << asset30.check_points
-user2.preferred_points << asset31.check_points
-user2.preferred_points << asset32.check_points
-user2.preferred_points << asset33.check_points
-user2.preferred_points << asset34.check_points
 user2.preferred_points << asset35.check_points
 
 user3.preferred_points << asset21.check_points
-user3.preferred_points << asset22.check_points
 user3.preferred_points << asset23.check_points
-user3.preferred_points << asset24.check_points
-user3.preferred_points << asset25.check_points
 user3.preferred_points << asset26.check_points
-user3.preferred_points << asset27.check_points
-user3.preferred_points << asset28.check_points
-user3.preferred_points << asset29.check_points
-user3.preferred_points << asset30.check_points
-user3.preferred_points << asset31.check_points
-user3.preferred_points << asset32.check_points
-user3.preferred_points << asset33.check_points
-user3.preferred_points << asset34.check_points
 user3.preferred_points << asset35.check_points
 
 #adding user to route
@@ -693,21 +543,77 @@ route2.users << user3
 asset01 = Asset.create({
                            serialnum: "WY141020016",
                            barcode: "WY141020016",
-                           name: "生活泵",
-                           description: "生活泵" })
+                           name: "生活水泵",
+                           description: "生活水泵" })
 asset01.check_points.create([
                                 {
-                                    name:         "1号",
+                                    name:         "1号泵泵体",
                                     description:  "是否正常",
-                                    category:     40,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "2号",
+                                    name:         "1号泵管道压力表",
                                     description:  "是否正常",
-                                    category:     40,
+                                    category:     51,
+                                    state:        "运转",
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "1号泵管道油漆",
+                                    description:  "是否正常",
+                                    category:     41,
+                                    state:        "运转",
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "1号泵管道阀门",
+                                    description:  "开闭情况",
+                                    category:     41,
+                                    state:        "运转",
+                                    choice:       '["开","闭"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "2号泵泵体",
+                                    description:  "是否正常",
+                                    category:     41,
+                                    state:        "运转",
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "2号泵管道压力表",
+                                    description:  "是否正常",
+                                    category:     51,
+                                    state:        "运转",
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "2号泵管道油漆",
+                                    description:  "是否正常",
+                                    category:     41,
+                                    state:        "运转",
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "2号泵管道阀门",
+                                    description:  "开闭情况",
+                                    category:     41,
+                                    state:        "运转",
+                                    choice:       '["开","闭"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "控制柜指示灯",
+                                    description:  "是否正常",
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
@@ -716,21 +622,29 @@ asset01.check_points.create([
 asset02 = Asset.create({
                            serialnum: "WY141020017",
                            barcode: "WY141020017",
-                           name: "喷淋泵",
-                           description: "喷淋泵" })
+                           name: "消防湿式报警阀组",
+                           description: "消防湿式报警阀组" })
 asset02.check_points.create([
                                 {
-                                    name:         "1号",
+                                    name:         "阀组阀门",
+                                    description:  "开闭情况",
+                                    category:     41,
+                                    state:        "运转",
+                                    choice:       '["开","闭"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "泄水管情况",
                                     description:  "是否正常",
-                                    category:     40,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "2号",
+                                    name:         "阀组压力表读数",
                                     description:  "是否正常",
-                                    category:     40,
+                                    category:     51,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
@@ -739,23 +653,39 @@ asset02.check_points.create([
 asset03 = Asset.create({
                            serialnum: "WY141020018",
                            barcode: "WY141020018",
-                           name: "消防泵",
-                           description: "消防泵" })
+                           name: "水箱",
+                           description: "水箱" })
 asset03.check_points.create([
                                 {
-                                    name:         "1号",
+                                    name:         "水箱浮球阀",
                                     description:  "是否正常",
-                                    category:     40,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "2号",
+                                    name:         "水箱外立面",
                                     description:  "是否正常",
-                                    category:     40,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "水箱泄水管情况",
+                                    description:  "是否正常",
+                                    category:     41,
+                                    state:        "运转",
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "水箱盖是否上锁",
+                                    description:  "是否上锁",
+                                    category:     41,
+                                    state:        "运转",
+                                    choice:       '["是","否"]',
                                     frequency:    24
                                 } ])
 
@@ -766,109 +696,64 @@ asset04 = Asset.create({
                            description: "集水井" })
 asset04.check_points.create([
                                 {
-                                    name:         "1号",
+                                    name:         "控制柜指示灯",
                                     description:  "是否正常",
-                                    category:     40,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "2号",
+                                    name:         "管道压力表",
                                     description:  "是否正常",
-                                    category:     40,
+                                    category:     51,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
+                                },
+                                {
+                                    name:         "井内清洁",
+                                    description:  "是否正常",
+                                    category:     41,
+                                    state:        "运转",
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "管道油漆",
+                                    description:  "是否正常",
+                                    category:     41,
+                                    state:        "运转",
+                                    choice:       '["正常","异常"]',
+                                    frequency:    24
+                                },
+                                {
+                                    name:         "阀门开闭",
+                                    description:  "开闭情况",
+                                    category:     41,
+                                    state:        "运转",
+                                    choice:       '["开","闭"]',
+                                    frequency:    24
                                 } ])
+
 asset05 = Asset.create({
                            serialnum: "WY141020020",
                            barcode: "WY141020020",
-                           name: "双切电源",
-                           description: "双切电源" })
+                           name: "水泵房其他情况",
+                           description: "水泵房其他情况" })
 asset05.check_points.create([
                                 {
-                                    name:         "生活",
+                                    name:         "上墙资料",
                                     description:  "是否正常",
-                                    category:     40,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "消防",
+                                    name:         "清洁用具",
                                     description:  "是否正常",
-                                    category:     40,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                } ])
-
-asset06 = Asset.create({
-                           serialnum: "WY141020021",
-                           barcode: "WY141020021",
-                           name: "控 制 柜",
-                           description: "控 制 柜" })
-asset06.check_points.create([
-                                {
-                                    name:         "生活",
-                                    description:  "是否正常",
-                                    category:     40,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                },
-                                {
-                                    name:         "消防",
-                                    description:  "是否正常",
-                                    category:     40,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                },
-                                {
-                                    name:         "喷淋",
-                                    description:  "是否正常",
-                                    category:     40,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                },
-                                {
-                                    name:         "液位器",
-                                    description:  "是否正常",
-                                    category:     40,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                },
-                                {
-                                    name:         "排污",
-                                    description:  "是否正常",
-                                    category:     40,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                } ])
-
-asset07 = Asset.create({
-                           serialnum: "WY141020022",
-                           barcode: "WY141020022",
-                           name: "水泵房",
-                           description: "水泵房" })
-asset07.check_points.create([
-                                {
-                                    name:         "压力表",
-                                    description:  "是否正常",
-                                    category:     40,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                },
-                                {
-                                    name:         "管道阀门",
-                                    description:  "是否正常",
-                                    category:     40,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
@@ -876,36 +761,27 @@ asset07.check_points.create([
                                 {
                                     name:         "机房照明",
                                     description:  "是否正常",
-                                    category:     40,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "环境卫生",
+                                    name:         "灭火器有效期",
                                     description:  "是否正常",
-                                    category:     40,
+                                    category:     41,
                                     state:        "运转",
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
                                 {
-                                    name:         "消防设备",
+                                    name:         "灭火器压力表",
                                     description:  "是否正常",
-                                    category:     40,
+                                    category:     41,
                                     state:        "运转",
-                                    choice:       '["正常","异常"]',
-                                    frequency:    24
-                                },
-                                {
-                                    name:         "水箱浮球阀",
-                                    description:  "是否正常",
-                                    category:     40,
-                                    state:        "运转",
-                                    choice:       '["正常","异常"]',
+                                    choice:       '["绿","黄","红"]',
                                     frequency:    24
                                 } ])
-
 
 
 route0 = area1.check_routes.create!(
@@ -915,17 +791,24 @@ route0.check_points << asset02.check_points
 route0.check_points << asset03.check_points
 route0.check_points << asset04.check_points
 route0.check_points << asset05.check_points
-route0.check_points << asset06.check_points
-route0.check_points << asset07.check_points
 
 
 #adding preference points
 user1.preferred_points <<  asset01.check_points
-user1.preferred_points <<  asset02.check_points
 user2.preferred_points <<  asset01.check_points
-user2.preferred_points <<  asset02.check_points
 user3.preferred_points <<  asset01.check_points
+user1.preferred_points <<  asset02.check_points
+user2.preferred_points <<  asset02.check_points
 user3.preferred_points <<  asset02.check_points
+user1.preferred_points <<  asset03.check_points
+user2.preferred_points <<  asset03.check_points
+user3.preferred_points <<  asset03.check_points
+user1.preferred_points <<  asset04.check_points
+user2.preferred_points <<  asset04.check_points
+user3.preferred_points <<  asset04.check_points
+user1.preferred_points <<  asset05.check_points
+user2.preferred_points <<  asset05.check_points
+user3.preferred_points <<  asset05.check_points
 
 #adding user to route
 route0.users << user1
@@ -937,8 +820,8 @@ route0.users << user3
 asset1 = Asset.create({
                           serialnum: "WY141030023",
                           barcode: "WY141030023",
-                          name: "设备",
-                          description: "设备" })
+                          name: "电梯设备",
+                          description: "电梯设备" })
 asset1.check_points.create([
                                {
                                    name:         "控制系统",
@@ -984,8 +867,8 @@ asset1.check_points.create([
 asset2 = Asset.create({
                           serialnum: "WY141030024",
                           barcode: "WY141030024",
-                          name: "机房",
-                          description: "机房" })
+                          name: "电梯机房",
+                          description: "电梯机房" })
 asset2.check_points.create([
                                {
                                    name:         "井道机房照明",
