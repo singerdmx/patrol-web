@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141116222418) do
+ActiveRecord::Schema.define(version: 20141116215800) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,7 +65,6 @@ ActiveRecord::Schema.define(version: 20141116222418) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "barcode"
-    t.integer  "manual_id"
   end
 
   add_index "assets", ["barcode"], name: "index_assets_on_barcode", using: :btree
@@ -83,7 +82,6 @@ ActiveRecord::Schema.define(version: 20141116222418) do
     t.datetime "updated_at"
     t.integer  "frequency",     default: 24
     t.string   "default_value"
-    t.integer  "manual_id"
   end
 
   create_table "check_results", force: true do |t|
