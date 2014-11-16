@@ -4,19 +4,17 @@ module CheckPointsHelper
   include ApplicationHelper
   #replacement of the index.json.jbuilder for complicated converting logic
   def index_json_builder(index_result)
-    results = []
-    index_result.each do |result|
+    index_result.map do |result|
       entry = to_hash(result)
       entry['state'] = "" if entry['state'].nil?
-      entry['default_value'] = "" if entry['default_value'].nil?
+      entry['default_value'] = '' if entry['default_value'].nil?
       entry['asset'] = result.asset.id
+      entry.delete('manual_id') if entry['manual_id'].nil?
       entry['routes'] = result.check_routes.map do |route|
         route.id
       end
-      results << entry
+      entry
     end
-
-    results
   end
 
   def index_ui_json_builder(index_result)
