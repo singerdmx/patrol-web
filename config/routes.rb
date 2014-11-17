@@ -12,6 +12,7 @@ Blog::Application.routes.draw do
     resources :history, controller: 'check_results', only: [:index]
   end
   resources :check_results, :path => :results
+  resources :manuals
   resources :user_preferences
   resources :factories, only: [:index]
 
