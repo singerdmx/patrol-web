@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141121235246) do
+ActiveRecord::Schema.define(version: 20141122072227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,7 +141,10 @@ ActiveRecord::Schema.define(version: 20141121235246) do
     t.boolean  "production_line_stopped"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "asset_id"
   end
+
+  add_index "repair_reports", ["asset_id"], name: "index_repair_reports_on_asset_id", using: :btree
 
   create_table "route_builders", force: true do |t|
     t.integer  "check_route_id"
