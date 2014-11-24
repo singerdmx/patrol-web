@@ -9,7 +9,7 @@ class RepairReportsController < ApplicationController
 
   # POST /repair_reports.json
   def create
-    #params['created_by'] = current_user.id
+    params['created_by_id'] = current_user.id
     report = params.select do |key, value|
       key.in?(RepairReport.column_names())
     end.symbolize_keys
