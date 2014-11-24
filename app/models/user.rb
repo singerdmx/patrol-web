@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
   has_many :user_preferences
   has_many :check_points, through: :user_preferences
 
+  has_many :repair_reports
+
   def preferred_points
     check_points
   end

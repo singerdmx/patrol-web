@@ -1,4 +1,4 @@
 class RepairReport < ActiveRecord::Base
-  has_one :created_by, foreign_key: "created_by", class_name: "User"
-  has_one :assigned, foreign_key: "assigned", class_name: "User"
+  belongs_to :created_by_user, :class_name => "User", :foreign_key => "created_by_id"
+  belongs_to :assigned_to_user, :class_name => "User", :foreign_key => "assigned_to_id"
 end

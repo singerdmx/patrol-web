@@ -859,3 +859,17 @@ manual2.check_points << asset1.check_points.last
 manual2.check_points << asset2.check_points.last
 manual2.check_points << asset3.check_points.last
 
+
+RepairReport.delete_all
+
+repair_report1 = RepairReport.create(
+  {asset_id: 2,
+   check_point_id: 3,
+   kind: "POINT",
+   code: 2,
+   description: "desc",
+   content: "repair it",
+   stopped: true,
+   production_line_stopped: false,
+   created_by_id: 1,
+  })
