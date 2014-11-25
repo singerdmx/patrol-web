@@ -33,5 +33,6 @@ Blog::Application.routes.draw do
     get :routes
     put :set_routes
   end
+  resources :repair_users
   resources :file
 end

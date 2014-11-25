@@ -1,0 +1,10 @@
+<% if current_user.is_admin?
+     provide(:title, '管理员')
+   elsif current_user.is_leader?
+     provide(:title, '高级用户')
+   else
+     provide(:title, '维修工')
+   end %>
+<div class="container-fluid">
+  <h1> 维修 保养 </h1>
+</div>
