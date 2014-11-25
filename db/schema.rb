@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141123083206) do
+ActiveRecord::Schema.define(version: 20141125065038) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -145,6 +145,9 @@ ActiveRecord::Schema.define(version: 20141123083206) do
     t.integer  "check_point_id"
     t.integer  "created_by_id"
     t.integer  "assigned_to_id"
+    t.integer  "priority"
+    t.string   "report_type"
+    t.integer  "status"
   end
 
   add_index "repair_reports", ["asset_id"], name: "index_repair_reports_on_asset_id", using: :btree
