@@ -871,5 +871,17 @@ repair_report1 = RepairReport.create(
    content: "repair it",
    stopped: true,
    production_line_stopped: false,
-   created_by_id: 1,
+   created_by_id: user1.id,
   })
+
+repair_report2 = RepairReport.create(
+    {asset_id: 2,
+     check_point_id: 3,
+     kind: "POINT",
+     code: 2,
+     description: "short desc",
+     content: "maintain it",
+     stopped: false,
+     production_line_stopped: false,
+     created_by_id: user1.id,
+    })
