@@ -32,17 +32,29 @@ class User < ActiveRecord::Base
     points
   end
 
+  def patrol_user?
+    read_attribute(:role).in? [0,1,2]
+  end
+
+  def repair_user?
+    read_attribute(:role).in? [3,4,5,6]
+  end
+
   def is_admin?
-    read_attribute(:role) == 0
+    read_attribute(:role).in? [0,3]
   end
 
   def is_leader?
-    read_attribute(:role) == 1
-  end
-  def is_user?
-    read_attribute(:role) == 2
+    read_attribute(:role).in? [1,4]
   end
 
+  def is_user?
+    read_attribute(:role).in? [2,5]
+  end
+
+  def is_worker?
+    read_attribute(:role) == 6
+  end
 
   def self.validate(point_id)
     if user_signed_in?
@@ -52,8 +64,5 @@ class User < ActiveRecord::Base
   end
 
   private :check_points, :check_points=
-
-
-
 
 end

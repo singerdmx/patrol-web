@@ -76,6 +76,15 @@ user4 = User.create! do |u|
   #u.ensure_authentication_token!
 end
 
+user5 = User.create! do |u|
+  u.email = 'worker@test.com'
+  u.password = 'worker1234'
+  u.password_confirmation = 'worker1234'
+  u.role = 6
+  u.name = 'worker'
+  #u.ensure_authentication_token!
+end
+
 #create routes based on 17-1.pdf page 9
 asset1 = Asset.create({
                 tag: SecureRandom.urlsafe_base64(10),

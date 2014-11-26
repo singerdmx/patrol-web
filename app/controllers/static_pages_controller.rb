@@ -9,12 +9,17 @@ class StaticPagesController < ApplicationController
     respond_to do |format|
       if user_signed_in?
         logger.debug("logged in")
-        if current_user.id == 101
-          format.html { redirect_to "/repair_users/#{current_user.id}" }
-         else
-          format.html { redirect_to "/users/#{current_user.id}" }
-          format.json { render json: { result: 'success' }.to_json, status: :ok }
+        if current_user.patrol_user?
+            format.html { redirect_to "/users/#{current_user.id}" }
+        elsif current_user.repair_user?
+            format.html { redirect_to "/repair_users/#{current_user.id}" }
+        else
+          format.html { render :home, status: :internal_server_error }
+          format.json { render json: { error: '用户类型错误' }.to_json, status: :internal_server_error }
+          return
         end
+
+        format.json { render json: { result: 'success' }.to_json, status: :ok }
       else
         logger.debug("failed to log in")
         format.html { render :home, :status => :unauthorized }

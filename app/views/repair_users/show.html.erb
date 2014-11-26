@@ -1,10 +1,23 @@
 <% if current_user.is_admin?
-     provide(:title, '管理员')
+     provide(:title, '报修 | 管理员')
    elsif current_user.is_leader?
-     provide(:title, '高级用户')
+     provide(:title, '报修 | 高级用户')
+   elsif current_user.is_user?
+     provide(:title, '报修 | 用户')
    else
-     provide(:title, '维修工')
+     provide(:title, '报修 | 维修工')
    end %>
 <div class="container-fluid">
-  <h1> 维修 保养 </h1>
+  <div class="row">
+    <div class="sidebar" id="sidebar">
+      <div class="close_box"></div>
+      <ul class="nav nav-sidebar">
+        <%= render 'repair_users/left_sidebar_menu' %>
+        <% if current_user.is_admin? %>
+          <%= render 'repair_users/left_sidebar_admin_menu' %>
+        <% end %>
+      </ul>
+    </div>
+    <%= render 'repair_users/right_container_divs' %>
+  </div>
 </div>

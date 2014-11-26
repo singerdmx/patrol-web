@@ -43,6 +43,12 @@ window.validateUserForm = (containerDiv, userInfo) ->
   true
 
 # Misc
+window.setTitle = (title) ->
+  $('span#logo').text(title)
+  $('small#footerTitle').text(title)
+
+  return
+
 window.removeFlashNotice = ->
   setTimeout( ->
     $('div.alert.alert-notice, div.alert.alert-success').remove()

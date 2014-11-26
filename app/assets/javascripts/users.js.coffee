@@ -3,6 +3,7 @@ fade_speed = 400
 
 $ ->
   return unless isUserPage()
+  setTitle('巡检')
   setupSidebar()
   $('div.containerDiv').first().show()
   setupRecordsDiv('div#preferencesDiv', 1, { preference: true })
@@ -25,8 +26,8 @@ $ ->
 
 isUserPage = ->
   _pageTitle = getPageTitle()
-  return true if _pageTitle in ['巡检 | 用户', '巡检 | 管理员', '巡检 | 高级用户']
-  return false
+  return true if _pageTitle in ['巡检 | 巡检员', '巡检 | 管理员', '巡检 | 高级用户']
+  false
 
 # users show
 setupSidebar = ->
