@@ -18,14 +18,18 @@ module RepairReportsHelper
       entry['created_at'] = entry['created_at'].to_i
       entry['updated_at'] = entry['updated_at'].to_i
 
+      barcode = ""
       ticket_name = ""
       asset = Asset.find_by(id: entry['asset_id'])
       ticket_name = asset.name if asset
+      barcode = asset.barcode if asset
       if entry['kind'] == "POINT"
         point = CheckPoint.find_by(id: entry['check_point_id'])
         ticket_name = "#{ticket_name} #{point.name}" if point
+        barcode = point.barcode if point
       end
       entry['name'] = ticket_name
+      entry['barcode'] = barcode
 
       entry['created_by_user'] = ""
       created_by_user = User.find_by(id: entry['created_by_id'])
