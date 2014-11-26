@@ -4,22 +4,12 @@ module RepairReportsHelper
   def index_json_builder(index_result)
     index_result.map do |result|
       entry = to_hash(result)
-      case entry['status']
-        when nil, 0
-          entry['status'] = "新建"
-        when 1
-          entry['status'] = "进行中"
-        when 2
-          entry['status'] = "完成"
-        else
-          entry['status'] = "暂停"
-      end
+
+      entry['status'] = 0 if entry['status'].nil?
 
       entry['created_at'] = entry['created_at'].to_i
       entry['updated_at'] = entry['updated_at'].to_i
 
-      barcode = ""
-      ticket_name = ""
       asset = Asset.find_by(id: entry['asset_id'])
       ticket_name = asset.name if asset
       barcode = asset.barcode if asset
@@ -28,16 +18,14 @@ module RepairReportsHelper
         ticket_name = "#{ticket_name} #{point.name}" if point
         barcode = point.barcode if point
       end
-      entry['name'] = ticket_name
-      entry['barcode'] = barcode
+      entry['name'] = ticket_name.nil? ? "" : ticket_name
+      entry['barcode'] = barcode.nil? ? "" : barcode
 
-      entry['created_by_user'] = ""
       created_by_user = User.find_by(id: entry['created_by_id'])
-      entry['created_by_user'] = created_by_user.name if created_by_user
+      entry['created_by_user'] = created_by_user.nil? ? "" : created_by_user.name
 
-      entry['assigned_to_user'] = ""
       assigned_to_user = User.find_by(id: entry['assigned_to_id'])
-      entry['assigned_to_user'] = assigned_to_user.name if assigned_to_user
+      entry['assigned_to_user'] = assigned_to_user.nil? ? "" : assigned_to_user.name
 
       entry
     end
