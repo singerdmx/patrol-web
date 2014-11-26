@@ -45,7 +45,7 @@ user1 = User.create! do |u|
   u.password = 'user1234'
   u.password_confirmation = 'user1234'
   u.role = 2
-  u.name = "u1"
+  u.name = "user_1"
   #u.ensure_authentication_token!
 end
 
@@ -54,7 +54,7 @@ user2 = User.create! do |u|
   u.password = 'user1234'
   u.password_confirmation = 'user1234'
   u.role = 2
-  u.name = "u2"
+  u.name = "work_2"
   #u.ensure_authentication_token!
 end
 
@@ -863,8 +863,8 @@ manual2.check_points << asset3.check_points.last
 RepairReport.delete_all
 
 repair_report1 = RepairReport.create(
-  {asset_id: 2,
-   check_point_id: 3,
+  {asset_id: asset2.id,
+   check_point_id: asset2.check_points.first.id,
    kind: "POINT",
    code: 2,
    description: "desc",
@@ -872,11 +872,13 @@ repair_report1 = RepairReport.create(
    stopped: true,
    production_line_stopped: false,
    created_by_id: user1.id,
+   priority: 1,
+   report_type: "报修",
   })
 
 repair_report2 = RepairReport.create(
-    {asset_id: 2,
-     check_point_id: 3,
+    {asset_id: asset20.id,
+     check_point_id: asset20.check_points.first.id,
      kind: "POINT",
      code: 2,
      description: "short desc",
@@ -884,4 +886,39 @@ repair_report2 = RepairReport.create(
      stopped: false,
      production_line_stopped: false,
      created_by_id: user1.id,
+     assigned_to_id: user2.id,
+     priority: 3,
+     status: 1,
+     report_type: "预防性保养",
+    })
+
+repair_report3 = RepairReport.create(
+    {asset_id: asset2.id,
+     check_point_id: asset2.check_points.last.id,
+     kind: "POINT",
+     code: 2,
+     description: "short desc",
+     content: "maintain it",
+     stopped: false,
+     production_line_stopped: false,
+     created_by_id: user1.id,
+     priority: 1,
+     status: 0,
+     report_type: "报修",
+    })
+
+repair_report4 = RepairReport.create(
+    {asset_id: asset2.id,
+     check_point_id: asset2.check_points.first.id,
+     kind: "POINT",
+     code: 2,
+     description: "short desc",
+     content: "maintain it",
+     stopped: false,
+     production_line_stopped: false,
+     created_by_id: user1.id,
+     assigned_to_id: user2.id,
+     priority: 1,
+     status: 2,
+     report_type: "报修",
     })
