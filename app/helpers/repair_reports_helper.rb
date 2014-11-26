@@ -15,6 +15,9 @@ module RepairReportsHelper
           entry['status'] = "暂停"
       end
 
+      entry['created_at'] = entry['created_at'].to_i
+      entry['updated_at'] = entry['updated_at'].to_i
+
       ticket_name = ""
       asset = Asset.find_by(id: entry['asset_id'])
       ticket_name = asset.name if asset
