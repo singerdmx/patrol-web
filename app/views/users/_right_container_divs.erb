@@ -167,37 +167,38 @@
   <div id="chartDiv"></div>
 </div>
 <div class="containerDiv" id="problemsDiv">
-  <div>
-    <div style="width: 30%" class="calendarWidgetDiv">
-      <div>起始时间</div>
-      <div id="startTime" class="input-append">
-        <input data-format="yyyy-MM-dd" type="text"/>
+  <span class="hiddenSpan" id="problemsIfNoneMatch"></span>
+  <span class="hiddenSpan" id="problemsIfModifiedSince"></span>
+  <span class="hiddenSpan" id="problemsQueryParamsUpdated">false</span>
+  <div style="width: 30%" class="calendarWidgetDiv">
+    <div>起始时间</div>
+    <div id="startTime" class="input-append">
+      <input data-format="yyyy-MM-dd" type="text"/>
             <span class="add-on">
               <i data-time-icon="icon-time" data-date-icon="icon-calendar">
               </i>
             </span>
-      </div>
     </div>
-    <div style="width: 30%" class="calendarWidgetDiv">
-      <div>结束时间</div>
-      <div id="endTime" class="input-append">
-        <input data-format="yyyy-MM-dd" type="text"/>
+  </div>
+  <div style="width: 30%" class="calendarWidgetDiv">
+    <div>结束时间</div>
+    <div id="endTime" class="input-append">
+      <input data-format="yyyy-MM-dd" type="text"/>
             <span class="add-on">
               <i data-time-icon="icon-time" data-date-icon="icon-calendar">
               </i>
             </span>
-      </div>
     </div>
-    <div style="width: 25%" class="calendarWidgetDiv">
-      <div>状态</div>
-      <div id="endTime" class="input-append">
-        <select class="form-control" id="status">
-          <option value="0">所有</option>
-          <option value="1">完成</option>
-          <option value="2">未完成</option>
-          <option value="3">取消</option>
-        </select>
-      </div>
+  </div>
+  <div style="width: 25%" class="calendarWidgetDiv">
+    <div>状态</div>
+    <div class="input-append">
+      <select class="form-control" id="status">
+        <option value="0">所有</option>
+        <option value="1">完成</option>
+        <option value="2">未完成</option>
+        <option value="3">取消</option>
+      </select>
     </div>
   </div>
 </div>

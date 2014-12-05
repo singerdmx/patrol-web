@@ -512,6 +512,17 @@ setupProblemsDiv = (containerDiv) ->
   setupCalendar(containerDiv, 30)
   return
 
+updateProblemsTable = (containerDiv, params) ->
+  start_time = getDatetimePickerEpoch("#{containerDiv} div#startTime")
+  end_time = getDatetimePickerEpoch("#{containerDiv} div#endTime") + 86400 # Add one day for 86400 seconds (60 * 60 * 24)
+  request_params =
+    check_time: "#{start_time}..#{end_time}"
+    ui: true
+
+  $.extend(request_params, params) if params # merge two objects
+
+  return
+
 getCanvasOverlayObjects = (_point) ->
   canvasOverlayObjects = []
   _choice = JSON.parse(_point.choice)
