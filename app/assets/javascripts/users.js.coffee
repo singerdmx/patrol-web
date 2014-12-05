@@ -12,6 +12,7 @@ $ ->
   setupFactoriesDiv('div#factories')
   setupRecordsDiv('div#recordsDiv', 1)
   setupHistoryDiv('div#historyDiv')
+  setupProblemsDiv('div#problemsDiv')
 
   # Check on exiting page
   window.onbeforeunload = confirmExit
@@ -505,6 +506,10 @@ setupHistoryDiv = (containerDiv) ->
     updateChart('div#historyDiv', {barcode: _val})
     return
 
+  return
+
+setupProblemsDiv = (containerDiv) ->
+  setupCalendar(containerDiv, 30)
   return
 
 getCanvasOverlayObjects = (_point) ->
