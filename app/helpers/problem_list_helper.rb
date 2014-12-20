@@ -1,6 +1,9 @@
 module ProblemListHelper
   include ApplicationHelper
 
+  UI_ENTRIES = ['created_at', 'created_by_user', 'name', 'description', 'assigned_to_user',
+                'status', 'content']
+
   def index_json_builder(index_result)
     index_result.map do |result|
       entry = to_hash(result)
@@ -28,6 +31,14 @@ module ProblemListHelper
       entry['assigned_to_user'] = assigned_to_user.nil? ? "" : assigned_to_user.name
 
       entry
+    end
+  end
+
+  def index_ui_json_builder(index_result)
+    index_result.map do |result|
+      result.select! { |k, v| k.in?(UI_ENTRIES) }
+      result['status'] = get_problem_status_string(result['status'].to_i)
+      result
     end
   end
 end

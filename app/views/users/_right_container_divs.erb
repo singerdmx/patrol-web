@@ -194,10 +194,11 @@
     <div>状态</div>
     <div class="input-append">
       <select class="form-control" id="status">
-        <option value="0">所有</option>
-        <option value="1">完成</option>
-        <option value="2">未完成</option>
-        <option value="3">取消</option>
+        <% [0, 1, 2, 3].each do |status| %>
+          <option value="<%= status %>">
+            <%= get_problem_status_string(status) %>
+          </option>
+        <% end %>
       </select>
     </div>
   </div>

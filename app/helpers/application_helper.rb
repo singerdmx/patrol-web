@@ -35,4 +35,14 @@ module ApplicationHelper
       else "#{category}"
     end
   end
+
+  def get_problem_status_string(status)
+    case status
+      when 0 then '所有'
+      when 1 then '完成'
+      when 2 then '未完成'
+      when 3 then '取消'
+      else "#{status}"
+    end
+  end
 end
