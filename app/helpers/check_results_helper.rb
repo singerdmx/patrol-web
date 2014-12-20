@@ -149,6 +149,7 @@ module CheckResultsHelper
       result = to_hash(entry)
       logger.info(result)
       index = choice.index(result['result'])
+      fail "Choice #{choice.inspect} does not have #{result['result']}" unless index
       result['check_time'] = result['check_time'].to_i
       if counter == 0
         min_time = max_time = result['check_time']
