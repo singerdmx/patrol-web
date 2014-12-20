@@ -2,8 +2,10 @@ class ProblemListController < ApplicationController
   include ProblemListHelper
 
   # GET /problem_list.json
+  # Example http://localhost:3000/problem_list.json?ui=true&status=2
   def index
     reports = RepairReport.where("check_result_id is not null")
+    reports = reports.where(status: params[:status].to_i) if params[:status] and params[:status].to_i != 0
     reports_json = index_json_builder(reports)
 
     if params[:ui] == 'true'
