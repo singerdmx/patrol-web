@@ -16,6 +16,7 @@ Blog::Application.routes.draw do
   resources :user_preferences
   resources :factories, only: [:index]
   resources :repair_reports
+  resources :problem_list
 
   devise_for :users, controllers: { sessions: "users/sessions" }
 
