@@ -931,3 +931,74 @@ repair_report4 = RepairReport.create(
      status: 2,
      report_type: "报修",
     })
+
+
+session11 = route1.check_sessions.create!(
+    {
+        start_time: "2014-12-19 06:36:09.0",
+        end_time: "2014-12-19 16:42:53.0",
+        user:'user@test.com',
+        session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
+        created_at: "2014-12-19 16:47:34.740",
+        updated_at: "2014-12-19 16:47:34.740"
+    })
+session11.check_results.create(
+    {result: "异常",
+     status: 1,
+     memo: "需要更换新部件",
+     check_time: "2014-12-19 06:46:45.0",
+     check_point_id: asset2.check_points.first.id,
+     created_at: "2014-12-19 06:47:34.954",
+     updated_at: "2014-12-19 06:47:34.954"
+    })
+repair_report11 = RepairReport.create(
+    {asset_id: asset2.id,
+     check_point_id: asset2.check_points.first.id,
+     kind: "POINT",
+     code: 2,
+     description: session11.check_results.first.memo,
+     content: "maintain it",
+     stopped: false,
+     production_line_stopped: false,
+     created_by_id: user1.id,
+     assigned_to_id: user2.id,
+     priority: 1,
+     status: 2,
+     check_session_id: session11.id,
+     report_type: "报修",
+    })
+
+session12 = route1.check_sessions.create!(
+    {
+        start_time: "2014-12-18 06:36:09.0",
+        end_time: "2014-12-18 16:42:53.0",
+        user:'user@test.com',
+        session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
+        created_at: "2014-12-18 16:47:34.740",
+        updated_at: "2014-12-18 16:47:34.740"
+    })
+session12.check_results.create(
+    {result: "异常",
+     status: 1,
+     memo: "需要更换新部件 again",
+     check_time: "2014-12-18 06:46:45.0",
+     check_point_id: asset2.check_points.first.id,
+     created_at: "2014-12-18 06:47:34.954",
+     updated_at: "2014-12-18 06:47:34.954"
+    })
+repair_report12 = RepairReport.create(
+    {asset_id: asset2.id,
+     check_point_id: asset2.check_points.first.id,
+     kind: "POINT",
+     code: 2,
+     description: session12.check_results.first.memo,
+     content: "maintain it again",
+     stopped: false,
+     production_line_stopped: false,
+     created_by_id: user1.id,
+     assigned_to_id: user2.id,
+     priority: 1,
+     status: 2,
+     check_session_id: session12.id,
+     report_type: "报修",
+    })
