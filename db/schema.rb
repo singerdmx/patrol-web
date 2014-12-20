@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141220012715) do
+ActiveRecord::Schema.define(version: 20141220032947) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -148,10 +148,12 @@ ActiveRecord::Schema.define(version: 20141220012715) do
     t.integer  "priority"
     t.string   "report_type"
     t.integer  "status"
+    t.integer  "check_session_id"
   end
 
   add_index "repair_reports", ["asset_id"], name: "index_repair_reports_on_asset_id", using: :btree
   add_index "repair_reports", ["check_point_id"], name: "index_repair_reports_on_check_point_id", using: :btree
+  add_index "repair_reports", ["check_session_id"], name: "index_repair_reports_on_check_session_id", using: :btree
 
   create_table "route_builders", force: true do |t|
     t.integer  "check_route_id"
