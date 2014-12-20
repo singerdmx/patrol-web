@@ -148,12 +148,12 @@ ActiveRecord::Schema.define(version: 20141220032947) do
     t.integer  "priority"
     t.string   "report_type"
     t.integer  "status"
-    t.integer  "check_session_id"
+    t.integer  "check_result_id"
   end
 
   add_index "repair_reports", ["asset_id"], name: "index_repair_reports_on_asset_id", using: :btree
   add_index "repair_reports", ["check_point_id"], name: "index_repair_reports_on_check_point_id", using: :btree
-  add_index "repair_reports", ["check_session_id"], name: "index_repair_reports_on_check_session_id", using: :btree
+  add_index "repair_reports", ["check_result_id"], name: "index_repair_reports_on_check_result_id", using: :btree
 
   create_table "route_builders", force: true do |t|
     t.integer  "check_route_id"

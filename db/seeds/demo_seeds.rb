@@ -45,7 +45,7 @@ user1 = User.create! do |u|
   u.password = 'user1234'
   u.password_confirmation = 'user1234'
   u.role = 2
-  u.name = "user_1"
+  u.name = "巡检员1"
   #u.ensure_authentication_token!
 end
 
@@ -54,7 +54,7 @@ user2 = User.create! do |u|
   u.password = 'user1234'
   u.password_confirmation = 'user1234'
   u.role = 2
-  u.name = "work_2"
+  u.name = "维修工2"
   #u.ensure_authentication_token!
 end
 
@@ -63,7 +63,7 @@ user3 = User.create! do |u|
   u.password = 'user1234'
   u.password_confirmation = 'user1234'
   u.role = 1
-  u.name = 'leader'
+  u.name = '经理'
   #u.ensure_authentication_token!
 end
 
@@ -72,7 +72,7 @@ user4 = User.create! do |u|
   u.password = 'admin1234'
   u.password_confirmation = 'admin1234'
   u.role = 0
-  u.name = 'admin'
+  u.name = '管理员'
   #u.ensure_authentication_token!
 end
 
@@ -81,7 +81,7 @@ user5 = User.create! do |u|
   u.password = 'worker1234'
   u.password_confirmation = 'worker1234'
   u.role = 6
-  u.name = 'worker'
+  u.name = '维修工1'
   #u.ensure_authentication_token!
 end
 
@@ -964,7 +964,7 @@ repair_report11 = RepairReport.create(
      assigned_to_id: user2.id,
      priority: 1,
      status: 2,
-     check_session_id: session11.id,
+     check_result_id: session11.check_results.first.id,
      report_type: "报修",
     })
 
@@ -999,6 +999,6 @@ repair_report12 = RepairReport.create(
      assigned_to_id: user2.id,
      priority: 1,
      status: 2,
-     check_session_id: session12.id,
+     check_result_id: session12.check_results.first.id,
      report_type: "报修",
     })
