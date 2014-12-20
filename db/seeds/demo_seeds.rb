@@ -670,7 +670,7 @@ session7.check_results.create(
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:43:38.0",
-     check_point_id: 7,
+     check_point_id: asset3.check_points.last.id,
      created_at: "2014-04-29 06:47:34.866",
      updated_at: "2014-04-29 06:47:34.866"
     })
@@ -688,7 +688,7 @@ session7.check_results.create(
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:43:54.0",
-     check_point_id: 3,
+     check_point_id: asset2.check_points.first.id,
      created_at: "2014-04-29 06:47:34.871",
      updated_at: "2014-04-29 06:47:34.871"
     })
@@ -742,7 +742,7 @@ session2.check_results.create(
      status: 1,
      memo: "",
      check_time: "2014-04-29 06:46:45.0",
-     check_point_id: 7,
+     check_point_id: asset3.check_points.last.id,
      created_at: "2014-04-29 06:47:34.954",
      updated_at: "2014-04-29 06:47:34.954"
     })
@@ -751,7 +751,7 @@ session2.check_results.create(
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:46:26.0",
-     check_point_id: 3,
+     check_point_id: asset2.check_points.first.id,
      created_at: "2014-04-29 06:47:34.957",
      updated_at: "2014-04-29 06:47:34.957"
     })
@@ -822,7 +822,7 @@ check_point_3_choice_json = JSON.parse(check_point_3_choice)
      status: status,
      memo: "",
      check_time: check_time,
-     check_point_id: 3,
+     check_point_id: asset2.check_points.first.id,
     })
 end
 
@@ -847,7 +847,7 @@ check_point_7_choice_json = JSON.parse(check_point_7_choice)
      status: status,
      memo: "",
      check_time: check_time,
-     check_point_id: 7,
+     check_point_id: asset3.check_points.last.id,
     })
 end
 
@@ -943,7 +943,7 @@ session11 = route1.check_sessions.create!(
         updated_at: "2014-12-19 16:47:34.740"
     })
 session11.check_results.create(
-    {result: "异常",
+    {result: "非正常",
      status: 1,
      memo: "需要更换新部件",
      check_time: "2014-12-19 06:46:45.0",
@@ -978,7 +978,7 @@ session12 = route1.check_sessions.create!(
         updated_at: "2014-12-18 16:47:34.740"
     })
 session12.check_results.create(
-    {result: "异常",
+    {result: "非正常",
      status: 1,
      memo: "需要更换新部件 again",
      check_time: "2014-12-18 06:46:45.0",
@@ -1001,4 +1001,114 @@ repair_report12 = RepairReport.create(
      status: 2,
      check_result_id: session12.check_results.first.id,
      report_type: "报修",
+     created_at: "2014-12-18 06:47:34.954",
+     updated_at: "2014-12-18 06:47:34.954"
+    })
+session13 = route1.check_sessions.create!(
+    {
+        start_time: "2014-12-18 06:36:09.0",
+        end_time: "2014-12-18 16:42:53.0",
+        user:'user@test.com',
+        session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
+        created_at: "2014-12-18 16:47:34.740",
+        updated_at: "2014-12-18 16:47:34.740"
+    })
+session13.check_results.create(
+    {result: "异常",
+     status: 1,
+     memo: "需要详细检查",
+     check_time: "2014-12-18 06:46:45.0",
+     check_point_id: asset3.check_points.last.id,
+     created_at: "2014-12-18 06:47:34.954",
+     updated_at: "2014-12-18 06:47:34.954"
+    })
+repair_report13 = RepairReport.create(
+    {asset_id: asset3.id,
+     check_point_id: asset3.check_points.last.id,
+     kind: "POINT",
+     code: 2,
+     description: session13.check_results.first.memo,
+     content: "maintain it again",
+     stopped: false,
+     production_line_stopped: false,
+     created_by_id: user1.id,
+     assigned_to_id: user5.id,
+     priority: 1,
+     status: 2,
+     check_result_id: session13.check_results.first.id,
+     report_type: "报修",
+     created_at: "2014-12-18 06:47:34.954",
+     updated_at: "2014-12-18 06:47:34.954"
+    })
+session14 = route1.check_sessions.create!(
+    {
+        start_time: "2014-12-18 06:36:09.0",
+        end_time: "2014-12-18 16:42:53.0",
+        user:'user@test.com',
+        session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
+        created_at: "2014-12-18 16:47:34.740",
+        updated_at: "2014-12-18 16:47:34.740"
+    })
+session14.check_results.create(
+    {result: "异常",
+     status: 1,
+     memo: "需要详细检查 again",
+     check_time: "2014-12-18 06:46:45.0",
+     check_point_id: asset3.check_points.last.id,
+     created_at: "2014-12-18 06:47:34.954",
+     updated_at: "2014-12-18 06:47:34.954"
+    })
+repair_report14 = RepairReport.create(
+    {asset_id: asset3.id,
+     check_point_id: asset3.check_points.last.id,
+     kind: "POINT",
+     code: 2,
+     description: session14.check_results.first.memo,
+     content: "maintain it again",
+     stopped: false,
+     production_line_stopped: false,
+     created_by_id: user1.id,
+     assigned_to_id: user5.id,
+     priority: 1,
+     status: 2,
+     check_result_id: session14.check_results.first.id,
+     report_type: "报修",
+     created_at: "2014-12-18 06:47:34.954",
+     updated_at: "2014-12-18 06:47:34.954"
+    })
+session15 = route1.check_sessions.create!(
+    {
+        start_time: "2014-12-18 06:36:09.0",
+        end_time: "2014-12-18 16:42:53.0",
+        user:'user@test.com',
+        session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
+        created_at: "2014-12-18 16:47:34.740",
+        updated_at: "2014-12-18 16:47:34.740"
+    })
+session15.check_results.create(
+    {result: "异常",
+     status: 1,
+     memo: "需要更换新部件",
+     check_time: "2014-12-18 06:46:45.0",
+     check_point_id: asset3.check_points.last.id,
+     created_at: "2014-12-18 06:47:34.954",
+     updated_at: "2014-12-18 06:47:34.954"
+    })
+repair_report15 = RepairReport.create(
+    {asset_id: asset3.id,
+     check_point_id: asset3.check_points.last.id,
+     kind: "POINT",
+     code: 2,
+     description: session15.check_results.first.memo,
+     content: "maintain it again",
+     stopped: false,
+     production_line_stopped: false,
+     created_by_id: user1.id,
+     assigned_to_id: user5.id,
+     priority: 1,
+     status: 2,
+     check_result_id: session15.check_results.first.id,
+     report_type: "报修",
+     created_at: "2014-12-18 06:47:34.954",
+     updated_at: "2014-12-18 06:47:34.954"
     })
