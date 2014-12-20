@@ -60,6 +60,8 @@ setupSidebar = ->
         updateRecordsTable(containerDiv)
       when 'manageUsers'
         updateUsersTable(containerDiv)
+      when 'problems'
+        updateProblemsTable(containerDiv)
     return
   return
 
@@ -457,7 +459,7 @@ updateRecordsTable = (containerDiv, params) ->
           {
             "sTitle": "状态",
             "sClass": "center"
-          }
+          },
           { "sTitle": "备注" },
           {
             "sTitle": "条形码",
@@ -488,7 +490,7 @@ updateRecordsTable = (containerDiv, params) ->
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
-    ifModified:true,
+    ifModified: true,
     dataType: 'json',
     timeout: defaultAjaxCallTimeout
 
@@ -510,6 +512,17 @@ setupHistoryDiv = (containerDiv) ->
 
 setupProblemsDiv = (containerDiv) ->
   setupCalendar(containerDiv, 30)
+
+  # 状态选择改变
+  $("#{containerDiv} select#status").change ->
+    $("#{containerDiv} > span#problemsQueryParamsUpdated").text('true')
+    return
+
+  # 更新button
+  $("#{containerDiv} button#updateProblemsTableButton").click (e) ->
+    updateProblemsTable(containerDiv)
+    return
+
   return
 
 updateProblemsTable = (containerDiv, params) ->
@@ -518,8 +531,74 @@ updateProblemsTable = (containerDiv, params) ->
   request_params =
     check_time: "#{start_time}..#{end_time}"
     ui: true
+    status: $("#{containerDiv} select#status option:selected").val()
 
   $.extend(request_params, params) if params # merge two objects
+
+  $.ajax
+    url: getBaseURL() + '/problem_list.json'
+    beforeSend: (xhr) ->
+      problemsQueryParamsUpdated = $("#{containerDiv} > span#problemsQueryParamsUpdated").text() is 'true'
+
+      if problemsQueryParamsUpdated
+        # Force update since we changed calendar
+        $("#{containerDiv} > span#problemsQueryParamsUpdated").text('false')
+        return
+
+      setXhrRequestHeader(xhr, containerDiv, 'problems')
+      return
+    data: request_params
+    success: (data, textStatus, jqHXR) ->
+      if jqHXR.status is 200
+        for record in data
+          record[0] = dateToString(new Date(record[0] * 1000))
+
+        columns = [
+          { "sTitle": "巡检日期" },
+          {
+            "sTitle": "点检人员",
+            "sClass": "center"
+          },
+          {
+            "sTitle": "名称",
+            "sClass": "center"
+          },
+          {
+            "sTitle": "问题描述",
+            "sClass": "center"
+          },
+          {
+            "sTitle": "责任人",
+            "sClass": "center"
+          },
+          {
+            "sTitle": "状态",
+            "sClass": "center"
+          },
+          {
+            "sTitle": "备注",
+            "sClass": "center"
+          }
+        ]
+        if $("#{containerDiv} table#problemsTable > tbody[role='alert'] td.dataTables_empty").length is 0
+          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
+          oTable = $("#{containerDiv} table#problemsTable").dataTable()
+          oTable.fnDestroy() unless oTable?
+
+        $("#{containerDiv} div#problemsTable_wrapper").remove()
+        $("#{containerDiv} > div").append('<table id="problemsTable"></table>')
+        $("#{containerDiv} table#problemsTable").dataTable
+          'aaData': data,
+          'aoColumns': columns
+
+        $("#{containerDiv} > span#problemsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} > span#problemsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    ifModified: true,
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
 
   return
 
