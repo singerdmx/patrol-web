@@ -40,7 +40,8 @@ module ProblemListHelper
         r['description'],
         r['assigned_to_user'],
         get_problem_status_string(r['status'].to_i),
-        r['content']
+        r['content'],
+        r['plan_date']
       ]
     end
   end

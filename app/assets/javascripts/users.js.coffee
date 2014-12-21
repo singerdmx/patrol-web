@@ -552,6 +552,7 @@ updateProblemsTable = (containerDiv, params) ->
       if jqHXR.status is 200
         for record in data
           record[0] = dateToString(new Date(record[0] * 1000))
+          record[7] = dateToString(new Date(record[7] * 1000)) if record[7]
 
         columns = [
           { "sTitle": "巡检日期" },
@@ -578,7 +579,8 @@ updateProblemsTable = (containerDiv, params) ->
           {
             "sTitle": "备注",
             "sClass": "center"
-          }
+          },
+          { "sTitle": "计划完成日期" }
         ]
         if $("#{containerDiv} table#problemsTable > tbody[role='alert'] td.dataTables_empty").length is 0
           # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
