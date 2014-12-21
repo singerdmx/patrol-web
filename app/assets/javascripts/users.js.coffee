@@ -535,6 +535,7 @@ updateProblemsTable = (containerDiv, params) ->
 
   $.extend(request_params, params) if params # merge two objects
 
+  $("#{containerDiv} div#assignedUserStatChartDiv").html('')
   $.ajax
     url: getBaseURL() + '/problem_list.json'
     beforeSend: (xhr) ->
@@ -549,11 +550,23 @@ updateProblemsTable = (containerDiv, params) ->
       return
     data: request_params
     success: (data, textStatus, jqHXR) ->
+      statusEnum = ($(o).text().trim() for o in $("#{containerDiv} select#status").children('option'))
+      statusEnum.shift() # remove “所有”
+      assignedUserStat = {}
       if jqHXR.status is 200
         for record in data
           record[0] = dateToString(new Date(record[0] * 1000))
           record[7] = dateToString(new Date(record[7] * 1000)) if record[7]
+          status = record[5]
+          assignedUser = record[4]
+          unless assignedUserStat[assignedUser]
+            assignedUserStat[assignedUser] = {}
+            for _s in statusEnum
+              assignedUserStat[assignedUser][_s] = 0
 
+          assignedUserStat[assignedUser][status] += 1
+
+        renderAssignedUserStatChart('assignedUserStatChartDiv', assignedUserStat, statusEnum)
         columns = [
           { "sTitle": "巡检日期" },
           {
@@ -588,7 +601,7 @@ updateProblemsTable = (containerDiv, params) ->
           oTable.fnDestroy() unless oTable?
 
         $("#{containerDiv} div#problemsTable_wrapper").remove()
-        $("#{containerDiv} > div").append('<table id="problemsTable"></table>')
+        $("#{containerDiv} > div:first-child").append('<table id="problemsTable"></table>')
         $("#{containerDiv} table#problemsTable").dataTable
           'aaData': data,
           'aoColumns': columns
@@ -602,6 +615,53 @@ updateProblemsTable = (containerDiv, params) ->
     dataType: 'json',
     timeout: defaultAjaxCallTimeout
 
+  return
+
+renderAssignedUserStatChart = (chartId, assignedUserStat, choice) ->
+  _line = []
+  _line.push(new Array()) for [1..choice.length]
+
+  _ticks = []
+  for k, v of assignedUserStat
+    _ticks.push(k)
+    for i in [0..choice.length-1]
+      _line[i].push(v[choice[i]])
+
+  _series = ({label: c} for c in choice)
+  _plot_setting =
+    title: "点检问题处理汇总"
+    stackSeries: true
+    captureRightClick: true
+    seriesDefaults:
+      renderer: $.jqplot.BarRenderer
+      rendererOptions:
+        barMargin: 8
+      pointLabels:
+        show: true
+        hideZeros: true
+    series: _series
+    axesDefaults:
+      tickRenderer: $.jqplot.CanvasAxisTickRenderer
+    axes:
+      xaxis:
+        renderer: $.jqplot.CategoryAxisRenderer
+        ticks: _ticks
+        tickOptions:
+          angle: chart_x_tick_angle
+      yaxis:
+        padMin: 0
+        min: 0
+        tickOptions: {formatString: '%d'}
+    legend:
+      show: true,
+      location: 'ne',
+      placement: 'outside'
+
+  $.jqplot(
+    chartId,
+    _line,
+    _plot_setting
+  )
   return
 
 getCanvasOverlayObjects = (_point) ->
@@ -664,7 +724,7 @@ updateChart = (containerDiv, params) ->
     request_params.barcode = true
     _id = _barcode
 
-  $('div#chartDiv').html('')
+  $("#{containerDiv} div#chartDiv").html('')
   $.ajax
     url: getBaseURL() + "/points/#{_id}/history.json?aggregate=30"
     data: request_params
@@ -872,6 +932,7 @@ renderBarChart = (chartId, title, data, group, choice) ->
           angle: chart_x_tick_angle
       yaxis:
         padMin: 0
+        min: 0
         tickOptions: {formatString: '%d'}
     legend:
       show: true,
