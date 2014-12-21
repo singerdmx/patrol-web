@@ -535,7 +535,6 @@ updateProblemsTable = (containerDiv, params) ->
 
   $.extend(request_params, params) if params # merge two objects
 
-  $("#{containerDiv} div#assignedUserStatChartDiv").html('')
   $.ajax
     url: getBaseURL() + '/problem_list.json'
     beforeSend: (xhr) ->
@@ -550,10 +549,12 @@ updateProblemsTable = (containerDiv, params) ->
       return
     data: request_params
     success: (data, textStatus, jqHXR) ->
-      statusEnum = ($(o).text().trim() for o in $("#{containerDiv} select#status").children('option'))
-      statusEnum.shift() # remove “所有”
-      assignedUserStat = {}
       if jqHXR.status is 200
+        $("#{containerDiv} div#assignedUserStatChartDiv").html('')
+        statusEnum = ($(o).text().trim() for o in $("#{containerDiv} select#status").children('option'))
+        statusEnum.shift() # remove “所有”
+        assignedUserStat = {}
+
         for record in data
           record[0] = dateToString(new Date(record[0] * 1000))
           record[7] = dateToString(new Date(record[7] * 1000)) if record[7]
