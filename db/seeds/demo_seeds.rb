@@ -1268,3 +1268,37 @@ repair_report19 = RepairReport.create(
      updated_at: "2014-12-15 06:47:34.954"
     })
 
+session19 = route1.check_sessions.create!(
+    {
+        start_time: "2014-12-15 06:36:09.0",
+        end_time: "2014-12-15 16:42:53.0",
+        user:'user@test.com',
+        session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
+        created_at: "2014-12-15 16:47:34.740",
+        updated_at: "2014-12-15 16:47:34.740"
+    })
+session19.check_results.create(
+    {result: "异常",
+     status: 1,
+     memo: "需要详细检查",
+     check_time: "2014-12-15 06:46:45.0",
+     check_point_id: asset3.check_points.last.id,
+     created_at: "2014-12-15 06:47:34.954",
+     updated_at: "2014-12-15 06:47:34.954"
+    })
+repair_report19 = RepairReport.create(
+    {asset_id: asset3.id,
+     check_point_id: asset3.check_points.last.id,
+     kind: "POINT",
+     code: 2,
+     description: session19.check_results.first.memo,
+     content: "maintain it again",
+     stopped: false,
+     production_line_stopped: false,
+     created_by_id: user1.id,
+     priority: 1,
+     status: 2,
+     check_result_id: session19.check_results.first.id,
+     report_type: "报修",
+    })
+
