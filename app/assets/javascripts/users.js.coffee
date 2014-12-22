@@ -560,6 +560,7 @@ updateProblemsTable = (containerDiv, params) ->
           record[7] = dateToString(new Date(record[7] * 1000)) if record[7]
           status = record[5]
           assignedUser = record[4]
+          assignedUser = '未分配' unless assignedUser
           unless assignedUserStat[assignedUser]
             assignedUserStat[assignedUser] = {}
             for _s in statusEnum
@@ -606,6 +607,16 @@ updateProblemsTable = (containerDiv, params) ->
         $("#{containerDiv} table#problemsTable").dataTable
           'aaData': data,
           'aoColumns': columns
+
+        $("#{containerDiv} table#problemsTable > tbody").on(
+            'click',
+            'tr',
+          ->
+            oTable = $("#{containerDiv} table#problemsTable").dataTable()
+            oTable.$('tr').removeClass('mediumSeaGreenBackground')
+            $(this).addClass('mediumSeaGreenBackground')
+            return
+        )
 
         $("#{containerDiv} > span#problemsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} > span#problemsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))

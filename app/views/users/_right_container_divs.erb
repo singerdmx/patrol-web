@@ -209,6 +209,11 @@
       </button>
     </div>
   </div>
+  <div id="editProblemListDiv">
+    <% if current_user.is_admin? %>
+      <button id="btnEditProblem" class="btn btn-info" type="button">编辑问题</button>
+    <% end %>
+  </div>
   <div id="assignedUserStatChartDiv"></div>
 </div>
 <div class="containerDiv" id="manageUsersDiv">
