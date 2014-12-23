@@ -523,6 +523,17 @@ setupProblemsDiv = (containerDiv) ->
     updateProblemsTable(containerDiv)
     return
 
+  $("#{containerDiv} button#btnEditProblem").click ->
+    oTable = $("#{containerDiv} table#problemsTable").dataTable()
+    _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
+    if _selectedTr.length is 0
+      alert '请选择问题！'
+    else
+      row = oTable.fnGetData(_selectedTr[0])
+      alert "#{row[8]}"
+
+    return
+
   return
 
 updateProblemsTable = (containerDiv, params) ->
@@ -595,7 +606,8 @@ updateProblemsTable = (containerDiv, params) ->
             "sTitle": "备注",
             "sClass": "center"
           },
-          { "sTitle": "计划完成日期" }
+          { "sTitle": "计划完成日期" },
+          { "sTitle": "ID" }
         ]
         if $("#{containerDiv} table#problemsTable > tbody[role='alert'] td.dataTables_empty").length is 0
           # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
@@ -607,6 +619,9 @@ updateProblemsTable = (containerDiv, params) ->
         $("#{containerDiv} table#problemsTable").dataTable
           'aaData': data,
           'aoColumns': columns
+
+        oTable = $("#{containerDiv} table#problemsTable").dataTable()
+        oTable.fnSetColumnVis(8, false)
 
         $("#{containerDiv} table#problemsTable > tbody").on(
             'click',
