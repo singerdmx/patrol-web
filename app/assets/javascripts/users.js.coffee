@@ -41,7 +41,7 @@ setupSidebar = ->
       $(this).addClass('close_box').removeClass('open_box')
     return
   $('div#sidebar > ul > li#return').click ->
-    location.reload(true)
+    location.href = "/"
     return
   $('div#sidebar > ul > li').click (e) ->
     $('#sidebar ul li.active').removeClass('active')
@@ -550,9 +550,16 @@ setupProblemsDiv = (containerDiv) ->
               _suggestions, $("#{containerDiv} span#problem_assigned_to_id"))
 
             $("#{containerDiv} button#btnSubmit").click ->
-              console.log _suggestions
               console.log $("#{containerDiv} input#problem_assigned_to_user").val()
-              console.log $("#{containerDiv} span#problem_assigned_to_id").text()
+              assigned_to_id = $("#{containerDiv} span#problem_assigned_to_id").text()
+              console.log assigned_to_id
+              result = $.grep(
+                _suggestions,
+                (e) ->
+                  e.data.toString() is assigned_to_id
+              )
+              console.log result
+
               return
         error: (jqXHR, textStatus, errorThrown) ->
           showErrorPage(jqXHR.responseText)
