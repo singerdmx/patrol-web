@@ -549,10 +549,12 @@ setupProblemsDiv = (containerDiv) ->
             setupAutocompleteInput('/users.json', 'name', containerDiv, 'input#problem_assigned_to_user',
               _suggestions, $("#{containerDiv} span#problem_assigned_to_id"))
 
+            $("#{containerDiv} button#btnSubmit").unbind('click')
             $("#{containerDiv} button#btnSubmit").click ->
-              return unless validateEditProblemForm(containerDiv, _suggestions)
-
+              submitEditProblemForm(containerDiv, _suggestions)
               return
+
+          return
         error: (jqXHR, textStatus, errorThrown) ->
           showErrorPage(jqXHR.responseText)
           return
@@ -565,6 +567,7 @@ setupProblemsDiv = (containerDiv) ->
     return
 
   $("#{containerDiv} button#btnReturn").click ->
+    updateProblemsTable(containerDiv)
     $("#{containerDiv} div#editProblemsDiv").hide()
     $("#{containerDiv} div#problemListDiv, #{containerDiv} div#editProblemListDiv, #{containerDiv} div#assignedUserStatChartDiv").show()
 
@@ -572,12 +575,14 @@ setupProblemsDiv = (containerDiv) ->
 
   return
 
-validateEditProblemForm = (containerDiv, _suggestions) ->
-  assignedUser = $("#{containerDiv} input#problem_assigned_to_user").val()
+submitEditProblemForm = (containerDiv, _suggestions) ->
+  assignedUser = $("#{containerDiv} input#problem_assigned_to_user").val().trim()
   assigned_to_id = $("#{containerDiv} span#problem_assigned_to_id").text()
   valid = true
-  if assigned_to_id is ''
-    valid = false unless assignedUser is ''
+
+  if assignedUser is ''
+    $("#{containerDiv} span#problem_assigned_to_id").text('')
+    assigned_to_id = ''
   else
     _u = $.grep(
       _suggestions,
@@ -585,11 +590,11 @@ validateEditProblemForm = (containerDiv, _suggestions) ->
         e.data.toString() is assigned_to_id
     )
 
-    valid = false unless _u.length is 0 or _u[0].value is assignedUser
+    valid = false unless _u.length > 0 and _u[0].value is assignedUser
 
   unless valid
     alert '责任人填写错误！'
-    return false
+    return
 
   planDate = null
   unless $("#{containerDiv} div#problem_plan_date > input").val().trim() is ''
@@ -601,10 +606,31 @@ validateEditProblemForm = (containerDiv, _suggestions) ->
 
   unless valid
     alert '计划完成日期填写错误！'
-    return false
+    return
 
-  console.log planDate
-  true
+  if planDate is null and assigned_to_id is ''
+    alert '没有更新提交！'
+    return
+
+  payload = {
+    plan_date: planDate,
+    assigned_to_id: assigned_to_id
+  }
+  $.ajax
+    url: getBaseURL() + "/problem_list/#{$("#{containerDiv} span#problemId").text()}.json"
+    type: 'PUT',
+    contentType: 'application/json',
+    data: JSON.stringify(payload),
+    dataType: 'json',
+    success: (data, textStatus, jqHXR) ->
+      alert '更新成功'
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      alert jqXHR.responseJSON.message
+      return
+    timeout: defaultAjaxCallTimeout
+
+  return
 
 updateProblemsTable = (containerDiv, params) ->
   start_time = getDatetimePickerEpoch("#{containerDiv} div#startTime")

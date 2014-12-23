@@ -30,4 +30,13 @@ class ProblemListController < ApplicationController
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
+
+  # PUT /problem_list/1.json
+  def update
+    puts params[:plan_date] # nil if not specified
+    puts params[:assigned_to_id] # "" if not specified
+    render json: {}.to_json
+  rescue Exception => e
+    render json: {message: e.to_s}.to_json, status: :internal_server_error
+  end
 end
