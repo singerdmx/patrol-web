@@ -1264,6 +1264,7 @@ repair_report19 = RepairReport.create(
      status: 1,
      check_result_id: session19.check_results.first.id,
      report_type: "报修",
+     plan_date: "2014-12-16",
      created_at: "2014-12-15 06:47:34.954",
      updated_at: "2014-12-15 06:47:34.954"
     })
