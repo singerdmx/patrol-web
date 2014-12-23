@@ -542,7 +542,18 @@ setupProblemsDiv = (containerDiv) ->
             $("#{containerDiv} span#problem_description").text(data['description'])
             $("#{containerDiv} span#problem_status").text(data['status'])
             $("#{containerDiv} span#problem_content").text(data['content'])
-            console.log data
+            $("#{containerDiv} input#problem_assigned_to_user").val(data['assigned_to_user'])
+            $("#{containerDiv} span#problem_assigned_to_id").text(data['assigned_to_id'])
+
+            _suggestions = []
+            setupAutocompleteInput('/users.json', 'name', containerDiv, 'input#problem_assigned_to_user',
+              _suggestions, $("#{containerDiv} span#problem_assigned_to_id"))
+
+            $("#{containerDiv} button#btnSubmit").click ->
+              console.log _suggestions
+              console.log $("#{containerDiv} input#problem_assigned_to_user").val()
+              console.log $("#{containerDiv} span#problem_assigned_to_id").text()
+              return
         error: (jqXHR, textStatus, errorThrown) ->
           showErrorPage(jqXHR.responseText)
           return

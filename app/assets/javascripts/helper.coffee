@@ -97,3 +97,28 @@ window.isInputValueEmpty = (input_element) ->
 window.removeParent = ->
   $(this).parent().remove()
   return
+
+window.setupAutocompleteInput = (relativeUrl, valueKey, containerDiv, inputElem, suggestions, idElement) ->
+  $.ajax
+    url: getBaseURL() + relativeUrl
+    success: (data, textStatus, jqHXR) ->
+      if jqHXR.status is 200
+        for datum in data
+          suggestions.push({ value: datum[valueKey], data: datum['id']})
+
+        suggestions.sort (a,b) ->
+          return if a.value >= b.value then 1 else -1
+
+        $("#{containerDiv} #{inputElem}").autocomplete(
+          lookup: suggestions,
+          onSelect: (suggestion) ->
+            idElement.text(suggestion.data)
+            return
+        )
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
+
+  return
