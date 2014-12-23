@@ -25,6 +25,7 @@ class ProblemListController < ApplicationController
   # GET /problem_list/1.json
   def show
     report = db_result_to_hash(RepairReport.find(params[:id]))
+    report['status'] = get_problem_status_string(report['status'])
     render json: report.to_json
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :internal_server_error

@@ -167,12 +167,49 @@
   <div id="chartDiv"></div>
 </div>
 <div class="containerDiv" id="problemsDiv">
-  <div>
-    <div id="editProblemsDiv" style="display: none" class="submissionForm">
+  <div id="editProblemsDiv" style="display: none" class="submissionForm">
+    <h2 class="form-signin-heading">
+      <span>点检问题</span>
+      <span class="hiddenSpan" id="problemId"></span>
+    </h2>
+    <div class="tableRowForm">
+      <span>巡检日期</span>
+      <span id="problem_created_at"></span>
     </div>
+    <div class="tableRowForm">
+      <span>点检人员</span>
+      <span id="problem_created_by_user"></span>
+    </div>
+    <div class="tableRowForm">
+      <span>名称</span>
+      <span id="problem_name"></span>
+    </div>
+    <div class="tableRowForm">
+      <span>问题描述</span>
+      <span id="problem_description"></span>
+    </div>
+    <div class="tableRowForm">
+      <span>状态</span>
+      <span id="problem_status"></span>
+    </div>
+    <div class="tableRowForm">
+      <span>备注</span>
+      <span id="problem_content"></span>
+    </div>
+    <div class="tableRowForm">
+      <span>责任人</span>
+      <input id="problem_assigned_to_user" class="form-control"/>
+    </div>
+
+    <div style="margin-top: 10px">
+      <button class="btn btn-warning" type="button" id="btnReturn"/>返回</button>
+      <button class="btn btn-primary" type="button" id="btnSubmit"/>提交</button>
+    </div>
+  </div>
+  <div id="problemListDiv">
     <span class="hiddenSpan" id="problemsIfNoneMatch"></span>
     <span class="hiddenSpan" id="problemsIfModifiedSince"></span>
-    <span class="hiddenSpan" id="problemsQueryParamsUpdated">false</span>
+    <span class="hiddenSpan" id="recordsCalendarUpdated">false</span>
     <div style="width: 30%" class="calendarWidgetDiv">
       <div>起始时间</div>
       <div id="startTime" class="input-append">

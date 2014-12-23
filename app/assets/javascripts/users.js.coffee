@@ -515,7 +515,7 @@ setupProblemsDiv = (containerDiv) ->
 
   # 状态选择改变
   $("#{containerDiv} select#status").change ->
-    $("#{containerDiv} > span#problemsQueryParamsUpdated").text('true')
+    $("#{containerDiv} > span#recordsCalendarUpdated").text('true')
     return
 
   # 更新button
@@ -530,7 +530,33 @@ setupProblemsDiv = (containerDiv) ->
       alert '请选择问题！'
     else
       row = oTable.fnGetData(_selectedTr[0])
-      alert "#{row[8]}"
+      id = row[8]
+      $.ajax
+        url: getBaseURL() + "/problem_list/#{id}.json"
+        success: (data, textStatus, jqHXR) ->
+          if jqHXR.status is 200
+            $("#{containerDiv} span#problemId").text(id)
+            $("#{containerDiv} span#problem_created_at").text(dateToString(new Date(data['created_at'] * 1000)))
+            $("#{containerDiv} span#problem_created_by_user").text(data['created_by_user'])
+            $("#{containerDiv} span#problem_name").text(data['name'])
+            $("#{containerDiv} span#problem_description").text(data['description'])
+            $("#{containerDiv} span#problem_status").text(data['status'])
+            $("#{containerDiv} span#problem_content").text(data['content'])
+            console.log data
+        error: (jqXHR, textStatus, errorThrown) ->
+          showErrorPage(jqXHR.responseText)
+          return
+        dataType: 'json',
+        timeout: defaultAjaxCallTimeout
+
+      $("#{containerDiv} div#editProblemsDiv").show()
+      $("#{containerDiv} div#problemListDiv, #{containerDiv} div#editProblemListDiv, #{containerDiv} div#assignedUserStatChartDiv").hide()
+
+    return
+
+  $("#{containerDiv} button#btnReturn").click ->
+    $("#{containerDiv} div#editProblemsDiv").hide()
+    $("#{containerDiv} div#problemListDiv, #{containerDiv} div#editProblemListDiv, #{containerDiv} div#assignedUserStatChartDiv").show()
 
     return
 
@@ -549,11 +575,11 @@ updateProblemsTable = (containerDiv, params) ->
   $.ajax
     url: getBaseURL() + '/problem_list.json'
     beforeSend: (xhr) ->
-      problemsQueryParamsUpdated = $("#{containerDiv} > span#problemsQueryParamsUpdated").text() is 'true'
+      recordsCalendarUpdated = $("#{containerDiv} > span#recordsCalendarUpdated").text() is 'true'
 
-      if problemsQueryParamsUpdated
+      if recordsCalendarUpdated
         # Force update since we changed calendar
-        $("#{containerDiv} > span#problemsQueryParamsUpdated").text('false')
+        $("#{containerDiv} > span#recordsCalendarUpdated").text('false')
         return
 
       setXhrRequestHeader(xhr, containerDiv, 'problems')
@@ -615,7 +641,7 @@ updateProblemsTable = (containerDiv, params) ->
           oTable.fnDestroy() unless oTable?
 
         $("#{containerDiv} div#problemsTable_wrapper").remove()
-        $("#{containerDiv} > div:first-child").append('<table id="problemsTable"></table>')
+        $("#{containerDiv} > div#problemListDiv").append('<table id="problemsTable"></table>')
         $("#{containerDiv} table#problemsTable").dataTable
           'aaData': data,
           'aoColumns': columns
