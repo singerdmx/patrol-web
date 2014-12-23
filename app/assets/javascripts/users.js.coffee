@@ -541,21 +541,16 @@ setupProblemsDiv = (containerDiv) ->
             $("#{containerDiv} span#problem_content").text(data['content'])
             $("#{containerDiv} input#problem_assigned_to_user").val(data['assigned_to_user'])
             $("#{containerDiv} span#problem_assigned_to_id").text(data['assigned_to_id'])
+            $("#{containerDiv} div#problem_plan_date").datetimepicker(getDatetimePickerSettingsWithStartDate())
+            planDatePicker = $("#{containerDiv} div#problem_plan_date").data('datetimepicker')
+            planDatePicker.setLocalDate(if data['plan_date'] then new Date(data['plan_date'] * 1000) else 0)
 
             _suggestions = []
             setupAutocompleteInput('/users.json', 'name', containerDiv, 'input#problem_assigned_to_user',
               _suggestions, $("#{containerDiv} span#problem_assigned_to_id"))
 
             $("#{containerDiv} button#btnSubmit").click ->
-              console.log $("#{containerDiv} input#problem_assigned_to_user").val()
-              assigned_to_id = $("#{containerDiv} span#problem_assigned_to_id").text()
-              console.log assigned_to_id
-              result = $.grep(
-                _suggestions,
-                (e) ->
-                  e.data.toString() is assigned_to_id
-              )
-              console.log result
+              return unless validateEditProblemForm(containerDiv, _suggestions)
 
               return
         error: (jqXHR, textStatus, errorThrown) ->
@@ -576,6 +571,40 @@ setupProblemsDiv = (containerDiv) ->
     return
 
   return
+
+validateEditProblemForm = (containerDiv, _suggestions) ->
+  assignedUser = $("#{containerDiv} input#problem_assigned_to_user").val()
+  assigned_to_id = $("#{containerDiv} span#problem_assigned_to_id").text()
+  valid = true
+  if assigned_to_id is ''
+    valid = false unless assignedUser is ''
+  else
+    _u = $.grep(
+      _suggestions,
+      (e) ->
+        e.data.toString() is assigned_to_id
+    )
+
+    valid = false unless _u.length is 0 or _u[0].value is assignedUser
+
+  unless valid
+    alert '责任人填写错误！'
+    return false
+
+  planDate = null
+  unless $("#{containerDiv} div#problem_plan_date > input").val().trim() is ''
+    try
+      planDate = getDatetimePickerEpoch($("#{containerDiv} div#problem_plan_date"))
+    catch err
+      console.error(err)
+      valid = false
+
+  unless valid
+    alert '计划完成日期填写错误！'
+    return false
+
+  console.log planDate
+  true
 
 updateProblemsTable = (containerDiv, params) ->
   start_time = getDatetimePickerEpoch("#{containerDiv} div#startTime")

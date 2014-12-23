@@ -347,7 +347,7 @@ div.tableRowForm {
     text-align: left;
   }
 
-  > span:nth-child(2), input {
+  > span:nth-child(2), > input, > div {
     float: left;
     width: 75%;
     text-align: left;

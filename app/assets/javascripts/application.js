@@ -218,6 +218,15 @@ function getDatetimePickerSettings() {
     }
 }
 
+function getDatetimePickerSettingsWithStartDate() {
+    return {
+        pickTime: false,
+        language: 'zh',
+        pick12HourFormat: true,
+        startDate: getToday()
+    }
+}
+
 // Support for HTML5 Placeholder Text in IE
 $(function() {
     if(!$.support.placeholder) {
