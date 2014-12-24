@@ -664,7 +664,7 @@ updateProblemsTable = (containerDiv, params) ->
 
         for record in data
           record[0] = dateToString(new Date(record[0] * 1000))
-          record[7] = dateToString(new Date(record[7] * 1000)) if record[7]
+          record[7] = dateToShortString(new Date(record[7] * 1000)) if record[7]
           status = record[5]
           assignedUser = record[4]
           assignedUser = '未分配' unless assignedUser

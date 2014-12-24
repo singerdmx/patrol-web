@@ -33,6 +33,7 @@ class ProblemListController < ApplicationController
 
   # PUT /problem_list/1.json
   def update
+    puts params[:id]
     puts params[:plan_date] # nil if not specified
     puts params[:assigned_to_id] # "" if not specified
     render json: {}.to_json

@@ -14,6 +14,7 @@ module ProblemListHelper
 
     entry['created_at'] = entry['created_at'].to_i
     entry['updated_at'] = entry['updated_at'].to_i
+    entry['plan_date'] = entry['plan_date'].to_time.to_i if entry['plan_date']
 
     asset = Asset.find_by(id: entry['asset_id'])
     ticket_name = asset.name if asset
