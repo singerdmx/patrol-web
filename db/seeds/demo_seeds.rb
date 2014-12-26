@@ -110,6 +110,8 @@ asset1.check_points.create([
                   state:        "运转",
                   category:         50,
                   choice:       '["", "", "", "70"]',
+                  measure_unit: "C",
+                  point_code:   "EE-11310-G01",
                   frequency:   24*3
                 },
                 {
@@ -117,6 +119,8 @@ asset1.check_points.create([
                   description:  "振动测量",
                   state:        "运转",
                   category:         50,
+                  measure_unit: "mm/s",
+                  point_code:   "EE-11310-G02",
                   choice:       '["", "", "", "4"]',
                 } ])
 
@@ -136,6 +140,7 @@ asset2.check_points.create([
                  state:        "停止",
                  category:         41,
                  choice:       check_point_3_choice,
+                 point_code:   "EE-11310-G03",
                } ])
 
 asset3 = Asset.create({
@@ -154,12 +159,16 @@ asset3.check_points.create([
                  default_value: 20,
                  barcode:      "999972318875",
                  choice:       '["20", "30", "60", "70"]',
+                 measure_unit: "C",
+                 point_code:   "EE-11310-G04",
                },
                { name:         "输入端轴承",
                  description:  "振动测量",
                  state:        "运转",
                  category:         50,
                  choice:       '["", "", "", "4"]',
+                 measure_unit: "mm/s",
+                 point_code:   "EE-11310-G05",
                },
                {
                  barcode:      "999972318873",
@@ -169,6 +178,8 @@ asset3.check_points.create([
                  category:         51,
                  default_value: 20,
                  choice:       '["", "", "", "70"]',
+                 measure_unit: "C",
+                 point_code:   "EE-11310-H01",
                },
                {
                  barcode:      "999972318812",
@@ -177,6 +188,7 @@ asset3.check_points.create([
                  state:        "运转",
                  category:         41,
                  choice:       check_point_7_choice,
+                 point_code:   "EE-11310-J00",
                } ])
 
 asset10 = Asset.create({
