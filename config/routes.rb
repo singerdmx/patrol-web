@@ -18,6 +18,8 @@ Blog::Application.routes.draw do
   resources :repair_reports
   resources :problem_list
 
+  resources :contacts
+
   devise_for :users, controllers: { sessions: "users/sessions" }
 
   root to: 'static_pages#home'
