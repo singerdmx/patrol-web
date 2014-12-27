@@ -79,12 +79,32 @@ class CheckResultsController < ApplicationController
                                                     end_time: end_time_,
                                                     session: params[:session]})
             end
-            CheckResult.create!({check_session_id: route_sessions[route_id].id,
-                                 check_point_id: point['id'],
-                                 check_time: check_time_,
-                                 result: point['result'],
-                                 status: point['status'],
-                                 memo: point['memo']})
+            result_record = CheckResult.create!({check_session_id: route_sessions[route_id].id,
+                                                 check_point_id: point['id'],
+                                                 check_time: check_time_,
+                                                 result: point['result'],
+                                                 status: point['status'],
+                                                 memo: point['memo']})
+
+            if point['status'] == 1
+              check_point = CheckPoint.find(point['id'])
+              unless check_point.nil?
+                RepairReport.create(
+                  {asset_id: check_point.asset_id,
+                   check_point_id: point['id'],
+                   kind: "POINT",
+                   code: 2,
+                   description: result_record.memo,
+                   content: "",
+                   created_by_id: current_user.id,
+                   priority: 1,
+                   status: 2,
+                   check_result_id: result_record.id,
+                   report_type: "报修",
+                   created_at: check_time_,
+                  })
+              end
+            end
 
           }
         }
