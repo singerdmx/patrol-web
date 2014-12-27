@@ -537,8 +537,8 @@ setupProblemsDiv = (containerDiv) ->
             $("#{containerDiv} span#problem_created_by_user").text(data['created_by_user'])
             $("#{containerDiv} span#problem_name").text(data['name'])
             $("#{containerDiv} span#problem_description").text(data['description'])
-            $("#{containerDiv} span#problem_status").text(data['status'])
-            $("#{containerDiv} span#problem_content").text(data['content'])
+            changeSelectByValue('problem_status', data['status'])
+            $("#{containerDiv} textarea#problem_content").text(data['content'])
             $("#{containerDiv} input#problem_assigned_to_user").val(data['assigned_to_user'])
             $("#{containerDiv} span#problem_assigned_to_id").text(data['assigned_to_id'])
             $("#{containerDiv} div#problem_plan_date").datetimepicker(getDatetimePickerSettingsWithStartDate())
@@ -608,13 +608,11 @@ submitEditProblemForm = (containerDiv, _suggestions) ->
     alert '计划完成日期填写错误！'
     return
 
-  if planDate is null and assigned_to_id is ''
-    alert '没有更新提交！'
-    return
-
   payload = {
     plan_date: planDate,
-    assigned_to_id: assigned_to_id
+    assigned_to_id: assigned_to_id,
+    status: $("#{containerDiv} select#problem_status").val(),
+    content: $("#{containerDiv} textarea#problem_content").text()
   }
   $.ajax
     url: getBaseURL() + "/problem_list/#{$("#{containerDiv} span#problemId").text()}.json"

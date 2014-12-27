@@ -25,7 +25,6 @@ class ProblemListController < ApplicationController
   # GET /problem_list/1.json
   def show
     report = db_result_to_hash(RepairReport.find(params[:id]))
-    report['status'] = get_problem_status_string(report['status'])
     render json: report.to_json
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :internal_server_error
@@ -33,9 +32,16 @@ class ProblemListController < ApplicationController
 
   # PUT /problem_list/1.json
   def update
+    unless current_user.is_admin?
+      render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      return
+    end
+
     puts params[:id]
     puts params[:plan_date] # nil if not specified
     puts params[:assigned_to_id] # "" if not specified
+    puts params[:status]
+    puts params[:content]
     render json: {}.to_json
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :internal_server_error

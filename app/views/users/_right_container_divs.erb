@@ -190,11 +190,19 @@
     </div>
     <div class="tableRowForm">
       <span>状态</span>
-      <span id="problem_status"></span>
+      <div>
+        <select class="form-control" id="problem_status">
+          <% [1, 2, 3].each do |status| %>
+            <option value="<%= status %>">
+              <%= get_problem_status_string(status) %>
+            </option>
+          <% end %>
+        </select>
+      </div>
     </div>
     <div class="tableRowForm">
       <span>备注</span>
-      <span id="problem_content"></span>
+      <textarea id="problem_content"></textarea>
     </div>
     <div class="tableRowForm">
       <span>责任人</span>
