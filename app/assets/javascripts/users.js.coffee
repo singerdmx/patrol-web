@@ -1313,14 +1313,19 @@ setupCreatePointForm = (containerDiv) ->
       data: JSON.stringify(pointInfo),
       dataType: 'json',
       success: (data, textStatus, jqHXR) ->
-        alert '检点创建成功'
         clearCreatePointForm()
-        if $('div#managementData span#addPointToAssetSpan').text() is 'true'
-          $('div#managementData span#addPointToAssetSpan').text('false')
-          $('div#createAsset').show()
+        _switchPointTo = $('div#managementData span#switchPointTo').text()
+        unless _switchPointTo is ''
+          $('div#managementData span#switchPointTo').text('')
+          $("#{_switchPointTo}").show()
           $('div#createPoint').hide()
-          $('div#addedPointDiv').append("<span class='lavenderBackground'>
-                                    <span class='hiddenSpan'>#{data.id}</span>#{data.name}</span>")
+          switch _switchPointTo
+            when 'div#createAsset'
+              $('div#addedPointDiv').append("<span class='lavenderBackground'>
+                                        <span class='hiddenSpan'>#{data.id}</span>#{data.name}</span>")
+              alert '检点创建成功'
+            when 'div#managementData div#pointsTableDiv, div#managementData div#edit_delete_point_buttons'
+              alert '检点编辑成功'
         return
       error: (jqXHR, textStatus, errorThrown) ->
         alert jqXHR.responseJSON.message
@@ -1335,10 +1340,19 @@ setupManageDataDiv = ->
     $("div#managementData > div##{divId}").show()
     switch divId
       when 'createPoint'
-        $('div#managementData span#addPointToAssetSpan').text('false')
+        $('div#managementData span#switchPointTo').text('')
+        $('div#createPoint > h2:first').text('创建检点')
+        $('div#managementData div#categorySelection').show()
         setupCreatePointForm('div#createPoint')
-      when 'deletePoint'
-        updatePointsTable('div#managementData div#deletePoint')
+      when 'createAsset'
+        $('div#createPoint > h2:first').text('创建检点')
+        $('div#managementData div#categorySelection').show()
+      when 'editDeletePoint'
+        $('div#managementData div#pointsTableDiv, div#managementData div#edit_delete_point_buttons').show()
+        $('div#createPoint').hide()
+        $('div#createPoint > h2:first').text('编辑检点')
+        $('div#managementData div#categorySelection').hide()
+        updatePointsTable('div#managementData div#editDeletePoint')
       when 'deleteAsset'
         updateAssetsTable('div#managementData div#deleteAsset')
       when 'attachPointToAsset'
@@ -1358,7 +1372,7 @@ setupManageDataDiv = ->
       return
 
   setupCreatePointDiv()
-  setupDeletePointDiv('div#managementData div#deletePoint')
+  setupEditDeletePointDiv('div#managementData div#editDeletePoint')
   setupCreateAssetDiv()
   setupDeleteAssetDiv('div#managementData div#deleteAsset')
   setupCreateRouteDiv()
@@ -1582,7 +1596,42 @@ updateAssetsTable = (containerDiv) ->
     timeout: defaultAjaxCallTimeout
   return
 
-setupDeletePointDiv = (containerDiv) ->
+setupEditDeletePointDiv = (containerDiv) ->
+  $("#{containerDiv} button#btnEditPoint").click ->
+    oTable = $("#{containerDiv} table#pointsTable").dataTable()
+    _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
+    if _selectedTr.length is 0
+      alert '请选择检点！'
+    else
+      row = oTable.fnGetData(_selectedTr[0])
+
+      _switchPointTo = "#{containerDiv} div#pointsTableDiv, #{containerDiv} div#edit_delete_point_buttons"
+      $('div#managementData span#switchPointTo').text(_switchPointTo)
+      $(_switchPointTo).hide()
+      $('div#createPoint').show()
+      setupCreatePointForm('div#createPoint')
+      $.ajax
+        url: getBaseURL() + "/points/#{row[0]}.json?r=#{getRandomArbitrary(0, 10240)}" # disable browser cache for the same GET
+        success: (data, textStatus, jqHXR) ->
+          if jqHXR.status is 200
+            $('div#createPoint span#pointId').text(data.id)
+            $('div#managementData input#pointName').val(data.name)
+            $('div#managementData input#pointDescription').val(data.description)
+            $('div#managementData input#pointBarcode').val(data.barcode)
+            if data.default_assigned_id
+              $('div#managementData input#point_assigned_to').val(data.default_assigned_user)
+              $('div#managementData span#point_assigned_to_id').text(data.default_assigned_id)
+
+          return
+        error: (jqXHR, textStatus, errorThrown) ->
+          showErrorPage(jqXHR.responseText)
+          return
+        ifModified:true,
+        dataType: 'json',
+        timeout: defaultAjaxCallTimeout
+
+    return
+
   $("#{containerDiv} button#btnDeletePoint").click ->
     oTable = $("#{containerDiv} table#pointsTable").dataTable()
     _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
@@ -1593,6 +1642,7 @@ setupDeletePointDiv = (containerDiv) ->
       deletePoint(row[0], containerDiv) if confirm("您确定要删除检点 '#{row[1]}' 条形码 '#{row[2]}' 吗？")
 
     return
+
   return
 
 deletePoint = (pointId, containerDiv) ->
@@ -1726,7 +1776,8 @@ clearCreateRouteForm = ->
 
 setupCreateAssetDiv = ->
   $('div#createAsset button#btnAddPointToAsset').click ->
-    $('div#managementData span#addPointToAssetSpan').text('true')
+    $('div#managementData span#switchPointTo').text('div#createAsset')
+    clearCreatePointForm()
     $('div#createAsset').hide()
     $('div#createPoint').show()
     setupCreatePointForm('div#createPoint')
@@ -1801,10 +1852,14 @@ setupCreatePointDiv = ->
 
   $('div#createPoint button#btnCancelCreatePoint').click ->
     clearCreatePointForm()
-    if $('div#managementData span#addPointToAssetSpan').text() is 'true'
-      $('div#managementData span#addPointToAssetSpan').text('false')
-      $('div#createAsset').show()
+    _switchPointTo = $('div#managementData span#switchPointTo').text()
+    unless _switchPointTo is ''
+      $('div#managementData span#switchPointTo').text('')
+      $("#{_switchPointTo}").show()
       $('div#createPoint').hide()
+      switch _switchPointTo
+        when 'div#managementData div#pointsTableDiv, div#managementData div#edit_delete_point_buttons'
+          updatePointsTable('div#managementData div#editDeletePoint')
       return
 
     return
@@ -1886,6 +1941,8 @@ clearCreatePointForm = ->
   $('div#pointChoiceDiv > div:first').append("<span class='lavenderBackground'>
             <i class='icon-remove'></i>非正常</span>")
   $('div#pointChoiceDiv > div:first > span > i').click(removeParent)
+  $('div#assignedToSelection input#point_assigned_to').val('')
+  $('div#assignedToSelection span#point_assigned_to_id').text('')
   return
 
 Route = (id, name) ->

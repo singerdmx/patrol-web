@@ -371,7 +371,7 @@
           <li role="presentation"><a role="menuitem" data-div="createPoint">创建</a></li>
           <li role="presentation"><a role="menuitem" data-div="attachPointToAsset">连接到设备</a></li>
           <li role="presentation"><a role="menuitem" data-div="attachPointToRoute">连接到路线</a></li>
-          <li role="presentation"><a role="menuitem" data-div="deletePoint">删除</a></li>
+          <li role="presentation"><a role="menuitem" data-div="editDeletePoint">编辑/删除</a></li>
         </ul>
       </div>
     </div>
@@ -396,7 +396,7 @@
     </div>
   </div>
   <div id="managementData">
-    <span class="hiddenSpan" id="addPointToAssetSpan">false</span>
+    <span class="hiddenSpan" id="switchPointTo"></span>
     <div class="alert" style="display: none" id="uploadInfo">
     </div>
     <div id="createRoute" style="display: none" class="submissionForm">
@@ -448,6 +448,7 @@
     </div>
     <div id="createPoint" style="display: none" class="submissionForm">
       <h2 class="form-signin-heading">创建检点</h2>
+      <span class="hiddenSpan" id="pointId"></span>
       <input type="text" value="" required="required" placeholder="名称（必填）" id="pointName" class="form-control"/>
       <input type="text" value="" placeholder="描述" id="pointDescription" class="form-control"/>
       <input type="text" value="" placeholder="条形码" id="pointBarcode" class="form-control"/>
@@ -538,12 +539,13 @@
         <span class="hiddenSpan" id="pointsIfModifiedSince"></span>
       </div>
     </div>
-    <div id="deletePoint" style="display: none">
+    <div id="editDeletePoint" style="display: none">
       <div id="pointsTableDiv">
         <span class="hiddenSpan" id="pointsIfNoneMatch"></span>
         <span class="hiddenSpan" id="pointsIfModifiedSince"></span>
       </div>
-      <div id="add_delete_point_buttons">
+      <div id="edit_delete_point_buttons">
+        <button id="btnEditPoint" class="btn btn-info" type="button">编辑检点</button>
         <button id="btnDeletePoint" class="btn btn-danger" type="button">删除检点</button>
       </div>
     </div>

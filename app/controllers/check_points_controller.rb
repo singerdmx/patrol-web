@@ -24,14 +24,18 @@ class CheckPointsController < ApplicationController
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
-  # GET /check_points/1
   # GET /check_points/1.json
   def show
-    begin
-      render template: 'check_points/show',  status: :ok
-    rescue Exception => e
-      render json: {:message=> e.to_s}.to_json, status: :not_found
+    p = to_hash(@check_point)
+    p['default_assigned_user'] = User.find(p['default_assigned_id']).name if p['default_assigned_id']
+    p['asset'] = to_hash(Asset.find(p['asset_id']))
+
+    p['routes'] = @check_point.check_routes.map do |r|
+      to_hash(r)
     end
+    render json: p.to_json
+  rescue Exception => e
+    render json: {message: e.to_s}.to_json, status: :not_found
   end
 
   def new
