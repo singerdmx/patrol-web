@@ -1299,16 +1299,30 @@ setupCreatePointForm = (containerDiv) ->
 
   $('div#createPoint button#btnCreatePoint').unbind('click')
   $('div#createPoint button#btnCreatePoint').click ->
+    requestType = null
+    _relativeUrl = null
+    switch $('div#createPoint > h2:first').text()
+      when '创建检点'
+        requestType = 'POST'
+        _relativeUrl = '/points.json'
+      when '编辑检点'
+        requestType = 'PUT'
+        _relativeUrl = "/points/#{$('div#createPoint span#pointId').text()}.json"
+      else
+        alert "Wrong createPoint title #{$('div#createPoint > h2:first').text()}"
+        return
+
     pointInfo = {}
     return unless validateCreatePointForm('div#createPoint', pointInfo, _suggestions)
-    pointInfo['choice'] = JSON.stringify(pointInfo['choice'])
+    pointInfo['choice'] = JSON.stringify(pointInfo['choice']) if requestType is 'POST'
     $pointDescription = $('div#createPoint input#pointDescription')
     pointInfo['description'] = $pointDescription.val() unless isInputValueEmpty($pointDescription)
     $pointBarcode = $('div#createPoint input#pointBarcode')
     pointInfo['barcode'] = $pointBarcode.val() unless isInputValueEmpty($pointBarcode)
+
     $.ajax
-      url: getBaseURL() + '/points.json'
-      type: 'POST',
+      url: getBaseURL() + _relativeUrl
+      type: requestType,
       contentType: 'application/json',
       data: JSON.stringify(pointInfo),
       dataType: 'json',
@@ -1319,13 +1333,14 @@ setupCreatePointForm = (containerDiv) ->
           $('div#managementData span#switchPointTo').text('')
           $("#{_switchPointTo}").show()
           $('div#createPoint').hide()
-          switch _switchPointTo
-            when 'div#createAsset'
+          switch requestType
+            when 'POST'
               $('div#addedPointDiv').append("<span class='lavenderBackground'>
                                         <span class='hiddenSpan'>#{data.id}</span>#{data.name}</span>")
               alert '检点创建成功'
-            when 'div#managementData div#pointsTableDiv, div#managementData div#edit_delete_point_buttons'
+            when 'PUT'
               alert '检点编辑成功'
+              updatePointsTable('div#managementData div#editDeletePoint')
         return
       error: (jqXHR, textStatus, errorThrown) ->
         alert jqXHR.responseJSON.message
@@ -1341,15 +1356,18 @@ setupManageDataDiv = ->
     switch divId
       when 'createPoint'
         $('div#managementData span#switchPointTo').text('')
+        $('div#createPoint button#btnCancelCreatePoint').text('重置')
         $('div#createPoint > h2:first').text('创建检点')
         $('div#managementData div#categorySelection').show()
         setupCreatePointForm('div#createPoint')
       when 'createAsset'
+        $('div#createPoint button#btnCancelCreatePoint').text('重置')
         $('div#createPoint > h2:first').text('创建检点')
         $('div#managementData div#categorySelection').show()
       when 'editDeletePoint'
         $('div#managementData div#pointsTableDiv, div#managementData div#edit_delete_point_buttons').show()
         $('div#createPoint').hide()
+        $('div#createPoint button#btnCancelCreatePoint').text('返回')
         $('div#createPoint > h2:first').text('编辑检点')
         $('div#managementData div#categorySelection').hide()
         updatePointsTable('div#managementData div#editDeletePoint')
@@ -1857,8 +1875,8 @@ setupCreatePointDiv = ->
       $('div#managementData span#switchPointTo').text('')
       $("#{_switchPointTo}").show()
       $('div#createPoint').hide()
-      switch _switchPointTo
-        when 'div#managementData div#pointsTableDiv, div#managementData div#edit_delete_point_buttons'
+      switch $('div#createPoint > h2:first').text()
+        when '编辑检点'
           updatePointsTable('div#managementData div#editDeletePoint')
       return
 

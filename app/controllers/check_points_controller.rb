@@ -70,19 +70,20 @@ class CheckPointsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /check_points/1
   # PATCH/PUT /check_points/1.json
   def update
-    respond_to do |format|
-      if @check_point.update(check_point_params)
-        format.html { redirect_to @check_point, notice: 'Check Point was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @check_point.errors, status: :internal_server_error }
-      end
+    unless current_user.is_admin?
+      render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      return
     end
 
+    if @check_point.update(check_point_params.except(:category, :choice))
+      render json: {id: @check_point.id}.to_json
+    else
+      fail 'Update failed'
+    end
+  rescue Exception => e
+    render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
   # DELETE /check_points/1
