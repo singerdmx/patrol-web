@@ -112,6 +112,7 @@ asset1.check_points.create([
                   choice:       '["", "", "", "70"]',
                   measure_unit: "C",
                   point_code:   "EE-11310-G01",
+                  default_assigned_id: user5.id,
                   frequency:   24*3
                 },
                 {
@@ -122,6 +123,7 @@ asset1.check_points.create([
                   measure_unit: "mm/s",
                   point_code:   "EE-11310-G02",
                   choice:       '["", "", "", "4"]',
+                  default_assigned_id: user5.id,
                 } ])
 
 asset2 = Asset.create({
@@ -161,6 +163,7 @@ asset3.check_points.create([
                  choice:       '["20", "30", "60", "70"]',
                  measure_unit: "C",
                  point_code:   "EE-11310-G04",
+                 default_assigned_id: user5.id,
                },
                { name:         "输入端轴承",
                  description:  "振动测量",
@@ -169,6 +172,7 @@ asset3.check_points.create([
                  choice:       '["", "", "", "4"]',
                  measure_unit: "mm/s",
                  point_code:   "EE-11310-G05",
+                 default_assigned_id: user5.id,
                },
                {
                  barcode:      "999972318873",
@@ -180,6 +184,7 @@ asset3.check_points.create([
                  choice:       '["", "", "", "70"]',
                  measure_unit: "C",
                  point_code:   "EE-11310-H01",
+                 default_assigned_id: user5.id,
                },
                {
                  barcode:      "999972318812",
@@ -189,6 +194,7 @@ asset3.check_points.create([
                  category:         41,
                  choice:       check_point_7_choice,
                  point_code:   "EE-11310-J00",
+                 default_assigned_id: user5.id,
                } ])
 
 asset10 = Asset.create({
