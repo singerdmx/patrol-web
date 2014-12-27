@@ -19,6 +19,9 @@ class CheckPointsController < ApplicationController
     else
       head :not_modified
     end
+
+  rescue Exception => e
+    render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
   # GET /check_points/1

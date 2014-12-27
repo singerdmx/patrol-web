@@ -577,17 +577,17 @@ setupProblemsDiv = (containerDiv) ->
 
 submitEditProblemForm = (containerDiv, _suggestions) ->
   assignedUser = $("#{containerDiv} input#problem_assigned_to_user").val().trim()
-  assigned_to_id = $("#{containerDiv} span#problem_assigned_to_id").text()
+  assignedToId = $("#{containerDiv} span#problem_assigned_to_id").text()
   valid = true
 
   if assignedUser is ''
     $("#{containerDiv} span#problem_assigned_to_id").text('')
-    assigned_to_id = ''
+    assignedToId = ''
   else
     _u = $.grep(
       _suggestions,
       (e) ->
-        e.data.toString() is assigned_to_id
+        e.data.toString() is assignedToId
     )
 
     valid = false unless _u.length > 0 and _u[0].value is assignedUser
@@ -610,7 +610,7 @@ submitEditProblemForm = (containerDiv, _suggestions) ->
 
   payload = {
     plan_date: planDate,
-    assigned_to_id: assigned_to_id,
+    assigned_to_id: assignedToId,
     status: $("#{containerDiv} select#problem_status").val(),
     content: $("#{containerDiv} textarea#problem_content").text()
   }
@@ -1291,6 +1291,43 @@ updateUsersTable = (containerDiv) ->
 
   return
 
+setupCreatePointForm = (containerDiv) ->
+  _suggestions = []
+  setupAutocompleteInput('/users.json', 'name', containerDiv,
+    'input#point_assigned_to',
+    _suggestions, $("#{containerDiv} span#point_assigned_to_id"))
+
+  $('div#createPoint button#btnCreatePoint').unbind('click')
+  $('div#createPoint button#btnCreatePoint').click ->
+    pointInfo = {}
+    return unless validateCreatePointForm('div#createPoint', pointInfo, _suggestions)
+    pointInfo['choice'] = JSON.stringify(pointInfo['choice'])
+    $pointDescription = $('div#createPoint input#pointDescription')
+    pointInfo['description'] = $pointDescription.val() unless isInputValueEmpty($pointDescription)
+    $pointBarcode = $('div#createPoint input#pointBarcode')
+    pointInfo['barcode'] = $pointBarcode.val() unless isInputValueEmpty($pointBarcode)
+    $.ajax
+      url: getBaseURL() + '/points.json'
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(pointInfo),
+      dataType: 'json',
+      success: (data, textStatus, jqHXR) ->
+        alert '检点创建成功'
+        clearCreatePointForm()
+        if $('div#managementData span#addPointToAssetSpan').text() is 'true'
+          $('div#managementData span#addPointToAssetSpan').text('false')
+          $('div#createAsset').show()
+          $('div#createPoint').hide()
+          $('div#addedPointDiv').append("<span class='lavenderBackground'>
+                                    <span class='hiddenSpan'>#{data.id}</span>#{data.name}</span>")
+        return
+      error: (jqXHR, textStatus, errorThrown) ->
+        alert jqXHR.responseJSON.message
+        return
+      timeout: defaultAjaxCallTimeout
+  return
+
 setupManageDataDiv = ->
   $('div#managementButtons ul.dropdown-menu > li > a').click ->
     $('div#managementData > div').hide()
@@ -1299,6 +1336,7 @@ setupManageDataDiv = ->
     switch divId
       when 'createPoint'
         $('div#managementData span#addPointToAssetSpan').text('false')
+        setupCreatePointForm('div#createPoint')
       when 'deletePoint'
         updatePointsTable('div#managementData div#deletePoint')
       when 'deleteAsset'
@@ -1599,7 +1637,11 @@ updatePointsTable = (containerDiv) ->
             "sWidth": "20%"
           },
           { "sTitle": "设备" },
-          { "sTitle": "路线" }
+          { "sTitle": "路线" },
+          {
+            "sTitle": "责任人",
+            "sClass": "center"
+          }
         ]
         if $("#{containerDiv} table#pointsTable > tbody[role='alert'] td.dataTables_empty").length is 0
           # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
@@ -1687,6 +1729,7 @@ setupCreateAssetDiv = ->
     $('div#managementData span#addPointToAssetSpan').text('true')
     $('div#createAsset').hide()
     $('div#createPoint').show()
+    setupCreatePointForm('div#createPoint')
     return
 
   $('div#createAsset button#btnCancelCreateAsset').click(clearCreateAssetForm)
@@ -1766,40 +1809,10 @@ setupCreatePointDiv = ->
 
     return
 
-  $('div#createPoint button#btnCreatePoint').click ->
-    pointInfo = {}
-    return unless validateCreatePointForm('div#createPoint', pointInfo)
-    pointInfo['choice'] = JSON.stringify(pointInfo['choice'])
-    $pointDescription = $('div#createPoint input#pointDescription')
-    pointInfo['description'] = $pointDescription.val() unless isInputValueEmpty($pointDescription)
-    $pointBarcode = $('div#createPoint input#pointBarcode')
-    pointInfo['barcode'] = $pointBarcode.val() unless isInputValueEmpty($pointBarcode)
-    $.ajax
-      url: getBaseURL() + '/points.json'
-      type: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify(pointInfo),
-      dataType: 'json',
-      success: (data, textStatus, jqHXR) ->
-        alert '检点创建成功'
-        clearCreatePointForm()
-        if $('div#managementData span#addPointToAssetSpan').text() is 'true'
-          $('div#managementData span#addPointToAssetSpan').text('false')
-          $('div#createAsset').show()
-          $('div#createPoint').hide()
-          $('div#addedPointDiv').append("<span class='lavenderBackground'>
-          <span class='hiddenSpan'>#{data.id}</span>#{data.name}</span>")
-        return
-      error: (jqXHR, textStatus, errorThrown) ->
-        alert jqXHR.responseJSON.message
-        return
-      timeout: defaultAjaxCallTimeout
-    return
-
   $('div#categorySelection select#pointCategory').val(10) # set to select first item
   return
 
-validateCreatePointForm = (containerDiv, pointInfo) ->
+validateCreatePointForm = (containerDiv, pointInfo, suggestions) ->
   pointInfo = {} unless pointInfo
   pointName = $("#{containerDiv} input#pointName")
   if isInputValueEmpty(pointName)
@@ -1840,6 +1853,27 @@ validateCreatePointForm = (containerDiv, pointInfo) ->
           alert "数字 '#{nums}' 不符合逻辑。应该递增排列！"
           return false
 
+  assignedUser = $("#{containerDiv} input#point_assigned_to").val().trim()
+  assignedToId = $("#{containerDiv} span#point_assigned_to_id").text()
+  valid = true
+
+  if assignedUser is ''
+    $("#{containerDiv} span#point_assigned_to_id").text('')
+    assignedToId = ''
+  else
+    _u = $.grep(
+      suggestions,
+      (e) ->
+        e.data.toString() is assignedToId
+    )
+
+    valid = false unless _u.length > 0 and _u[0].value is assignedUser
+
+  unless valid
+    alert '责任人填写错误！'
+    return
+
+  pointInfo['default_assigned_id'] = assignedToId
   true
 
 clearCreatePointForm = ->

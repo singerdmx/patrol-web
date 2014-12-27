@@ -18,8 +18,7 @@ module CheckPointsHelper
   end
 
   def index_ui_json_builder(index_result)
-    results = []
-    index_result.each do |result|
+    index_result.map do |result|
       entry = to_hash(result)
       entry['asset'] = result.asset.id
       entry['routes'] = result.check_routes.map do |route|
@@ -35,7 +34,8 @@ module CheckPointsHelper
           "#{prefix[i]}： #{(c.nil? or c.empty?) ? '无' : c}"
         end
       end
-      results << [
+
+      [
         entry['id'],
         entry['name'],
         entry['barcode'],
@@ -44,11 +44,10 @@ module CheckPointsHelper
         result.asset.name,
         result.check_routes.map do |route|
           route.name
-        end
+        end,
+        entry['default_assigned_id'].nil? ? '' : User.find(entry['default_assigned_id']).name
       ]
     end
-
-    results
   end
 end
 
