@@ -39,6 +39,7 @@ Asset.delete_all
 CheckPoint.delete_all
 CheckResult.delete_all
 User.delete_all
+Contact.delete_all
 
 user1 = User.create! do |u|
   u.email = 'user@test.com'
@@ -92,6 +93,16 @@ user6 = User.create! do |u|
   u.role = 6
   u.name = '维修工3'
   #u.ensure_authentication_token!
+end
+
+contact1 = Contact.create! do |c|
+  c.name = "维修经理"
+  c.email = "manager1@test.com"
+end
+
+contact2 = Contact.create! do |c|
+  c.name = "维修主管"
+  c.email = "lead1@test.com"
 end
 
 #create routes based on 17-1.pdf page 9
