@@ -279,7 +279,7 @@
     <h2 class="form-signin-heading">创建用户</h2>
     <input type="text" value="" required="required" placeholder="用户名" name="user[name]" id="user_name" class="form-control"/>
     <input type="email" value="" required="required" placeholder="电子邮箱" name="user[email]" id="user_email" class="form-control"/>
-    <div id="userRoleSelection">
+    <div id="userRoleSelection" class="floatLeft">
       <div style="width: 100px; margin-top: 8px; padding-left: 5px">
         <span style="font-size: 15px">用户级别</span>
       </div>
@@ -403,7 +403,7 @@
       <h2 class="form-signin-heading">创建路线</h2>
       <input type="text" value="" required="required" placeholder="名称（必填）" id="routeName" class="form-control"/>
       <input type="text" value="" placeholder="描述" id="routeDescription" class="form-control"/>
-      <div id="areaSelection">
+      <div id="areaSelection" class="floatLeft">
         <div style="width: 100px; margin-top: 8px; padding-left: 5px">
           <span style="font-size: 15px">工区</span>
         </div>
@@ -449,10 +449,31 @@
     <div id="createPoint" style="display: none" class="submissionForm">
       <h2 class="form-signin-heading">创建检点</h2>
       <span class="hiddenSpan" id="pointId"></span>
-      <input type="text" value="" required="required" placeholder="名称（必填）" id="pointName" class="form-control"/>
-      <input type="text" value="" placeholder="描述" id="pointDescription" class="form-control"/>
-      <input type="text" value="" placeholder="条形码" id="pointBarcode" class="form-control"/>
-      <div id="categorySelection">
+      <div class="floatLeft">
+        <div style="width: 100px; margin-top: 8px; padding-left: 5px">
+          <span style="font-size: 15px">名称</span>
+        </div>
+        <div style="width: 70%">
+          <input type="text" value="" required="required" placeholder="名称（必填）" id="pointName" class="form-control"/>
+        </div>
+      </div>
+      <div class="floatLeft">
+        <div style="width: 100px; margin-top: 8px; padding-left: 5px">
+          <span style="font-size: 15px">描述</span>
+        </div>
+        <div style="width: 70%">
+          <input type="text" value="" placeholder="描述" id="pointDescription" class="form-control"/>
+        </div>
+      </div>
+      <div class="floatLeft">
+        <div style="width: 100px; margin-top: 8px; padding-left: 5px">
+          <span style="font-size: 15px">条形码</span>
+        </div>
+        <div style="width: 70%">
+          <input type="text" value="" placeholder="条形码" id="pointBarcode" class="form-control"/>
+        </div>
+      </div>
+      <div id="categorySelection" class="floatLeft">
         <div style="width: 100px; margin-top: 8px; padding-left: 5px">
           <span style="font-size: 15px">类型</span>
         </div>
@@ -466,7 +487,7 @@
           </select>
         </div>
       </div>
-      <div id="assignedToSelection">
+      <div id="assignedToSelection" class="floatLeft">
         <div style="width: 100px; margin-top: 8px; padding-left: 5px">
           <span style="font-size: 15px">责任人</span>
         </div>
