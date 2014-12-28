@@ -52,16 +52,21 @@ class CheckRoutesController < ApplicationController
   # POST /check_routes
   # POST /check_routes.json
   def create
-    begin
-      @check_route = CheckRoute.create!(check_route_params)
-      unless params[:area].nil?
-        @check_route.area_id = params[:area].to_i
-        @check_route.save
-      end
-      render template: 'check_routes/show', status: :created
-    rescue Exception => e
-      render json: {:message=> e.to_s}.to_json, status: :internal_server_error
+    unless current_user.is_admin?
+      render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      return
     end
+
+    @check_route = CheckRoute.create!(check_route_params)
+    unless params[:area].nil?
+      @check_route.area_id = params[:area].to_i
+      @check_route.save
+    end
+
+    puts params[:contacts] # params[:contacts] is nil if not specified
+    render template: 'check_routes/show', status: :created
+  rescue Exception => e
+    render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
   def new

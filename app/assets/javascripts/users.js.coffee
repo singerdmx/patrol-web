@@ -1363,6 +1363,7 @@ setupManageDataDiv = ->
     switch divId
       when 'createRoute'
         setupAddContactToRouteBtn('div#createRoute')
+        clearCreateRouteForm()
       when 'createPoint'
         $('div#managementData span#switchPointTo').text('')
         $('div#createPoint button#btnCancelCreatePoint').text('重置')
@@ -1809,6 +1810,17 @@ setupCreateRouteDiv = ->
     $routeDescription = $('div#createRoute input#routeDescription')
     routeInfo['description'] = $routeDescription.val() unless isInputValueEmpty($routeDescription)
     routeInfo['area'] = $('div#createRoute select#routeArea').val()
+    _contacts = []
+    routeInfo['contacts'] = []
+
+    for span in $('div#createRoute div#contacts_for_route > span')
+      _contact = $.trim($(span).text())
+      if _contact in _contacts
+        alert "您有重复的联系人： #{_contact}"
+        return
+
+      _contacts.push(_contact)
+      routeInfo['contacts'].push($(span).children('span').text()) # contact id
 
     $.ajax
       url: getBaseURL() + '/routes.json'
@@ -1830,6 +1842,9 @@ setupCreateRouteDiv = ->
 
 clearCreateRouteForm = ->
   resetToPlaceholderValue($('div#createRoute input'))
+  $('div#createRoute div#contacts_for_route').html('')
+  $('div#createRoute input#contact_add_to_route').val('')
+  $('div#createRoute span#contact_add_to_route_id').text('')
   return
 
 setupCreateAssetDiv = ->
