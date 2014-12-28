@@ -93,7 +93,7 @@ class CheckRoutesController < ApplicationController
   # DELETE /check_routes/1.json
   def destroy
     unless current_user.is_admin?
-      render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
       return
     end
 

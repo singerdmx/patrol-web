@@ -1402,6 +1402,7 @@ setupManageDataDiv = ->
       return
 
   setupCreatePointDiv()
+  setupEditDeleteRouteDiv('div#managementData div#editDeleteRoute')
   setupEditDeletePointDiv('div#managementData div#editDeletePoint')
   setupCreateAssetDiv()
   setupDeleteAssetDiv('div#managementData div#deleteAsset')
@@ -2020,6 +2021,33 @@ clearCreatePointForm = ->
   $('div#pointChoiceDiv > div:first > span > i').click(removeParent)
   $('div#assignedToSelection input#point_assigned_to').val('')
   $('div#assignedToSelection span#point_assigned_to_id').text('')
+  return
+
+setupEditDeleteRouteDiv = (containerDiv) ->
+  $("#{containerDiv} button#btnDeleteRoute").click ->
+    oTable = $("#{containerDiv} table#routesTable").dataTable()
+    _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
+    if _selectedTr.length is 0
+      alert '请选择路线！'
+    else
+      row = oTable.fnGetData(_selectedTr[0])
+      if confirm("您确定要删除路线 '#{row[1]}' 吗？")
+        $.ajax
+          url: getBaseURL() + "/routes/#{row[0]}.json"
+          type: 'DELETE',
+          contentType: 'application/json',
+          dataType: 'json',
+          success: (data, textStatus, jqHXR) ->
+            updateRoutesTable(containerDiv)
+            alert '路线已经成功删除！'
+            return
+          error: (jqXHR, textStatus, errorThrown) ->
+            alert jqXHR.responseJSON.message
+            return
+          timeout: defaultAjaxCallTimeout
+
+    return
+
   return
 
 updateContactsTable = (containerDiv) ->
