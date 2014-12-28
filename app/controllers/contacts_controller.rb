@@ -4,8 +4,10 @@ class ContactsController < ApplicationController
   # GET /contacts.json
   def index
     contacts = Contact.all
-    contacts.map do |c|
-      to_hash(c)
+    if params[:ui] == 'true'
+      contacts = contacts.map do |c|
+        [c.id, c.name, c.email]
+      end
     end
 
     if stale?(etag: contacts)

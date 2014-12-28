@@ -23,6 +23,7 @@ $ ->
 
   setupManageUsersDiv('div#manageUsersDiv')
   setupManageDataDiv()
+  setupManageContactsDiv('div#manageContactsDiv')
   return
 
 isUserPage = ->
@@ -57,6 +58,8 @@ setupSidebar = ->
         updateRecordsTable(containerDiv)
       when 'manageUsers'
         updateUsersTable(containerDiv)
+      when 'manageContacts'
+        updateContactsTable(containerDiv)
       when 'problems'
         updateProblemsTable(containerDiv)
     return
@@ -1282,6 +1285,8 @@ updateUsersTable = (containerDiv) ->
 
         $("#{containerDiv} > span#usersIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} > span#usersIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+
+      return
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
@@ -1961,6 +1966,60 @@ clearCreatePointForm = ->
   $('div#pointChoiceDiv > div:first > span > i').click(removeParent)
   $('div#assignedToSelection input#point_assigned_to').val('')
   $('div#assignedToSelection span#point_assigned_to_id').text('')
+  return
+
+updateContactsTable = (containerDiv) ->
+  $.ajax
+    url: getBaseURL() + '/contacts.json?ui=true'
+    beforeSend: (xhr) ->
+      setXhrRequestHeader(xhr, containerDiv, 'contacts')
+      return
+    success: (data, textStatus, jqHXR) ->
+      if jqHXR.status is 200
+        columns = [
+          { "sTitle": "ID" },
+          { "sTitle": "姓名" },
+          { "sTitle": "邮箱" }
+        ]
+        if $("#{containerDiv} table#contactsTable > tbody[role='alert'] td.dataTables_empty").length is 0
+          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
+          oTable = $("#{containerDiv} table#contactsTable").dataTable()
+          oTable.fnDestroy() unless oTable?
+
+        $("#{containerDiv} div#contactsTable_wrapper").remove()
+        $("#{containerDiv} div#contactsTableDiv").append('<table id="contactsTable"></table>')
+        $("#{containerDiv} table#contactsTable").dataTable
+          'aaData': data
+          'aoColumns': columns
+
+        oTable = $("#{containerDiv} table#contactsTable").dataTable()
+        oTable.fnSetColumnVis(0, false)
+
+        $("#{containerDiv} table#contactsTable > tbody").on(
+            'click',
+            'tr',
+          ->
+            oTable = $("#{containerDiv} table#contactsTable").dataTable()
+            oTable.$('tr').removeClass('mediumSeaGreenBackground')
+            $(this).addClass('mediumSeaGreenBackground')
+            return
+        )
+
+        $("#{containerDiv} > span#contactsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} > span#contactsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    ifModified: true,
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
+
+  return
+
+setupManageContactsDiv = (containerDiv) ->
+
   return
 
 Route = (id, name) ->
