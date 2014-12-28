@@ -716,7 +716,8 @@ updateProblemsTable = (containerDiv, params) ->
         $("#{containerDiv} > div#problemListDiv").append('<table id="problemsTable"></table>')
         $("#{containerDiv} table#problemsTable").dataTable
           'aaData': data,
-          'aoColumns': columns
+          'aoColumns': columns,
+          'aaSorting': [[ 0, 'desc' ]]
 
         oTable = $("#{containerDiv} table#problemsTable").dataTable()
         oTable.fnSetColumnVis(8, false)
