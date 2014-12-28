@@ -455,11 +455,13 @@ asset32.check_points.create([
                                 } ])
 
 route1 = area1.check_routes.create!(
-    {name: "一工区机械8小时点巡检", description: "一工区机械8小时点巡检"})
+    {name: "一工区机械8小时点巡检",
+     description: "一工区机械8小时点巡检",
+     contacts: "[#{contact1.id},#{contact2.id}]",
+    })
 route1.check_points << asset1.check_points.first
 route1.check_points << asset2.check_points.first
 route1.check_points << asset3.check_points.first
-
 
 route2 = area2.check_routes.create!(
     {name: "二工区机械8小时点巡检", description: "二工区机械8小时点巡检"})
