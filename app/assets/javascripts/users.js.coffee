@@ -477,6 +477,7 @@ updateRecordsTable = (containerDiv, params) ->
         $("#{containerDiv} table#recordsTable").dataTable
           'aaData': data,
           'aoColumns': columns
+          'aaSorting': [[ 7, 'desc' ]]
           'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
             switch aaData[4]
               when '异常'
