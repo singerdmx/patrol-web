@@ -346,6 +346,7 @@
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation"><a role="menuitem" data-div="createRoute">创建</a></li>
+          <li role="presentation"><a role="menuitem" data-div="editDeleteRoute">编辑/删除</a></li>
         </ul>
       </div>
     </div>
@@ -456,6 +457,16 @@
       <div style="margin-top: 5px; display: block">
         <button class="btn btn-warning" type="button" id="btnCancelCreateRoute"/>重置</button>
         <button class="btn btn-primary" type="button" id="btnCreateRoute"/>提交</button>
+      </div>
+    </div>
+    <div id="editDeleteRoute" style="display: none">
+      <div id="routesTableDiv">
+        <span class="hiddenSpan" id="routesIfNoneMatch"></span>
+        <span class="hiddenSpan" id="routesIfModifiedSince"></span>
+      </div>
+      <div>
+        <button class="btn btn-info" type="button" id="btnEditRoute"/>编辑路线</button>
+        <button class="btn btn-danger" type="button" id="btnDeleteRoute"/>删除路线</button>
       </div>
     </div>
     <div id="createAsset" style="display: none" class="submissionForm">

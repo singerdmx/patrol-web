@@ -6,8 +6,7 @@ module CheckRoutesHelper
 
   #replacement of the index.json.jbuilder for complicated converting logic
   def index_json_builder(check_routes, route_assets, show_name = false)
-    results = []
-    check_routes.each do |route|
+    check_routes.map do |route|
       entry = to_hash(route)
       if route_assets.nil?
         entry['points'] = route.check_points.map do |point|
@@ -28,10 +27,19 @@ module CheckRoutesHelper
         end
       end
       entry['area_name'] = Area.find(route.area_id).name if show_name
-      results << entry
+      if show_name
+        if entry['contacts']
+          contacts = JSON.parse(entry['contacts'])
+          entry['contacts'] = contacts.map do |id|
+            c = Contact.find(id)
+            "#{c.email} (#{c.name})"
+          end
+        end
+      else
+        entry.except!('contacts')
+      end
+      entry
     end
-
-    results
   end
 
   # route_assets: Key is route id and value is assets (Hash of key = asset id and value = points)
@@ -39,8 +47,7 @@ module CheckRoutesHelper
   # asset_map: Key is asset id and value is asset
   def index_ui_json_builder(route_assets, route_map, asset_map)
     fail "route_assets is nil! Please set 'group_by_asset' to 'true'." if route_assets.nil?
-    results = []
-    route_assets.each do |route_id, assets|
+    route_assets.map do |route_id, assets|
       route = {}
       route[:id] = route_id
       route[:kind] = 'route'
@@ -48,10 +55,8 @@ module CheckRoutesHelper
       route[:title] = '路线'
       route[:description] = route_map[route_id].name
       route[:children] = route_assets_children(assets, asset_map)
-      results << route
+      route
     end
-
-    results
   end
 
   private

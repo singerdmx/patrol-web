@@ -723,8 +723,8 @@ updateProblemsTable = (containerDiv, params) ->
         oTable.fnSetColumnVis(8, false)
 
         $("#{containerDiv} table#problemsTable > tbody").on(
-            'click',
-            'tr',
+          'click',
+          'tr',
           ->
             oTable = $("#{containerDiv} table#problemsTable").dataTable()
             oTable.$('tr').removeClass('mediumSeaGreenBackground')
@@ -1276,8 +1276,8 @@ updateUsersTable = (containerDiv) ->
         oTable.fnSetColumnVis(0, false)
 
         $("#{containerDiv} table#usersTable > tbody").on(
-            'click',
-            'tr',
+          'click',
+          'tr',
           ->
             oTable = $("#{containerDiv} table#usersTable").dataTable()
             oTable.$('tr').removeClass('mediumSeaGreenBackground')
@@ -1364,6 +1364,8 @@ setupManageDataDiv = ->
       when 'createRoute'
         setupAddContactToRouteBtn('div#createRoute')
         clearCreateRouteForm()
+      when 'editDeleteRoute'
+        updateRoutesTable('div#managementData div#editDeleteRoute')
       when 'createPoint'
         $('div#managementData span#switchPointTo').text('')
         $('div#createPoint button#btnCancelCreatePoint').text('重置')
@@ -1456,14 +1458,15 @@ updateRoutesTable = (containerDiv) ->
       return
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
-        records = ([record['id'], record['name'], record['description'], record['area_name'], record['points']] for record in data)
+        records = ([record['id'], record['name'], record['description'], record['area_name'], record['points'], joinStringArrayWithBR(record['contacts'])] for record in data)
 
         columns = [
           { "sTitle": "ID" },
           { "sTitle": "名称" },
           { "sTitle": "描述" },
           { "sTitle": "工区" },
-          { "sTitle": "检点" }
+          { "sTitle": "检点" },
+          { "sTitle": "联系人" }
         ]
         if $("#{containerDiv} table#routesTable > tbody[role='alert'] td.dataTables_empty").length is 0
           # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
@@ -1484,15 +1487,16 @@ updateRoutesTable = (containerDiv) ->
         $("#{containerDiv} table#routesTable > tbody").on(
           'click',
           'tr',
-        ->
-          oTable = $("#{containerDiv} table#routesTable").dataTable()
-          oTable.$('tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
-          $(this).addClass('mediumSeaGreenBackground')
-          return
+          ->
+            oTable = $("#{containerDiv} table#routesTable").dataTable()
+            oTable.$('tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
+            $(this).addClass('mediumSeaGreenBackground')
+            return
         )
 
         $("#{containerDiv} span#routesIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} span#routesIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+        return
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
@@ -1580,7 +1584,7 @@ updateAssetsTable = (containerDiv) ->
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
         for record in data
-          record[3] = record[3].join('<br/>')
+          record[3] = joinStringArrayWithBR(record[3])
 
         columns = [
           { "sTitle": "ID" },
@@ -1698,8 +1702,8 @@ updatePointsTable = (containerDiv) ->
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
         for record in data
-          record[4] = record[4].join('<br/>')
-          record[6] = record[6].join('<br/>')
+          record[4] = joinStringArrayWithBR(record[4])
+          record[6] = joinStringArrayWithBR(record[6])
 
         columns = [
           { "sTitle": "ID" },
@@ -2046,8 +2050,8 @@ updateContactsTable = (containerDiv) ->
         oTable.fnSetColumnVis(0, false)
 
         $("#{containerDiv} table#contactsTable > tbody").on(
-            'click',
-            'tr',
+          'click',
+          'tr',
           ->
             oTable = $("#{containerDiv} table#contactsTable").dataTable()
             oTable.$('tr').removeClass('mediumSeaGreenBackground')

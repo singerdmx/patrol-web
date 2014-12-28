@@ -98,6 +98,14 @@ window.removeParent = ->
   $(this).parent().remove()
   return
 
+window.joinStringArrayWithBR = (array) ->
+  if array
+    array = array.join('<br/>')
+  else
+    array = ''
+
+  array
+
 window.setupAutocompleteInput = (relativeUrl, valueKey, containerDiv, inputElem, suggestions, idElement) ->
   $.ajax
     url: getBaseURL() + relativeUrl
