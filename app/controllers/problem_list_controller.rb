@@ -44,7 +44,7 @@ class ProblemListController < ApplicationController
       content: params[:content],
     }
     new_value[:plan_date] = Time.at(params[:plan_date]).to_date if params[:plan_date]
-    new_value[:assigned_to_id] = params[:assigned_to_id] if params[:assigned_to_id]
+    new_value[:assigned_to_id] = params[:assigned_to_id] unless params[:assigned_to_id].blank?
 
     report.update_attributes(new_value)
 
