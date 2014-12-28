@@ -1359,6 +1359,8 @@ setupManageDataDiv = ->
     divId = $(this).data('div')
     $("div#managementData > div##{divId}").show()
     switch divId
+      when 'createRoute'
+        setupAddContactToRouteBtn('div#createRoute')
       when 'createPoint'
         $('div#managementData span#switchPointTo').text('')
         $('div#createPoint button#btnCancelCreatePoint').text('重置')
@@ -1761,6 +1763,36 @@ updatePointsTable = (containerDiv) ->
     timeout: defaultAjaxCallTimeout
   return
 
+setupAddContactToRouteBtn = (containerDiv) ->
+  _suggestions = []
+  setupAutocompleteInput('/contacts.json', ['name', 'email'], containerDiv, 'input#contact_add_to_route',
+    _suggestions, $("#{containerDiv} span#contact_add_to_route_id"))
+
+  $("#{containerDiv} span#addContactToRouteSpan").click ->
+    _contact = $("#{containerDiv} input#contact_add_to_route").val().trim()
+    _contactId = $("#{containerDiv} span#contact_add_to_route_id").text()
+    if _contact is ''
+      $("#{containerDiv} span#contact_add_to_route_id").text('')
+      alert '请填写联系人！'
+      return
+
+    _c = $.grep(
+      _suggestions,
+      (e) ->
+        e.data.toString() is _contactId
+    )
+
+    unless _c.length > 0 and _c[0].value is _contact
+      alert '联系人填写错误！'
+      return
+
+    $("#{containerDiv} div#contacts_for_route").append("<span class='lavenderBackground'>
+       <span class='hiddenSpan'>#{_contactId}</span><i class='icon-remove'></i>#{_contact}</span>")
+    $("#{containerDiv} div#contacts_for_route > span > i").click(removeParent)
+    return
+
+  return
+
 setupCreateRouteDiv = ->
   $('div#createRoute button#btnCancelCreateRoute').click(clearCreateRouteForm)
 
@@ -1774,7 +1806,8 @@ setupCreateRouteDiv = ->
     routeInfo['name'] = $routeName.val()
     $routeDescription = $('div#createRoute input#routeDescription')
     routeInfo['description'] = $routeDescription.val() unless isInputValueEmpty($routeDescription)
-    routeInfo['area'] = $('div#createRoute div#areaSelection select#routeArea').val()
+    routeInfo['area'] = $('div#createRoute select#routeArea').val()
+
     $.ajax
       url: getBaseURL() + '/routes.json'
       type: 'POST',

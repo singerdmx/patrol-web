@@ -234,6 +234,17 @@ div.floatLeft {
     float: left;
     text-align: left;
   }
+  > div:first-child {
+    width: 100px;
+    margin-top: 8px;
+    padding-left: 5px;
+    > span:fist {
+      font-size: 15px;
+    }
+  }
+  > div:nth-child(2) {
+    width: 70%
+  }
 }
 
 div#manageUsersDiv {
@@ -286,7 +297,16 @@ div#manageDataDiv {
   }
 }
 
-div#createPoint{
+div#createRoute {
+  div#contacts_for_route {
+    height: 100px;
+    overflow-y: scroll;
+    padding: 3px;
+    background-color: $LightCyan;
+  }
+}
+
+div#createPoint {
   div#addPointChoiceDiv {
     > div {
       float: left;

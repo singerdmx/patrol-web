@@ -104,7 +104,15 @@ window.setupAutocompleteInput = (relativeUrl, valueKey, containerDiv, inputElem,
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
         for datum in data
-          suggestions.push({ value: datum[valueKey], data: datum['id']})
+          _value = null
+          if typeof valueKey is 'string'
+            _value = datum[valueKey]
+          else if valueKey instanceof Array
+            _value = (datum[v] for v in valueKey).join(' ')
+          else
+            console.error("valueKey #{valueKey} is invalid")
+
+          suggestions.push({ value: _value, data: datum['id']})
 
         suggestions.sort (a,b) ->
           return if a.value >= b.value then 1 else -1
