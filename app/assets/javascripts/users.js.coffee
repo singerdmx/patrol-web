@@ -2019,6 +2019,67 @@ updateContactsTable = (containerDiv) ->
   return
 
 setupManageContactsDiv = (containerDiv) ->
+  $("#{containerDiv} button#btnAddNewContact").click ->
+    $contactName = $("#{containerDiv} input#contactNameInput")
+    if isInputValueEmpty($contactName)
+      alert '请填写姓名！'
+      return
+
+    $contactEmail = $("#{containerDiv} input#contactEmailInput")
+    if isInputValueEmpty($contactEmail)
+      alert '请填写邮箱！'
+      return
+
+    unless isValidEmailAddress($contactEmail.val())
+      alert '您填写的电子邮箱无效，请修正！'
+      return
+
+    payload = {
+      name: $contactName.val(),
+      email: $contactEmail.val()
+    }
+    $.ajax
+      url: getBaseURL() + '/contacts.json'
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(payload),
+      dataType: 'json',
+      success: (data, textStatus, jqHXR) ->
+        alert '联系人添加成功'
+        updateContactsTable(containerDiv)
+        resetToPlaceholderValue($contactName)
+        resetToPlaceholderValue($contactEmail)
+        return
+      error: (jqXHR, textStatus, errorThrown) ->
+        alert jqXHR.responseJSON.message
+        return
+      timeout: defaultAjaxCallTimeout
+
+    return
+
+  $("#{containerDiv} button#btnDeleteContact").click ->
+    oTable = $("#{containerDiv} table#contactsTable").dataTable()
+    _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
+    if _selectedTr.length is 0
+      alert '请选择联系人！'
+    else
+      row = oTable.fnGetData(_selectedTr[0])
+      if confirm("您确定要删除联系人 #{row[1]} #{row[2]} 吗？")
+        $.ajax
+          url: getBaseURL() + "/contacts/#{row[0]}.json"
+          type: 'DELETE',
+          contentType: 'application/json',
+          dataType: 'json',
+          success: (data, textStatus, jqHXR) ->
+            updateContactsTable(containerDiv)
+            alert '联系人已经成功删除！'
+            return
+          error: (jqXHR, textStatus, errorThrown) ->
+            alert jqXHR.responseJSON.message
+            return
+          timeout: defaultAjaxCallTimeout
+
+    return
 
   return
 
