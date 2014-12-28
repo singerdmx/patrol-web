@@ -37,12 +37,18 @@ class ProblemListController < ApplicationController
       return
     end
 
-    puts params[:id]
-    puts params[:plan_date] # nil if not specified
-    puts params[:assigned_to_id] # "" if not specified
-    puts params[:status]
-    puts params[:content]
-    render json: {}.to_json
+    report = RepairReport.find(params[:id])
+
+    new_value = {
+      status: params[:status],
+      content: params[:content],
+    }
+    new_value[:plan_date] = Time.at(params[:plan_date]).to_date if params[:plan_date]
+    new_value[:assigned_to_id] = params[:assigned_to_id] if params[:assigned_to_id]
+
+    report.update_attributes(new_value)
+
+    render json: {id: params[:id]}.to_json
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
