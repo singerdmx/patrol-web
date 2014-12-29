@@ -28,6 +28,8 @@ class ContactsController < ApplicationController
       return
     end
 
+    AlertMailer.alert_email(current_user).deliver
+
     Contact.create! do |c|
       c.name = params[:name]
       c.email = params[:email]
