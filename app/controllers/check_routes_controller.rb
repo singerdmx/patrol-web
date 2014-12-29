@@ -69,7 +69,6 @@ class CheckRoutesController < ApplicationController
       @check_route.save
     end
 
-    puts params[:contacts] # params[:contacts] is nil if not specified
     render template: 'check_routes/show', status: :created
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :internal_server_error
@@ -86,7 +85,6 @@ class CheckRoutesController < ApplicationController
       return
     end
 
-    puts params[:contacts] # nil if no contacts
     if @check_route.update(check_route_params)
       render json: {id: @check_route.id}.to_json
     else
@@ -163,6 +161,7 @@ class CheckRoutesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def check_route_params
       request_para = params[:check_route].nil? ? params : params[:check_route]
+      request_para[:contacts] = request_para[:contacts].to_s unless request_para[:contacts].nil?
       request_para.select{|key,value| key.in?(CheckRoute.column_names())}.symbolize_keys
     end
 end
