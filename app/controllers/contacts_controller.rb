@@ -10,7 +10,7 @@ class ContactsController < ApplicationController
       end
     else
       contacts = contacts.map do |c|
-        to_hash(c).except!('created_at', 'updated_at')
+        to_hash(c, true)
       end
     end
 

@@ -39,14 +39,20 @@ class CheckRoutesController < ApplicationController
     end
   end
 
-  # GET /check_routes/1
   # GET /check_routes/1.json
   def show
-    begin
-      render template: 'check_routes/show',  status: :ok
-    rescue Exception => e
-      render json: {:message=> e.to_s}.to_json, status: :not_found
+    r = to_hash(@check_route, true)
+    if r['contacts']
+      r['contacts'] = JSON.parse(r['contacts']).map do |id|
+        to_hash(Contact.find(id), true)
+      end
     end
+    #r['points'] = @check_route.check_points.map do |p|
+    #  to_hash(p, true)
+    #end
+    render json: r.to_json
+  rescue Exception => e
+    render json: {message: e.to_s}.to_json, status: :not_found
   end
 
   # POST /check_routes
@@ -73,21 +79,22 @@ class CheckRoutesController < ApplicationController
     @check_route = CheckRoute.new
   end
 
-
-  # PATCH/PUT /check_routes/1
   # PATCH/PUT /check_routes/1.json
   def update
+    unless current_user.is_admin?
+      render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      return
+    end
 
-      respond_to do |format|
-        if @check_route.update(check_route_params)
-          format.html { redirect_to @check_route, notice: 'Check Route was successfully updated.' }
-          format.json { head :no_content }
-        else
-          format.html { render action: 'edit' }
-          format.json { render json: @check_route.errors, status: :internal_server_error }
-        end
-      end
-   end
+    puts params[:contacts] # nil if no contacts
+    if @check_route.update(check_route_params)
+      render json: {id: @check_route.id}.to_json
+    else
+      fail 'Update failed'
+    end
+  rescue Exception => e
+    render json: {message: e.to_s}.to_json, status: :internal_server_error
+  end
 
   # DELETE /check_routes/1
   # DELETE /check_routes/1.json

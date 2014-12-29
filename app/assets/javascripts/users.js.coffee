@@ -1362,9 +1362,15 @@ setupManageDataDiv = ->
     $("div#managementData > div##{divId}").show()
     switch divId
       when 'createRoute'
+        $('div#createRoute button#btnCancelCreateRoute').text('重置')
+        $('div#createRoute > h2:first').text('创建路线')
+        $('div#createRoute').show()
         setupAddContactToRouteBtn('div#createRoute')
         clearCreateRouteForm()
       when 'editDeleteRoute'
+        $('div#createRoute button#btnCancelCreateRoute').text('返回')
+        $('div#createRoute > h2:first').text('编辑路线')
+        $('div#editDeleteRoute > div').show()
         updateRoutesTable('div#managementData div#editDeleteRoute')
       when 'createPoint'
         $('div#managementData span#switchPointTo').text('')
@@ -1648,12 +1654,12 @@ setupEditDeletePointDiv = (containerDiv) ->
         success: (data, textStatus, jqHXR) ->
           if jqHXR.status is 200
             $('div#createPoint span#pointId').text(data.id)
-            $('div#managementData input#pointName').val(data.name)
-            $('div#managementData input#pointDescription').val(data.description)
-            $('div#managementData input#pointBarcode').val(data.barcode)
+            $('div#createPoint input#pointName').val(data.name)
+            $('div#createPoint input#pointDescription').val(data.description)
+            $('div#createPoint input#pointBarcode').val(data.barcode)
             if data.default_assigned_id
-              $('div#managementData input#point_assigned_to').val(data.default_assigned_user)
-              $('div#managementData span#point_assigned_to_id').text(data.default_assigned_id)
+              $('div#createPoint input#point_assigned_to').val(data.default_assigned_user)
+              $('div#createPoint span#point_assigned_to_id').text(data.default_assigned_id)
 
           return
         error: (jqXHR, textStatus, errorThrown) ->
@@ -1802,7 +1808,13 @@ setupAddContactToRouteBtn = (containerDiv) ->
   return
 
 setupCreateRouteDiv = ->
-  $('div#createRoute button#btnCancelCreateRoute').click(clearCreateRouteForm)
+  $('div#createRoute button#btnCancelCreateRoute').click ->
+    clearCreateRouteForm()
+    if $('div#createRoute > h2:first').text() is '编辑路线'
+      $('div#editDeleteRoute > div').show()
+      $('div#createRoute').hide()
+
+    return
 
   $('div#createRoute button#btnCreateRoute').click ->
     $routeName = $('div#createRoute input#routeName')
@@ -1827,15 +1839,36 @@ setupCreateRouteDiv = ->
       _contacts.push(_contact)
       routeInfo['contacts'].push($(span).children('span').text()) # contact id
 
+    requestType = null
+    _relativeUrl = null
+    switch $('div#createRoute > h2:first').text()
+      when '创建路线'
+        requestType = 'POST'
+        _relativeUrl = '/routes.json'
+      when '编辑路线'
+        requestType = 'PUT'
+        _relativeUrl = "/routes/#{$('div#createRoute span#routeId').text()}.json"
+      else
+        alert "Wrong createRoute title #{$('div#createRoute > h2:first').text()}"
+        return
+
     $.ajax
-      url: getBaseURL() + '/routes.json'
-      type: 'POST',
+      url: getBaseURL() + _relativeUrl
+      type: requestType,
       contentType: 'application/json',
       data: JSON.stringify(routeInfo),
       dataType: 'json',
       success: (data, textStatus, jqHXR) ->
-        alert '路线创建成功'
         clearCreateRouteForm()
+        switch requestType
+          when 'POST'
+            alert '路线创建成功'
+          when 'PUT'
+            $('div#createRoute').hide()
+            $('div#editDeleteRoute > div').show()
+            updateRoutesTable('div#managementData div#editDeleteRoute')
+            alert '路线编辑成功'
+
         return
       error: (jqXHR, textStatus, errorThrown) ->
         alert jqXHR.responseJSON.message
@@ -1847,6 +1880,8 @@ setupCreateRouteDiv = ->
 
 clearCreateRouteForm = ->
   resetToPlaceholderValue($('div#createRoute input'))
+  $('div#createRoute select#routeArea').val(1) # set to select first item
+  $('div#createRoute span#routeId').text('')
   $('div#createRoute div#contacts_for_route').html('')
   $('div#createRoute input#contact_add_to_route').val('')
   $('div#createRoute span#contact_add_to_route_id').text('')
@@ -2024,6 +2059,39 @@ clearCreatePointForm = ->
   return
 
 setupEditDeleteRouteDiv = (containerDiv) ->
+  $("#{containerDiv} button#btnEditRoute").click ->
+    oTable = $("#{containerDiv} table#routesTable").dataTable()
+    _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
+    if _selectedTr.length is 0
+      alert '请选择路线！'
+    else
+      row = oTable.fnGetData(_selectedTr[0])
+      $("#{containerDiv} > div").hide()
+      $('div#createRoute').show()
+      clearCreateRouteForm()
+      $.ajax
+        url: getBaseURL() + "/routes/#{row[0]}.json?r=#{getRandomArbitrary(0, 10240)}" # disable browser cache for the same GET
+        success: (data, textStatus, jqHXR) ->
+          if jqHXR.status is 200
+            $('div#createRoute span#routeId').text(data.id)
+            $('div#createRoute input#routeName').val(data.name)
+            $('div#createRoute input#routeDescription').val(data.description)
+            changeSelectByValue('routeArea', data.area_id)
+            if data.contacts
+              for c in data.contacts
+                $('div#createRoute div#contacts_for_route').append("<span class='lavenderBackground'>
+                       <span class='hiddenSpan'>#{c.id}</span><i class='icon-remove'></i>#{c.name} #{c.email}</span>")
+
+              $('div#createRoute div#contacts_for_route > span > i').click(removeParent)
+
+    return
+  error: (jqXHR, textStatus, errorThrown) ->
+    showErrorPage(jqXHR.responseText)
+    return
+  ifModified:true,
+  dataType: 'json',
+  timeout: defaultAjaxCallTimeout
+
   $("#{containerDiv} button#btnDeleteRoute").click ->
     oTable = $("#{containerDiv} table#routesTable").dataTable()
     _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
