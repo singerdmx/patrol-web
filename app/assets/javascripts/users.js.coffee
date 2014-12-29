@@ -1782,6 +1782,7 @@ setupAddContactToRouteBtn = (containerDiv) ->
   setupAutocompleteInput('/contacts.json', ['name', 'email'], containerDiv, 'input#contact_add_to_route',
     _suggestions, $("#{containerDiv} span#contact_add_to_route_id"))
 
+  $("#{containerDiv} span#addContactToRouteSpan").unbind('click')
   $("#{containerDiv} span#addContactToRouteSpan").click ->
     _contact = $("#{containerDiv} input#contact_add_to_route").val().trim()
     _contactId = $("#{containerDiv} span#contact_add_to_route_id").text()
@@ -2069,6 +2070,7 @@ setupEditDeleteRouteDiv = (containerDiv) ->
       $("#{containerDiv} > div").hide()
       $('div#createRoute').show()
       clearCreateRouteForm()
+      setupAddContactToRouteBtn('div#createRoute')
       $.ajax
         url: getBaseURL() + "/routes/#{row[0]}.json?r=#{getRandomArbitrary(0, 10240)}" # disable browser cache for the same GET
         success: (data, textStatus, jqHXR) ->
