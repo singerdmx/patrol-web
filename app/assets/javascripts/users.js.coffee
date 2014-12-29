@@ -475,7 +475,7 @@ updateRecordsTable = (containerDiv, params) ->
         $("#{containerDiv} div#recordsTable_wrapper").remove()
         $("#{containerDiv} > div").append('<table id="recordsTable"></table>')
         $("#{containerDiv} table#recordsTable").dataTable
-          'aaData': data,
+          'aaData': data
           'aoColumns': columns
           'aaSorting': [[ 7, 'desc' ]]
           'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
