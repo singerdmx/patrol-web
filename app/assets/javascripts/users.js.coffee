@@ -2144,6 +2144,7 @@ updateContactsTable = (containerDiv) ->
           'aaData': data
           'aoColumns': columns
 
+        $("#{containerDiv} table#contactsTable > thead th").css('text-align', 'left')
         oTable = $("#{containerDiv} table#contactsTable").dataTable()
         oTable.fnSetColumnVis(0, false)
 
