@@ -68,8 +68,38 @@ user6 = User.create! do |u|
   #u.ensure_authentication_token!
 end
 
-
-
+contact1 = Contact.create! do |c|
+  c.name = "王月明"
+  c.email = "yueming.wang@granges.com.cn"
+end
+contact2 = Contact.create! do |c|
+  c.name = "汪敏"
+  c.email = "min.wang@granges.com.cn"
+end
+contact3 = Contact.create! do |c|
+  c.name = "陈杰"
+  c.email = "jie.chen2@granges.com.cn"
+end
+contact4 = Contact.create! do |c|
+  c.name = "王耀忠"
+  c.email = "yaozhong.wang@granges.com.cn"
+end
+contact5 = Contact.create! do |c|
+  c.name = "张荣"
+  c.email = "rong.zhang@granges.com.cn"
+end
+contact6 = Contact.create! do |c|
+  c.name = "王强"
+  c.email = "qiang.wang@granges.com.cn"
+end
+contact7 = Contact.create! do |c|
+  c.name = "汪泳江"
+  c.email = "yongjiang.wang@granges.com.cn"
+end
+contact8 = Contact.create! do |c|
+  c.name = "徐松"
+  c.email = "song.xu@granges.com.cn"
+end
 
 asset01 = Asset.create({
                            serialnum: "1916201001",
