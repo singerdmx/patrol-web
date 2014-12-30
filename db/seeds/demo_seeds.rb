@@ -683,7 +683,7 @@ session6.check_results.create(
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:42:33.0",
-     check_point_id: 15,
+     check_point_id: route5.check_points.limit(3).last.id,
      created_at: "2014-04-29 06:47:34.776",
      updated_at: "2014-04-29 06:47:34.776"
     })
@@ -692,7 +692,7 @@ session6.check_results.create(
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:42:24.0",
-     check_point_id: 14,
+     check_point_id: route5.check_points.limit(2).last.id,
      created_at: "2014-04-29 06:47:34.779",
      updated_at: "2014-04-29 06:47:34.779"
     })
@@ -701,7 +701,7 @@ session6.check_results.create(
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:42:45.0",
-     check_point_id: 16,
+     check_point_id: route5.check_points.limit(3).last.id,
      created_at: "2014-04-29 06:47:34.781",
      updated_at: "2014-04-29 06:47:34.781"
     })
@@ -719,7 +719,7 @@ session7.check_results.create(
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:43:38.0",
-     check_point_id: 4,
+     check_point_id: asset3.check_points.first.id,
      created_at: "2014-04-29 06:47:34.869",
      updated_at: "2014-04-29 06:47:34.869"
     })
@@ -737,7 +737,7 @@ session8.check_results.create(
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:44:30.0",
-     check_point_id: 14,
+     check_point_id: route5.check_points.limit(2).last.id,
      created_at: "2014-04-29 06:47:34.875",
      updated_at: "2014-04-29 06:47:34.875"
     })
@@ -746,7 +746,7 @@ session8.check_results.create(
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:44:49.0",
-     check_point_id: 15,
+     check_point_id: route5.check_points.limit(3).last.id,
      created_at: "2014-04-29 06:47:34.878",
      updated_at: "2014-04-29 06:47:34.878"
     })
@@ -755,7 +755,7 @@ session8.check_results.create(
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:44:57.0",
-     check_point_id: 16,
+     check_point_id: route5.check_points.limit(3).last.id,
      created_at: "2014-04-29 06:47:34.880",
      updated_at: "2014-04-29 06:47:34.880"
     })
@@ -764,7 +764,7 @@ session1.check_results.create(
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:45:10.0",
-     check_point_id: 17,
+     check_point_id: route5.check_points.limit(3).last.id,
      created_at: "2014-04-29 06:47:34.884",
      updated_at: "2014-04-29 06:47:34.884"
     })
@@ -773,7 +773,7 @@ session1.check_results.create(
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:45:22.0",
-     check_point_id: 18,
+     check_point_id: route5.check_points.limit(3).last.id,
      created_at: "2014-04-29 06:47:34.886",
      updated_at: "2014-04-29 06:47:34.886"
     })
@@ -800,7 +800,7 @@ session2.check_results.create(
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:46:45.0",
-     check_point_id: 4,
+     check_point_id: asset3.check_points.first.id,
      created_at: "2014-04-29 06:47:34.960",
      updated_at: "2014-04-29 06:47:34.960"
     })
@@ -809,7 +809,7 @@ session3.check_results.create(
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:47:20.0",
-     check_point_id: 19,
+     check_point_id: route5.check_points.limit(3).last.id,
      created_at: "2014-04-29 06:47:34.965",
      updated_at: "2014-04-29 06:47:34.965"
     })
@@ -818,7 +818,7 @@ session3.check_results.create(
      status: 0,
      memo: "",
      check_time: "2014-04-29 06:47:34.0",
-     check_point_id: 19,
+     check_point_id: route5.check_points.limit(3).last.id,
      created_at: "2014-04-29 06:47:34.968",
      updated_at: "2014-04-29 06:47:34.968"
     })
@@ -849,7 +849,7 @@ check_point_3_choice_json = JSON.parse(check_point_3_choice)
      status: status,
      memo: "",
      check_time: check_time,
-     check_point_id: 4,
+     check_point_id: asset3.check_points.first.id,
     })
 
   check_time = now - i * 24 * 3600
