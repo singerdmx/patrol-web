@@ -105,6 +105,11 @@ contact2 = Contact.create! do |c|
   c.email = "lead1@test.com"
 end
 
+contact3 = Contact.create! do |u|
+  c.name = "维修主管"
+  c.email = "managbrite@gmail.com"
+end
+
 #create routes based on 17-1.pdf page 9
 asset1 = Asset.create({
                 tag: SecureRandom.urlsafe_base64(10),
@@ -457,7 +462,7 @@ asset32.check_points.create([
 route1 = area1.check_routes.create!(
     {name: "一工区机械8小时点巡检",
      description: "一工区机械8小时点巡检",
-     contacts: "[#{contact1.id},#{contact2.id}]",
+     contacts: "[#{contact1.id},#{contact2.id},#{contact3.id}]",
     })
 route1.check_points << asset1.check_points.first
 route1.check_points << asset2.check_points.first
