@@ -105,7 +105,7 @@ contact2 = Contact.create! do |c|
   c.email = "lead1@test.com"
 end
 
-contact3 = Contact.create! do |u|
+contact3 = Contact.create! do |c|
   c.name = "维修主管"
   c.email = "managbrite@gmail.com"
 end
