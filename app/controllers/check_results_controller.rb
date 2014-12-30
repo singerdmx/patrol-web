@@ -106,10 +106,17 @@ class CheckResultsController < ApplicationController
                 }
                 RepairReport.create(report_hash)
 
+
                 contacts = route.contacts
                 contacts = contacts[1...-1].split(",").map { |s| s.to_i }
-                users = [current_user.id, check_point.default_assigned_id]
-                AlertMailer.alert_email(contacts, users, report_hash).deliver
+                users = [current_user.id]
+                users << check_point.default_assigned_id if check_point.default_assigned_id
+                email_hash = {}
+                email_hash["name"] =
+                  "#{Asset.find(check_point.asset_id).name} #{check_point.name}"
+                email_hash["time"] = check_time_
+                email_hash["desc"] = result_record.memo
+                AlertMailer.alert_email(contacts, users, email_hash).deliver
               end
             end
 

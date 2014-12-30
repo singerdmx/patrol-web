@@ -1,7 +1,9 @@
 class AlertMailer < ActionMailer::Base
   default from: "alert-no-reply@managebrite.com"
 
-  def alert_email(contacts, users, report)
+  def alert_email(contacts, users, content)
+    @result = content
+
     recipients = contacts.map {|c| Contact.find(c).email}
     users.each do |u|
       recipients << User.find(u).email
