@@ -89,20 +89,27 @@ class CheckResultsController < ApplicationController
             if point['status'] == 1
               check_point = CheckPoint.find(point['id'])
               unless check_point.nil?
-                RepairReport.create(
-                  {asset_id: check_point.asset_id,
-                   check_point_id: point['id'],
-                   kind: "POINT",
-                   code: 2,
-                   description: result_record.memo,
-                   content: "",
-                   created_by_id: current_user.id,
-                   priority: 1,
-                   status: 2,
-                   check_result_id: result_record.id,
-                   report_type: "报修",
-                   created_at: check_time_,
-                  })
+                report_hash = {
+                  asset_id: check_point.asset_id,
+                  check_point_id: point['id'],
+                  kind: "POINT",
+                  code: 2,
+                  description: result_record.memo,
+                  content: "",
+                  created_by_id: current_user.id,
+                  priority: 1,
+                  status: 2,
+                  check_result_id: result_record.id,
+                  report_type: "报修",
+                  assigned_to_id: check_point.default_assigned_id,
+                  created_at: check_time_,
+                }
+                RepairReport.create(report_hash)
+
+                contacts = route.contacts
+                contacts = contacts[1...-1].split(",").map { |s| s.to_i }
+                users = [current_user.id, check_point.default_assigned_id]
+                AlertMailer.alert_email(contacts, users, report_hash).deliver
               end
             end
 
