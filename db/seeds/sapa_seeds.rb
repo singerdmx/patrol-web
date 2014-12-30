@@ -33,6 +33,64 @@ user3 = User.create! do |u|
   #u.ensure_authentication_token!
 end
 
+user11 = User.create! do |c|
+  c.name = "王月明"
+  c.email = "yueming.wang@granges.com.cn"
+  c.password = 'user1234'
+  c.password_confirmation = 'user1234'
+  c.role = 2
+end
+user12 = User.create! do |c|
+  c.name = "汪敏"
+  c.email = "min.wang@granges.com.cn"
+  c.password = 'user1234'
+  c.password_confirmation = 'user1234'
+  c.role = 2
+end
+user13 = User.create! do |c|
+  c.name = "陈杰"
+  c.email = "jie.chen2@granges.com.cn"
+  c.password = 'user1234'
+  c.password_confirmation = 'user1234'
+  c.role = 2
+end
+user14 = User.create! do |c|
+  c.name = "王耀忠"
+  c.email = "yaozhong.wang@granges.com.cn"
+  c.password = 'user1234'
+  c.password_confirmation = 'user1234'
+  c.role = 2
+end
+user15 = User.create! do |c|
+  c.name = "张荣"
+  c.email = "rong.zhang@granges.com.cn"
+  c.password = 'user1234'
+  c.password_confirmation = 'user1234'
+  c.role = 2
+end
+user16 = User.create! do |c|
+  c.name = "王强"
+  c.email = "qiang.wang@granges.com.cn"
+  c.password = 'user1234'
+  c.password_confirmation = 'user1234'
+  c.role = 2
+end
+user17 = User.create! do |c|
+  c.name = "汪泳江"
+  c.email = "yongjiang.wang@granges.com.cn"
+  c.password = 'user1234'
+  c.password_confirmation = 'user1234'
+  c.role = 2
+end
+user18 = User.create! do |c|
+  c.name = "徐松"
+  c.email = "song.xu@granges.com.cn"
+  c.password = 'user1234'
+  c.password_confirmation = 'user1234'
+  c.role = 2
+end
+
+
 contact1 = Contact.create! do |c|
   c.name = "王月明"
   c.email = "yueming.wang@granges.com.cn"
@@ -79,6 +137,7 @@ asset01.check_points.create([
                                     point_code:   "SC-1A100-MRSS04",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -88,6 +147,7 @@ asset01.check_points.create([
                                     point_code:   "SC-1A100-MRSV04",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -97,6 +157,7 @@ asset01.check_points.create([
                                     point_code:   "SC-1A000-MHYZ52",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 } ])
 
@@ -114,6 +175,7 @@ asset02.check_points.create([
                                     point_code:   "SC-19100-MRSS03",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -123,6 +185,7 @@ asset02.check_points.create([
                                     point_code:   "SC-19100-MRSV03",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -132,6 +195,7 @@ asset02.check_points.create([
                                     point_code:   "SC-19000-MHYZ51",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 } ])
 
@@ -148,6 +212,7 @@ asset03.check_points.create([
                                     point_code:   "SC-1C400-MEWZ02",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 } ])
 
@@ -165,6 +230,7 @@ asset04.check_points.create([
                                     measure_unit: "Bar",
                                     state:        "",
                                     choice:       '["150", "", "", "165"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -175,6 +241,7 @@ asset04.check_points.create([
                                     measure_unit: "C",
                                     state:        "",
                                     choice:       '["", "", "", "55"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -184,6 +251,7 @@ asset04.check_points.create([
                                     point_code:   "SC-18100-MEXZ07",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -193,6 +261,7 @@ asset04.check_points.create([
                                     point_code:   "SC-18120-MPHR04",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -201,6 +270,7 @@ asset04.check_points.create([
                                     category:     41,
                                     point_code:   "SC-18130-MPHR05",
                                     state:        "",
+                                    default_assigned_id: user14.id,
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
@@ -211,6 +281,7 @@ asset04.check_points.create([
                                     point_code:   "SC-18140-MPHR06",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 } ])
 
@@ -227,6 +298,7 @@ asset05.check_points.create([
                                     point_code:   "SC-11500-MEZZ01",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 } ])
 
@@ -243,6 +315,7 @@ asset06.check_points.create([
                                     point_code:   "SC-10000-ZZZZ24",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -252,6 +325,7 @@ asset06.check_points.create([
                                     point_code:   "SC-10000-ZZZZ24",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 } ])
 
@@ -269,6 +343,7 @@ asset07.check_points.create([
                                     measure_unit: "Bar",
                                     state:        "",
                                     choice:       '["95", "", "", "105"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -279,6 +354,7 @@ asset07.check_points.create([
                                     measure_unit: "C",
                                     state:        "",
                                     choice:       '["", "", "", "55"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -288,6 +364,7 @@ asset07.check_points.create([
                                     point_code:   "SC-1I100-MEXZ08",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -297,6 +374,7 @@ asset07.check_points.create([
                                     point_code:   "SC-1I120-MPHR07",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -306,6 +384,7 @@ asset07.check_points.create([
                                     point_code:   "SC-1I130-MPHR08",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -315,6 +394,7 @@ asset07.check_points.create([
                                     point_code:   "SC-1I140-MPHR09",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 } ])
 
@@ -331,6 +411,7 @@ asset08.check_points.create([
                                     point_code:   "SC-11A10-MVVZ06",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 } ])
 
@@ -347,6 +428,7 @@ asset09.check_points.create([
                                     point_code:   "SC-11300-MVVZ03",
                                     measure_unit: "Mpa",
                                     state:        "",
+                                    default_assigned_id: user13.id,
                                     choice:       '["0.40", "", "", ""]',
                                     frequency:    24
                                 },
@@ -357,6 +439,7 @@ asset09.check_points.create([
                                     point_code:   "SC-11300-MEXZ01",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 } ])
 
@@ -373,6 +456,7 @@ asset10.check_points.create([
                                     point_code:   "SC-1J200-MVVZ42",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -382,6 +466,7 @@ asset10.check_points.create([
                                     point_code:   "SC-1J400-MPIC08",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -391,6 +476,7 @@ asset10.check_points.create([
                                     point_code:   "SC-1J400-MPIC09",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -400,6 +486,7 @@ asset10.check_points.create([
                                     point_code:   "SC-1J200-MPIC02",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -409,6 +496,7 @@ asset10.check_points.create([
                                     point_code:   "SC-1J200-MPIC03",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -418,6 +506,7 @@ asset10.check_points.create([
                                     point_code:   "SC-1J200-MPIC04",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -427,6 +516,7 @@ asset10.check_points.create([
                                     point_code:   "SC-1J200-MPIC14",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -436,6 +526,7 @@ asset10.check_points.create([
                                     point_code:   "SC-1J300-MPIC05",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -445,6 +536,7 @@ asset10.check_points.create([
                                     point_code:   "SC-1J300-MPIC06",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -454,6 +546,7 @@ asset10.check_points.create([
                                     point_code:   "SC-1J300-MPIC07",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -463,6 +556,7 @@ asset10.check_points.create([
                                     point_code:   "SC-1J300-MPIC15",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -472,14 +566,15 @@ asset10.check_points.create([
                                     point_code:   "SC-1J300-MVVZ43",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 } ])
 
 asset11 = Asset.create({
                            serialnum: "1916201011",
                            barcode: "1916201011",
-                           name: "热轧乳液地下室",
-                           description: "热轧乳液地下室" })
+                           name: "热轧稀油地下室",
+                           description: "热轧稀油地下室" })
 asset11.check_points.create([
                                 {
                                     name:         "热轧稀油地下室",
@@ -488,6 +583,7 @@ asset11.check_points.create([
                                     point_code:   "SC-11410-MPHG01",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -497,6 +593,7 @@ asset11.check_points.create([
                                     point_code:   "SC-11410-MPHG02",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -506,6 +603,7 @@ asset11.check_points.create([
                                     point_code:   "SC-11410-MVVZ04",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -515,6 +613,7 @@ asset11.check_points.create([
                                     point_code:   "SC-12400-MPIC18",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -524,6 +623,7 @@ asset11.check_points.create([
                                     point_code:   "SC-12400-MPIC19",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -533,6 +633,7 @@ asset11.check_points.create([
                                     point_code:   "SC-12400-MVVZ60",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 } ])
 
@@ -549,6 +650,7 @@ asset12.check_points.create([
                                     point_code:   "SC-1J200-MPIC02",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -558,6 +660,7 @@ asset12.check_points.create([
                                     point_code:   "SC-1J200-MPIC03",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -567,6 +670,7 @@ asset12.check_points.create([
                                     point_code:   "SC-1J200-MPIC04",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -576,6 +680,7 @@ asset12.check_points.create([
                                     point_code:   "SC-1J000-MEFC01",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -585,6 +690,7 @@ asset12.check_points.create([
                                     point_code:   "SC-1J400-MPIC08",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -594,6 +700,7 @@ asset12.check_points.create([
                                     point_code:   "SC-1J400-MPIC09",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 } ])
 
@@ -611,6 +718,7 @@ asset13.check_points.create([
                                     point_code:   "SC-15200-MRSS02",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -619,6 +727,7 @@ asset13.check_points.create([
                                     category:     41,
                                     point_code:   "SC-15200-MRSV02",
                                     state:        "",
+                                    default_assigned_id: user13.id,
                                     choice:       '["正常","异常"]',
                                     frequency:    24
                                 },
@@ -629,6 +738,7 @@ asset13.check_points.create([
                                     point_code:   "SC-15000-MHYZ36",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 } ])
 
@@ -646,6 +756,7 @@ asset14.check_points.create([
                                     point_code:   "SC-14100-MRSS01",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -655,6 +766,7 @@ asset14.check_points.create([
                                     point_code:   "SC-14100-MRSV01",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -664,6 +776,7 @@ asset14.check_points.create([
                                     point_code:   "SC-14000-MHYZ35",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 } ])
 
@@ -680,6 +793,7 @@ asset15.check_points.create([
                                     point_code:   "SC-17200-MENZ01",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -689,6 +803,7 @@ asset15.check_points.create([
                                     point_code:   "SC-17300-LLZZ03",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -698,6 +813,7 @@ asset15.check_points.create([
                                     point_code:   "SC-17400-MEWZ01",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 } ])
 
@@ -715,6 +831,7 @@ asset16.check_points.create([
                                     measure_unit: "Bar",
                                     state:        "",
                                     choice:       '["150", "", "", "165"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -724,6 +841,7 @@ asset16.check_points.create([
                                     point_code:   "SC-13100-MEXZ05",
                                     measure_unit: "C",
                                     state:        "",
+                                    default_assigned_id: user14.id,
                                     choice:       '["", "", "", "55"]',
                                     frequency:    24
                                 },
@@ -734,6 +852,7 @@ asset16.check_points.create([
                                     point_code:   "SC-13100-MEXZ05",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -743,6 +862,7 @@ asset16.check_points.create([
                                     point_code:   "SC-13120-MPHR01",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -752,6 +872,7 @@ asset16.check_points.create([
                                     point_code:   "SC-13130-MPHR02",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -761,6 +882,7 @@ asset16.check_points.create([
                                     point_code:   "SC-13140-MPHR03",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 } ])
 
@@ -778,6 +900,7 @@ asset17.check_points.create([
                                     measure_unit: "Bar",
                                     state:        "",
                                     choice:       '["150", "", "", "165"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -788,6 +911,7 @@ asset17.check_points.create([
                                     measure_unit: "C",
                                     state:        "",
                                     choice:       '["", "", "", "55"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -797,6 +921,7 @@ asset17.check_points.create([
                                     point_code:   "SC-1I200-MEXZ09",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -806,6 +931,7 @@ asset17.check_points.create([
                                     point_code:   "SC-1I220-MPHR10",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -815,6 +941,7 @@ asset17.check_points.create([
                                     point_code:   "SC-1I230-MPHR11",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -824,6 +951,7 @@ asset17.check_points.create([
                                     point_code:   "SC-1I240-MPHR12",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 } ])
 
@@ -841,6 +969,7 @@ asset18.check_points.create([
                                     measure_unit: "Bar",
                                     state:        "",
                                     choice:       '["200", "", "", "210"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -851,6 +980,7 @@ asset18.check_points.create([
                                     measure_unit: "C",
                                     state:        "",
                                     choice:       '["", "", "", "55"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -860,6 +990,7 @@ asset18.check_points.create([
                                     point_code:   "SC-1I300-MEXZ10",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -869,6 +1000,7 @@ asset18.check_points.create([
                                     point_code:   "SC-1I320-MPHR13",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -878,6 +1010,7 @@ asset18.check_points.create([
                                     point_code:   "SC-1I330-MPHR14",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                } ])
 
@@ -895,6 +1028,7 @@ asset19.check_points.create([
                                     measure_unit: "Bar",
                                     state:        "",
                                     choice:       '["185", "", "", "210"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -905,6 +1039,7 @@ asset19.check_points.create([
                                     measure_unit: "C",
                                     state:        "",
                                     choice:       '["", "", "", "55"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -914,6 +1049,7 @@ asset19.check_points.create([
                                     point_code:   "SC-1I400-MEXZ11",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -923,6 +1059,7 @@ asset19.check_points.create([
                                     point_code:   "SC-1I420-MPHR15",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 },
                                 {
@@ -932,14 +1069,15 @@ asset19.check_points.create([
                                     point_code:   "SC-1I430-MPHR16",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user14.id,
                                     frequency:    24
                                 } ])
 
 asset20 = Asset.create({
                            serialnum: "1916201020",
                            barcode: "1916201020",
-                           name: "压上系统液压站",
-                           description: "压上系统液压站" })
+                           name: "压下装置",
+                           description: "压下装置" })
 asset20.check_points.create([
                                 {
                                     name:         "压下装置，传动侧减速箱各润滑点滴油状况",
@@ -948,6 +1086,7 @@ asset20.check_points.create([
                                     point_code:   "SC-11900-MDEZ02",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -957,6 +1096,7 @@ asset20.check_points.create([
                                     point_code:   "SC-11900-MDEZ03",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -966,6 +1106,7 @@ asset20.check_points.create([
                                     point_code:   "SC-11900-MDTZ02",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -975,6 +1116,7 @@ asset20.check_points.create([
                                     point_code:   "SC-11900-MEXZ03",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 } ])
 
@@ -991,6 +1133,7 @@ asset21.check_points.create([
                                     point_code:   "SC-1J300-MPIC05",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -1000,6 +1143,7 @@ asset21.check_points.create([
                                     point_code:   "SC-1J300-MPIC06",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -1009,6 +1153,7 @@ asset21.check_points.create([
                                     point_code:   "SC-1J300-MPIC07",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 } ])
 
@@ -1025,6 +1170,7 @@ asset22.check_points.create([
                                     point_code:   "SC-11B10-LLZZ01",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 } ])
 
@@ -1041,6 +1187,7 @@ asset23.check_points.create([
                                     point_code:   "SC-11400-EETS01",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -1050,6 +1197,7 @@ asset23.check_points.create([
                                     point_code:   "SC-11410-MEXZ02",
                                     state:        "",
                                     choice:       '["正常","异常"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 },
                                 {
@@ -1059,6 +1207,7 @@ asset23.check_points.create([
                                     point_code:   "SC-11410-ZZZZ01",
                                     state:        "",
                                     choice:       '["0.30", "", "", "0.50"]',
+                                    default_assigned_id: user13.id,
                                     frequency:    24
                                 } ])
 
