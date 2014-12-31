@@ -4,7 +4,8 @@ class AlertMailer < ActionMailer::Base
   def alert_email(contacts, users, content)
     @result = content
 
-    recipients = contacts.map {|c| Contact.find(c).email}
+    recipients = contacts.map {|c| Contact.find(c).email} if contacts
+    recipients ||= []
     users.each do |u|
       recipients << User.find(u).email
     end

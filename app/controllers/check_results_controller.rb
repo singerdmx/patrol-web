@@ -108,7 +108,7 @@ class CheckResultsController < ApplicationController
 
 
                 contacts = route.contacts
-                contacts = contacts[1...-1].split(",").map { |s| s.to_i }
+                contacts = contacts[1...-1].split(",").map { |s| s.to_i } if contacts
                 users = [current_user.id]
                 users << check_point.default_assigned_id if check_point.default_assigned_id
                 email_hash = {}
