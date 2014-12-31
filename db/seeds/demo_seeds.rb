@@ -40,6 +40,7 @@ CheckPoint.delete_all
 CheckResult.delete_all
 User.delete_all
 Contact.delete_all
+RepairReport.delete_all
 
 user1 = User.create! do |u|
   u.email = 'user@test.com'
