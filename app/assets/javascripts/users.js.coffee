@@ -542,7 +542,7 @@ setupProblemsDiv = (containerDiv) ->
             $("#{containerDiv} span#problem_name").text(data['name'])
             $("#{containerDiv} span#problem_description").text(data['description'])
             changeSelectByValue('problem_status', data['status'])
-            $("#{containerDiv} textarea#problem_content").text(data['content'])
+            $("#{containerDiv} textarea#problem_content").val(data['content'])
             $("#{containerDiv} input#problem_assigned_to_user").val(data['assigned_to_user'])
             $("#{containerDiv} span#problem_assigned_to_id").text(data['assigned_to_id'])
             $("#{containerDiv} div#problem_plan_date").datetimepicker(getDatetimePickerSettingsWithStartDate())
@@ -616,7 +616,7 @@ submitEditProblemForm = (containerDiv, _suggestions) ->
     plan_date: planDate,
     assigned_to_id: assignedToId,
     status: $("#{containerDiv} select#problem_status").val(),
-    content: $("#{containerDiv} textarea#problem_content").text()
+    content: $("#{containerDiv} textarea#problem_content").val()
   }
   $.ajax
     url: getBaseURL() + "/problem_list/#{$("#{containerDiv} span#problemId").text()}.json"
