@@ -626,6 +626,7 @@ submitEditProblemForm = (containerDiv, _suggestions) ->
     dataType: 'json',
     success: (data, textStatus, jqHXR) ->
       alert '更新成功'
+      $("#{containerDiv} button#btnReturn").trigger('click')
       return
     error: (jqXHR, textStatus, errorThrown) ->
       alert jqXHR.responseJSON.message
