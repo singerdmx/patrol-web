@@ -662,7 +662,7 @@ updateProblemsTable = (containerDiv, params) ->
       if jqHXR.status is 200
         $("#{containerDiv} div#assignedUserStatChartDiv").html('')
         statusEnum = ($(o).text().trim() for o in $("#{containerDiv} select#status").children('option'))
-        statusEnum.shift() # remove “所有”
+        statusEnum.remove(statusEnum.indexOf('所有')) # remove “所有”
         assignedUserStat = {}
 
         for record in data

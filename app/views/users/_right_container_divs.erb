@@ -253,7 +253,7 @@
       <div>状态</div>
       <div class="input-append">
         <select class="form-control" id="status">
-          <% [0, 1, 2, 3].each do |status| %>
+          <% [2, 1, 3, 0].each do |status| %>
             <option value="<%= status %>">
               <%= get_problem_status_string(status) %>
             </option>
