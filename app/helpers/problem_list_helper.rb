@@ -16,22 +16,28 @@ module ProblemListHelper
     entry['updated_at'] = entry['updated_at'].to_i
     entry['plan_date'] = entry['plan_date'].to_time.to_i if entry['plan_date']
 
-    asset = Asset.find_by(id: entry['asset_id'])
-    ticket_name = asset.name if asset
-    barcode = asset.barcode if asset
-    if entry['kind'] == "POINT"
-      point = CheckPoint.find_by(id: entry['check_point_id'])
-      ticket_name = "#{ticket_name} #{point.name}" if point
-      barcode = point.barcode if point
+    asset = Asset.find(entry['asset_id'])
+    barcode = asset.barcode
+    case entry['kind']
+      when 'POINT'
+        point = CheckPoint.find(entry['check_point_id'])
+        entry['name'] = "#{asset.name} #{point.name}"
+        barcode = point.barcode
+        entry['point_description'] = point.description
+      when 'ASSET'
+        entry['name'] = asset.name
+        entry['point_description'] = ''
+      else
+        fail "Invalid kind '#{kind}'!"
     end
-    entry['name'] = ticket_name.nil? ? "" : ticket_name
-    entry['barcode'] = barcode.nil? ? "" : barcode
+
+    entry['barcode'] = barcode.nil? ? '' : barcode
 
     created_by_user = User.find_by(id: entry['created_by_id'])
-    entry['created_by_user'] = created_by_user.nil? ? "" : created_by_user.name
+    entry['created_by_user'] = created_by_user.nil? ? '' : created_by_user.name
 
     assigned_to_user = User.find_by(id: entry['assigned_to_id'])
-    entry['assigned_to_user'] = assigned_to_user.nil? ? "" : assigned_to_user.name
+    entry['assigned_to_user'] = assigned_to_user.nil? ? '' : assigned_to_user.name
 
     entry
   end
@@ -42,6 +48,7 @@ module ProblemListHelper
         r['created_at'],
         r['created_by_user'],
         r['name'],
+        r['point_description'],
         r['description'],
         r['assigned_to_user'],
         get_problem_status_string(r['status'].to_i),

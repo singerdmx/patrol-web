@@ -668,9 +668,9 @@ updateProblemsTable = (containerDiv, params) ->
 
         for record in data
           record[0] = dateToString(new Date(record[0] * 1000))
-          record[7] = dateToShortString(new Date(record[7] * 1000)) if record[7]
-          status = record[5]
-          assignedUser = record[4]
+          record[8] = dateToShortString(new Date(record[8] * 1000)) if record[7]
+          status = record[6]
+          assignedUser = record[5]
           assignedUser = '未分配' unless assignedUser
           unless assignedUserStat[assignedUser]
             assignedUserStat[assignedUser] = {}
@@ -687,7 +687,11 @@ updateProblemsTable = (containerDiv, params) ->
             "sClass": "center"
           },
           {
-            "sTitle": "名称",
+            "sTitle": "点检部位名称",
+            "sClass": "center"
+          },
+          {
+            "sTitle": "点检内容",
             "sClass": "center"
           },
           {
@@ -721,7 +725,7 @@ updateProblemsTable = (containerDiv, params) ->
           'aoColumns': columns,
           'aaSorting': [[ 0, 'desc' ]]
           'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
-            switch aaData[5]
+            switch aaData[6]
               when '未完成'
                 $(nRow).addClass('darkBlueTextColor')
               when '完成'
@@ -731,7 +735,7 @@ updateProblemsTable = (containerDiv, params) ->
             return
 
         oTable = $("#{containerDiv} table#problemsTable").dataTable()
-        oTable.fnSetColumnVis(8, false)
+        oTable.fnSetColumnVis(9, false)
 
         $("#{containerDiv} table#problemsTable > tbody").on(
           'click',
