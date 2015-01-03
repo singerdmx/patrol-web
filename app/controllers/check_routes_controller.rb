@@ -43,8 +43,8 @@ class CheckRoutesController < ApplicationController
   def show
     r = to_hash(@check_route, true)
     if r['contacts']
-      r['contacts'] = JSON.parse(r['contacts']).map do |id|
-        to_hash(Contact.find(id), true)
+      r['contacts'] = get_or_update_contacts(@check_route, r['contacts']).map do |c|
+        to_hash(c, true)
       end
     end
     #r['points'] = @check_route.check_points.map do |p|

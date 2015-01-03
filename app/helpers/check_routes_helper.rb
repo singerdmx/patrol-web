@@ -29,9 +29,7 @@ module CheckRoutesHelper
       entry['area_name'] = Area.find(route.area_id).name if show_name
       if show_name
         if entry['contacts']
-          contacts = JSON.parse(entry['contacts'])
-          entry['contacts'] = contacts.map do |id|
-            c = Contact.find(id)
+          entry['contacts'] = get_or_update_contacts(route, entry['contacts']).map do |c|
             "#{c.email} (#{c.name})"
           end
         end
@@ -40,6 +38,32 @@ module CheckRoutesHelper
       end
       entry
     end
+  end
+
+  def get_or_update_contacts(route, contacts_json_string)
+    contact_ids = []
+    contacts = []
+    updated = false
+    JSON.parse(contacts_json_string).map do |id|
+      _results = Contact.where(id: id)
+      if _results.empty?
+        updated = true
+      else
+        c = _results.first
+        contacts.push(c)
+        contact_ids.push(id)
+      end
+    end
+
+    if updated
+      if contact_ids.empty?
+        route.update(contacts: nil)
+      else
+        route.update(contacts: contact_ids.to_s)
+      end
+    end
+
+    contacts
   end
 
   # route_assets: Key is route id and value is assets (Hash of key = asset id and value = points)
