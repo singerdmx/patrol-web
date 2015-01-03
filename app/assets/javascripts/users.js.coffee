@@ -59,6 +59,7 @@ setupSidebar = ->
       when 'manageUsers'
         updateUsersTable(containerDiv)
       when 'manageContacts'
+        $("#{containerDiv} button#btnAddNewContact, #{containerDiv} button#btnEditContact").hide()
         updateContactsTable(containerDiv)
       when 'problems'
         updateProblemsTable(containerDiv)
@@ -2178,6 +2179,13 @@ updateContactsTable = (containerDiv) ->
             oTable = $("#{containerDiv} table#contactsTable").dataTable()
             oTable.$('tr').removeClass('mediumSeaGreenBackground')
             $(this).addClass('mediumSeaGreenBackground')
+            if $("#{containerDiv} button#btnEditContact").is(':visible')
+              _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
+              row = oTable.fnGetData(_selectedTr[0])
+              $("#{containerDiv} span#contactId").text(row[0])
+              $("#{containerDiv} input#contactNameInput").val(row[1])
+              $("#{containerDiv} input#contactEmailInput").val(row[2])
+
             return
         )
 
@@ -2195,7 +2203,31 @@ updateContactsTable = (containerDiv) ->
   return
 
 setupManageContactsDiv = (containerDiv) ->
-  $("#{containerDiv} button#btnAddNewContact").click ->
+  $("#{containerDiv} button#btnShowAddNewContact").click ->
+    $("#{containerDiv} button#btnAddNewContact").show()
+    $("#{containerDiv} button#btnEditContact").hide()
+    $("#{containerDiv} input#contactNameInput").val('')
+    $("#{containerDiv} input#contactEmailInput").val('')
+    oTable = $("#{containerDiv} table#contactsTable").dataTable()
+    oTable.$('tr').removeClass('mediumSeaGreenBackground')
+    return
+
+  $("#{containerDiv} button#btnShowEditContact").click ->
+    oTable = $("#{containerDiv} table#contactsTable").dataTable()
+    _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
+    if _selectedTr.length is 0
+      alert '请选择联系人！'
+      return
+
+    row = oTable.fnGetData(_selectedTr[0])
+    $("#{containerDiv} button#btnAddNewContact").hide()
+    $("#{containerDiv} button#btnEditContact").show()
+    $("#{containerDiv} span#contactId").text(row[0])
+    $("#{containerDiv} input#contactNameInput").val(row[1])
+    $("#{containerDiv} input#contactEmailInput").val(row[2])
+    return
+
+  $("#{containerDiv} button#btnAddNewContact, #{containerDiv} button#btnEditContact").click ->
     $contactName = $("#{containerDiv} input#contactNameInput")
     if isInputValueEmpty($contactName)
       alert '请填写姓名！'
@@ -2214,17 +2246,32 @@ setupManageContactsDiv = (containerDiv) ->
       name: $contactName.val(),
       email: $contactEmail.val()
     }
+
+    requestType = $(this).data('type')
+    _relativeUrl = null
+    switch requestType
+      when 'POST'
+        _relativeUrl = '/contacts.json'
+      when 'PUT'
+        _relativeUrl = "/contacts/#{$("#{containerDiv} span#contactId").text()}.json"
+
     $.ajax
-      url: getBaseURL() + '/contacts.json'
-      type: 'POST',
+      url: getBaseURL() + _relativeUrl
+      type: requestType,
       contentType: 'application/json',
       data: JSON.stringify(payload),
       dataType: 'json',
       success: (data, textStatus, jqHXR) ->
-        alert '联系人添加成功'
+        switch requestType
+          when 'POST'
+            alert '联系人添加成功'
+          when 'PUT'
+            alert '联系人编辑成功'
+
         updateContactsTable(containerDiv)
         resetToPlaceholderValue($contactName)
         resetToPlaceholderValue($contactEmail)
+        $("#{containerDiv} button#btnAddNewContact, #{containerDiv} button#btnEditContact").hide()
         return
       error: (jqXHR, textStatus, errorThrown) ->
         alert jqXHR.responseJSON.message
@@ -2239,6 +2286,7 @@ setupManageContactsDiv = (containerDiv) ->
     if _selectedTr.length is 0
       alert '请选择联系人！'
     else
+      $("#{containerDiv} button#btnAddNewContact, #{containerDiv} button#btnEditContact").hide()
       row = oTable.fnGetData(_selectedTr[0])
       if confirm("您确定要删除联系人 #{row[1]} #{row[2]} 吗？")
         $.ajax

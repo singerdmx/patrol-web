@@ -38,6 +38,20 @@ class ContactsController < ApplicationController
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
+  # PUT /contacts/1.json
+  def update
+    unless current_user.is_admin?
+      render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      return
+    end
+
+    contact = Contact.find(params[:id])
+    contact.update_attributes(name: params[:name], email: params[:email])
+    render json: {id: params[:id]}.to_json
+  rescue Exception => e
+    render json: {message: e.to_s}.to_json, status: :internal_server_error
+  end
+
   def destroy
     unless current_user.is_admin?
       render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
