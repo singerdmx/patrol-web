@@ -758,10 +758,20 @@ renderAssignedUserStatChart = (chartId, assignedUserStat, choice) ->
   _line.push(new Array()) for [1..choice.length]
 
   _ticks = []
+  _values = []
   for k, v of assignedUserStat
     _ticks.push(k)
-    for i in [0..choice.length-1]
-      _line[i].push(v[choice[i]])
+    _values.push(v)
+
+  _unassignedIndex = _ticks.indexOf('未分配')
+  # move '未分配' to the last
+  if _unassignedIndex >= 0
+    _ticks.swap(_unassignedIndex, _ticks.length - 1)
+    _values.swap(_unassignedIndex, _values.length - 1)
+
+  for i in [0.._ticks.length-1]
+    for j in [0..choice.length-1]
+      _line[j].push(_values[i][choice[j]])
 
   _series = ({label: c} for c in choice)
   _plot_setting =
@@ -776,6 +786,7 @@ renderAssignedUserStatChart = (chartId, assignedUserStat, choice) ->
         show: true
         hideZeros: true
     series: _series
+    seriesColors: ['rgb(0, 0, 139)', 'rgb(0, 100, 0)', 'rgb(0, 139, 139)']
     axesDefaults:
       tickRenderer: $.jqplot.CanvasAxisTickRenderer
     axes:
@@ -798,6 +809,8 @@ renderAssignedUserStatChart = (chartId, assignedUserStat, choice) ->
     _line,
     _plot_setting
   )
+
+  $("div##{chartId} div.jqplot-point-label").css('color', 'white')
   return
 
 getCanvasOverlayObjects = (_point) ->
