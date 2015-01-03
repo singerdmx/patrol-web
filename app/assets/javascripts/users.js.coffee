@@ -59,7 +59,7 @@ setupSidebar = ->
       when 'manageUsers'
         updateUsersTable(containerDiv)
       when 'manageContacts'
-        $("#{containerDiv} button#btnAddNewContact, #{containerDiv} button#btnEditContact").hide()
+        $("#{containerDiv} div#addEditContactDiv, #{containerDiv} button#btnAddNewContact, #{containerDiv} button#btnEditContact").hide()
         updateContactsTable(containerDiv)
       when 'problems'
         updateProblemsTable(containerDiv)
@@ -663,7 +663,7 @@ updateProblemsTable = (containerDiv, params) ->
       if jqHXR.status is 200
         $("#{containerDiv} div#assignedUserStatChartDiv").html('')
         statusEnum = ($(o).text().trim() for o in $("#{containerDiv} select#status").children('option'))
-        statusEnum.remove(statusEnum.indexOf('所有')) # remove “所有”
+        statusEnum.remove(statusEnum.indexOf('全部')) # remove “全部”
         assignedUserStat = {}
 
         for record in data
@@ -2208,6 +2208,7 @@ updateContactsTable = (containerDiv) ->
 
 setupManageContactsDiv = (containerDiv) ->
   $("#{containerDiv} button#btnShowAddNewContact").click ->
+    $("#{containerDiv} div#addEditContactDiv").show()
     $("#{containerDiv} button#btnAddNewContact").show()
     $("#{containerDiv} button#btnEditContact").hide()
     $("#{containerDiv} input#contactNameInput").val('')
@@ -2224,6 +2225,7 @@ setupManageContactsDiv = (containerDiv) ->
       return
 
     row = oTable.fnGetData(_selectedTr[0])
+    $("#{containerDiv} div#addEditContactDiv").show()
     $("#{containerDiv} button#btnAddNewContact").hide()
     $("#{containerDiv} button#btnEditContact").show()
     $("#{containerDiv} span#contactId").text(row[0])
@@ -2275,7 +2277,7 @@ setupManageContactsDiv = (containerDiv) ->
         updateContactsTable(containerDiv)
         resetToPlaceholderValue($contactName)
         resetToPlaceholderValue($contactEmail)
-        $("#{containerDiv} button#btnAddNewContact, #{containerDiv} button#btnEditContact").hide()
+        $("#{containerDiv} div#addEditContactDiv, #{containerDiv} button#btnAddNewContact, #{containerDiv} button#btnEditContact").hide()
         return
       error: (jqXHR, textStatus, errorThrown) ->
         alert jqXHR.responseJSON.message
@@ -2290,7 +2292,7 @@ setupManageContactsDiv = (containerDiv) ->
     if _selectedTr.length is 0
       alert '请选择联系人！'
     else
-      $("#{containerDiv} button#btnAddNewContact, #{containerDiv} button#btnEditContact").hide()
+      $("#{containerDiv} div#addEditContactDiv, #{containerDiv} button#btnAddNewContact, #{containerDiv} button#btnEditContact").hide()
       row = oTable.fnGetData(_selectedTr[0])
       if confirm("您确定要删除联系人 #{row[1]} #{row[2]} 吗？")
         $.ajax
