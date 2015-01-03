@@ -719,6 +719,15 @@ updateProblemsTable = (containerDiv, params) ->
           'aaData': data,
           'aoColumns': columns,
           'aaSorting': [[ 0, 'desc' ]]
+          'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
+            switch aaData[5]
+              when '未完成'
+                $(nRow).addClass('darkBlueTextColor')
+              when '完成'
+                $(nRow).addClass('darkGreenTextColor')
+              when '取消'
+                $(nRow).addClass('darkCyanTextColor')
+            return
 
         oTable = $("#{containerDiv} table#problemsTable").dataTable()
         oTable.fnSetColumnVis(8, false)
