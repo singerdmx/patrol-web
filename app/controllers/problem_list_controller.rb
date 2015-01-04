@@ -52,4 +52,9 @@ class ProblemListController < ApplicationController
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
+
+  #GET /problem_list/export
+  def export
+    render json: params.to_json
+  end
 end

@@ -16,7 +16,9 @@ Blog::Application.routes.draw do
   resources :user_preferences
   resources :factories, only: [:index]
   resources :repair_reports
-  resources :problem_list
+  resources :problem_list do
+    collection { get 'export' }
+  end
 
   resources :contacts
 
