@@ -769,6 +769,8 @@ renderAssignedUserStatChart = (chartId, assignedUserStat, choice) ->
     _ticks.push(k)
     _values.push(v)
 
+  return if _ticks.length == 0
+
   _unassignedIndex = _ticks.indexOf('未分配')
   # move '未分配' to the last
   if _unassignedIndex >= 0
