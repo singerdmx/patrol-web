@@ -11,7 +11,9 @@ Blog::Application.routes.draw do
   resources :check_points,     :path => :points do
     resources :history, controller: 'check_results', only: [:index]
   end
-  resources :check_results, :path => :results
+  resources :check_results, :path => :results do
+    collection { get 'export' }
+  end
   resources :manuals
   resources :user_preferences
   resources :factories, only: [:index]

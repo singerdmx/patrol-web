@@ -160,8 +160,11 @@ class CheckResultsController < ApplicationController
         format.json { render json: {:message=> e.to_s}.to_json, status: :internal_server_error }
       end
     end
+  end
 
-
+  #GET /results/export
+  def export
+    render json: params.to_json
   end
 
   private
