@@ -532,7 +532,7 @@ setupProblemsDiv = (containerDiv) ->
       alert '请选择问题！'
     else
       row = oTable.fnGetData(_selectedTr[0])
-      id = row[8]
+      id = row[9]
       $.ajax
         url: getBaseURL() + "/problem_list/#{id}.json"
         success: (data, textStatus, jqHXR) ->
@@ -542,6 +542,7 @@ setupProblemsDiv = (containerDiv) ->
             $("#{containerDiv} span#problem_created_by_user").text(data['created_by_user'])
             $("#{containerDiv} span#problem_name").text(data['name'])
             $("#{containerDiv} span#problem_description").text(data['description'])
+            $("#{containerDiv} span#problem_point_description").text(data['point_description'])
             changeSelectByValue('problem_status', data['status'])
             $("#{containerDiv} textarea#problem_content").val(data['content'])
             $("#{containerDiv} input#problem_assigned_to_user").val(data['assigned_to_user'])
@@ -668,7 +669,7 @@ updateProblemsTable = (containerDiv, params) ->
 
         for record in data
           record[0] = dateToString(new Date(record[0] * 1000))
-          record[8] = dateToShortString(new Date(record[8] * 1000)) if record[7]
+          record[8] = dateToShortString(new Date(record[8] * 1000)) if record[8]
           status = record[6]
           assignedUser = record[5]
           assignedUser = '未分配' unless assignedUser
