@@ -128,7 +128,7 @@ class CheckResultsController < ApplicationController
 
 
     rescue Exception => e
-      render json: {:message=> e.to_s}.to_json, status: :internal_server_error
+      render json: {message: e.to_s}.to_json, status: :internal_server_error
     end
   end
 
@@ -162,9 +162,11 @@ class CheckResultsController < ApplicationController
     end
   end
 
-  #GET /results/export
+  # GET /results/export.json
   def export
     render json: params.to_json
+  rescue Exception => e
+    render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
   private

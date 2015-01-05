@@ -388,6 +388,24 @@ setupRecordsDiv = (containerDiv, defaultCalendarDaysRange, params) ->
   # Calendar widget
   setupCalendar(containerDiv, defaultCalendarDaysRange)
 
+  $("#{containerDiv} button#btnExportRecords").click ->
+    requestParams = getRecordsTableParams(containerDiv)
+    $.ajax
+      url: getBaseURL() + '/results/export.json'
+      data: requestParams
+      success: (data, textStatus, jqHXR) ->
+        if jqHXR.status is 200
+          alert '导出数据成功！'
+        return
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    ifModified: true,
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
+
+    return
+
   # 更新button
   $("#{containerDiv} button#updateRecordsTableButton").click (e) ->
     updateRecordsTable(containerDiv, params)
@@ -419,14 +437,18 @@ setupCalendar = (containerDiv, defaultCalendarDaysRange) ->
 
   return
 
-updateRecordsTable = (containerDiv, params) ->
-  start_time = getDatetimePickerEpoch("#{containerDiv} div#startTime")
-  end_time = getDatetimePickerEpoch("#{containerDiv} div#endTime") + 86400 # Add one day for 86400 seconds (60 * 60 * 24)
-  request_params =
-    check_time: "#{start_time}..#{end_time}"
+getRecordsTableParams = (containerDiv, params) ->
+  startTime = getDatetimePickerEpoch("#{containerDiv} div#startTime")
+  endTime = getDatetimePickerEpoch("#{containerDiv} div#endTime") + 86400 # Add one day for 86400 seconds (60 * 60 * 24)
+  requestParams =
+    check_time: "#{startTime}..#{endTime}"
     ui: true
 
-  $.extend(request_params, params) if params # merge two objects
+  $.extend(requestParams, params) if params # merge two objects
+  requestParams
+
+updateRecordsTable = (containerDiv, params) ->
+  requestParams = getRecordsTableParams(containerDiv, params)
 
   $.ajax
     url: getBaseURL() + '/results.json'
@@ -440,7 +462,7 @@ updateRecordsTable = (containerDiv, params) ->
 
       setXhrRequestHeader(xhr, containerDiv, 'records')
       return
-    data: request_params
+    data: requestParams
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
         for record in data
@@ -489,6 +511,8 @@ updateRecordsTable = (containerDiv, params) ->
 
         $("#{containerDiv} > span#recordsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} > span#recordsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+
+      return
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
