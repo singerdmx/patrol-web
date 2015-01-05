@@ -525,6 +525,24 @@ setupProblemsDiv = (containerDiv) ->
     updateProblemsTable(containerDiv)
     return
 
+  $("#{containerDiv} button#btnExportProblem").click ->
+    requestParams = getProblemsTableParams(containerDiv)
+    $.ajax
+      url: getBaseURL() + '/problem_list/export.json'
+      data: requestParams
+      success: (data, textStatus, jqHXR) ->
+        if jqHXR.status is 200
+          alert '导出数据成功！'
+        return
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    ifModified: true,
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
+
+    return
+
   $("#{containerDiv} button#btnEditProblem").click ->
     oTable = $("#{containerDiv} table#problemsTable").dataTable()
     _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
@@ -637,15 +655,19 @@ submitEditProblemForm = (containerDiv, _suggestions) ->
 
   return
 
-updateProblemsTable = (containerDiv, params) ->
-  start_time = getDatetimePickerEpoch("#{containerDiv} div#startTime")
-  end_time = getDatetimePickerEpoch("#{containerDiv} div#endTime") + 86400 # Add one day for 86400 seconds (60 * 60 * 24)
-  request_params =
-    check_time: "#{start_time}..#{end_time}"
+getProblemsTableParams = (containerDiv, params) ->
+  startTime = getDatetimePickerEpoch("#{containerDiv} div#startTime")
+  endTime = getDatetimePickerEpoch("#{containerDiv} div#endTime") + 86400 # Add one day for 86400 seconds (60 * 60 * 24)
+  requestParams =
+    check_time: "#{startTime}..#{endTime}"
     ui: true
     status: $("#{containerDiv} select#status option:selected").val()
 
-  $.extend(request_params, params) if params # merge two objects
+  $.extend(requestParams, params) if params # merge two objects
+  requestParams
+
+updateProblemsTable = (containerDiv, params) ->
+  requestParams = getProblemsTableParams(containerDiv, params)
 
   $.ajax
     url: getBaseURL() + '/problem_list.json'
@@ -659,7 +681,7 @@ updateProblemsTable = (containerDiv, params) ->
 
       setXhrRequestHeader(xhr, containerDiv, 'problems')
       return
-    data: request_params
+    data: requestParams
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
         $("#{containerDiv} div#assignedUserStatChartDiv").html('')
@@ -750,6 +772,8 @@ updateProblemsTable = (containerDiv, params) ->
 
         $("#{containerDiv} > span#problemsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} > span#problemsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+
+      return
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
