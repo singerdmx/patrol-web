@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141228200628) do
+ActiveRecord::Schema.define(version: 20150107051100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,7 +101,10 @@ ActiveRecord::Schema.define(version: 20141228200628) do
     t.integer  "check_session_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "area_id"
   end
+
+  add_index "check_results", ["area_id"], name: "index_check_results_on_area_id", using: :btree
 
   create_table "check_routes", force: true do |t|
     t.text     "description"
