@@ -467,23 +467,16 @@ route1 = area1.check_routes.create!(
     })
 route1.check_points << asset1.check_points.first
 route1.check_points << asset2.check_points.first
-route1.check_points << asset3.check_points.first
+route1.check_points << asset1.check_points.last
 
 route2 = area2.check_routes.create!(
     {name: "二工区机械8小时点巡检", description: "二工区机械8小时点巡检"})
-route2.check_points << asset1.check_points.last
+route2.check_points << asset3.check_points.last
 
 
 #adding preference points
 user1.preferred_points <<  asset1.check_points.last
 user1.preferred_points <<  asset3.check_points.first
-
-route3 = area3.check_routes.create(
-    {name: "三工区机械8小时点巡检", description: "三工区机械8小时点巡检"})
-route3.check_points << asset2.check_points.last
-route3.check_points << asset3.check_points.first
-route3.check_points << asset3.check_points.last
-
 
 
 route4 = area4.check_routes.create(
@@ -521,7 +514,6 @@ route8.check_points << asset32.check_points.first
 
 route1.users << user1
 route2.users << user1
-route3.users << user1
 route4.users << user1
 route5.users << user2
 route6.users << user2
@@ -546,15 +538,6 @@ session2 = route2.check_sessions.create!(
      session: 'b34ed3eb-36e6-445d-a9f7-79f4577c033d',
      created_at: "2014-04-29 06:47:34.758",
      updated_at: "2014-04-29 06:47:34.758"
-    })
-session3 = route3.check_sessions.create!(
-    {
-     start_time: "2014-04-29 06:36:09.0",
-     end_time: "2014-04-29 06:42:53.0",
-     user:'user@test.com',
-     session: 'b34ed3eb-36e6-445d-a9f7-79f4577c033d',
-     created_at: "2014-04-29 06:47:34.774",
-     updated_at: "2014-04-29 06:47:34.774"
     })
 session4 = route4.check_sessions.create!(
     {
@@ -609,6 +592,7 @@ session4.check_results.create(
      memo: "hot",
      check_time: "2014-04-29 06:39:41.0",
      check_point_id: route4.check_points.first.id,
+     area_id: area4.id,
      created_at: "2014-04-29 06:47:34.747",
      updated_at: "2014-04-29 06:47:34.747"
     })
@@ -618,6 +602,7 @@ session4.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:40:12.0",
      check_point_id: route4.check_points.limit(4).last.id,
+     area_id: area4.id,
      created_at: "2014-04-29 06:47:34.747",
      updated_at: "2014-04-29 06:47:34.747"
     })
@@ -627,6 +612,7 @@ session4.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:40:27.0",
      check_point_id: route4.check_points.limit(3).last.id,
+     area_id: area4.id,
      created_at: "2014-04-29 06:47:34.755",
      updated_at: "2014-04-29 06:47:34.755"
     })
@@ -636,6 +622,7 @@ session5.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:40:46.0",
      check_point_id: route5.check_points.first.id,
+     area_id: area4.id,
      created_at: "2014-04-29 06:47:34.760",
      updated_at: "2014-04-29 06:47:34.760"
     })
@@ -645,6 +632,7 @@ session5.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:41:10.0",
      check_point_id: route5.check_points.limit(2).last.id,
+     area_id: area4.id,
      created_at: "2014-04-29 06:47:34.763",
      updated_at: "2014-04-29 06:47:34.763"
     })
@@ -654,6 +642,7 @@ session5.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:41:20.0",
      check_point_id: route5.check_points.limit(3).last.id,
+     area_id: area4.id,
      created_at: "2014-04-29 06:47:34.765",
      updated_at: "2014-04-29 06:47:34.765"
     })
@@ -663,6 +652,7 @@ session5.check_results.create(
      memo: "",
      check_time: "2014-05-01 06:41:29.0",
      check_point_id: route5.check_points.limit(3).last.id,
+     area_id: area4.id,
      created_at: "2014-05-01 06:47:34.767",
      updated_at: "2014-05-01 06:47:34.767"
     })
@@ -672,6 +662,7 @@ session5.check_results.create(
      memo: "",
      check_time: "2014-05-02 06:41:48.0",
      check_point_id: route5.check_points.limit(3).last.id,
+     area_id: area4.id,
      created_at: "2014-05-02 06:47:34.770",
      updated_at: "2014-04-02 06:47:34.770"
     })
@@ -681,6 +672,7 @@ session5.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:41:55.0",
      check_point_id: route5.check_points.limit(3).last.id,
+     area_id: area4.id,
      created_at: "2014-04-29 06:47:34.772",
      updated_at: "2014-04-29 06:47:34.772"
     })
@@ -690,6 +682,7 @@ session6.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:42:33.0",
      check_point_id: route5.check_points.limit(3).last.id,
+     area_id: area4.id,
      created_at: "2014-04-29 06:47:34.776",
      updated_at: "2014-04-29 06:47:34.776"
     })
@@ -699,6 +692,7 @@ session6.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:42:24.0",
      check_point_id: route5.check_points.limit(2).last.id,
+     area_id: area4.id,
      created_at: "2014-04-29 06:47:34.779",
      updated_at: "2014-04-29 06:47:34.779"
     })
@@ -708,6 +702,7 @@ session6.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:42:45.0",
      check_point_id: route5.check_points.limit(3).last.id,
+     area_id: area4.id,
      created_at: "2014-04-29 06:47:34.781",
      updated_at: "2014-04-29 06:47:34.781"
     })
@@ -717,6 +712,7 @@ session7.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:43:38.0",
      check_point_id: asset3.check_points.last.id,
+     area_id: area2.id,
      created_at: "2014-04-29 06:47:34.866",
      updated_at: "2014-04-29 06:47:34.866"
     })
@@ -726,6 +722,7 @@ session7.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:43:38.0",
      check_point_id: asset3.check_points.first.id,
+     area_id: area2.id,
      created_at: "2014-04-29 06:47:34.869",
      updated_at: "2014-04-29 06:47:34.869"
     })
@@ -735,6 +732,7 @@ session7.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:43:54.0",
      check_point_id: asset2.check_points.first.id,
+     area_id: area1.id,
      created_at: "2014-04-29 06:47:34.871",
      updated_at: "2014-04-29 06:47:34.871"
     })
@@ -744,6 +742,7 @@ session8.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:44:30.0",
      check_point_id: route5.check_points.limit(2).last.id,
+     area_id: area4.id,
      created_at: "2014-04-29 06:47:34.875",
      updated_at: "2014-04-29 06:47:34.875"
     })
@@ -753,6 +752,7 @@ session8.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:44:49.0",
      check_point_id: route5.check_points.limit(3).last.id,
+     area_id: area4.id,
      created_at: "2014-04-29 06:47:34.878",
      updated_at: "2014-04-29 06:47:34.878"
     })
@@ -762,6 +762,7 @@ session8.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:44:57.0",
      check_point_id: route5.check_points.limit(3).last.id,
+     area_id: area4.id,
      created_at: "2014-04-29 06:47:34.880",
      updated_at: "2014-04-29 06:47:34.880"
     })
@@ -771,6 +772,7 @@ session1.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:45:10.0",
      check_point_id: route5.check_points.limit(3).last.id,
+     area_id: area4.id,
      created_at: "2014-04-29 06:47:34.884",
      updated_at: "2014-04-29 06:47:34.884"
     })
@@ -780,6 +782,7 @@ session1.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:45:22.0",
      check_point_id: route5.check_points.limit(3).last.id,
+     area_id: area4.id,
      created_at: "2014-04-29 06:47:34.886",
      updated_at: "2014-04-29 06:47:34.886"
     })
@@ -789,6 +792,7 @@ session2.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:46:45.0",
      check_point_id: asset3.check_points.last.id,
+     area_id: area2.id,
      created_at: "2014-04-29 06:47:34.954",
      updated_at: "2014-04-29 06:47:34.954"
     })
@@ -798,6 +802,7 @@ session2.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:46:26.0",
      check_point_id: asset2.check_points.first.id,
+     area_id: area1.id,
      created_at: "2014-04-29 06:47:34.957",
      updated_at: "2014-04-29 06:47:34.957"
     })
@@ -807,26 +812,9 @@ session2.check_results.create(
      memo: "",
      check_time: "2014-04-29 06:46:45.0",
      check_point_id: asset3.check_points.first.id,
+     area_id: area2.id,
      created_at: "2014-04-29 06:47:34.960",
      updated_at: "2014-04-29 06:47:34.960"
-    })
-session3.check_results.create(
-    {result: "66",
-     status: 0,
-     memo: "",
-     check_time: "2014-04-29 06:47:20.0",
-     check_point_id: route5.check_points.limit(3).last.id,
-     created_at: "2014-04-29 06:47:34.965",
-     updated_at: "2014-04-29 06:47:34.965"
-    })
-session3.check_results.create(
-    {result: "50",
-     status: 0,
-     memo: "",
-     check_time: "2014-04-29 06:47:34.0",
-     check_point_id: route5.check_points.limit(3).last.id,
-     created_at: "2014-04-29 06:47:34.968",
-     updated_at: "2014-04-29 06:47:34.968"
     })
 
 check_point_3_choice_json = JSON.parse(check_point_3_choice)
@@ -854,6 +842,7 @@ check_point_3_choice_json = JSON.parse(check_point_3_choice)
     {result: result,
      status: status,
      memo: "",
+     area_id: area1.id,
      check_time: check_time,
      check_point_id: asset3.check_points.first.id,
     })
@@ -875,7 +864,7 @@ end
 check_point_7_choice_json = JSON.parse(check_point_7_choice)
 (0..200).each do |i|
   now = Time.now
-  session = route3.check_sessions.create!(
+  session = route1.check_sessions.create!(
     {
       start_time: now - 3600 * 24 * 200,
       end_time: now,
@@ -892,6 +881,7 @@ check_point_7_choice_json = JSON.parse(check_point_7_choice)
     {result: check_point_7_choice_json[result],
      status: status,
      memo: "",
+     area_id: area2.id,
      check_time: check_time,
      check_point_id: asset3.check_points.last.id,
     })
@@ -925,6 +915,7 @@ repair_report1 = RepairReport.create(
    description: "desc",
    content: "repair it",
    stopped: true,
+   area_id: area1.id,
    production_line_stopped: false,
    created_by_id: user1.id,
    priority: 1,
@@ -939,6 +930,7 @@ repair_report2 = RepairReport.create(
      description: "short desc",
      content: "maintain it",
      stopped: false,
+     area_id: area4.id,
      production_line_stopped: false,
      created_by_id: user1.id,
      assigned_to_id: user2.id,
@@ -955,6 +947,7 @@ repair_report3 = RepairReport.create(
      description: "short desc",
      content: "maintain it",
      stopped: false,
+     area_id: area1.id,
      production_line_stopped: false,
      created_by_id: user1.id,
      priority: 1,
@@ -970,6 +963,7 @@ repair_report4 = RepairReport.create(
      description: "short desc",
      content: "maintain it",
      stopped: false,
+     area_id: area1.id,
      production_line_stopped: false,
      created_by_id: user1.id,
      assigned_to_id: user2.id,
@@ -994,6 +988,7 @@ session11.check_results.create(
      memo: "需要更换新部件",
      check_time: "2014-12-19 06:46:45.0",
      check_point_id: asset2.check_points.first.id,
+     area_id: area1.id,
      created_at: "2014-12-19 06:47:34.954",
      updated_at: "2014-12-19 06:47:34.954"
     })
@@ -1005,6 +1000,7 @@ repair_report11 = RepairReport.create(
      description: session11.check_results.first.memo,
      content: "maintain it",
      stopped: false,
+     area_id: area1.id,
      production_line_stopped: false,
      created_by_id: user1.id,
      assigned_to_id: user2.id,
@@ -1029,6 +1025,7 @@ session12.check_results.create(
      memo: "需要更换新部件 again",
      check_time: "2014-12-18 06:46:45.0",
      check_point_id: asset2.check_points.first.id,
+     area_id: area1.id,
      created_at: "2014-12-18 06:47:34.954",
      updated_at: "2014-12-18 06:47:34.954"
     })
@@ -1040,6 +1037,7 @@ repair_report12 = RepairReport.create(
      description: session12.check_results.first.memo,
      content: "maintain it again",
      stopped: false,
+     area_id: area1.id,
      production_line_stopped: false,
      created_by_id: user1.id,
      assigned_to_id: user2.id,
@@ -1065,6 +1063,7 @@ session13.check_results.create(
      memo: "需要详细检查",
      check_time: "2014-12-18 06:46:45.0",
      check_point_id: asset3.check_points.last.id,
+     area_id: area2.id,
      created_at: "2014-12-18 06:47:34.954",
      updated_at: "2014-12-18 06:47:34.954"
     })
@@ -1076,6 +1075,7 @@ repair_report13 = RepairReport.create(
      description: session13.check_results.first.memo,
      content: "maintain it again",
      stopped: false,
+     area_id: area2.id,
      production_line_stopped: false,
      created_by_id: user1.id,
      assigned_to_id: user5.id,
@@ -1101,6 +1101,7 @@ session14.check_results.create(
      memo: "需要详细检查 again",
      check_time: "2014-12-18 06:46:45.0",
      check_point_id: asset3.check_points.last.id,
+     area_id: area2.id,
      created_at: "2014-12-18 06:47:34.954",
      updated_at: "2014-12-18 06:47:34.954"
     })
@@ -1112,6 +1113,7 @@ repair_report14 = RepairReport.create(
      description: session14.check_results.first.memo,
      content: "maintain it again",
      stopped: false,
+     area_id: area2.id,
      production_line_stopped: false,
      created_by_id: user1.id,
      assigned_to_id: user5.id,
@@ -1137,6 +1139,7 @@ session15.check_results.create(
      memo: "需要更换新部件",
      check_time: "2014-12-18 06:46:45.0",
      check_point_id: asset3.check_points.last.id,
+     area_id: area2.id,
      created_at: "2014-12-18 06:47:34.954",
      updated_at: "2014-12-18 06:47:34.954"
     })
@@ -1148,6 +1151,7 @@ repair_report15 = RepairReport.create(
      description: session15.check_results.first.memo,
      content: "maintain it again",
      stopped: false,
+     area_id: area2.id,
      production_line_stopped: false,
      created_by_id: user1.id,
      assigned_to_id: user5.id,
@@ -1174,6 +1178,7 @@ session16.check_results.create(
      memo: "需要详细检查",
      check_time: "2014-12-17 06:46:45.0",
      check_point_id: asset3.check_points.last.id,
+     area_id: area2.id,
      created_at: "2014-12-17 06:47:34.954",
      updated_at: "2014-12-17 06:47:34.954"
     })
@@ -1185,6 +1190,7 @@ repair_report16 = RepairReport.create(
      description: session16.check_results.first.memo,
      content: "maintain it again",
      stopped: false,
+     area_id: area2.id,
      production_line_stopped: false,
      created_by_id: user1.id,
      assigned_to_id: user5.id,
@@ -1210,6 +1216,7 @@ session17.check_results.create(
      memo: "需要详细检查",
      check_time: "2014-12-16 06:46:45.0",
      check_point_id: asset3.check_points.last.id,
+     area_id: area2.id,
      created_at: "2014-12-16 06:47:34.954",
      updated_at: "2014-12-16 06:47:34.954"
     })
@@ -1221,6 +1228,7 @@ repair_report17 = RepairReport.create(
      description: session17.check_results.first.memo,
      content: "maintain it again",
      stopped: false,
+     area_id: area2.id,
      production_line_stopped: false,
      created_by_id: user1.id,
      assigned_to_id: user5.id,
@@ -1246,6 +1254,7 @@ session18.check_results.create(
      memo: "需要详细检查",
      check_time: "2014-12-15 06:46:45.0",
      check_point_id: asset3.check_points.last.id,
+     area_id: area2.id,
      created_at: "2014-12-15 06:47:34.954",
      updated_at: "2014-12-15 06:47:34.954"
     })
@@ -1258,6 +1267,7 @@ repair_report18 = RepairReport.create(
      content: "maintain it again",
      stopped: false,
      production_line_stopped: false,
+     area_id: area2.id,
      created_by_id: user1.id,
      assigned_to_id: user5.id,
      priority: 1,
@@ -1283,6 +1293,7 @@ session19.check_results.create(
      memo: "需要详细检查",
      check_time: "2014-12-15 06:46:45.0",
      check_point_id: asset3.check_points.last.id,
+     area_id: area2.id,
      created_at: "2014-12-15 06:47:34.954",
      updated_at: "2014-12-15 06:47:34.954"
     })
@@ -1294,6 +1305,7 @@ repair_report19 = RepairReport.create(
      description: session19.check_results.first.memo,
      content: "maintain it again",
      stopped: false,
+     area_id: area2.id,
      production_line_stopped: false,
      created_by_id: user1.id,
      assigned_to_id: user6.id,
@@ -1321,6 +1333,7 @@ session19.check_results.create(
      memo: "需要详细检查",
      check_time: "2014-12-15 06:46:45.0",
      check_point_id: asset3.check_points.last.id,
+     area_id: area2.id,
      created_at: "2014-12-15 06:47:34.954",
      updated_at: "2014-12-15 06:47:34.954"
     })
@@ -1332,6 +1345,7 @@ repair_report19 = RepairReport.create(
      description: session19.check_results.first.memo,
      content: "maintain it again",
      stopped: false,
+     area_id: area2.id,
      production_line_stopped: false,
      created_by_id: user1.id,
      priority: 1,
