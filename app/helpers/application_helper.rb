@@ -40,8 +40,10 @@ module ApplicationHelper
     case status
       when 0 then '全部'
       when 1 then '完成'
-      when 2 then '未完成'
+      when 2 then '部分完成'
       when 3 then '取消'
+      when 4 then '进行中'
+      when 5 then '未开始'
       else "#{status}"
     end
   end

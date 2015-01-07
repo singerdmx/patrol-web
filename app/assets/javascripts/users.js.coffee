@@ -773,12 +773,16 @@ updateProblemsTable = (containerDiv, params) ->
           'aaSorting': [[ 0, 'desc' ]]
           'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
             switch aaData[6]
-              when '未完成'
+              when '部分完成'
                 $(nRow).addClass('darkBlueTextColor')
               when '完成'
                 $(nRow).addClass('darkGreenTextColor')
               when '取消'
                 $(nRow).addClass('darkCyanTextColor')
+              when '进行中'
+                $(nRow).addClass('darkOrangeTextColor')
+              when '未开始'
+                $(nRow).addClass('darkOrchidTextColor')
             return
 
         oTable = $("#{containerDiv} table#problemsTable").dataTable()
@@ -842,7 +846,7 @@ renderAssignedUserStatChart = (chartId, assignedUserStat, choice) ->
         show: true
         hideZeros: true
     series: _series
-    seriesColors: ['rgb(0, 0, 139)', 'rgb(0, 100, 0)', 'rgb(0, 139, 139)']
+    seriesColors: ['rgb(0, 0, 139)', 'rgb(0, 100, 0)', 'rgb(0, 139, 139)', 'rgb(255, 140, 0)', 'rgb(153, 50, 204)']
     axesDefaults:
       tickRenderer: $.jqplot.CanvasAxisTickRenderer
     axes:
