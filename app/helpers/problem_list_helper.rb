@@ -18,12 +18,17 @@ module ProblemListHelper
 
     asset = Asset.find(entry['asset_id'])
     barcode = asset.barcode
+    entry['area'] = ''
     case entry['kind']
       when 'POINT'
         point = CheckPoint.find(entry['check_point_id'])
         entry['name'] = "#{asset.name} #{point.name}"
         barcode = point.barcode
         entry['point_description'] = point.description
+        if entry['area_id']
+          areas = Area.where(id: entry['area_id'])
+          entry['area'] = areas.first.name unless areas.empty?
+        end
       when 'ASSET'
         entry['name'] = asset.name
         entry['point_description'] = ''
@@ -47,6 +52,7 @@ module ProblemListHelper
       [
         r['created_at'],
         r['created_by_user'],
+        r['area'],
         r['name'],
         r['point_description'],
         r['description'],

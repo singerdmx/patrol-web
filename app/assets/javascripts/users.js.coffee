@@ -574,7 +574,7 @@ setupProblemsDiv = (containerDiv) ->
       alert '请选择问题！'
     else
       row = oTable.fnGetData(_selectedTr[0])
-      id = row[9]
+      id = row[10]
       $.ajax
         url: getBaseURL() + "/problem_list/#{id}.json"
         success: (data, textStatus, jqHXR) ->
@@ -584,6 +584,7 @@ setupProblemsDiv = (containerDiv) ->
             $("#{containerDiv} span#problem_created_by_user").text(data['created_by_user'])
             $("#{containerDiv} span#problem_name").text(data['name'])
             $("#{containerDiv} span#problem_description").text(data['description'])
+            $("#{containerDiv} span#problem_area").text(data['area'])
             $("#{containerDiv} span#problem_point_description").text(data['point_description'])
             changeSelectByValue('problem_status', data['status'])
             $("#{containerDiv} textarea#problem_content").val(data['content'])
@@ -715,9 +716,9 @@ updateProblemsTable = (containerDiv, params) ->
 
         for record in data
           record[0] = dateToString(new Date(record[0] * 1000))
-          record[8] = dateToShortString(new Date(record[8] * 1000)) if record[8]
-          status = record[6]
-          assignedUser = record[5]
+          record[9] = dateToShortString(new Date(record[9] * 1000)) if record[9]
+          status = record[7]
+          assignedUser = record[6]
           assignedUser = '未分配' unless assignedUser
           unless assignedUserStat[assignedUser]
             assignedUserStat[assignedUser] = {}
@@ -731,6 +732,10 @@ updateProblemsTable = (containerDiv, params) ->
           { "sTitle": "巡检日期" },
           {
             "sTitle": "点检人员",
+            "sClass": "center"
+          },
+          {
+            "sTitle": "机台信息",
             "sClass": "center"
           },
           {
@@ -772,7 +777,7 @@ updateProblemsTable = (containerDiv, params) ->
           'aoColumns': columns,
           'aaSorting': [[ 0, 'desc' ]]
           'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
-            switch aaData[6]
+            switch aaData[7]
               when '部分完成'
                 $(nRow).addClass('darkBlueTextColor')
               when '完成'
@@ -786,7 +791,7 @@ updateProblemsTable = (containerDiv, params) ->
             return
 
         oTable = $("#{containerDiv} table#problemsTable").dataTable()
-        oTable.fnSetColumnVis(9, false)
+        oTable.fnSetColumnVis(10, false)
 
         $("#{containerDiv} table#problemsTable > tbody").on(
           'click',
