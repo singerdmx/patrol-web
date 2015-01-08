@@ -946,7 +946,7 @@ updateChart = (containerDiv, params) ->
       if jqHXR.status is 200
          $('div#errorBanner, div#infoBanner').hide()
          if data.result.length is 0
-           $('div#noHistoryBanner').show()
+           $('div#noHistoryBanner').text('该巡检点没有历史纪录').show()
          else
            $('div#noHistoryBanner').hide()
            _point = data.point
@@ -966,7 +966,7 @@ updateChart = (containerDiv, params) ->
                $('div#infoBanner').text("在选择时间范围内共巡检了#{data.result}次")
                $('div#infoBanner').show()
              else
-               $('div#noHistoryBanner').show()
+               $('div#noHistoryBanner').text('该巡检点没有历史纪录').show()
 
       return
     error: (jqXHR, textStatus, errorThrown) ->
