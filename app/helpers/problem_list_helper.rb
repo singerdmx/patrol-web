@@ -47,7 +47,7 @@ module ProblemListHelper
     entry
   end
 
-  def index_ui_json_builder(index_result)
+  def problem_list_ui_json_builder(index_result)
     index_result.map do |r|
       [
         r['created_at'],

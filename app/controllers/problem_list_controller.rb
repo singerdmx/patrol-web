@@ -9,7 +9,7 @@ class ProblemListController < ApplicationController
     reports_json = index_json_builder(reports)
 
     if params[:ui] == 'true'
-      reports_json = index_ui_json_builder(reports_json)
+      reports_json = problem_list_ui_json_builder(reports_json)
     end
 
     if stale?(etag: reports_json,

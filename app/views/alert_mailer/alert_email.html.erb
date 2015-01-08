@@ -1,14 +1,157 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+<style media="screen" type="text/css">
+
+    /*
+     * Table
+     */
+  table.dataTable {
+    margin: 0 auto;
+    clear: both;
+    width: 100%;
+  }
+
+  table.dataTable thead th {
+    padding: 3px 18px 3px 10px;
+    border-bottom: 1px solid black;
+    font-weight: bold;
+  }
+
+  table.dataTable tfoot th {
+    padding: 3px 18px 3px 10px;
+    border-top: 1px solid black;
+    font-weight: bold;
+  }
+
+  table.dataTable td {
+    padding: 3px 10px;
+  }
+
+  table.dataTable td.center,
+  table.dataTable td.dataTables_empty {
+    text-align: center;
+  }
+
+  table.dataTable tr.odd {
+    background-color: #E2E4FF;
+  }
+
+  table.dataTable tr.even {
+    background-color: white;
+  }
+
+  table.dataTable tr.odd td.sorting_1 {
+    background-color: #D3D6FF;
+  }
+
+  table.dataTable tr.odd td.sorting_2 {
+    background-color: #DADCFF;
+  }
+
+  table.dataTable tr.odd td.sorting_3 {
+    background-color: #E0E2FF;
+  }
+
+  table.dataTable tr.even td.sorting_1 {
+    background-color: #EAEBFF;
+  }
+
+  table.dataTable tr.even td.sorting_2 {
+    background-color: #F2F3FF;
+  }
+
+  table.dataTable tr.even td.sorting_3 {
+    background-color: #F9F9FF;
+  }
+
+    /*
+     * Table wrapper
+     */
+  .dataTables_wrapper {
+    position: relative;
+    clear: both;
+    *zoom: 1;
+  }
+
+    /*
+     * Page length menu
+     */
+  .dataTables_length {
+    float: left;
+  }
+
+    /*
+     * Filter
+     */
+  .dataTables_filter {
+    float: right;
+    text-align: right;
+  }
+
+    /*
+     * Table information
+     */
+  .dataTables_info {
+    clear: both;
+    float: left;
+  }
+
+  table.dataTable thead th:active,
+  table.dataTable thead td:active {
+    outline: none;
+  }
+
+</style>
 </head>
 <body>
-<h1>Hi, </h1>
-
-<p>
-  巡检点 <%= @result["name"] %> 在 <%= @result["time"] %> 巡检结果显示异常。
-</p>
-<p>问题描述：<%= @result["desc"] %> </p>
+<table id="problemsTable" class="dataTable" aria-describedby="problemsTable_info" style="width: 920px;">
+  <thead>
+  <tr role="row">
+    <th tabindex="0" rowspan="1" colspan="1" style="width: 108px;" aria-sort="descending"
+        aria-label="巡检日期: activate to sort column ascending">巡检日期
+    </th>
+    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 50px;"
+        aria-label="点检人员: activate to sort column ascending">点检人员
+    </th>
+    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 50px;"
+        aria-label="机台信息: activate to sort column ascending">机台信息
+    </th>
+    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 104px;"
+        aria-label="点检部位名称: activate to sort column ascending">点检部位名称
+    </th>
+    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 54px;"
+        aria-label="点检内容: activate to sort column ascending">点检内容
+    </th>
+    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 102px;"
+        aria-label="问题描述: activate to sort column ascending">问题描述
+    </th>
+    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 41px;"
+        aria-label="责任人: activate to sort column ascending">责任人
+    </th>
+    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 45px;"
+        aria-label="状态: activate to sort column ascending">状态
+    </th>
+    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 86px;"
+        aria-label="备注: activate to sort column ascending">备注
+    </th>
+    <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width: 80px;"
+        aria-label="计划完成日期: activate to sort column ascending">计划完成日期
+    </th>
+  </tr>
+  </thead>
+  <tbody role="alert" aria-live="polite" aria-relevant="all">
+  <% count = 0 %>
+  <% for row in @content %>
+    <tr class="<%= count % 2 == 0 ? 'odd' : 'even' %>">
+      <% for i in 0..9 %>
+        <td class="center"><%= row[i] %></td>
+      <% end %>
+    </tr>
+    <% count += 1 %>
+  <% end %>
+  </tbody>
+</table>
 </body>
 </html>

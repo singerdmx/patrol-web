@@ -1,5 +1,5 @@
 class CheckResultsController < ApplicationController
-  include CheckResultsHelper
+  include CheckResultsHelper, ProblemListHelper
   before_action :set_check_result, only: [:show, :edit, :update, :destroy]
 
   # GET /check_results
@@ -52,84 +52,70 @@ class CheckResultsController < ApplicationController
   # POST /check_results
   # POST /check_results.json
   def create
-    begin
-      #TODO : validate incoming ids of route and point
-      if params[:points].nil?
-        #TODO: this if branch need to be removed
-        @check_result = CheckResult.create!(check_result_params)
-        render template: 'check_results/show', status: :created
-      else
-        #batch upload from client with time in number of seconds since epoch time
-        start_time_ = Time.at(params[:start_time]).to_datetime
-        end_time_ = Time.at(params[:end_time]).to_datetime
-
-        route_sessions = Hash.new
-
-        params[:points].each { |point|
-          #TODO: the following validation is commented out due to that user b may submit for user a. may need better logic
-          # for this
-          #next if !User.validate(point['id'])
-          route_ids = point['routes']
-          check_time_ =  Time.at(point['check_time']).to_datetime
-          route_ids.each { |route_id|
-            route = CheckRoute.find(route_id)
-            if route_sessions[route_id].nil?
-              route_sessions[route_id]  = route.check_sessions.create!({user: params[:user],
-                                                    start_time: start_time_,
-                                                    end_time: end_time_,
-                                                    session: params[:session]})
-            end
-            result_record = CheckResult.create!({check_session_id: route_sessions[route_id].id,
-                                                 check_point_id: point['id'],
-                                                 check_time: check_time_,
-                                                 result: point['result'],
-                                                 status: point['status'],
-                                                 memo: point['memo']})
-
-            if point['status'] == 1
-              check_point = CheckPoint.find(point['id'])
-              unless check_point.nil?
-                report_hash = {
-                  asset_id: check_point.asset_id,
-                  check_point_id: point['id'],
-                  kind: "POINT",
-                  code: 2,
-                  description: result_record.memo,
-                  content: "",
-                  created_by_id: current_user.id,
-                  priority: 1,
-                  status: 2,
-                  check_result_id: result_record.id,
-                  report_type: "报修",
-                  assigned_to_id: check_point.default_assigned_id,
-                  created_at: check_time_,
-                }
-                RepairReport.create(report_hash)
-
-
-                contacts = route.contacts
-                contacts = contacts[1...-1].split(",").map { |s| s[1...-1].to_i } if contacts
-                users = [current_user.id]
-                users << check_point.default_assigned_id if check_point.default_assigned_id
-                email_hash = {}
-                email_hash["name"] =
-                  "#{Asset.find(check_point.asset_id).name} #{check_point.name}"
-                email_hash["time"] = check_time_
-                email_hash["desc"] = result_record.memo
-                AlertMailer.alert_email(contacts, users, email_hash).deliver
-              end
-            end
-
-          }
-        }
-
-        render :nothing => true, :status => :created
-      end
-
-
-    rescue Exception => e
-      render json: {message: e.to_s}.to_json, status: :internal_server_error
+    #TODO : validate incoming ids of route and point
+    if params[:points].nil?
+      #TODO: this if branch need to be removed
+      @check_result = CheckResult.create!(check_result_params)
+      render template: 'check_results/show', status: :created
+      return
     end
+
+    #batch upload from client with time in number of seconds since epoch time
+    start_time_ = Time.at(params[:start_time]).to_datetime
+    end_time_ = Time.at(params[:end_time]).to_datetime
+
+    route_sessions = Hash.new
+
+    params[:points].each do |point|
+      #TODO: the following validation is commented out due to that user b may submit for user a. may need better logic
+      # for this
+      #next if !User.validate(point['id'])
+      route_ids = point['routes']
+      check_time_ = Time.at(point['check_time']).to_datetime
+      route_ids.each do |route_id|
+        route = CheckRoute.find(route_id)
+        if route_sessions[route_id].nil?
+          route_sessions[route_id]  = route.check_sessions.create!(
+            user: params[:user],
+            start_time: start_time_,
+            end_time: end_time_,
+            session: params[:session])
+        end
+
+        result_record = CheckResult.create!(
+          check_session_id: route_sessions[route_id].id,
+          check_point_id: point['id'],
+          check_time: check_time_,
+          result: point['result'],
+          status: point['status'],
+          memo: point['memo'])
+
+        if point['status'] == 1
+          check_point = CheckPoint.find(point['id'])
+          report = RepairReport.create(
+            asset_id: check_point.asset_id,
+            check_point_id: point['id'],
+            kind: "POINT",
+            code: 2,
+            description: result_record.memo,
+            content: "",
+            created_by_id: current_user.id,
+            priority: 1,
+            status: 2,
+            check_result_id: result_record.id,
+            report_type: "报修",
+            assigned_to_id: check_point.default_assigned_id,
+            created_at: check_time_
+          )
+
+          send_emails(check_point, report, route)
+        end
+      end
+    end
+
+    render nothing: true, status: :created
+  rescue Exception => e
+    render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
   # PATCH/PUT /check_results/1
@@ -170,14 +156,32 @@ class CheckResultsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_check_result
-      @check_result = get_results({id: params[:id]}).take!
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def check_result_params
-      request_para = params[:check_result].nil? ? params : params[:check_result]
-      request_para.select{|key,value| key.in?(CheckResult.column_names())}.symbolize_keys
+  # Use callbacks to share common setup or constraints between actions.
+  def set_check_result
+    @check_result = get_results({id: params[:id]}).take!
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def check_result_params
+    request_para = params[:check_result].nil? ? params : params[:check_result]
+    request_para.select{|key,value| key.in?(CheckResult.column_names())}.symbolize_keys
+  end
+
+  def send_emails(check_point, report, route)
+    #Thread.new do
+      contacts = route.contacts
+      contacts = contacts[1...-1].split(",").map { |s| s[1...-1].to_i } if contacts
+      users = [current_user.id]
+      users << check_point.default_assigned_id if check_point.default_assigned_id
+
+      email_content =
+        problem_list_ui_json_builder([db_result_to_hash(report)]).map do |c|
+          c[0] = Time.at(c[0]).strftime("%Y年%m月%d日")
+          c[9] = c[9].nil? ? '' : Time.at(c[9]).strftime("%Y年%m月%d日")
+          c
+        end
+      AlertMailer.alert_email(contacts, users, email_content).deliver
     end
+  #end
 end
