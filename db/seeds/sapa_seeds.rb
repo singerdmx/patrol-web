@@ -23,7 +23,7 @@ user1 = User.create! do |u|
   u.password = 'user1234'
   u.password_confirmation = 'user1234'
   u.role = 2
-  u.name = "巡检员1"
+  u.name = "顾铭"
 end
 
 user3 = User.create! do |u|
