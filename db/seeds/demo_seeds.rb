@@ -848,7 +848,7 @@ check_point_3_choice_json = JSON.parse(check_point_3_choice)
     })
 
   check_time = now - i * 24 * 3600
-  result = rand(check_point_3_choice_json.size())
+  result = rand(check_point_3_choice_json.size)
   status = 1
   status = 0 if result == 0
 
@@ -873,7 +873,7 @@ check_point_7_choice_json = JSON.parse(check_point_7_choice)
     })
 
   check_time = now - i * 24 * 3600
-  result = rand(check_point_7_choice_json.size())
+  result = rand(check_point_7_choice_json.size)
   status = 1
   status = 0 if result == 0
 

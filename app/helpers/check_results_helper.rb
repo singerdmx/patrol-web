@@ -17,7 +17,7 @@ module CheckResultsHelper
       results = {}
       group = params[:aggregate].to_i
       results['group'] = false
-      results['group'] = true if index_result.size() > group
+      results['group'] = true if index_result.size > group
 
       if !params[:check_point_id].nil?
         results['point'] = to_hash(CheckPoint.find(check_result_params[:check_point_id]))
@@ -28,7 +28,7 @@ module CheckResultsHelper
         when 40, 41
           results['result'] = aggregate_enumerable_results(index_result, group, JSON.parse(results['point']['choice']))
         when 10,20
-          results['result'] = index_result.size()
+          results['result'] = index_result.size
         else
           results['result'] = []
       end
@@ -144,7 +144,7 @@ module CheckResultsHelper
     aggregated_results = []
     total = counter = 0
     min_time = max_time = nil
-    selection = Array.new(choice.size(), 0)
+    selection = Array.new(choice.size, 0)
     index_result.each do |entry|
       result = to_hash(entry)
       logger.info(result)
@@ -174,7 +174,7 @@ module CheckResultsHelper
           'end_time' => max_time,
           'count' => counter
         }
-        selection = Array.new(choice.size(), 0)
+        selection = Array.new(choice.size, 0)
         counter = 0
       end
     end

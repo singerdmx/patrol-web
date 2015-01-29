@@ -158,7 +158,7 @@ class CheckResultsController < ApplicationController
 
   def convert_check_time(params)
     unless params[:check_time].nil?
-      unless params[:check_time].include?('..')
+      unless params[:check_time].include?('..') && params[:check_time].split('..').size == 2
         fail "Invalid check_time param #{params[:check_time]}"
       end
 
