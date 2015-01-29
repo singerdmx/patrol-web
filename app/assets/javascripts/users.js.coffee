@@ -390,20 +390,8 @@ setupRecordsDiv = (containerDiv, defaultCalendarDaysRange, params) ->
 
   $("#{containerDiv} button#btnExportRecords").click ->
     requestParams = getRecordsTableParams(containerDiv)
-    $.ajax
-      url: getBaseURL() + '/results/export.json'
-      data: requestParams
-      success: (data, textStatus, jqHXR) ->
-        if jqHXR.status is 200
-          alert '导出数据成功！'
-        return
-    error: (jqXHR, textStatus, errorThrown) ->
-      showErrorPage(jqXHR.responseText)
-      return
-    ifModified: true,
-    dataType: 'json',
-    timeout: defaultAjaxCallTimeout
-
+    _url = getBaseURL() + '/results/export.json?' + ("#{k}=#{v}" for k, v of requestParams).join('&')
+    window.open(_url)
     return
 
   # 更新button

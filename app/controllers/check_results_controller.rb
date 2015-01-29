@@ -18,12 +18,7 @@ class CheckResultsController < ApplicationController
         end
       end
 
-      index_para = check_result_params
-
-      if !index_para[:check_time].nil?&&index_para[:check_time].include?('..')
-         time_window = index_para[:check_time].split('..')
-         index_para[:check_time] = Time.at(time_window[0].to_i).to_datetime..Time.at(time_window[1].to_i).to_datetime
-      end
+      index_para = convert_check_time(check_result_params)
       @check_results = get_results(index_para, params[:preference]=='true')
       @check_results_json = index_json_builder(@check_results)
 
@@ -150,12 +145,29 @@ class CheckResultsController < ApplicationController
 
   # GET /results/export.json
   def export
-    render json: params.to_json
+    index_para = convert_check_time(check_result_params)
+    results = get_results(index_para, params[:preference]=='true')
+    send_data results.to_xml,
+              type: 'text/xml; charset=UTF-8;',
+              disposition: "attachment; filename=results.xml"
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
   private
+
+  def convert_check_time(params)
+    unless params[:check_time].nil?
+      unless params[:check_time].include?('..')
+        fail "Invalid check_time param #{params[:check_time]}"
+      end
+
+      time_window = params[:check_time].split('..')
+      params[:check_time] = Time.at(time_window[0].to_i).to_datetime..Time.at(time_window[1].to_i).to_datetime
+    end
+
+    params
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_check_result
