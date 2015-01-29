@@ -539,20 +539,8 @@ setupProblemsDiv = (containerDiv) ->
 
   $("#{containerDiv} button#btnExportProblem").click ->
     requestParams = getProblemsTableParams(containerDiv)
-    $.ajax
-      url: getBaseURL() + '/problem_list/export.json'
-      data: requestParams
-      success: (data, textStatus, jqHXR) ->
-        if jqHXR.status is 200
-          alert '导出数据成功！'
-        return
-    error: (jqXHR, textStatus, errorThrown) ->
-      showErrorPage(jqXHR.responseText)
-      return
-    ifModified: true,
-    dataType: 'json',
-    timeout: defaultAjaxCallTimeout
-
+    _url = getBaseURL() + '/problem_list/export.json?' + ("#{k}=#{v}" for k, v of requestParams).join('&')
+    window.open(_url)
     return
 
   $("#{containerDiv} button#btnEditProblem").click ->

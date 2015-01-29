@@ -4,8 +4,7 @@ class ProblemListController < ApplicationController
   # GET /problem_list.json
   # Example http://localhost:3000/problem_list.json?ui=true&status=2
   def index
-    reports = RepairReport.where("check_result_id is not null")
-    reports = reports.where(status: params[:status].to_i) if params[:status] and params[:status].to_i != 0
+    reports = query_repair_report(params)
     reports_json = index_json_builder(reports)
 
     if params[:ui] == 'true'
@@ -55,8 +54,19 @@ class ProblemListController < ApplicationController
 
   # GET /problem_list/export.json
   def export
-    render json: params.to_json
+    reports = query_repair_report(params)
+    send_data reports.to_xml,
+              type: 'text/xml; charset=UTF-8;',
+              disposition: "attachment; filename=reports.xml"
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :internal_server_error
+  end
+
+  private
+
+  def query_repair_report(params)
+    reports = RepairReport.where("check_result_id is not null")
+    reports = reports.where(status: params[:status].to_i) if params[:status] and params[:status].to_i != 0
+    reports
   end
 end
