@@ -1,4 +1,7 @@
+require_relative '../../app/config/settings'
+
 class ApplicationController < ActionController::Base
+  include RbConfig
 
   # This is our new function that comes before Devise's one
   before_filter :authenticate_user_from_token!

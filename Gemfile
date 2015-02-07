@@ -40,6 +40,8 @@ gem "jbuilder", "~> 1.2"
 
 gem 'json', '~> 1.8.1'
 
+gem 'aws-sdk', '~> 2.0.22'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem "sdoc", require: false

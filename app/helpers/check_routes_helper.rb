@@ -1,8 +1,5 @@
-require_relative '../../app/config/settings'
-
 module CheckRoutesHelper
   include ApplicationHelper
-  include Config
 
   #replacement of the index.json.jbuilder for complicated converting logic
   def index_json_builder(check_routes, route_assets, show_name = false)
