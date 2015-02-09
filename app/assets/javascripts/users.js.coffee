@@ -582,6 +582,12 @@ setupProblemsDiv = (containerDiv) ->
             $("#{containerDiv} div#problem_plan_date").datetimepicker(getDatetimePickerSettingsWithStartDate())
             planDatePicker = $("#{containerDiv} div#problem_plan_date").data('datetimepicker')
             planDatePicker.setLocalDate(if data['plan_date'] then new Date(data['plan_date'] * 1000) else 0)
+            if data['image']
+              $("#{containerDiv} div#problem_image").show()
+              $("#{containerDiv} span#problem_image_link").html(
+                "<a target='_blank' href='" + data['image'] + "'>点击显示</a>")
+            else
+              $("#{containerDiv} div#problem_image").hide()
 
             _suggestions = []
             setupAutocompleteInput('/users.json', 'name', containerDiv, 'input#problem_assigned_to_user',
@@ -703,9 +709,15 @@ updateProblemsTable = (containerDiv, params) ->
         statusEnum.remove(statusEnum.indexOf('全部')) # remove “全部”
         assignedUserStat = {}
 
+        noImage = true
         for record in data
           record[0] = dateToString(new Date(record[0] * 1000))
           record[9] = dateToShortString(new Date(record[9] * 1000)) if record[9]
+          if record[11] is null
+            record[11] = '无'
+          else
+            noImage = false
+            record[11] = "<a target='_blank' href='#{record[11]}'>显示</a>"
           status = record[7]
           assignedUser = record[6]
           assignedUser = '未分配' unless assignedUser
@@ -718,41 +730,46 @@ updateProblemsTable = (containerDiv, params) ->
 
         renderAssignedUserStatChart('assignedUserStatChartDiv', assignedUserStat, statusEnum)
         columns = [
-          { "sTitle": "巡检日期" },
+          { 'sTitle': '巡检日期' },
           {
-            "sTitle": "点检人员",
-            "sClass": "center"
+            'sTitle': '点检人员',
+            'sClass': 'center'
           },
           {
-            "sTitle": "机台信息",
-            "sClass": "center"
+            'sTitle': '机台信息',
+            'sClass': 'center'
           },
           {
-            "sTitle": "点检部位名称",
-            "sClass": "center"
+            'sTitle': '点检部位名称',
+            'sClass': 'center'
           },
           {
-            "sTitle": "点检内容",
-            "sClass": "center"
+            'sTitle': '点检内容',
+            'sClass': 'center'
           },
           {
-            "sTitle": "问题描述",
-            "sClass": "center"
+            'sTitle': '问题描述',
+            'sClass': 'center'
           },
           {
-            "sTitle": "责任人",
-            "sClass": "center"
+            'sTitle': '责任人',
+            'sClass': 'center'
           },
           {
-            "sTitle": "状态",
-            "sClass": "center"
+            'sTitle': '状态',
+            'sClass': 'center'
           },
           {
-            "sTitle": "备注",
-            "sClass": "center"
+            'sTitle': '备注',
+            'sClass': 'center'
           },
-          { "sTitle": "计划完成日期" },
-          { "sTitle": "ID" }
+          { 'sTitle': '计划完成日期' },
+          { 'sTitle': 'ID' },
+          {
+            'sTitle': '图片',
+            'sClass': 'center',
+            'sWidth': '24px'
+          }
         ]
         if $("#{containerDiv} table#problemsTable > tbody[role='alert'] td.dataTables_empty").length is 0
           # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
@@ -783,6 +800,7 @@ updateProblemsTable = (containerDiv, params) ->
 
         oTable = $("#{containerDiv} table#problemsTable").dataTable()
         oTable.fnSetColumnVis(10, false)
+        oTable.fnSetColumnVis(11, false) if noImage
 
         $("#{containerDiv} table#problemsTable > tbody").on(
           'click',

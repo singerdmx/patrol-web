@@ -85,17 +85,18 @@ class CheckResultsController < ApplicationController
           report = RepairReport.create(
             asset_id: check_point.asset_id,
             check_point_id: point['id'],
-            kind: "POINT",
+            kind: 'POINT',
             code: 2,
             description: result_record.memo,
-            content: "",
+            content: '',
             created_by_id: current_user.id,
             priority: 1,
             status: 2,
             check_result_id: result_record.id,
-            report_type: "报修",
+            report_type: '报修',
             assigned_to_id: check_point.default_assigned_id,
-            created_at: check_time_
+            created_at: check_time_,
+            result_image_id: point['image']
           )
 
           send_emails(check_point, report, route)

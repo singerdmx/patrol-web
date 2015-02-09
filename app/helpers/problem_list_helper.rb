@@ -43,6 +43,7 @@ module ProblemListHelper
 
     assigned_to_user = User.find_by(id: entry['assigned_to_id'])
     entry['assigned_to_user'] = assigned_to_user.nil? ? '' : assigned_to_user.name
+    entry['image'] = entry['result_image_id'].nil? ? nil : ResultImage.find(entry['result_image_id']).url
 
     entry
   end
@@ -60,7 +61,8 @@ module ProblemListHelper
         get_problem_status_string(r['status'].to_i),
         r['content'],
         r['plan_date'],
-        r['id']
+        r['id'],
+        r['image']
       ]
     end
   end
