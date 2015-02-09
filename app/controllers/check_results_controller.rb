@@ -47,13 +47,7 @@ class CheckResultsController < ApplicationController
   # POST /check_results
   # POST /check_results.json
   def create
-    #TODO : validate incoming ids of route and point
-    if params[:points].nil?
-      #TODO: this if branch need to be removed
-      @check_result = CheckResult.create!(check_result_params)
-      render template: 'check_results/show', status: :created
-      return
-    end
+    fail "no points when trying to create result!" if params[:points].blank?
 
     #batch upload from client with time in number of seconds since epoch time
     start_time_ = Time.at(params[:start_time]).to_datetime
@@ -83,7 +77,8 @@ class CheckResultsController < ApplicationController
           check_time: check_time_,
           result: point['result'],
           status: point['status'],
-          memo: point['memo'])
+          memo: point['memo'],
+          result_image_id: point['image'])
 
         if point['status'] == 1
           check_point = CheckPoint.find(point['id'])
