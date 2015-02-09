@@ -453,30 +453,41 @@ updateRecordsTable = (containerDiv, params) ->
     data: requestParams
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
+        noImage = true
         for record in data
           record[7] = dateToString(new Date(record[7] * 1000))
+          if record[8] is null
+            record[8] = '无'
+          else
+            noImage = false
+            record[8] = "<a target='_blank' href='#{record[8]}'>点击显示</a>"
 
         columns = [
-          { "sTitle": "名称" },
-          { "sTitle": "描述" },
+          { 'sTitle': '名称' },
+          { 'sTitle': '描述' },
           {
-            "sTitle": "读数",
-            "sClass": "center"
+            'sTitle': '读数',
+            'sClass': 'center'
           },
           {
-            "sTitle": "正常范围",
-            "sClass": "center"
+            'sTitle': '正常范围',
+            'sClass': 'center'
           },
           {
-            "sTitle": "状态",
-            "sClass": "center"
+            'sTitle': '状态',
+            'sClass': 'center'
           },
-          { "sTitle": "备注" },
+          { 'sTitle': '备注' },
           {
-            "sTitle": "条形码",
-            "sClass": "center"
+            'sTitle': '条形码',
+            'sClass': 'center'
           },
-          { "sTitle": "检测时间" }
+          { 'sTitle': '检测时间' },
+          {
+            'sTitle': '图片',
+            'sClass': 'center',
+            'sWidth': '46px'
+          }
         ]
         if $("#{containerDiv} table#recordsTable > tbody[role='alert'] td.dataTables_empty").length is 0
           # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
@@ -497,6 +508,8 @@ updateRecordsTable = (containerDiv, params) ->
                 $(nRow).addClass('yellowBackground')
             return
 
+        oTable = $("#{containerDiv} table#recordsTable").dataTable()
+        oTable.fnSetColumnVis(8, false) if noImage
         $("#{containerDiv} > span#recordsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} > span#recordsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 

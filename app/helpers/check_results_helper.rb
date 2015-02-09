@@ -66,7 +66,8 @@ module CheckResultsHelper
         status,
         result['memo'],
         result['point']['barcode'],
-        result['check_time'].to_i
+        result['check_time'].to_i,
+        result['result_image_id'].nil? ? nil : ResultImage.find(result['result_image_id']).url
       ]
     end
   end
