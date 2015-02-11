@@ -1,3 +1,5 @@
+require_relative '../../app/config/settings'
+
 module CheckRoutesHelper
   include ApplicationHelper
 
@@ -90,7 +92,7 @@ module CheckRoutesHelper
     end
     assets.each do |asset_id, points|
       asset = {}
-      if points.size == 1 and Settings::CATEGORY_SCAN_ONLY.include? points.first.category
+      if points.size == 1 and RbConfig::Settings::CATEGORY_SCAN_ONLY.include? points.first.category
         # dummy asset
         point = points.first
         asset[:id] = point.id
