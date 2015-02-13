@@ -143,9 +143,9 @@ class CheckResultsController < ApplicationController
   def export
     index_para = convert_check_time(check_result_params)
     results = get_results(index_para, params[:preference]=='true')
-    send_data results.to_xml,
-              type: 'text/xml; charset=UTF-8;',
-              disposition: "attachment; filename=results.xml"
+    send_data results.to_csv,
+              type: 'text/csv; charset=UTF-8;',
+              disposition: "attachment; filename=results.csv"
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
