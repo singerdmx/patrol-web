@@ -5,7 +5,7 @@ module RepairReportsHelper
     index_result.map do |result|
       entry = to_hash(result)
 
-      entry['status'] = 0 if entry['status'].nil?
+      entry['status'] = 5 if entry['status'].nil?
 
       entry['created_at'] = entry['created_at'].to_i
       entry['updated_at'] = entry['updated_at'].to_i
