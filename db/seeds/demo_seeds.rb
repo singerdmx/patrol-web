@@ -915,6 +915,7 @@ repair_report1 = RepairReport.create(
    description: "desc",
    content: "repair it",
    stopped: true,
+   status: 2,
    area_id: area1.id,
    production_line_stopped: false,
    created_by_id: user1.id,

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150209063653) do
+ActiveRecord::Schema.define(version: 20150217223201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -153,8 +153,8 @@ ActiveRecord::Schema.define(version: 20150209063653) do
     t.string   "code"
     t.text     "description"
     t.text     "content"
-    t.boolean  "stopped"
-    t.boolean  "production_line_stopped"
+    t.boolean  "stopped",                 null: false
+    t.boolean  "production_line_stopped", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "asset_id"
@@ -163,7 +163,7 @@ ActiveRecord::Schema.define(version: 20150209063653) do
     t.integer  "assigned_to_id"
     t.integer  "priority"
     t.string   "report_type"
-    t.integer  "status"
+    t.integer  "status",                  null: false
     t.integer  "check_result_id"
     t.date     "plan_date"
     t.integer  "area_id"
