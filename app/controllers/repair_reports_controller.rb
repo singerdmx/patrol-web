@@ -18,16 +18,32 @@ class RepairReportsController < ApplicationController
     start_time_ = Time.at(params[:start_time]).to_datetime
     end_time_ = Time.at(params[:end_time]).to_datetime
 
-    params[:repairReports].each do |repair_report|
+    create_repair_report(params[:repairReports])
+    update_repair_report(params[:ticketUpdates])
+
+    render nothing: true, status: :created
+  rescue Exception => e
+    render json: {message: e.to_s}.to_json, status: :internal_server_error
+  end
+
+  private
+
+  def create_repair_report(repair_reports)
+    return if repair_reports.blank?
+    repair_reports.each do |repair_report|
       repair_report['created_by_id'] = current_user.id
       report = repair_report.select do |key, value|
         key.in?(RepairReport.column_names())
       end.symbolize_keys
       RepairReport.create!(report)
     end
+  end
 
-    render nothing: true, status: :created
-  rescue Exception => e
-    render json: {message: e.to_s}.to_json, status: :internal_server_error
+  def update_repair_report(ticket_updates)
+    return if ticket_updates.blank?
+    ticket_updates.each do |ticket_update|
+      report = RepairReport.find(ticket_update[:id])
+      report.update(status: ticket_update[:status])
+    end
   end
 end
