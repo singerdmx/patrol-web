@@ -145,7 +145,9 @@ ActiveRecord::Schema.define(version: 20150217223201) do
   end
 
   create_table "manuals", force: true do |t|
-    t.text "entry"
+    t.text     "entry"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "repair_reports", force: true do |t|
