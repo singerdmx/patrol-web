@@ -8,6 +8,7 @@ module CheckSessionsHelper
         entry.check_route.description,
         entry.start_time.to_i,
         entry.end_time.to_i,
+        User.find_by_email(entry.user).name,
         entry.user
       ]
     end

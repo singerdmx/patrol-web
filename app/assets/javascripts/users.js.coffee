@@ -391,6 +391,10 @@ setupSessionsDiv = (containerDiv, defaultCalendarDaysRange, params) ->
   # Calendar widget
   setupCalendar(containerDiv, defaultCalendarDaysRange)
 
+  # 更新button
+  $("#{containerDiv} button#updateSessionsTableButton").click (e) ->
+    updateSessionsTable(containerDiv, params)
+    return
   return
 
 setupRecordsDiv = (containerDiv, defaultCalendarDaysRange, params) ->
@@ -451,6 +455,59 @@ getProblemsTableParams = (containerDiv, params) ->
 
 updateSessionsTable = (containerDiv, params) ->
   requestParams = getTableParams(containerDiv, params)
+
+  $.ajax
+    url: getBaseURL() + '/sessions.json'
+    beforeSend: (xhr) ->
+      sessionsCalendarUpdated = $("#{containerDiv} > span#sessionsCalendarUpdated").text() is 'true'
+
+      if sessionsCalendarUpdated
+        # Force update since we changed calendar
+        $("#{containerDiv} > span#sessionsCalendarUpdated").text('false')
+        return
+
+      setXhrRequestHeader(xhr, containerDiv, 'sessions')
+      return
+    data: requestParams
+    success: (data, textStatus, jqHXR) ->
+      if jqHXR.status is 200
+        for record in data
+          columnDateToString(record, [2, 3])
+
+        columns = [
+          { "sTitle": "ID" },
+          { "sTitle": "路线" },
+          { "sTitle": "开始时间" },
+          { "sTitle": "结束时间" },
+          { "sTitle": "用户名" },
+          { "sTitle": "邮箱" },
+        ]
+
+        if $("#{containerDiv} table#sessionsTable > tbody[role='alert'] td.dataTables_empty").length is 0
+          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
+          oTable = $("#{containerDiv} table#sessionsTable").dataTable()
+          oTable.fnDestroy() unless oTable?
+
+        $("#{containerDiv} div#sessionsTable_wrapper").remove()
+        $("#{containerDiv} > div").append('<table id="sessionsTable"></table>')
+        $("#{containerDiv} table#sessionsTable").dataTable
+          'aaData': data
+          'aoColumns': columns
+          'aaSorting': [[ 2, 'desc' ]]
+
+        oTable = $("#{containerDiv} table#sessionsTable").dataTable()
+        oTable.fnSetColumnVis(0, false)
+        $("#{containerDiv} > span#sessionsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} > span#sessionsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    ifModified: true,
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
+
   return
 
 updateRecordsTable = (containerDiv, params) ->
@@ -473,7 +530,7 @@ updateRecordsTable = (containerDiv, params) ->
       if jqHXR.status is 200
         noImage = true
         for record in data
-          record[7] = dateToString(new Date(record[7] * 1000))
+          columnDateToString(record, [7])
           if record[8] is null
             record[8] = '无'
           else
@@ -718,7 +775,7 @@ updateProblemsTable = (containerDiv, params) ->
 
         noImage = true
         for record in data
-          record[0] = dateToString(new Date(record[0] * 1000))
+          columnDateToString(record, [0])
           record[9] = dateToShortString(new Date(record[9] * 1000)) if record[9]
           if record[11] is null
             record[11] = '无'
@@ -1329,8 +1386,7 @@ updateUsersTable = (containerDiv) ->
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
         for record in data
-          for i in [4, 5, 8, 9]
-            record[i] = dateToString(new Date(record[i] * 1000)) if record[i]
+          columnDateToString(record, [4, 5, 8, 9])
 
           switch record[3]
             when 0

@@ -71,6 +71,12 @@ window.dateRangeToString = (start_time, end_time) ->
   return start_time_string if start_time_string is end_time_string
   "#{start_time_string} － #{end_time_string}"
 
+window.columnDateToString = (record, columns) ->
+  for column in columns
+    record[column] = dateToString(new Date(record[column] * 1000)) if record[column]
+
+  return
+
 window.changePasswordType = (element) ->
   switch $(element).attr('type')
     when 'password'
