@@ -498,6 +498,7 @@ updateSessionsTable = (containerDiv, params) ->
             $(nRow).hover(
               ->
                 $(this).addClass('mediumSeaGreenBackground')
+                $(this).css('cursor', 'pointer')
                 $("#{containerDiv} div#sessionsTooltipDiv").show()
                 return
               ->
@@ -505,6 +506,11 @@ updateSessionsTable = (containerDiv, params) ->
                 $("#{containerDiv} div#sessionsTooltipDiv").hide()
                 return
             )
+
+            $(nRow).click ->
+              console.log aaData[0]
+              return
+
             return
 
         oTable = $("#{containerDiv} table#sessionsTable").dataTable()
