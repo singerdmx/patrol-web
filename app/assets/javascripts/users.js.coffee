@@ -961,12 +961,12 @@ updateChart = (containerDiv, params) ->
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
          $('div#errorBanner, div#infoBanner').hide()
+         _point = data.point
+         $("#{containerDiv} input#barcodeInput").val(_point.barcode)
          if data.result.length is 0
            $('div#noHistoryBanner').text('该巡检点没有历史纪录').show()
          else
            $('div#noHistoryBanner').hide()
-           _point = data.point
-           $("#{containerDiv} input#barcodeInput").val(_point.barcode) if _point.barcode
            title = "#{_point.name}   #{_point.description}"
            switch _point.category
              when 30, 50
