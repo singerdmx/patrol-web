@@ -3,7 +3,7 @@ require 'json'
 module CheckResultsHelper
   include ApplicationHelper
   #replacement of the index.json.jbuilder for complicated converting logic
-  def index_json_builder(index_result)
+  def index_json_builder(index_result, check_point_id)
     if params[:aggregate].nil?
       results = []
       index_result.each do |entry|
@@ -20,7 +20,7 @@ module CheckResultsHelper
       results['group'] = true if index_result.size > group
 
       if !params[:check_point_id].nil?
-        results['point'] = to_hash(CheckPoint.find(check_result_params[:check_point_id]))
+        results['point'] = to_hash(CheckPoint.find(check_point_id))
       end
       case results['point']['category']
         when 30, 50
@@ -67,7 +67,8 @@ module CheckResultsHelper
         result['memo'],
         result['point']['barcode'],
         result['check_time'].to_i,
-        result['result_image_id'].nil? ? nil : ResultImage.find(result['result_image_id']).url
+        result['result_image_id'].nil? ? nil : ResultImage.find(result['result_image_id']).url,
+        result['session'].id
       ]
     end
   end
@@ -89,7 +90,9 @@ module CheckResultsHelper
       end
     end
 
-    CheckResult.where(check_result_params).order(check_time: :asc)
+    results = CheckResult.where(check_result_params)
+
+    results.order(check_time: :asc)
   end
 
   private

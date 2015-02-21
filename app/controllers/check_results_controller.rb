@@ -4,6 +4,7 @@ class CheckResultsController < ApplicationController
 
   # GET /check_results
   # GET /check_results.json
+  # Example: http://localhost:3000/results.json?check_time=1424332800..1424505600&&ui=true&&check_session_id=8
   def index
     begin
       if !params[:check_point_id].nil?
@@ -20,7 +21,7 @@ class CheckResultsController < ApplicationController
 
       index_para = convert_check_time(check_result_params)
       @check_results = get_results(index_para, params[:preference]=='true')
-      @check_results_json = index_json_builder(@check_results)
+      @check_results_json = index_json_builder(@check_results, params[:check_point_id])
 
       if params[:ui] == 'true'
         @check_results_json = index_ui_json_builder(@check_results_json)
