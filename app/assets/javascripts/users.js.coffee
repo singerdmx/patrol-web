@@ -185,7 +185,7 @@ updateRouteList = (containerDiv) ->
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
-    ifModified:true,
+    ifModified: true,
     dataType: 'json',
     timeout: defaultAjaxCallTimeout
 
@@ -271,7 +271,7 @@ renderTreeView = (url, containerDiv, ifModifiedSinceSpanId, params, hideTree, sh
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
-    ifModified:true,
+    ifModified: true,
     dataType: 'json',
     timeout: defaultAjaxCallTimeout
 
@@ -494,9 +494,22 @@ updateSessionsTable = (containerDiv, params) ->
           'aaData': data
           'aoColumns': columns
           'aaSorting': [[ 2, 'desc' ]]
+          'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
+            $(nRow).hover(
+              ->
+                $(this).addClass('mediumSeaGreenBackground')
+                $("#{containerDiv} div#sessionsTooltipDiv").show()
+                return
+              ->
+                $(this).removeClass('mediumSeaGreenBackground')
+                $("#{containerDiv} div#sessionsTooltipDiv").hide()
+                return
+            )
+            return
 
         oTable = $("#{containerDiv} table#sessionsTable").dataTable()
         oTable.fnSetColumnVis(0, false)
+
         $("#{containerDiv} > span#sessionsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} > span#sessionsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 
@@ -1667,7 +1680,7 @@ updateRoutesTable = (containerDiv) ->
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
-    ifModified:true,
+    ifModified: true,
     dataType: 'json',
     timeout: defaultAjaxCallTimeout
   return
@@ -1790,7 +1803,7 @@ updateAssetsTable = (containerDiv) ->
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
-    ifModified:true,
+    ifModified: true,
     dataType: 'json',
     timeout: defaultAjaxCallTimeout
   return
@@ -1825,7 +1838,7 @@ setupEditDeletePointDiv = (containerDiv) ->
         error: (jqXHR, textStatus, errorThrown) ->
           showErrorPage(jqXHR.responseText)
           return
-        ifModified:true,
+        ifModified: true,
         dataType: 'json',
         timeout: defaultAjaxCallTimeout
 
@@ -1932,7 +1945,7 @@ updatePointsTable = (containerDiv) ->
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
-    ifModified:true,
+    ifModified: true,
     dataType: 'json',
     timeout: defaultAjaxCallTimeout
   return
@@ -2250,7 +2263,7 @@ setupEditDeleteRouteDiv = (containerDiv) ->
   error: (jqXHR, textStatus, errorThrown) ->
     showErrorPage(jqXHR.responseText)
     return
-  ifModified:true,
+  ifModified: true,
   dataType: 'json',
   timeout: defaultAjaxCallTimeout
 

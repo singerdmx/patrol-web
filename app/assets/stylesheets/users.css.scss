@@ -371,3 +371,17 @@ div.tableRowForm {
     text-align: left;
   }
 }
+
+div#sessionsTooltipDiv {
+  display: none;
+  > span {
+    position: absolute;
+    top: 130px;
+    left: 500px;
+    display: block;
+    opacity: 0.7;
+    text-align: center;
+    font-size: 18px;
+    line-height: 21px;
+  }
+}
