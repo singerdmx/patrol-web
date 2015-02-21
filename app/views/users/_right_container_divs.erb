@@ -96,6 +96,38 @@
     </div>
   </div>
 </div>
+<div class="containerDiv" id="sessionsDiv">
+  <div>
+    <span class="hiddenSpan" id="sessionsIfNoneMatch"></span>
+    <span class="hiddenSpan" id="sessionsIfModifiedSince"></span>
+    <span class="hiddenSpan" id="sessionsCalendarUpdated">false</span>
+    <div style="width: 30%" class="calendarWidgetDiv">
+      <div>起始时间</div>
+      <div id="startTime" class="input-append">
+        <input data-format="yyyy-MM-dd" type="text"/>
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+              </i>
+            </span>
+      </div>
+    </div>
+    <div style="width: 30%" class="calendarWidgetDiv">
+      <div>结束时间</div>
+      <div id="endTime" class="input-append">
+        <input data-format="yyyy-MM-dd" type="text"/>
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+              </i>
+            </span>
+      </div>
+    </div>
+    <div style="width: 15%" class="calendarWidgetDiv">
+      <button type="button" class="btn btn-primary" style="margin-top: 16px" id="updateSessionsTableButton">
+        更新数据
+      </button>
+    </div>
+  </div>
+</div>
 <div class="containerDiv" id="recordsDiv">
   <div>
     <span class="hiddenSpan" id="recordsIfNoneMatch"></span>

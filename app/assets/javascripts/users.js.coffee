@@ -10,6 +10,7 @@ $ ->
   updateRecordsTable('div#preferencesDiv', { preference: true })
   setupRoutesDiv('div#routes')
   setupFactoriesDiv('div#factories')
+  setupSessionsDiv('div#sessionsDiv', 1)
   setupRecordsDiv('div#recordsDiv', 1)
   setupHistoryDiv('div#historyDiv')
   setupProblemsDiv('div#problemsDiv')
@@ -54,6 +55,8 @@ setupSidebar = ->
         updateRouteList("#{containerDiv} div#routes")
       when 'preferences'
         updateRecordsTable(containerDiv, { preference: true })
+      when 'sessions'
+        updateSessionsTable(containerDiv)
       when 'records'
         updateRecordsTable(containerDiv)
       when 'manageUsers'
@@ -384,12 +387,18 @@ syncSamePointImg = (containerDiv, img, pic) ->
         imgElem.attr('src', src.replace(/care.png/, 'tool.png'))
   return
 
+setupSessionsDiv = (containerDiv, defaultCalendarDaysRange, params) ->
+  # Calendar widget
+  setupCalendar(containerDiv, defaultCalendarDaysRange)
+
+  return
+
 setupRecordsDiv = (containerDiv, defaultCalendarDaysRange, params) ->
   # Calendar widget
   setupCalendar(containerDiv, defaultCalendarDaysRange)
 
   $("#{containerDiv} button#btnExportRecords").click ->
-    requestParams = getRecordsTableParams(containerDiv)
+    requestParams = getTableParams(containerDiv)
     _url = getBaseURL() + '/results/export.json?' + ("#{k}=#{v}" for k, v of requestParams).join('&')
     window.open(_url)
     return
@@ -425,7 +434,7 @@ setupCalendar = (containerDiv, defaultCalendarDaysRange) ->
 
   return
 
-getRecordsTableParams = (containerDiv, params) ->
+getTableParams = (containerDiv, params) ->
   startTime = getDatetimePickerEpoch("#{containerDiv} div#startTime")
   endTime = getDatetimePickerEpoch("#{containerDiv} div#endTime") + 86400 # Add one day for 86400 seconds (60 * 60 * 24)
   requestParams =
@@ -435,8 +444,17 @@ getRecordsTableParams = (containerDiv, params) ->
   $.extend(requestParams, params) if params # merge two objects
   requestParams
 
+getProblemsTableParams = (containerDiv, params) ->
+  requestParams = getTableParams(containerDiv, params)
+  $.extend(requestParams, { status: $("#{containerDiv} select#status option:selected").val() })
+  requestParams
+
+updateSessionsTable = (containerDiv, params) ->
+  requestParams = getTableParams(containerDiv, params)
+  return
+
 updateRecordsTable = (containerDiv, params) ->
-  requestParams = getRecordsTableParams(containerDiv, params)
+  requestParams = getTableParams(containerDiv, params)
 
   $.ajax
     url: getBaseURL() + '/results.json'
@@ -674,17 +692,6 @@ submitEditProblemForm = (containerDiv, _suggestions) ->
     timeout: defaultAjaxCallTimeout
 
   return
-
-getProblemsTableParams = (containerDiv, params) ->
-  startTime = getDatetimePickerEpoch("#{containerDiv} div#startTime")
-  endTime = getDatetimePickerEpoch("#{containerDiv} div#endTime") + 86400 # Add one day for 86400 seconds (60 * 60 * 24)
-  requestParams =
-    check_time: "#{startTime}..#{endTime}"
-    ui: true
-    status: $("#{containerDiv} select#status option:selected").val()
-
-  $.extend(requestParams, params) if params # merge two objects
-  requestParams
 
 updateProblemsTable = (containerDiv, params) ->
   requestParams = getProblemsTableParams(containerDiv, params)
