@@ -35,4 +35,17 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def convert_check_time(params)
+    unless params[:check_time].nil?
+      unless params[:check_time].include?('..') && params[:check_time].split('..').size == 2
+        fail "Invalid check_time param #{params[:check_time]}"
+      end
+
+      time_window = params[:check_time].split('..')
+      params[:check_time] = Time.at(time_window[0].to_i).to_datetime..Time.at(time_window[1].to_i).to_datetime
+    end
+
+    params
+  end
+
 end

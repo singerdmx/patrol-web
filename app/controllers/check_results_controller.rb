@@ -4,7 +4,7 @@ class CheckResultsController < ApplicationController
 
   # GET /check_results
   # GET /check_results.json
-  # Example: http://localhost:3000/results.json?check_time=1424332800..1424505600&&ui=true&&check_session_id=8
+  # Example: http://localhost:3000/results.json?check_time=1424332800..1424505600&&ui=true&check_session_id=8
   def index
     begin
       if !params[:check_point_id].nil?
@@ -34,7 +34,7 @@ class CheckResultsController < ApplicationController
         head :not_modified
       end
     rescue Exception => e
-      render json: {:message=> e.to_s}.to_json, status: :internal_server_error
+      render json: {message: e.to_s}.to_json, status: :internal_server_error
     end
   end
 
@@ -152,19 +152,6 @@ class CheckResultsController < ApplicationController
   end
 
   private
-
-  def convert_check_time(params)
-    unless params[:check_time].nil?
-      unless params[:check_time].include?('..') && params[:check_time].split('..').size == 2
-        fail "Invalid check_time param #{params[:check_time]}"
-      end
-
-      time_window = params[:check_time].split('..')
-      params[:check_time] = Time.at(time_window[0].to_i).to_datetime..Time.at(time_window[1].to_i).to_datetime
-    end
-
-    params
-  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_check_result
