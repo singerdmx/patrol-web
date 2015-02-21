@@ -14,6 +14,7 @@ Blog::Application.routes.draw do
   resources :check_results, :path => :results do
     collection { get 'export' }
   end
+  resources :check_sessions, :path => :sessions
   resources :manuals
   resources :user_preferences
   resources :factories, only: [:index]

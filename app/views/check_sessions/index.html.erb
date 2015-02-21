@@ -1,0 +1,25 @@
+<h1>Listing check_sessions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @check_sessions.each do |check_session| %>
+      <tr>
+        <td><%= link_to 'Show', check_session %></td>
+        <td><%= link_to 'Edit', edit_check_session_path(check_session) %></td>
+        <td><%= link_to 'Destroy', check_session, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Check session', new_check_session_path %>
