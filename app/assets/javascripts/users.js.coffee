@@ -411,6 +411,13 @@ setupRecordsDiv = (containerDiv, defaultCalendarDaysRange, params) ->
   $("#{containerDiv} button#updateRecordsTableButton").click (e) ->
     updateRecordsTable(containerDiv, params)
     return
+
+  # 重置button
+  $("#{containerDiv} div#sessionFilterDiv button#btnResetRecordsHead").click ->
+    $("#{containerDiv} div#sessionFilterDiv").hide()
+    $("#{containerDiv} > div > div.calendarWidgetDiv").show()
+    return
+
   return
 
 setupCalendar = (containerDiv, defaultCalendarDaysRange) ->
@@ -509,9 +516,14 @@ updateSessionsTable = (containerDiv, params) ->
 
             $(nRow).click ->
               $('div#recordsDiv > div > div.calendarWidgetDiv').hide()
+              $('div#recordsDiv div#sessionFilterDiv').show()
               $('div#recordsDiv div#sessionFilterDiv > span:first-child').text(
                 aaData[1] + '， ' + aaData[2] + ' － ' + aaData[3])
               $('div#recordsDiv div#sessionFilterDiv > span:nth-child(2)').text(aaData[0])
+              $('div#recordsDiv div#startTime').data('datetimepicker').setLocalDate(
+                new Date(getDatetimePickerEpoch('div#sessionsDiv div#startTime') * 1000))
+              $('div#recordsDiv div#endTime').data('datetimepicker').setLocalDate(
+                new Date(getDatetimePickerEpoch('div#sessionsDiv div#endTime') * 1000))
               $('div#sidebar li#records').trigger('click')
               return
 
@@ -535,6 +547,9 @@ updateSessionsTable = (containerDiv, params) ->
 
 updateRecordsTable = (containerDiv, params) ->
   requestParams = getTableParams(containerDiv, params)
+  $sessionFilterDiv = $("#{containerDiv} div#sessionFilterDiv")
+  if $sessionFilterDiv.length > 0 and $sessionFilterDiv.is(':visible')
+    $.extend(requestParams, { check_session_id: $("#{containerDiv} div#sessionFilterDiv > span:nth-child(2)").text() })
 
   $.ajax
     url: getBaseURL() + '/results.json'
