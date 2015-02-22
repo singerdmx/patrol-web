@@ -508,7 +508,11 @@ updateSessionsTable = (containerDiv, params) ->
             )
 
             $(nRow).click ->
-              console.log aaData[0]
+              $('div#recordsDiv > div > div.calendarWidgetDiv').hide()
+              $('div#recordsDiv div#sessionFilterDiv > span:first-child').text(
+                aaData[1] + '， ' + aaData[2] + ' － ' + aaData[3])
+              $('div#recordsDiv div#sessionFilterDiv > span:nth-child(2)').text(aaData[0])
+              $('div#sidebar li#records').trigger('click')
               return
 
             return
