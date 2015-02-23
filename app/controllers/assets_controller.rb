@@ -5,25 +5,22 @@ class AssetsController < ApplicationController
   # GET /assets
   # GET /assets.json
   def index
-    begin
-
-      @assets = Asset.where(asset_params)
-      if params[:ui] == 'true'
-        @assets_index_json =  index_ui_json_builder(@assets)
-      else
-        @assets_index_json =  index_json_builder(@assets)
-      end
-
-      if stale?(etag: @assets_index_json,
-                last_modified: @assets.maximum(:updated_at))
-        render template: 'assets/index', status: :ok
-      else
-        head :not_modified
-      end
-    rescue Exception => e
-      Rails.logger.error("Encountered an error while indexing  #{e}")
-      render json: {:message=> e.to_s}.to_json, status: :not_found
+    @assets = Asset.where(asset_params)
+    if params[:ui] == 'true'
+      @assets_index_json =  index_ui_json_builder(@assets)
+    else
+      @assets_index_json =  index_json_builder(@assets)
     end
+
+    if stale?(etag: @assets_index_json,
+              last_modified: @assets.maximum(:updated_at))
+      render template: 'assets/index', status: :ok
+    else
+      head :not_modified
+    end
+  rescue Exception => e
+    Rails.logger.error("Encountered an error while indexing  #{e}")
+    render json: {message: e.to_s}.to_json, status: :not_found
   end
 
   def edit
@@ -36,35 +33,29 @@ class AssetsController < ApplicationController
   # GET /assets/1
   # GET /assets/1.json
   def show
-    begin
-      render template: 'assets/show',  status: :ok
-    rescue Exception => e
-      render json: {:message=> e.to_s}.to_json, status: :not_found
-    end
+    render template: 'assets/show',  status: :ok
+  rescue Exception => e
+    render json: {message: e.to_s}.to_json, status: :not_found
   end
-
-
 
   # POST /assets
   # POST /assets.json
   def create
-    begin
-      unless current_user.is_admin?
-        render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
-        return
-      end
-
-      @asset = Asset.create!(asset_params)
-      for pointId in params[:points]
-        point = CheckPoint.find(pointId)
-        point.asset_id = @asset.id
-        point.save
-      end
-
-      render template: 'assets/show', status: :created
-    rescue Exception => e
-      render json: {:message=> e.to_s}.to_json, status: :internal_server_error
+    unless current_user.is_admin?
+      render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      return
     end
+
+    @asset = Asset.create!(asset_params)
+    for pointId in params[:points]
+      point = CheckPoint.find(pointId)
+      point.asset_id = @asset.id
+      point.save
+    end
+
+    render template: 'assets/show', status: :created
+  rescue Exception => e
+    render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
   # PATCH/PUT /assets/1
@@ -93,7 +84,7 @@ class AssetsController < ApplicationController
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
     Rails.logger.error("Encountered an error while deleting user #{params.inspect}: #{e}")
-    render json: {:message => e.to_s}.to_json, status: :unprocessable_entity
+    render json: {message: e.to_s}.to_json, status: :unprocessable_entity
   end
 
   #PUT /assets/1/attach_point?point=id
