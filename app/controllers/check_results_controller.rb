@@ -5,37 +5,36 @@ class CheckResultsController < ApplicationController
   # GET /check_results
   # GET /check_results.json
   # Example: http://localhost:3000/results.json?check_time=1424332800..1424505600&&ui=true&check_session_id=8
+  # http://localhost:3000/points/A001/history.json?aggregate=30&check_time=1416038400..1424764800&barcode=true
   def index
-    begin
-      if !params[:check_point_id].nil?
-        if params[:barcode] == 'true'
-          point = CheckPoint.find_by(barcode: params[:check_point_id])
-          if point.nil?
-            render json: { error: "无法找到条形码为\"#{params[:check_point_id]}\"的巡检点" }.to_json, status: :not_found
-            return
-          else
-            params[:check_point_id] = point.id
-          end
+    if !params[:check_point_id].nil?
+      if params[:barcode] == 'true'
+        point = CheckPoint.find_by(barcode: params[:check_point_id])
+        if point.nil?
+          render json: { error: "无法找到条形码为\"#{params[:check_point_id]}\"的巡检点" }.to_json, status: :not_found
+          return
+        else
+          params[:check_point_id] = point.id
         end
       end
-
-      index_para = convert_check_time(check_result_params)
-      @check_results = get_results(index_para, params[:preference]=='true')
-      @check_results_json = index_json_builder(@check_results, params[:check_point_id])
-
-      if params[:ui] == 'true'
-        @check_results_json = index_ui_json_builder(@check_results_json)
-      end
-
-      if stale?(etag: @check_results_json,
-                last_modified: @check_results.maximum(:updated_at))
-        render template: 'check_results/index', status: :ok
-      else
-        head :not_modified
-      end
-    rescue Exception => e
-      render json: {message: e.to_s}.to_json, status: :internal_server_error
     end
+
+    index_para = convert_check_time(check_result_params)
+    @check_results = get_results(index_para, params[:preference]=='true')
+    @check_results_json = index_json_builder(@check_results, params[:check_point_id])
+
+    if params[:ui] == 'true'
+      @check_results_json = index_ui_json_builder(@check_results_json)
+    end
+
+    if stale?(etag: @check_results_json,
+              last_modified: @check_results.maximum(:updated_at))
+      render template: 'check_results/index', status: :ok
+    else
+      head :not_modified
+    end
+  rescue Exception => e
+    render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
   # GET /check_results/1

@@ -1,19 +1,17 @@
 class AssetsController < ApplicationController
   include AssetsHelper
-  before_action :set_asset, only: [:show, :edit, :update, :destroy]
-  #TODO: disable user role for CUD of assets
   # GET /assets
   # GET /assets.json
   def index
-    @assets = Asset.where(asset_params)
+    assets = Asset.where(asset_params)
     if params[:ui] == 'true'
-      @assets_index_json =  index_ui_json_builder(@assets)
+      assets_index_json =  index_ui_json_builder(assets)
     else
-      @assets_index_json =  index_json_builder(@assets)
+      assets_index_json =  index_json_builder(assets)
     end
 
-    if stale?(etag: @assets_index_json,
-              last_modified: @assets.maximum(:updated_at))
+    if stale?(etag: assets_index_json,
+              last_modified: assets.maximum(:updated_at))
       render template: 'assets/index', status: :ok
     else
       head :not_modified
@@ -23,17 +21,14 @@ class AssetsController < ApplicationController
     render json: {message: e.to_s}.to_json, status: :not_found
   end
 
-  def edit
-  end
-
-  def new
-    @asset = Asset.new
-  end
-
   # GET /assets/1
   # GET /assets/1.json
+  # GET http://localhost:3000/assets/780672318863.json?barcode=true
   def show
-    render template: 'assets/show',  status: :ok
+    asset = get_asset
+    asset_hash = to_hash(asset)
+    asset_hash['points'] = asset.check_points
+    render json: asset_hash.to_json
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :not_found
   end
@@ -46,10 +41,10 @@ class AssetsController < ApplicationController
       return
     end
 
-    @asset = Asset.create!(asset_params)
+    asset = Asset.create!(asset_params)
     for pointId in params[:points]
       point = CheckPoint.find(pointId)
-      point.asset_id = @asset.id
+      point.asset_id = asset.id
       point.save
     end
 
@@ -57,20 +52,6 @@ class AssetsController < ApplicationController
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
-
-  # PATCH/PUT /assets/1
-  # PATCH/PUT /assets/1.json
-  def update
-    respond_to do |format|
-      if @asset.update(asset_params)
-        format.html { redirect_to @asset, notice: 'Asset was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @asset.errors, status: :internal_server_error }
-      end
-    end
-   end
 
   # DELETE /assets/1
   # DELETE /assets/1.json
@@ -80,7 +61,7 @@ class AssetsController < ApplicationController
       return
     end
 
-    @asset.destroy
+    get_asset.destroy
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
     Rails.logger.error("Encountered an error while deleting user #{params.inspect}: #{e}")
@@ -95,14 +76,20 @@ class AssetsController < ApplicationController
     render json: { success: true }.to_json, status: :ok
   rescue ActiveRecord::RecordNotFound
     Rails.logger.error("Bad point id from parameter #{params[:point]}")
-    render json: {:message => "Bad point id from parameter #{params[:point]}"}, status: :bad_request
+    render json: {message: "Bad point id from parameter #{params[:point]}"}, status: :bad_request
   end
 
   private
 
   # Use callbacks to share common setup or constraints between actions.
-  def set_asset
-    @asset = Asset.find(params[:id])
+  def get_asset
+    if params[:barcode] == 'true'
+      asset = Asset.find_by(barcode: params[:id])
+      fail "无法找到条形码为\"#{params[:id]}\"设备" if asset.nil?
+      params[:id] = asset.id
+    end
+
+    Asset.find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
