@@ -330,7 +330,7 @@ bindTreeViewClick = (containerDiv) ->
     switch $(this).data('type')
       when 'history'
         $('div#sidebar ul > li#history').trigger('click')
-        updateChart('div#historyDiv', {id: $(this).data('id')})
+        updatePointChart('div#historyDiv', {id: $(this).data('id')})
       when 'moveOut'
         detachPoint($(this)) if confirm("确认移出？")
       when 'delete'
@@ -649,7 +649,7 @@ setupHistoryDiv = (containerDiv) ->
     return
 
   $("#{containerDiv} button#btnPointSelection").click ->
-    updateChart(containerDiv, {id: $("#{containerDiv} select#pointSelection").val()})
+    updatePointChart(containerDiv, {id: $("#{containerDiv} select#pointSelection").val()})
     return
   return
 
@@ -1051,6 +1051,10 @@ updateChart = (containerDiv, params) ->
       url: getBaseURL() + "/assets/#{params.barcode}.json?barcode=true"
       success: (data, textStatus, jqHXR) ->
         if jqHXR.status is 200
+          if data.points.length == 1
+            updatePointChart(containerDiv, {id: data.points[0].id})
+            return
+
           $("#{containerDiv} div#pointSelectionBanner").show()
           $pointSelection = $("#{containerDiv} div#pointSelectionBanner select#pointSelection")
           $pointSelection.html('')
