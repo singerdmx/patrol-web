@@ -330,7 +330,7 @@ bindTreeViewClick = (containerDiv) ->
     switch $(this).data('type')
       when 'history'
         $('div#sidebar ul > li#history').trigger('click')
-        updatePointChart('div#historyDiv', {id: $(this).data('id')})
+        updateChart('div#historyDiv', {id: $(this).data('id')})
       when 'moveOut'
         detachPoint($(this)) if confirm("确认移出？")
       when 'delete'
