@@ -214,6 +214,28 @@ div#historyDiv {
       }
     }
 
+    &#pointSelectionBanner {
+      > div {
+        float: left;
+        margin-right: 20px;
+      }
+
+      > div:first-child {
+        margin-top: 7px;
+        width: 30%;
+        text-align: right;
+      }
+      > div:nth-child(2) {
+        text-align: center;
+        width: 30%;
+      }
+      > div:nth-child(3) {
+        margin-top: 3px;
+        width: 30%;
+        text-align: left;
+      }
+    }
+
     &#chartDiv {
       height: 450px;
       width: 100%;

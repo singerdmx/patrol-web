@@ -204,6 +204,18 @@
       <input type="text" class="form-control" id="barcodeInput" placeholder="条形码"/>
     </div>
   </div>
+  <div class="alert alert-info historyBanner" id="pointSelectionBanner" style="display: none">
+    <div>
+      <span>选择检点</span>
+    </div>
+    <div>
+      <select class="form-control" id="pointSelection">
+      </select>
+    </div>
+    <div>
+      <button class="btn btn-primary" type="button" id="btnPointSelection"/>提交</button>
+    </div>
+  </div>
   <div class="alert alert-warning historyBanner" id="noHistoryBanner">请输入条形码并更新</div>
   <div class="alert alert-danger historyBanner" id="errorBanner" style="display: none"></div>
   <div class="alert alert-info historyBanner" id="infoBanner" style="display: none"></div>

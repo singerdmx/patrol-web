@@ -645,9 +645,12 @@ setupHistoryDiv = (containerDiv) ->
       alert '条形码不能为空！'
       return
 
-    updateChart('div#historyDiv', {barcode: _val})
+    updateChart(containerDiv, {barcode: _val})
     return
 
+  $("#{containerDiv} button#btnPointSelection").click ->
+    updateChart(containerDiv, {id: $("#{containerDiv} select#pointSelection").val()})
+    return
   return
 
 setupProblemsDiv = (containerDiv) ->
@@ -1040,16 +1043,46 @@ getCanvasOverlayObjects = (_point) ->
   [min, max, canvasOverlayObjects]
 
 updateChart = (containerDiv, params) ->
+  $("#{containerDiv} div#chartDiv").html('')
+  $("#{containerDiv} div#pointSelectionBanner, #{containerDiv} div.historyBanner").hide()
+
+  if params.barcode
+    $.ajax
+      url: getBaseURL() + "/assets/#{params.barcode}.json?barcode=true"
+      success: (data, textStatus, jqHXR) ->
+        if jqHXR.status is 200
+          $("#{containerDiv} div#pointSelectionBanner").show()
+          $pointSelection = $("#{containerDiv} div#pointSelectionBanner select#pointSelection")
+          $pointSelection.html('')
+          for point in data.points
+            $pointSelection.append("<option value='#{point.id}'>#{point.name} #{point.description}</option>")
+
+        return
+      error: (jqXHR, textStatus, errorThrown) ->
+        if jqXHR.status is 404
+          updatePointChart(containerDiv, params)
+        else
+          showErrorPage(jqXHR.responseText)
+
+        return
+      dataType: 'json',
+      timeout: defaultAjaxCallTimeout
+  else
+    updatePointChart(containerDiv, params)
+
+  return
+
+updatePointChart = (containerDiv, params) ->
   start_time = getDatetimePickerEpoch("#{containerDiv} div#startTime")
   end_time = getDatetimePickerEpoch("#{containerDiv} div#endTime") + 86400 # Add one day for 86400 seconds (60 * 60 * 24)
   request_params = { check_time: "#{start_time}..#{end_time}" }
   _id = params.id
   _barcode = params.barcode
+
   unless _barcode is undefined
     request_params.barcode = true
     _id = _barcode
 
-  $("#{containerDiv} div#chartDiv").html('')
   $.ajax
     url: getBaseURL() + "/points/#{_id}/history.json?aggregate=30"
     data: request_params
