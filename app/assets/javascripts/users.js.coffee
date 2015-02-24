@@ -1044,7 +1044,7 @@ getCanvasOverlayObjects = (_point) ->
 
 updateChart = (containerDiv, params) ->
   $("#{containerDiv} div#chartDiv").html('')
-  $("#{containerDiv} div#pointSelectionBanner, #{containerDiv} div.historyBanner").hide()
+  $("#{containerDiv} div.historyBanner").hide()
 
   if params.barcode
     $.ajax
@@ -1052,7 +1052,7 @@ updateChart = (containerDiv, params) ->
       success: (data, textStatus, jqHXR) ->
         if jqHXR.status is 200
           if data.points.length == 1
-            updatePointChart(containerDiv, {id: data.points[0].id})
+            updateChart(containerDiv, {id: data.points[0].id})
             return
 
           $("#{containerDiv} div#pointSelectionBanner").show()
@@ -1077,6 +1077,9 @@ updateChart = (containerDiv, params) ->
   return
 
 updatePointChart = (containerDiv, params) ->
+  $("#{containerDiv} div#chartDiv").html('')
+  $("#{containerDiv} div#noHistoryBanner, #{containerDiv} div#errorBanner, #{containerDiv} div#infoBanner").hide()
+
   start_time = getDatetimePickerEpoch("#{containerDiv} div#startTime")
   end_time = getDatetimePickerEpoch("#{containerDiv} div#endTime") + 86400 # Add one day for 86400 seconds (60 * 60 * 24)
   request_params = { check_time: "#{start_time}..#{end_time}" }
