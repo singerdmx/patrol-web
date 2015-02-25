@@ -12,7 +12,7 @@ class AssetsController < ApplicationController
 
     if stale?(etag: assets_index_json,
               last_modified: assets.maximum(:updated_at))
-      render template: 'assets/index', status: :ok
+      render json: assets_index_json.to_json, status: :ok
     else
       head :not_modified
     end
