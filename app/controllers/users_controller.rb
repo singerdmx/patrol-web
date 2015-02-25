@@ -7,24 +7,25 @@ class UsersController < ApplicationController
 
   # GET /users.json
   def index
-    begin
-      if show_full_view?
-        @users = User.all
-        @users_index_json = to_json(@users)
-      end
+    if !show_full_view?
+      render json: {error: "此用户没有足够权限访问本页"}.to_json, status: :unauthorized
+      return
+    end
 
-      @users_index_json = index_ui_json_builder(@users_index_json) if params[:ui] == 'true'
-
-      if stale?(etag: @users_index_json,
-                last_modified: @users.maximum(:updated_at))
-        render template: 'users/index', status: :ok
+    ActiveRecord::Base.transaction do
+      users = User.all
+      users_index_json = to_json(users)
+      users_index_json = index_ui_json_builder(users_index_json) if params[:ui] == 'true'
+      if stale?(etag: users_index_json,
+                last_modified: users.maximum(:updated_at))
+        render json: users_index_json.to_json, status: :ok
       else
         head :not_modified
       end
-    rescue Exception => e
-      Rails.logger.error("Encountered an error while indexing  #{e}")
-      render json: {:message=> e.to_s}.to_json, status: :not_found
     end
+  rescue Exception => e
+    Rails.logger.error("Encountered an error while indexing  #{e}")
+    render json: {message: e.to_s}.to_json, status: :not_found
   end
 
   def update
@@ -41,32 +42,34 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     unless current_user.is_admin?
-      render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
       return
     end
 
-    user = User.find_by_email(params[:email])
-    unless user.nil?
-      render json: {:message => "用户 #{params[:email]} 已经存在！"}.to_json, status: :unprocessable_entity
-      return
-    end
+    ActiveRecord::Base.transaction do
+      user = User.find_by_email(params[:email])
+      unless user.nil?
+        render json: {:message => "用户 #{params[:email]} 已经存在！"}.to_json, status: :unprocessable_entity
+        return
+      end
 
-    User.create! do |u|
-      u.email = params[:email]
-      u.password = params[:password]
-      u.role = params[:role]
-      u.name = params[:name]
+      User.create! do |u|
+        u.email = params[:email]
+        u.password = params[:password]
+        u.role = params[:role]
+        u.name = params[:name]
+      end
     end
 
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
     Rails.logger.error("Encountered an error while creating user #{params.inspect}: #{e}")
-    render json: {:message => e.to_s}.to_json, status: :unprocessable_entity
+    render json: {message: e.to_s}.to_json, status: :unprocessable_entity
   end
 
   def destroy
     unless current_user.is_admin?
-      render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
       return
     end
 
@@ -74,49 +77,57 @@ class UsersController < ApplicationController
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
     Rails.logger.error("Encountered an error while deleting user #{params.inspect}: #{e}")
-    render json: {:message => e.to_s}.to_json, status: :unprocessable_entity
+    render json: {message: e.to_s}.to_json, status: :unprocessable_entity
   end
 
+  # GET /users/#{id}/routes
   def routes
     unless current_user.is_admin?
-      render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
       return
     end
 
-    curr_routes = CheckRoute.joins(:users).where("users.id = #{params[:user_id]}")
-    rest_routes = CheckRoute.all - curr_routes
-    @routes_json = { curr_routes: routes_to_json(curr_routes),
-                     rest_routes: routes_to_json(rest_routes) }
+    ActiveRecord::Base.transaction do
+      curr_routes = CheckRoute.joins(:users).where("users.id = #{params[:user_id]}")
+      rest_routes = CheckRoute.all - curr_routes
+      routes_json = { curr_routes: routes_to_json(curr_routes),
+                       rest_routes: routes_to_json(rest_routes) }
 
-    render json: @routes_json, status: :ok
+      render json: routes_json, status: :ok
+    end
+  rescue Exception => e
+    Rails.logger.error("Encountered an error #{params.inspect}: #{e}")
+    render json: {message: e.to_s}.to_json, status: :unprocessable_entity
   end
 
-  #PUT /users/#{id}/set_routes
+  # PUT /users/#{id}/set_routes
   def set_routes
     unless current_user.is_admin?
-      render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
       return
     end
 
-    user  = User.find(params[:user_id])
-    if user.nil?
-      render json: {:message => "User #{params[:user_id]} not found"}.to_json, status: :bad_request
-      return
-    end
+    ActiveRecord::Base.transaction do
+      user  = User.find(params[:user_id])
+      if user.nil?
+        render json: {message: "User #{params[:user_id]} not found"}.to_json, status: :bad_request
+        return
+      end
 
-    user.check_routes.delete_all
+      user.check_routes.delete_all
 
-    if params[:routes]
-      params[:routes].each do |r|
-        route = CheckRoute.find(r)
-        user.check_routes << route if route
+      if params[:routes]
+        params[:routes].each do |r|
+          route = CheckRoute.find(r)
+          user.check_routes << route if route
+        end
       end
     end
 
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
     Rails.logger.error("Encountered an error while editing user routes #{params.inspect}: #{e}")
-    render json: {:message => e.to_s}.to_json, status: :internal_server_error
+    render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
   private

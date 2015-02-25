@@ -45,8 +45,10 @@ class ContactsController < ApplicationController
       return
     end
 
-    contact = Contact.find(params[:id])
-    contact.update_attributes(name: params[:name], email: params[:email])
+    ActiveRecord::Base.transaction do
+      contact = Contact.find(params[:id])
+      contact.update_attributes(name: params[:name], email: params[:email])
+    end
     render json: {id: params[:id]}.to_json
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :internal_server_error

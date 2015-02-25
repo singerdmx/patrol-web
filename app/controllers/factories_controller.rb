@@ -3,10 +3,14 @@ class FactoriesController < ApplicationController
 
   # GET /factoriess.json
   def index
-    if show_full_view?
-      factories = Factory.all
+    if !show_full_view?
+      render json: {error: "此用户没有足够权限访问本页"}.to_json, status: :unauthorized
+      return
+    end
 
-      @factories_json = []
+    factories_json = []
+    ActiveRecord::Base.transaction do
+      factories = Factory.all
       factories.reverse.each do |f|
         entry = to_hash(f)
         entry['subfactories'] = []
@@ -27,21 +31,22 @@ class FactoriesController < ApplicationController
           entry['subfactories'] << subf_entry
         end
 
-        @factories_json << entry
+        factories_json << entry
       end
 
       if params[:ui] == 'true'
-        @factories_json = index_ui_json_builder(@factories_json)
+        factories_json = index_ui_json_builder(factories_json)
       end
 
-      if stale?(etag: @factories_json.to_a,
+      if stale?(etag: factories_json.to_a,
                 last_modified: factories.maximum(:updated_at))
-        render template: 'factories/index', status: :ok
+        render json: factories_json.to_json, status: :ok
       else
         head :not_modified
       end
-    else
-      render json: {error: "此用户没有足够权限访问本页"}.to_json, status: :unauthorized
     end
+  rescue Exception => e
+    Rails.logger.error("Encountered an error while GET /factoriess.json #{params.inspect}: #{e}")
+    render json: {message: e.to_s}.to_json, status: :unprocessable_entity
   end
 end

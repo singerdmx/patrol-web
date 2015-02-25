@@ -4,18 +4,20 @@ class ProblemListController < ApplicationController
   # GET /problem_list.json
   # Example http://localhost:3000/problem_list.json?ui=true&status=2
   def index
-    reports = query_repair_report(params)
-    reports_json = index_json_builder(reports)
+    ActiveRecord::Base.transaction do
+      reports = query_repair_report(params)
+      reports_json = index_json_builder(reports)
 
-    if params[:ui] == 'true'
-      reports_json = problem_list_ui_json_builder(reports_json)
-    end
+      if params[:ui] == 'true'
+        reports_json = problem_list_ui_json_builder(reports_json)
+      end
 
-    if stale?(etag: reports_json,
-              last_modified: reports.maximum(:updated_at))
-      render json: reports_json.to_json
-    else
-      head :not_modified
+      if stale?(etag: reports_json,
+                last_modified: reports.maximum(:updated_at))
+        render json: reports_json.to_json
+      else
+        head :not_modified
+      end
     end
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :internal_server_error
@@ -23,8 +25,10 @@ class ProblemListController < ApplicationController
 
   # GET /problem_list/1.json
   def show
-    report = db_result_to_hash(RepairReport.find(params[:id]))
-    render json: report.to_json
+    ActiveRecord::Base.transaction do
+      report = db_result_to_hash(RepairReport.find(params[:id]))
+      render json: report.to_json
+    end
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end

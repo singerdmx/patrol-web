@@ -4,9 +4,17 @@ class RepairReportsController < ApplicationController
   # GET /repair_reports
   # GET /repair_reports.json
   def index
-    @reports = RepairReport.where(:created_by_id => current_user.id)
+    ActiveRecord::Base.transaction do
+      reports = RepairReport.where(created_by_id: current_user.id)
+      reports_json = index_json_builder(reports)
 
-    @reports_index_json = index_json_builder(@reports)
+      if stale?(etag: reports_json,
+                last_modified: reports.maximum(:updated_at))
+        render json: reports_json.to_json
+      else
+        head :not_modified
+      end
+    end
   rescue Exception => e
     flash[:error] = e.message
   end

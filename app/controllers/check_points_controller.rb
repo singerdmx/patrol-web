@@ -1,25 +1,26 @@
 class CheckPointsController < ApplicationController
   include CheckPointsHelper
-  before_action :set_check_point, only: [:show, :edit, :update, :destroy]
+  before_action :set_check_point, only: [:show, :update, :destroy]
   #TODO: disable user role for CUD of points
   # GET /check_points
   # GET /check_points.json
   def index
-    @check_points = CheckPoint.where(check_point_params)
+    ActiveRecord::Base.transaction do
+      @check_points = CheckPoint.where(check_point_params)
 
-    if params[:ui] == 'true'
-      @check_points_json = index_ui_json_builder(@check_points)
-    else
-      @check_points_json = index_json_builder(@check_points)
+      if params[:ui] == 'true'
+        @check_points_json = index_ui_json_builder(@check_points)
+      else
+        @check_points_json = index_json_builder(@check_points)
+      end
+
+      if stale?(etag: @check_points_json,
+                last_modified: @check_points.maximum(:updated_at))
+        render template: 'check_points/index', status: :ok
+      else
+        head :not_modified
+      end
     end
-
-    if stale?(etag: @check_points_json,
-              last_modified: @check_points.maximum(:updated_at))
-      render template: 'check_points/index', status: :ok
-    else
-      head :not_modified
-    end
-
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
@@ -38,35 +39,32 @@ class CheckPointsController < ApplicationController
     render json: {message: e.to_s}.to_json, status: :not_found
   end
 
-  def new
-    @check_point = CheckPoint.new
-  end
-
-
   # POST /check_points
   # POST /check_points.json
   def create
     begin
       unless current_user.is_admin?
-        render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+        render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
         return
       end
 
-      if check_point_params[:asset_id].nil?
-        logger.info("no asset id provided when creating point:so creating dummy asset")
-        asset = Asset.create({
-                                 barcode: check_point_params[:barcode],
-                                 name: check_point_params[:name],
-                                 description: check_point_params[:description] })
-      else
-        logger.info("asset id: #{check_point_params}")
-        asset = Asset.find(check_point_params[:asset_id])
-      end
+      ActiveRecord::Base.transaction do
+        if check_point_params[:asset_id].nil?
+          logger.info("no asset id provided when creating point:so creating dummy asset")
+          asset = Asset.create({
+                                   barcode: check_point_params[:barcode],
+                                   name: check_point_params[:name],
+                                   description: check_point_params[:description] })
+        else
+          logger.info("asset id: #{check_point_params}")
+          asset = Asset.find(check_point_params[:asset_id])
+        end
 
-      @check_point = asset.check_points.create!(check_point_params)
-      render template: 'check_points/show', status: :created
+        @check_point = asset.check_points.create!(check_point_params)
+      end
+      render json: @check_point.to_json, status: :created
     rescue Exception => e
-      render json: {:message=> e.to_s}.to_json, status: :internal_server_error
+      render json: {message: e.to_s}.to_json, status: :internal_server_error
     end
   end
 
@@ -90,7 +88,7 @@ class CheckPointsController < ApplicationController
   # DELETE /check_points/1.json
   def destroy
     unless current_user.is_admin?
-      render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
       return
     end
 
@@ -98,7 +96,7 @@ class CheckPointsController < ApplicationController
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
     Rails.logger.error("Encountered an error while deleting user #{params.inspect}: #{e}")
-    render json: {:message => e.to_s}.to_json, status: :unprocessable_entity
+    render json: {message: e.to_s}.to_json, status: :unprocessable_entity
   end
 
   private

@@ -1,39 +1,41 @@
 class CheckRoutesController < ApplicationController
   include CheckRoutesHelper
-  before_action :set_check_route, only: [:show, :edit, :update, :destroy]
+  before_action :set_check_route, only: [:show, :update, :destroy]
   #TODO: disable user role for D of results
   # GET /check_routes
   # GET /check_routes.json
   def index
-    @check_routes = get_routes(check_route_params)
-    route_assets = nil
-    if params[:group_by_asset] == 'true'
-      route_assets = Hash.new # Key is route id and value is assets (Hash of key = asset id and value = points)
-      route_map = Hash.new # Key is route id and value is route
-      asset_map = Hash.new # Key is asset id and value is asset
-      @check_routes.each do |route|
-        route_map[route.id] = route
-        assets = Hash.new
-        route.check_points.each do |point|
-           asset_id = point.asset.id
-           if assets[asset_id].nil?
-             assets[asset_id] = []
-           end
-           assets[asset_id] << point
-           asset_map[asset_id] = point.asset
+    ActiveRecord::Base.transaction do
+      @check_routes = get_routes(check_route_params)
+      route_assets = nil
+      if params[:group_by_asset] == 'true'
+        route_assets = Hash.new # Key is route id and value is assets (Hash of key = asset id and value = points)
+        route_map = Hash.new # Key is route id and value is route
+        asset_map = Hash.new # Key is asset id and value is asset
+        @check_routes.each do |route|
+          route_map[route.id] = route
+          assets = Hash.new
+          route.check_points.each do |point|
+             asset_id = point.asset.id
+             if assets[asset_id].nil?
+               assets[asset_id] = []
+             end
+             assets[asset_id] << point
+             asset_map[asset_id] = point.asset
+          end
+          route_assets[route.id] = assets
         end
-        route_assets[route.id] = assets
       end
-    end
 
-    if params[:ui] == 'true'
-      @check_routes_json = index_ui_json_builder(route_assets, route_map, asset_map)
-    else
-      @check_routes_json  = index_json_builder(@check_routes, route_assets, params[:show_name] == 'true')
+      if params[:ui] == 'true'
+        @check_routes_json = index_ui_json_builder(route_assets, route_map, asset_map)
+      else
+        @check_routes_json  = index_json_builder(@check_routes, route_assets, params[:show_name] == 'true')
+      end
     end
     if stale?(etag: @check_routes_json.to_a,
             last_modified: @check_routes.maximum(:updated_at))
-      render template: 'check_routes/index', status: :ok
+      render json: @check_routes_json.to_json, status: :ok
     else
       head :not_modified
     end
@@ -106,19 +108,19 @@ class CheckRoutesController < ApplicationController
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
     Rails.logger.error("Encountered an error while deleting user #{params.inspect}: #{e}")
-    render json: {:message => e.to_s}.to_json, status: :unprocessable_entity
+    render json: {message: e.to_s}.to_json, status: :unprocessable_entity
   end
 
   #PUT /routes/#{routeId}/detach_point?point=#{id}
   def detach_point
     unless current_user.is_admin?
-      render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
       return
     end
 
     attachment = RouteBuilder.find_by(check_point_id: params[:point], check_route_id: params[:check_route_id])
     if attachment.nil?
-      render json: {:message => "Point #{params[:point]} is not attached to route #{params[:check_route_id]}"}.to_json, status: :bad_request
+      render json: {message: "Point #{params[:point]} is not attached to route #{params[:check_route_id]}"}.to_json, status: :bad_request
       return
     end
 
@@ -129,18 +131,18 @@ class CheckRoutesController < ApplicationController
   #PUT /routes/#{routeId}/attach_point?point=#{id}
   def attach_point
     unless current_user.is_admin?
-      render json: {:message => '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
       return
     end
 
     route = CheckRoute.find_by(id: params[:check_route_id])
     if route.nil?
-      render json: {:message => "Route #{params[:check_route_id]} not found"}.to_json, status: :bad_request
+      render json: {message: "Route #{params[:check_route_id]} not found"}.to_json, status: :bad_request
       return
     end
     point = CheckPoint.find_by(id: params[:point])
     if point.nil?
-      render json: {:message => "Point #{params[:point]} not found"}.to_json, status: :bad_request
+      render json: {message: "Point #{params[:point]} not found"}.to_json, status: :bad_request
       return
     end
 

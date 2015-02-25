@@ -3,18 +3,20 @@ class AssetsController < ApplicationController
   # GET /assets
   # GET /assets.json
   def index
-    assets = Asset.where(asset_params)
-    if params[:ui] == 'true'
-      assets_index_json =  index_ui_json_builder(assets)
-    else
-      assets_index_json =  index_json_builder(assets)
-    end
+    ActiveRecord::Base.transaction do
+      assets = Asset.where(asset_params)
+      if params[:ui] == 'true'
+        assets_index_json =  index_ui_json_builder(assets)
+      else
+        assets_index_json =  index_json_builder(assets)
+      end
 
-    if stale?(etag: assets_index_json,
-              last_modified: assets.maximum(:updated_at))
-      render json: assets_index_json.to_json, status: :ok
-    else
-      head :not_modified
+      if stale?(etag: assets_index_json,
+                last_modified: assets.maximum(:updated_at))
+        render json: assets_index_json.to_json, status: :ok
+      else
+        head :not_modified
+      end
     end
   rescue Exception => e
     Rails.logger.error("Encountered an error while indexing  #{e}")
@@ -25,10 +27,12 @@ class AssetsController < ApplicationController
   # GET /assets/1.json
   # GET http://localhost:3000/assets/780672318863.json?barcode=true
   def show
-    asset = get_asset
-    asset_hash = to_hash(asset)
-    asset_hash['points'] = asset.check_points
-    render json: asset_hash.to_json
+    ActiveRecord::Base.transaction do
+      asset = get_asset
+      asset_hash = to_hash(asset)
+      asset_hash['points'] = asset.check_points
+      render json: asset_hash.to_json
+    end
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :not_found
   end
@@ -41,14 +45,16 @@ class AssetsController < ApplicationController
       return
     end
 
-    asset = Asset.create!(asset_params)
-    for pointId in params[:points]
-      point = CheckPoint.find(pointId)
-      point.asset_id = asset.id
-      point.save
-    end
+    ActiveRecord::Base.transaction do
+      asset = Asset.create!(asset_params)
+      for pointId in params[:points]
+        point = CheckPoint.find(pointId)
+        point.asset_id = asset.id
+        point.save
+      end
 
-    render template: 'assets/show', status: :created
+      render json: asset.to_json, status: :created
+    end
   rescue Exception => e
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
@@ -70,9 +76,11 @@ class AssetsController < ApplicationController
 
   #PUT /assets/1/attach_point?point=id
   def attach_point
-    point = CheckPoint.find(params[:point])
-    point.asset_id = params[:asset_id]
-    point.save
+    ActiveRecord::Base.transaction do
+      point = CheckPoint.find(params[:point])
+      point.asset_id = params[:asset_id]
+      point.save
+    end
     render json: { success: true }.to_json, status: :ok
   rescue ActiveRecord::RecordNotFound
     Rails.logger.error("Bad point id from parameter #{params[:point]}")
