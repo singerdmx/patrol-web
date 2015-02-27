@@ -46,7 +46,7 @@ window.validateUserForm = (containerDiv, userInfo) ->
 window.setTitle = (title) ->
   $('span#logo').text(title)
   $('small#footerTitle').text(title)
-
+  $('body').removeClass('defaultBackgroundImage')
   return
 
 window.removeFlashNotice = ->

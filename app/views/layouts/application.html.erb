@@ -44,7 +44,8 @@
     <%= stylesheet_link_tag 'jquery.fileupload', :media => 'screen' %>
     <%= csrf_meta_tags %>
   </head>
-  <body>
+
+  <body class="defaultBackgroundImage">
     <%= render 'layouts/header' %>
     <div class="container">
       <% flash.each do |key, value| %>

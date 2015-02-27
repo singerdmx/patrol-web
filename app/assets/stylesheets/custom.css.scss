@@ -12,6 +12,11 @@
 
 /* universal */
 
+.defaultBackgroundImage {
+  background-image: url("/assets/cloud.png");
+  background-size: 140% auto;
+}
+
 html {
   overflow-y: scroll;
 }
