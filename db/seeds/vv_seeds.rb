@@ -36,8 +36,8 @@ user3 = User.create! do |u|
   u.email = 'user3@test.com'
   u.password = 'user1234'
   u.password_confirmation = 'user1234'
-  u.role = 1
-  u.name = '经理'
+  u.role = 0
+  u.name = '管理员'
   #u.ensure_authentication_token!
 end
 
@@ -56,15 +56,6 @@ user5 = User.create! do |u|
   u.password_confirmation = 'worker1234'
   u.role = 6
   u.name = '维修工1'
-  #u.ensure_authentication_token!
-end
-
-user6 = User.create! do |u|
-  u.email = 'worker3@test.com'
-  u.password = 'worker1234'
-  u.password_confirmation = 'worker1234'
-  u.role = 6
-  u.name = '维修工3'
   #u.ensure_authentication_token!
 end
 
