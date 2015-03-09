@@ -16,11 +16,10 @@ class RouteBuildersController < ApplicationController
   # GET /route_builders/1
   # GET /route_builders/1.json
   def show
-    begin
-      render template: 'route_builders/show',  status: :ok
-    rescue Exception => e
-      render json: {:message=> e.to_s}.to_json, status: :not_found
-    end
+    render template: 'route_builders/show',  status: :ok
+  rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
+    render json: {message: e.to_s}.to_json, status: :not_found
   end
 
   # GET /route_builders/new
@@ -39,7 +38,8 @@ class RouteBuildersController < ApplicationController
       @route_builder = RouteBuilder.create!(route_builder_params)
       render template: 'route_builders/show', status: :created
     rescue Exception => e
-      render json: {:message=> e.to_s}.to_json, status: :internal_server_error
+      Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
+      render json: {message: e.to_s}.to_json, status: :internal_server_error
     end
 
   end

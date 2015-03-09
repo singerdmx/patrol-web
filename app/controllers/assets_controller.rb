@@ -19,7 +19,7 @@ class AssetsController < ApplicationController
       end
     end
   rescue Exception => e
-    Rails.logger.error("Encountered an error while indexing  #{e}")
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :not_found
   end
 
@@ -34,6 +34,7 @@ class AssetsController < ApplicationController
       render json: asset_hash.to_json
     end
   rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :not_found
   end
 
@@ -56,6 +57,7 @@ class AssetsController < ApplicationController
       render json: asset.to_json, status: :created
     end
   rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
@@ -70,7 +72,7 @@ class AssetsController < ApplicationController
     get_asset.destroy
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
-    Rails.logger.error("Encountered an error while deleting user #{params.inspect}: #{e}")
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :unprocessable_entity
   end
 

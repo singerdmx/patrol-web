@@ -16,6 +16,7 @@ class RepairReportsController < ApplicationController
       end
     end
   rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     flash[:error] = e.message
   end
 
@@ -31,6 +32,7 @@ class RepairReportsController < ApplicationController
 
     render nothing: true, status: :created
   rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 

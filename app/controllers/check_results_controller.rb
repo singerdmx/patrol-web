@@ -35,6 +35,7 @@ class CheckResultsController < ApplicationController
       end
     end
   rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
@@ -56,6 +57,7 @@ class CheckResultsController < ApplicationController
 
     render nothing: true, status: :created
   rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
@@ -67,6 +69,7 @@ class CheckResultsController < ApplicationController
               type: 'text/csv; charset=UTF-8;',
               disposition: "attachment; filename=results.csv"
   rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 

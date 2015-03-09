@@ -54,6 +54,7 @@ class CheckRoutesController < ApplicationController
     #end
     render json: r.to_json
   rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :not_found
   end
 
@@ -73,6 +74,7 @@ class CheckRoutesController < ApplicationController
 
     render template: 'check_routes/show', status: :created
   rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
@@ -93,6 +95,7 @@ class CheckRoutesController < ApplicationController
       fail 'Update failed'
     end
   rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
@@ -107,7 +110,7 @@ class CheckRoutesController < ApplicationController
     @check_route.destroy
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
-    Rails.logger.error("Encountered an error while deleting user #{params.inspect}: #{e}")
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :unprocessable_entity
   end
 

@@ -35,6 +35,7 @@ class ContactsController < ApplicationController
 
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
@@ -51,6 +52,7 @@ class ContactsController < ApplicationController
     end
     render json: {id: params[:id]}.to_json
   rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
@@ -63,7 +65,7 @@ class ContactsController < ApplicationController
     Contact.find(params[:id]).destroy
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
-    Rails.logger.error("Encountered an error while deleting contact #{params.inspect}: #{e}")
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :unprocessable_entity
   end
 end

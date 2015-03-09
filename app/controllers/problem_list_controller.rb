@@ -20,6 +20,7 @@ class ProblemListController < ApplicationController
       end
     end
   rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
@@ -30,6 +31,7 @@ class ProblemListController < ApplicationController
       render json: report.to_json
     end
   rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
@@ -53,6 +55,7 @@ class ProblemListController < ApplicationController
 
     render json: {id: params[:id]}.to_json
   rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
@@ -63,6 +66,7 @@ class ProblemListController < ApplicationController
               type: 'text/csv; charset=UTF-8;',
               disposition: "attachment; filename=reports.csv"
   rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
