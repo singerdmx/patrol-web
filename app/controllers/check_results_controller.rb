@@ -94,55 +94,64 @@ class CheckResultsController < ApplicationController
           session: params[:session])
       end
 
-      result_record = CheckResult.create!(
+      check_result_input = {
         check_session_id: route_sessions[route_id].id,
         check_point_id: point['id'],
         check_time: check_time_,
         result: point['result'],
         status: point['status'],
         memo: point['memo'],
-        result_image_id: point['image'])
+        result_image_id: point['image']
+      }
+      Rails.logger.info("creating check_result #{check_result_input}")
+
+      result_record = CheckResult.create!(check_result_input)
 
       if point['status'] == 1
-        check_point = CheckPoint.find(point['id'])
-        report = RepairReport.create(
-          asset_id: check_point.asset_id,
-          check_point_id: point['id'],
-          kind: 'POINT',
-          code: 2,
-          description: result_record.memo,
-          content: '',
-          created_by_id: current_user.id,
-          priority: 1,
-          status: 2,
-          check_result_id: result_record.id,
-          report_type: '报修',
-          assigned_to_id: check_point.default_assigned_id,
-          created_at: check_time_,
-          result_image_id: point['image'],
-          stopped: false,
-          production_line_stopped: false
-        )
-
+        check_point, report = create_repair_report(check_time_, point, result_record)
         send_emails(check_point, report, route)
       end
     end
   end
 
-  def send_emails(check_point, report, route)
-    #Thread.new do
-      contacts = route.contacts
-      contacts = contacts[1...-1].split(",").map { |s| s[1...-1].to_i } if contacts
-      users = [current_user.id]
-      users << check_point.default_assigned_id if check_point.default_assigned_id
+  def create_repair_report(check_time_, point, result_record)
+    check_point = CheckPoint.find(point['id'])
+    repair_report_input = {
+      asset_id: check_point.asset_id,
+      check_point_id: point['id'],
+      kind: 'POINT',
+      code: 2,
+      description: result_record.memo,
+      content: '',
+      created_by_id: current_user.id,
+      priority: 1,
+      status: 2,
+      check_result_id: result_record.id,
+      report_type: '报修',
+      assigned_to_id: check_point.default_assigned_id,
+      created_at: check_time_,
+      result_image_id: point['image'],
+      stopped: false,
+      production_line_stopped: false
+    }
+    Rails.logger.info("creating repair_report #{repair_report_input}")
+    report = RepairReport.create(repair_report_input)
+    return check_point, report
+  end
 
-      email_content =
-        problem_list_ui_json_builder([db_result_to_hash(report)]).map do |c|
-          c[0] = Time.at(c[0]).strftime("%Y年%m月%d日")
-          c[9] = c[9].nil? ? '' : Time.at(c[9]).strftime("%Y年%m月%d日")
-          c
-        end
-      AlertMailer.alert_email(contacts, users, email_content).deliver
-    end
-  #end
+  def send_emails(check_point, report, route)
+    contacts = route.contacts
+    contacts = contacts[1...-1].split(",").map { |s| s[1...-1].to_i } if contacts
+    users = [current_user.id]
+    users << check_point.default_assigned_id if check_point.default_assigned_id
+
+    email_content =
+      problem_list_ui_json_builder([db_result_to_hash(report)]).map do |c|
+        c[0] = Time.at(c[0]).strftime("%Y年%m月%d日")
+        c[9] = c[9].nil? ? '' : Time.at(c[9]).strftime("%Y年%m月%d日")
+        c
+      end
+    Rails.logger.info("sending email: #{email_content}")
+    AlertMailer.alert_email(contacts, users, email_content).deliver
+  end
 end
