@@ -907,73 +907,6 @@ manual2.check_points << asset3.check_points.last
 
 RepairReport.delete_all
 
-repair_report1 = RepairReport.create(
-  {asset_id: asset2.id,
-   check_point_id: asset2.check_points.first.id,
-   kind: "POINT",
-   code: 2,
-   description: "desc",
-   content: "repair it",
-   stopped: true,
-   status: 2,
-   area_id: area1.id,
-   production_line_stopped: false,
-   created_by_id: user1.id,
-   priority: 1,
-   report_type: "报修",
-  })
-
-repair_report2 = RepairReport.create(
-    {asset_id: asset20.id,
-     check_point_id: asset20.check_points.first.id,
-     kind: "POINT",
-     code: 2,
-     description: "short desc",
-     content: "maintain it",
-     stopped: false,
-     area_id: area4.id,
-     production_line_stopped: false,
-     created_by_id: user1.id,
-     assigned_to_id: user2.id,
-     priority: 3,
-     status: 1,
-     report_type: "预防性保养",
-    })
-
-repair_report3 = RepairReport.create(
-    {asset_id: asset2.id,
-     check_point_id: asset2.check_points.last.id,
-     kind: "POINT",
-     code: 2,
-     description: "short desc",
-     content: "maintain it",
-     stopped: false,
-     area_id: area1.id,
-     production_line_stopped: false,
-     created_by_id: user1.id,
-     priority: 1,
-     status: 0,
-     report_type: "报修",
-    })
-
-repair_report4 = RepairReport.create(
-    {asset_id: asset2.id,
-     check_point_id: asset2.check_points.first.id,
-     kind: "POINT",
-     code: 2,
-     description: "short desc",
-     content: "maintain it",
-     stopped: false,
-     area_id: area1.id,
-     production_line_stopped: false,
-     created_by_id: user1.id,
-     assigned_to_id: user2.id,
-     priority: 1,
-     status: 2,
-     report_type: "报修",
-    })
-
-
 session11 = route1.check_sessions.create!(
     {
         start_time: "2014-12-19 06:36:09.0",
@@ -983,7 +916,7 @@ session11 = route1.check_sessions.create!(
         created_at: "2014-12-19 16:47:34.740",
         updated_at: "2014-12-19 16:47:34.740"
     })
-session11.check_results.create(
+result11 = session11.check_results.create(
     {result: "非正常",
      status: 1,
      memo: "需要更换新部件",
@@ -1020,7 +953,7 @@ session12 = route1.check_sessions.create!(
         created_at: "2014-12-18 16:47:34.740",
         updated_at: "2014-12-18 16:47:34.740"
     })
-session12.check_results.create(
+result12 = session12.check_results.create(
     {result: "非正常",
      status: 1,
      memo: "需要更换新部件 again",
@@ -1058,7 +991,7 @@ session13 = route1.check_sessions.create!(
         created_at: "2014-12-18 16:47:34.740",
         updated_at: "2014-12-18 16:47:34.740"
     })
-session13.check_results.create(
+result13 = session13.check_results.create(
     {result: "异常",
      status: 1,
      memo: "需要详细检查",

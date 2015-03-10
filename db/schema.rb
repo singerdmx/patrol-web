@@ -151,7 +151,7 @@ ActiveRecord::Schema.define(version: 20150217223201) do
   end
 
   create_table "repair_reports", force: true do |t|
-    t.string   "kind"
+    t.string   "kind",                    null: false
     t.string   "code"
     t.text     "description"
     t.text     "content"
@@ -159,16 +159,16 @@ ActiveRecord::Schema.define(version: 20150217223201) do
     t.boolean  "production_line_stopped", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "asset_id"
+    t.integer  "asset_id",                null: false
     t.integer  "check_point_id"
-    t.integer  "created_by_id"
+    t.integer  "created_by_id",           null: false
     t.integer  "assigned_to_id"
     t.integer  "priority"
     t.string   "report_type"
     t.integer  "status",                  null: false
-    t.integer  "check_result_id"
+    t.integer  "check_result_id",         null: false
     t.date     "plan_date"
-    t.integer  "area_id"
+    t.integer  "area_id",                 null: false
     t.integer  "result_image_id"
   end
 
