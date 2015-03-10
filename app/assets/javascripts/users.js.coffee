@@ -515,16 +515,9 @@ updateSessionsTable = (containerDiv, params) ->
             )
 
             $(nRow).click ->
-              $('div#recordsDiv > div > div.calendarWidgetDiv').hide()
-              $('div#recordsDiv div#sessionFilterDiv').show()
-              $('div#recordsDiv div#sessionFilterDiv > span:first-child').text(
-                aaData[1] + '， ' + aaData[2] + ' － ' + aaData[3])
-              $('div#recordsDiv div#sessionFilterDiv > span:nth-child(2)').text(aaData[0])
-              $('div#recordsDiv div#startTime').data('datetimepicker').setLocalDate(
-                new Date(getDatetimePickerEpoch('div#sessionsDiv div#startTime') * 1000))
-              $('div#recordsDiv div#endTime').data('datetimepicker').setLocalDate(
-                new Date(getDatetimePickerEpoch('div#sessionsDiv div#endTime') * 1000))
-              $('div#sidebar li#records').trigger('click')
+              showSessionInRecordsTable(aaData[0], aaData[1], aaData[2], aaData[3],
+                getDatetimePickerEpoch('div#sessionsDiv div#startTime'),
+                getDatetimePickerEpoch('div#sessionsDiv div#endTime'))
               return
 
             return
@@ -543,6 +536,19 @@ updateSessionsTable = (containerDiv, params) ->
     dataType: 'json',
     timeout: defaultAjaxCallTimeout
 
+  return
+
+showSessionInRecordsTable = (sessionId, sessionRoute, sessionStartTime, sessionEndTime, searchStartTime, searchEndTime) ->
+  $('div#recordsDiv > div > div.calendarWidgetDiv').hide()
+  $('div#recordsDiv div#sessionFilterDiv').show()
+  $('div#recordsDiv div#sessionFilterDiv > span:first-child').text(
+    sessionRoute + '， ' + sessionStartTime + ' － ' + sessionEndTime)
+  $('div#recordsDiv div#sessionFilterDiv > span:nth-child(2)').text(sessionId)
+  $('div#recordsDiv div#startTime').data('datetimepicker').setLocalDate(
+    new Date(searchStartTime * 1000))
+  $('div#recordsDiv div#endTime').data('datetimepicker').setLocalDate(
+    new Date(searchEndTime * 1000))
+  $('div#sidebar li#records').trigger('click')
   return
 
 updateRecordsTable = (containerDiv, params) ->
@@ -818,11 +824,12 @@ updateProblemsTable = (containerDiv, params) ->
         for record in data
           columnDateToString(record, [0])
           record[9] = dateToShortString(new Date(record[9] * 1000)) if record[9]
-          if record[11] is null
-            record[11] = '无'
+          record[11] = "<span class='sessionLink' data-session='#{record[11]}'>巡检记录</span>" # 详情
+          if record[12] is null
+            record[12] = '无'
           else
             noImage = false
-            record[11] = "<a target='_blank' href='#{record[11]}'>显示</a>"
+            record[12] = "<a target='_blank' href='#{record[12]}'>显示</a>"
           status = record[7]
           assignedUser = record[6]
           assignedUser = '未分配' unless assignedUser
@@ -870,6 +877,7 @@ updateProblemsTable = (containerDiv, params) ->
           },
           { 'sTitle': '计划完成日期' },
           { 'sTitle': 'ID' },
+          { 'sTitle': '详情' },
           {
             'sTitle': '图片',
             'sClass': 'center',
@@ -905,7 +913,7 @@ updateProblemsTable = (containerDiv, params) ->
 
         oTable = $("#{containerDiv} table#problemsTable").dataTable()
         oTable.fnSetColumnVis(10, false)
-        oTable.fnSetColumnVis(11, false) if noImage
+        oTable.fnSetColumnVis(12, false) if noImage
 
         $("#{containerDiv} table#problemsTable > tbody").on(
           'click',
@@ -916,6 +924,24 @@ updateProblemsTable = (containerDiv, params) ->
             $(this).addClass('mediumSeaGreenBackground')
             return
         )
+
+        $("#{containerDiv} table#problemsTable span.sessionLink").click ->
+          session_id = $(this).data('session')
+          $.ajax
+            url: getBaseURL() + "/sessions/#{session_id}.json"
+            dataType: 'json',
+            success: (data, textStatus, jqHXR) ->
+              if jqHXR.status is 200
+                showSessionInRecordsTable(session_id, data.route,
+                  dateToString(new Date(data.start_time * 1000)),
+                  dateToString(new Date(data.end_time * 1000)),
+                  data.start_time, data.end_time)
+              return
+            error: (jqXHR, textStatus, errorThrown) ->
+              showErrorPage(jqXHR.responseText)
+              return
+            timeout: defaultAjaxCallTimeout
+          return
 
         $("#{containerDiv} > span#problemsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} > span#problemsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))

@@ -29,4 +29,18 @@ class CheckSessionsController < ApplicationController
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
+  # GET /sessions/1.json
+  def show
+    ActiveRecord::Base.transaction do
+      s = to_hash(CheckSession.find(params[:id]))
+      s['start_time'] = s['start_time'].to_i
+      s['end_time'] = s['end_time'].to_i
+      s['route'] = CheckRoute.find(s['check_route_id']).description
+      render json: s.to_json
+    end
+  rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
+    render json: {message: e.to_s}.to_json, status: :not_found
+  end
+
 end

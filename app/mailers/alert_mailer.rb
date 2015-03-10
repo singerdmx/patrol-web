@@ -5,7 +5,7 @@ class AlertMailer < ActionMailer::Base
     @noImage = false
     @content = content
     @content.each do |row|
-      unless row[11].nil?
+      unless row[12].nil?
         @noImage = true
         break
       end

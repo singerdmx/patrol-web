@@ -132,7 +132,8 @@ class CheckResultsController < ApplicationController
       created_at: check_time_,
       result_image_id: point['image'],
       stopped: false,
-      production_line_stopped: false
+      production_line_stopped: false,
+      area_id: check_point.check_routes.first.area.id
     }
     Rails.logger.info("creating repair_report #{repair_report_input}")
     report = RepairReport.create(repair_report_input)
