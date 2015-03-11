@@ -64,7 +64,7 @@ class ProblemListController < ApplicationController
     reports = query_repair_report(params)
     send_data reports.to_csv,
               type: 'text/csv; charset=UTF-8;',
-              disposition: "attachment; filename=reports.csv"
+              disposition: "attachment; filename=reports.txt"
   rescue Exception => e
     Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error

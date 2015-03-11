@@ -67,7 +67,7 @@ class CheckResultsController < ApplicationController
     results = get_results(index_para, params[:preference]=='true')
     send_data results.to_csv,
               type: 'text/csv; charset=UTF-8;',
-              disposition: "attachment; filename=results.csv"
+              disposition: "attachment; filename=results.txt"
   rescue Exception => e
     Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error
