@@ -43,8 +43,7 @@ module ApplicationHelper
       when 2 then '未完成'
       when 3 then '取消'
       when 4 then '进行中'
-      when 5 then '未开始'
-      when 6 then '部分完成'
+      when 5 then '部分完成'
       else "#{status}"
     end
   end

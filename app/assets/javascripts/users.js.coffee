@@ -905,8 +905,6 @@ updateProblemsTable = (containerDiv, params) ->
                 $(nRow).addClass('darkCyanTextColor')
               when '进行中'
                 $(nRow).addClass('darkOrangeTextColor')
-              when '未开始'
-                $(nRow).addClass('darkOrchidTextColor')
               when '部分完成'
                 $(nRow).addClass('darkGoldenrodTextColor')
             return
