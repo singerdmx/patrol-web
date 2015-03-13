@@ -2,11 +2,11 @@ class AlertMailer < ActionMailer::Base
   default from: "alert-no-reply@managebrite.com"
 
   def alert_email(contacts, users, content)
-    @noImage = false
+    @hasMedia = false
     @content = content
     @content.each do |row|
-      unless row[12].nil?
-        @noImage = true
+      unless row[0].nil? && row[1].nil?
+        @hasMedia = true
         break
       end
     end

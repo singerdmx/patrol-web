@@ -2,7 +2,6 @@ require 'json'
 
 module CheckResultsHelper
   include ApplicationHelper
-  #replacement of the index.json.jbuilder for complicated converting logic
   def index_json_builder(index_result, check_point_id)
     if params[:aggregate].nil?
       results = []
@@ -59,6 +58,9 @@ module CheckResultsHelper
                   end
                 else ''
               end
+      result['image'] =  ResultImage.find(result['result_image_id']).url if result['result_image_id']
+      result['audio'] =  ResultAudio.find(result['result_audio_id']).url if result['result_audio_id']
+
       [
         result['point']['name'], result['point']['description'],
         result['result'],
@@ -67,7 +69,7 @@ module CheckResultsHelper
         result['memo'],
         result['point']['barcode'],
         result['check_time'].to_i,
-        result['result_image_id'].nil? ? nil : ResultImage.find(result['result_image_id']).url,
+        [result['image'], result['audio']],
         result['session'].id
       ]
     end

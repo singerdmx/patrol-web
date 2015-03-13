@@ -139,9 +139,9 @@
     <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width: 80px;"
         aria-label="计划完成日期: activate to sort column ascending">计划完成日期
     </th>
-    <% if @noImage %>
+    <% if @hasMedia %>
       <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 50px;"
-          aria-label="图片: activate to sort column ascending">图片
+          aria-label="媒体: activate to sort column ascending">媒体
       </th>
     <% end %>
   </tr>
@@ -153,13 +153,17 @@
       <% for i in 0..9 %>
         <td class="center"><%= row[i] %></td>
       <% end %>
-      <% if @noImage %>
+      <% if @hasMedia %>
         <td class="center">
-          <% if row[12].nil? %>
-            无
-          <% else %>
-            <a target="_blank" href="<%= row[12] %>">
-              点击显示
+          <% if !row[12][0].nil? %>
+            <a target="_blank" href="<%= row[12][0] %>">
+              图片
+            </a>
+          <% end %>
+          <br/>
+          <% if !row[12][1].nil? %>
+            <a target="_blank" href="<%= row[12][1] %>">
+              音频
             </a>
           <% end %>
         </td>

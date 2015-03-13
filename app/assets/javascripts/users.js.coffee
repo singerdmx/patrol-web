@@ -572,14 +572,22 @@ updateRecordsTable = (containerDiv, params) ->
     data: requestParams
     success: (data, textStatus, jqHXR) ->
       if jqHXR.status is 200
-        noImage = true
+        noMedia = true
         for record in data
           columnDateToString(record, [7])
-          if record[8] is null
-            record[8] = '无'
+          # record[8] is in form of [image_url, audio_url]
+          if record[8][0] isnt null
+            noMedia = false
+            record[8][0] = "<a target='_blank' href='#{record[8][0]}'>图片</a>"
+
+          if record[8][1] isnt null
+            noMedia = false
+            record[8][1] = "<a target='_blank' href='#{record[8][1]}'>音频</a>"
+
+          if noMedia
+            record[8] = ''
           else
-            noImage = false
-            record[8] = "<a target='_blank' href='#{record[8]}'>点击显示</a>"
+            record[8] = record[8].join('<br/>')
 
         columns = [
           { 'sTitle': '名称' },
@@ -603,7 +611,7 @@ updateRecordsTable = (containerDiv, params) ->
           },
           { 'sTitle': '检测时间' },
           {
-            'sTitle': '图片',
+            'sTitle': '媒体',
             'sClass': 'center',
             'sWidth': '46px'
           }
@@ -628,7 +636,7 @@ updateRecordsTable = (containerDiv, params) ->
             return
 
         oTable = $("#{containerDiv} table#recordsTable").dataTable()
-        oTable.fnSetColumnVis(8, false) if noImage
+        oTable.fnSetColumnVis(8, false) if noMedia
         $("#{containerDiv} > span#recordsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} > span#recordsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 
@@ -707,9 +715,15 @@ setupProblemsDiv = (containerDiv) ->
             if data['image']
               $("#{containerDiv} div#problem_image").show()
               $("#{containerDiv} span#problem_image_link").html(
-                "<a target='_blank' href='" + data['image'] + "'>点击显示</a>")
+                "<a target='_blank' href='" + data['image'] + "'>链接</a>")
             else
               $("#{containerDiv} div#problem_image").hide()
+            if data['audio']
+              $("#{containerDiv} div#problem_audio").show()
+              $("#{containerDiv} span#problem_audio_link").html(
+                "<a target='_blank' href='" + data['audio'] + "'>链接</a>")
+            else
+              $("#{containerDiv} div#problem_audio").hide()
 
             _suggestions = []
             setupAutocompleteInput('/users.json', 'name', containerDiv, 'input#problem_assigned_to_user',
@@ -820,16 +834,24 @@ updateProblemsTable = (containerDiv, params) ->
         statusEnum.remove(statusEnum.indexOf('全部')) # remove “全部”
         assignedUserStat = {}
 
-        noImage = true
+        noMedia = true
         for record in data
           columnDateToString(record, [0])
           record[9] = dateToShortString(new Date(record[9] * 1000)) if record[9]
           record[11] = "<span class='sessionLink' data-session='#{record[11]}'>巡检记录</span>" # 详情
-          if record[12] is null
-            record[12] = '无'
+          # record[12] is in form of [image_url, audio_url]
+          if record[12][0] isnt null
+            noMedia = false
+            record[12][0] = "<a target='_blank' href='#{record[12][0]}'>图片</a>"
+
+          if record[12][1] isnt null
+            noMedia = false
+            record[12][1] = "<a target='_blank' href='#{record[12][1]}'>音频</a>"
+
+          if noMedia
+            record[12] = ''
           else
-            noImage = false
-            record[12] = "<a target='_blank' href='#{record[12]}'>显示</a>"
+            record[12] = record[12].join('<br/>')
           status = record[7]
           assignedUser = record[6]
           assignedUser = '未分配' unless assignedUser
@@ -879,7 +901,7 @@ updateProblemsTable = (containerDiv, params) ->
           { 'sTitle': 'ID' },
           { 'sTitle': '详情' },
           {
-            'sTitle': '图片',
+            'sTitle': '媒体',
             'sClass': 'center',
             'sWidth': '24px'
           }
@@ -911,7 +933,7 @@ updateProblemsTable = (containerDiv, params) ->
 
         oTable = $("#{containerDiv} table#problemsTable").dataTable()
         oTable.fnSetColumnVis(10, false)
-        oTable.fnSetColumnVis(12, false) if noImage
+        oTable.fnSetColumnVis(12, false) if noMedia
 
         $("#{containerDiv} table#problemsTable > tbody").on(
           'click',

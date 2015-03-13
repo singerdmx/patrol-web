@@ -101,7 +101,8 @@ class CheckResultsController < ApplicationController
         result: point['result'],
         status: point['status'],
         memo: point['memo'],
-        result_image_id: point['image']
+        result_image_id: point['image'],
+        result_audio_id: point['audio']
       }
       Rails.logger.info("creating check_result #{check_result_input}")
 
@@ -131,6 +132,7 @@ class CheckResultsController < ApplicationController
       assigned_to_id: check_point.default_assigned_id,
       created_at: check_time_,
       result_image_id: point['image'],
+      result_audio_id: point['audio'],
       stopped: false,
       production_line_stopped: false,
       area_id: check_point.check_routes.first.area.id
