@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150313060354) do
+ActiveRecord::Schema.define(version: 20150313061457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,9 +103,11 @@ ActiveRecord::Schema.define(version: 20150313060354) do
     t.datetime "updated_at"
     t.integer  "area_id"
     t.integer  "result_image_id"
+    t.integer  "result_audio_id"
   end
 
   add_index "check_results", ["area_id"], name: "index_check_results_on_area_id", using: :btree
+  add_index "check_results", ["result_audio_id"], name: "index_check_results_on_result_audio_id", using: :btree
   add_index "check_results", ["result_image_id"], name: "index_check_results_on_result_image_id", using: :btree
 
   create_table "check_routes", force: true do |t|
