@@ -577,16 +577,15 @@ updateRecordsTable = (containerDiv, params) ->
           columnDateToString(record, [7])
           # record[8] is in form of [image_url, audio_url]
           if record[8][0] isnt null
-            noMedia = false
             record[8][0] = "<a target='_blank' href='#{record[8][0]}'>图片</a>"
 
           if record[8][1] isnt null
-            noMedia = false
             record[8][1] = "<a target='_blank' href='#{record[8][1]}'>音频</a>"
 
-          if noMedia
+          if record[8][0] is null and record[8][1] is null
             record[8] = ''
           else
+            noMedia = false
             record[8] = record[8].join('<br/>')
 
         columns = [
@@ -841,17 +840,17 @@ updateProblemsTable = (containerDiv, params) ->
           record[11] = "<span class='sessionLink' data-session='#{record[11]}'>巡检记录</span>" # 详情
           # record[12] is in form of [image_url, audio_url]
           if record[12][0] isnt null
-            noMedia = false
             record[12][0] = "<a target='_blank' href='#{record[12][0]}'>图片</a>"
 
           if record[12][1] isnt null
-            noMedia = false
             record[12][1] = "<a target='_blank' href='#{record[12][1]}'>音频</a>"
 
-          if noMedia
+          if record[12][0] is null and record[12][1] is null
             record[12] = ''
           else
+            noMedia = false
             record[12] = record[12].join('<br/>')
+
           status = record[7]
           assignedUser = record[6]
           assignedUser = '未分配' unless assignedUser

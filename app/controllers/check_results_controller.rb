@@ -88,7 +88,7 @@ class CheckResultsController < ApplicationController
       route = CheckRoute.find(route_id)
       if route_sessions[route_id].nil?
         route_sessions[route_id]  = route.check_sessions.create!(
-          user: params[:user],
+          user: params[:user],    # submitter
           start_time: start_time_,
           end_time: end_time_,
           session: params[:session])
