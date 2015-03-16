@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150313061637) do
+ActiveRecord::Schema.define(version: 20150316060134) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -129,6 +129,7 @@ ActiveRecord::Schema.define(version: 20150313061637) do
     t.integer  "check_route_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "submitter"
   end
 
   add_index "check_sessions", ["check_route_id"], name: "index_check_sessions_on_check_route_id", using: :btree

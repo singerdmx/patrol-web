@@ -41,6 +41,7 @@ CheckResult.delete_all
 User.delete_all
 Contact.delete_all
 RepairReport.delete_all
+CheckSession.delete_all
 
 user1 = User.create! do |u|
   u.email = 'user@test.com'
@@ -526,6 +527,7 @@ session1 = route1.check_sessions.create!(
      start_time: "2014-04-29 06:36:09.0",
      end_time: "2014-04-29 06:42:53.0",
      user:'user@test.com',
+     submitter:'user@test.com',
      session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
      created_at: "2014-04-29 06:47:34.740",
      updated_at: "2014-04-29 06:47:34.740"
@@ -535,6 +537,7 @@ session2 = route2.check_sessions.create!(
      start_time: "2014-04-29 06:36:09.0",
      end_time: "2014-04-29 06:42:53.0",
      user:'user@test.com',
+     submitter:'user@test.com',
      session: 'b34ed3eb-36e6-445d-a9f7-79f4577c033d',
      created_at: "2014-04-29 06:47:34.758",
      updated_at: "2014-04-29 06:47:34.758"
@@ -544,6 +547,7 @@ session4 = route4.check_sessions.create!(
      start_time: "2014-04-29 06:43:08.0",
      end_time: "2014-04-29 06:45:26.0",
      user:'user@test.com',
+     submitter:'user@test.com',
      session: '0a5764f4-1170-4b34-904c-fc8b2c6d5592',
      created_at: "2014-04-29 06:47:34.864",
      updated_at: "2014-04-29 06:47:34.864"
@@ -553,6 +557,7 @@ session5 = route5.check_sessions.create!(
      start_time: "2014-04-29 06:43:08.0",
      end_time: "2014-04-29 06:45:26.0",
      user:'user@test.com',
+     submitter:'user@test.com',
      session: '0a5764f4-1170-4b34-904c-fc8b2c6d5592',
      created_at: "2014-04-29 06:47:34.873",
      updated_at: "2014-04-29 06:47:34.873"
@@ -562,6 +567,7 @@ session6 = route6.check_sessions.create!(
      start_time: "2014-04-29 06:43:08.0",
      end_time: "2014-04-29 06:45:26.0",
      user:'user@test.com',
+     submitter:'user@test.com',
      session: '0a5764f4-1170-4b34-904c-fc8b2c6d5592',
      created_at: "2014-04-29 06:47:34.882",
      updated_at: "2014-04-29 06:47:34.882"
@@ -571,6 +577,7 @@ session7 = route7.check_sessions.create!(
      start_time: "2014-04-29 06:45:39.0",
      end_time: "2014-04-29 06:47:36.0",
      user:'user@test.com',
+     submitter:'user@test.com',
      session: '515fc0e0-0506-404a-b9d3-9c56744f2232',
      created_at: "2014-04-29 06:47:34.951",
      updated_at: "2014-04-29 06:47:34.951"
@@ -580,6 +587,7 @@ session8 = route8.check_sessions.create!(
      start_time: "2014-04-29 06:45:39.0",
      end_time: "2014-04-29 06:47:36.0",
      user:'user@test.com',
+     submitter:'user@test.com',
      session: '515fc0e0-0506-404a-b9d3-9c56744f2232',
      created_at: "2014-04-29 06:47:34.963",
      updated_at: "2014-04-29 06:47:34.963"
@@ -825,6 +833,7 @@ check_point_3_choice_json = JSON.parse(check_point_3_choice)
       start_time: now - 3600 * 24 * 200,
       end_time: now,
       user:'user@test.com',
+      submitter:'user@test.com',
       session: SecureRandom.uuid,
     })
 
@@ -869,6 +878,7 @@ check_point_7_choice_json = JSON.parse(check_point_7_choice)
       start_time: now - 3600 * 24 * 200,
       end_time: now,
       user:'user@test.com',
+      submitter:'user@test.com',
       session: SecureRandom.uuid,
     })
 
@@ -905,13 +915,12 @@ manual2.check_points << asset2.check_points.last
 manual2.check_points << asset3.check_points.last
 
 
-RepairReport.delete_all
-
 session11 = route1.check_sessions.create!(
     {
         start_time: "2014-12-19 06:36:09.0",
         end_time: "2014-12-19 16:42:53.0",
         user:'user@test.com',
+        submitter:'user@test.com',
         session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
         created_at: "2014-12-19 16:47:34.740",
         updated_at: "2014-12-19 16:47:34.740"
@@ -949,6 +958,7 @@ session12 = route1.check_sessions.create!(
         start_time: "2014-12-18 06:36:09.0",
         end_time: "2014-12-18 16:42:53.0",
         user:'user@test.com',
+        submitter:'user@test.com',
         session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
         created_at: "2014-12-18 16:47:34.740",
         updated_at: "2014-12-18 16:47:34.740"
@@ -987,6 +997,7 @@ session13 = route1.check_sessions.create!(
         start_time: "2014-12-18 06:36:09.0",
         end_time: "2014-12-18 16:42:53.0",
         user:'user@test.com',
+        submitter:'user@test.com',
         session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
         created_at: "2014-12-18 16:47:34.740",
         updated_at: "2014-12-18 16:47:34.740"
@@ -1025,6 +1036,7 @@ session14 = route1.check_sessions.create!(
         start_time: "2014-12-18 06:36:09.0",
         end_time: "2014-12-18 16:42:53.0",
         user:'user@test.com',
+        submitter:'user@test.com',
         session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
         created_at: "2014-12-18 16:47:34.740",
         updated_at: "2014-12-18 16:47:34.740"
@@ -1063,6 +1075,7 @@ session15 = route1.check_sessions.create!(
         start_time: "2014-12-18 06:36:09.0",
         end_time: "2014-12-18 16:42:53.0",
         user:'user@test.com',
+        submitter:'user@test.com',
         session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
         created_at: "2014-12-18 16:47:34.740",
         updated_at: "2014-12-18 16:47:34.740"
@@ -1102,6 +1115,7 @@ session16 = route1.check_sessions.create!(
         start_time: "2014-12-17 06:36:09.0",
         end_time: "2014-12-17 16:42:53.0",
         user:'user@test.com',
+        submitter:'user@test.com',
         session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
         created_at: "2014-12-17 16:47:34.740",
         updated_at: "2014-12-17 16:47:34.740"
@@ -1140,6 +1154,7 @@ session17 = route1.check_sessions.create!(
         start_time: "2014-12-16 06:36:09.0",
         end_time: "2014-12-16 16:42:53.0",
         user:'user@test.com',
+        submitter:'user@test.com',
         session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
         created_at: "2014-12-16 16:47:34.740",
         updated_at: "2014-12-16 16:47:34.740"
@@ -1178,6 +1193,7 @@ session18 = route1.check_sessions.create!(
         start_time: "2014-12-15 06:36:09.0",
         end_time: "2014-12-15 16:42:53.0",
         user:'user@test.com',
+        submitter:'user@test.com',
         session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
         created_at: "2014-12-15 16:47:34.740",
         updated_at: "2014-12-15 16:47:34.740"
@@ -1217,6 +1233,7 @@ session19 = route1.check_sessions.create!(
         start_time: "2014-12-15 06:36:09.0",
         end_time: "2014-12-15 16:42:53.0",
         user:'user@test.com',
+        submitter:'user@test.com',
         session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
         created_at: "2014-12-15 16:47:34.740",
         updated_at: "2014-12-15 16:47:34.740"
@@ -1257,6 +1274,7 @@ session19 = route1.check_sessions.create!(
         start_time: "2014-12-15 06:36:09.0",
         end_time: "2014-12-15 16:42:53.0",
         user:'user@test.com',
+        submitter:'user@test.com',
         session: '34ed3eb-36e6-445d-a9f7-79f4577c033d',
         created_at: "2014-12-15 16:47:34.740",
         updated_at: "2014-12-15 16:47:34.740"
