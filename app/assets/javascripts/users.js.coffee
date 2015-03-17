@@ -863,7 +863,7 @@ updateProblemsTable = (containerDiv, params) ->
 
         renderAssignedUserStatChart('assignedUserStatChartDiv', assignedUserStat, statusEnum)
         columns = [
-          { 'sTitle': '巡检日期' },
+          { 'sTitle': '日期' },
           {
             'sTitle': '点检人员',
             'sClass': 'center'
@@ -873,11 +873,11 @@ updateProblemsTable = (containerDiv, params) ->
             'sClass': 'center'
           },
           {
-            'sTitle': '点检部位名称',
+            'sTitle': '部位名称',
             'sClass': 'center'
           },
           {
-            'sTitle': '点检内容',
+            'sTitle': '内容',
             'sClass': 'center'
           },
           {
