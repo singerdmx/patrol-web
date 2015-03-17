@@ -1,13 +1,17 @@
 <div class="container">
   <%= form_for(resource, as: resource_name, url: password_path(resource_name),
                html: { method: :post, class: "form-signin" }) do |f| %>
-    <%= devise_error_messages! %>
+    <% unless devise_error_messages!.empty? %>
+      <div class="alert alert-error">
+        无法找到有此电子邮箱的用户
+      </div>
+    <% end %>
 
     <h2 class="form-signin-heading">重置密码</h2>
     <hr>
     <p class="message">
       忘记密码了？<br/>
-      在下面输入您的电子邮件地址，我们会向您发送一封电子邮件，让您重置。
+      在下面输入您的电子邮件地址，我们会向您发送一封电子邮件，让您重置密码。
     </p>
 
     <%= f.email_field :email, autofocus: true,
