@@ -1,4 +1,4 @@
-class StaticPagesController < ActionController::Base
+class StaticPagesController < ApplicationController
 
   def home
     self.request.env.each do |header|
@@ -38,21 +38,9 @@ class StaticPagesController < ActionController::Base
   end
 
   def generate_new_password_email
-    email = params[:email]
-    user = User.find_by_email(email)
-
-    if user
-      user.send_reset_password_instructions
-      @message = "Reset email instruction sent to #{email}."
-    else
-      @message = "Cannot find the user email #{email}."
-    end
   end
 
   def reset_password
-    unless user_signed_in?
-      render :reset_password
-    end
   end
 
 end

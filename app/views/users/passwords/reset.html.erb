@@ -1,0 +1,20 @@
+<div class="container form-signin">
+  <h3>重置密码</h3>
+  <hr>
+  <p class="message">
+    忘记密码了？<br/>
+    在下面输入您的电子邮件地址，我们会向您发送一封电子邮件，让您重置。
+  </p>
+  <div class="text-danger">
+  </div>
+
+  <form class="password_reset" action="reset_password" method="POST">
+    <div class="form-group">
+      <div>
+        <input type="email" value="" required="required" placeholder="电子邮箱" name="user[email]" id="user_email" class="form-control" autofocus="autofocus">
+      </div>
+      <input type="submit" value="重置我的密码"
+             class="btn btn-default btn-primary block-center">
+    </div>
+  </form>
+</div>
