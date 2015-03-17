@@ -45,7 +45,7 @@ module ProblemListHelper
     entry['assigned_to_user'] = assigned_to_user.nil? ? '' : assigned_to_user.name
     entry['image'] = ResultImage.find(entry['result_image_id']).url if entry['result_image_id']
     entry['audio'] = ResultAudio.find(entry['result_audio_id']).url if entry['result_audio_id']
-    entry['session'] = CheckResult.find(result.check_result_id).check_session_id
+    entry['session'] = CheckResult.find(result.check_result_id).check_session_id if result.check_result_id
 
     entry
   end

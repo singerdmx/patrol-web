@@ -837,7 +837,7 @@ updateProblemsTable = (containerDiv, params) ->
         for record in data
           columnDateToString(record, [0])
           record[9] = dateToShortString(new Date(record[9] * 1000)) if record[9]
-          record[11] = "<span class='sessionLink' data-session='#{record[11]}'>巡检记录</span>" # 详情
+          record[11] = "<span class='sessionLink' data-session='#{record[11]}'>巡检记录</span>" if record[11] # 详情
           # record[12] is in form of [image_url, audio_url]
           if record[12][0] isnt null
             record[12][0] = "<a target='_blank' href='#{record[12][0]}'>图片</a>"
