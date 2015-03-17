@@ -1,4 +1,4 @@
-class StaticPagesController < ApplicationController
+class StaticPagesController < ActionController::Base
 
   def home
     self.request.env.each do |header|
@@ -22,7 +22,7 @@ class StaticPagesController < ApplicationController
         format.json { render json: { result: 'success' }.to_json, status: :ok }
       else
         logger.debug("failed to log in")
-        format.html { render :home, :status => :unauthorized }
+        format.html { redirect_to "/users/sign_in"}
         format.json { render json: { error: '密码错误' }.to_json, status: :unauthorized }
       end
     end
@@ -36,4 +36,23 @@ class StaticPagesController < ApplicationController
 
   def contact
   end
+
+  def generate_new_password_email
+    email = params[:email]
+    user = User.find_by_email(email)
+
+    if user
+      user.send_reset_password_instructions
+      @message = "Reset email instruction sent to #{email}."
+    else
+      @message = "Cannot find the user email #{email}."
+    end
+  end
+
+  def reset_password
+    unless user_signed_in?
+      render :reset_password
+    end
+  end
+
 end
