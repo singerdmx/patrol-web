@@ -36,8 +36,6 @@ Blog::Application.routes.draw do
   match '/help',    to: 'static_pages#help',    via: 'get'
   match '/about',   to: 'static_pages#about',   via: 'get'
   match '/contact', to: 'static_pages#contact', via: 'get'
-  match '/reset_password',  to: 'static_pages#reset_password', via: 'get'
-  match '/reset_password',  to: 'static_pages#generate_new_password_email', via: 'post'
 
   resources :admins, only: :index
   resources :users do

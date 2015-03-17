@@ -37,10 +37,4 @@ class StaticPagesController < ApplicationController
   def contact
   end
 
-  def generate_new_password_email
-  end
-
-  def reset_password
-  end
-
 end

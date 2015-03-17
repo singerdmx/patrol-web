@@ -24,27 +24,6 @@ class ApplicationController < ActionController::Base
   private
 
   def authenticate_user_from_token!
-    if params[:controller] == 'static_pages'
-      flash.delete(:success)
-      flash.delete(:error)
-      case params[:action]
-        when 'reset_password'
-          render template: 'users/passwords/reset'
-          return
-        when 'generate_new_password_email'
-          email = params[:user][:email]
-          user = User.find_by_email(email)
-          if user
-            user.send_reset_password_instructions
-            flash[:success] = "已经发送邮件到#{email}"
-          else
-            flash[:error] = "无法找到邮箱是#{email}的用户"
-          end
-          render template: 'users/passwords/reset'
-          return
-      end
-    end
-
     user_email = params[:user_email].presence
     user = user_email && User.find_by_email(user_email)
 
