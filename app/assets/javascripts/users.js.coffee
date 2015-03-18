@@ -865,7 +865,7 @@ updateProblemsTable = (containerDiv, params) ->
         columns = [
           { 'sTitle': '日期' },
           {
-            'sTitle': '点检人员',
+            'sTitle': '提交人',
             'sClass': 'center'
           },
           {
