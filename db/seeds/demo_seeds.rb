@@ -830,14 +830,14 @@ check_point_3_choice_json = JSON.parse(check_point_3_choice)
   now = Time.now
   session = route1.check_sessions.create!(
     {
-      start_time: now - 3600 * 24 * 200,
+      start_time: now - 3600 * 6,
       end_time: now,
       user:'user@test.com',
       submitter:'user@test.com',
       session: SecureRandom.uuid,
     })
 
-  check_time = now - i * 24 * 3600
+  check_time = now - i * 4 * 3600
   result = rand(100)
   if result > 70 || result < 20
     status = 1
@@ -856,7 +856,7 @@ check_point_3_choice_json = JSON.parse(check_point_3_choice)
      check_point_id: asset3.check_points.first.id,
     })
 
-  check_time = now - i * 24 * 3600
+  check_time = now - i * 2 * 3600
   result = rand(check_point_3_choice_json.size)
   status = 1
   status = 0 if result == 0
@@ -875,14 +875,14 @@ check_point_7_choice_json = JSON.parse(check_point_7_choice)
   now = Time.now
   session = route1.check_sessions.create!(
     {
-      start_time: now - 3600 * 24 * 200,
+      start_time: now - 3600 * 6 * 200,
       end_time: now,
       user:'user@test.com',
       submitter:'user@test.com',
       session: SecureRandom.uuid,
     })
 
-  check_time = now - i * 24 * 3600
+  check_time = now - i * 5 * 3600
   result = rand(check_point_7_choice_json.size)
   status = 1
   status = 0 if result == 0
