@@ -1527,10 +1527,10 @@ updateUsersTable = (containerDiv) ->
             "sTitle": "用户级别",
             "sClass": "center"
           },
-          { "sTitle": "本次登入时间" },
-          { "sTitle": "上次登入时间" },
-          { "sTitle": "本次登入IP地址" },
-          { "sTitle": "上次登入IP地址" },
+          { "sTitle": "本次登录时间" },
+          { "sTitle": "上次登录时间" },
+          { "sTitle": "本次登录IP地址" },
+          { "sTitle": "上次登录IP地址" },
           { "sTitle": "创建时间" },
           { "sTitle": "最近更新时间" }
         ]

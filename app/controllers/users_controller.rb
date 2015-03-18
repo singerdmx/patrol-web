@@ -30,7 +30,7 @@ class UsersController < ApplicationController
 
   def update
     if current_user.update_attributes(user_params)
-      flash[:success] = '更新成功！请重新登入。'
+      flash[:success] = '更新成功！请重新登录。'
     else
       flash[:error] = '更新失败！'
     end
