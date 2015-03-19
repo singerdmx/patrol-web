@@ -73,8 +73,10 @@ class ProblemListController < ApplicationController
   private
 
   def query_repair_report(params)
-    reports = RepairReport.where("check_result_id is not null")
-    reports = reports.where(status: params[:status].to_i) if params[:status] and params[:status].to_i != 0
-    reports
+    if params[:status] and params[:status].to_i != 0
+      RepairReport.where(status: params[:status].to_i)
+    else
+      RepairReport.all
+    end
   end
 end

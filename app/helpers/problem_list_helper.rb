@@ -21,14 +21,9 @@ module ProblemListHelper
     entry['area'] = ''
     case entry['kind']
       when 'POINT'
-        point = CheckPoint.find(entry['check_point_id'])
-        entry['name'] = "#{asset.name} #{point.name}"
-        barcode = point.barcode
-        entry['point_description'] = point.description
-        if entry['area_id']
-          areas = Area.where(id: entry['area_id'])
-          entry['area'] = areas.first.name unless areas.empty?
-        end
+        process_point_or_part(asset, CheckPoint.find(entry['check_point_id']), entry)
+      when 'PART'
+        process_point_or_part(asset, Part.find(entry['part_id']), entry)
       when 'ASSET'
         entry['name'] = asset.name
         entry['point_description'] = ''
@@ -36,7 +31,7 @@ module ProblemListHelper
         fail "Invalid kind '#{kind}'!"
     end
 
-    entry['barcode'] = barcode.nil? ? '' : barcode
+    entry['barcode'] = barcode || ''
 
     created_by_user = User.find_by(id: entry['created_by_id'])
     entry['created_by_user'] = created_by_user.nil? ? '' : created_by_user.name
@@ -67,6 +62,18 @@ module ProblemListHelper
         r['session'],
         [r['image'], r['audio']]
       ]
+    end
+  end
+
+  private
+
+  def process_point_or_part(asset, p, entry)
+    entry['name'] = "#{asset.name} #{p.name}"
+    barcode = p.barcode
+    entry['point_description'] = p.description
+    if entry['area_id']
+      areas = Area.where(id: entry['area_id'])
+      entry['area'] = areas.first.name unless areas.empty?
     end
   end
 end
