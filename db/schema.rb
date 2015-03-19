@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150319065516) do
+ActiveRecord::Schema.define(version: 20150319202523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,13 +84,10 @@ ActiveRecord::Schema.define(version: 20150319065516) do
     t.datetime "updated_at"
     t.integer  "frequency",           default: 24
     t.string   "default_value"
-    t.integer  "manual_id"
     t.string   "measure_unit"
     t.string   "point_code"
     t.integer  "default_assigned_id"
   end
-
-  add_index "check_points", ["manual_id"], name: "index_check_points_on_manual_id", using: :btree
 
   create_table "check_results", force: true do |t|
     t.string   "result"

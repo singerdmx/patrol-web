@@ -921,17 +921,11 @@ manual1 = Manual.create( entry: "维护保养手册：条目 1 － 步骤如 1 �
 manual1.assets << asset10
 manual1.assets << asset11
 manual1.assets << asset12
-manual1.check_points << asset1.check_points.first
-manual1.check_points << asset2.check_points.first
-manual1.check_points << asset3.check_points.first
 
 manual2 = Manual.create( entry: "维护保养手册：条目 2 － 步骤如 2 －－ 1" )
 manual2.assets << asset20
 manual2.assets << asset21
 manual2.assets << asset22
-manual2.check_points << asset1.check_points.last
-manual2.check_points << asset2.check_points.last
-manual2.check_points << asset3.check_points.last
 
 
 session11 = route1.check_sessions.create!(
