@@ -1325,3 +1325,40 @@ repair_report19 = RepairReport.create(
      report_type: "报修",
     })
 
+report_time = Time.now - 3600
+repair_report20 = RepairReport.create(
+  {asset_id: asset3.id,
+   part_id: asset3.parts.last.id,
+   kind: "PART",
+   code: 2,
+   description: "need to replace parts",
+   content: "箱体破损，需要更换。",
+   stopped: false,
+   area_id: area2.id,
+   production_line_stopped: false,
+   created_by_id: user1.id,
+   priority: 1,
+   status: 2,
+   report_type: "报修",
+   created_at: report_time,
+   updated_at: report_time,
+  })
+
+repair_report21 = RepairReport.create(
+  {asset_id: asset3.id,
+   part_id: asset3.parts.first.id,
+   kind: "PART",
+   code: 2,
+   description: "need to replace parts",
+   content: "轴承磨损，需要更换。",
+   stopped: false,
+   area_id: area2.id,
+   production_line_stopped: false,
+   created_by_id: user1.id,
+   priority: 1,
+   status: 2,
+   report_type: "报修",
+   created_at: report_time,
+   updated_at: report_time,
+  })
+
