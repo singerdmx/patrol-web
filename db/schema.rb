@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150319062933) do
+ActiveRecord::Schema.define(version: 20150319065516) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -181,7 +181,7 @@ ActiveRecord::Schema.define(version: 20150319062933) do
     t.integer  "priority"
     t.string   "report_type"
     t.integer  "status",                  null: false
-    t.integer  "check_result_id",         null: false
+    t.integer  "check_result_id"
     t.date     "plan_date"
     t.integer  "area_id",                 null: false
     t.integer  "result_image_id"
