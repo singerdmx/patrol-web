@@ -215,6 +215,25 @@ asset3.check_points.create([
                  default_assigned_id: user5.id,
                } ])
 
+asset3.parts.create([
+                      { name:         "输入端轴承",
+                        description:  "输入端轴承",
+                        barcode:      "999972318875",
+                        default_assigned_id: user5.id,
+                      },
+                      {
+                        barcode:      "999972318873",
+                        name:         "输出端轴承",
+                        description:  "输出端轴承",
+                        default_assigned_id: user5.id,
+                      },
+                      {
+                        barcode:      "999972318812",
+                        name:         "箱体",
+                        description:  "箱体",
+                        default_assigned_id: user5.id,
+                      } ])
+
 asset10 = Asset.create({
                            tag: SecureRandom.urlsafe_base64(10),
                            number: SecureRandom.random_number(5),
