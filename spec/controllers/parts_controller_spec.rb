@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe PartController do
+describe PartsController do
 
 end

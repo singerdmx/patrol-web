@@ -2,7 +2,6 @@ class CheckPointsController < ApplicationController
   include CheckPointsHelper
   before_action :set_check_point, only: [:show, :update, :destroy]
   #TODO: disable user role for CUD of points
-  # GET /check_points
   # GET /check_points.json
   def index
     ActiveRecord::Base.transaction do
@@ -16,7 +15,7 @@ class CheckPointsController < ApplicationController
 
       if stale?(etag: @check_points_json,
                 last_modified: @check_points.maximum(:updated_at))
-        render template: 'check_points/index', status: :ok
+        render json: @check_points_json.to_json
       else
         head :not_modified
       end

@@ -7,6 +7,10 @@ module AssetsHelper
         result.check_points.map do |point|
           point.id
         end
+      entry['parts'] =
+        result.parts.map do |part|
+          part.id
+        end
       entry.delete('manual_id') if entry['manual_id'].nil?
       entry
     end
