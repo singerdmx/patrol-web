@@ -1,3 +1,5 @@
+require 'set'
+
 class CheckResultsController < ApplicationController
   include CheckResultsHelper, ProblemListHelper
 
@@ -49,10 +51,15 @@ class CheckResultsController < ApplicationController
     end_time_ = Time.at(params[:end_time]).to_datetime
 
     route_sessions = Hash.new
+    reports = []
+    contacts = Set.new
+    users = Set.new([current_user.id])
     ActiveRecord::Base.transaction do
       params[:points].each do |point|
-        create_point_result(point, route_sessions, start_time_, end_time_)
+        create_point_result(reports, contacts, users, point, route_sessions, start_time_, end_time_)
       end
+
+      send_emails(reports, contacts, users)
     end
 
     render nothing: true, status: :created
@@ -81,7 +88,7 @@ class CheckResultsController < ApplicationController
     request_para.select{|key,value| key.in?(CheckResult.column_names())}.symbolize_keys
   end
 
-  def create_point_result(point, route_sessions, start_time_, end_time_)
+  def create_point_result(reports, contacts, users, point, route_sessions, start_time_, end_time_)
     route_ids = point['routes']
     check_time_ = Time.at(point['check_time']).to_datetime
     route_ids.each do |route_id|
@@ -109,14 +116,15 @@ class CheckResultsController < ApplicationController
       result_record = CheckResult.create!(check_result_input)
 
       if point['status'] == 1
-        check_point, report = create_repair_report(check_time_, point, result_record)
-        send_emails(check_point, report, route)
+        reports << create_repair_report(users, check_time_, point, result_record)
+        contacts.merge(JSON.parse(route.contacts).map {|c| c.to_i}) unless route.contacts.blank?
       end
     end
   end
 
-  def create_repair_report(check_time_, point, result_record)
+  def create_repair_report(users, check_time_, point, result_record)
     check_point = CheckPoint.find(point['id'])
+    users.add(check_point.default_assigned_id) if check_point.default_assigned_id
     repair_report_input = {
       asset_id: check_point.asset_id,
       check_point_id: point['id'],
@@ -138,18 +146,13 @@ class CheckResultsController < ApplicationController
       area_id: check_point.check_routes.first.area.id
     }
     Rails.logger.info("creating repair_report #{repair_report_input}")
-    report = RepairReport.create(repair_report_input)
-    return check_point, report
+    RepairReport.create(repair_report_input)
   end
 
-  def send_emails(check_point, report, route)
-    contacts = route.contacts
-    contacts = contacts[1...-1].split(",").map { |s| s[1...-1].to_i } if contacts
-    users = [current_user.id]
-    users << check_point.default_assigned_id if check_point.default_assigned_id
-
+  def send_emails(reports, contacts, users)
+    reports = reports.map { |r| db_result_to_hash(r) }
     email_content =
-      problem_list_ui_json_builder([db_result_to_hash(report)]).map do |c|
+      problem_list_ui_json_builder(reports).map do |c|
         c[0] = Time.at(c[0]).strftime("%Y年%m月%d日")
         c[9] = c[9].nil? ? '' : Time.at(c[9]).strftime("%Y年%m月%d日")
         c
@@ -157,4 +160,5 @@ class CheckResultsController < ApplicationController
     Rails.logger.info("sending email: #{email_content}")
     AlertMailer.alert_email(contacts, users, email_content).deliver
   end
+
 end

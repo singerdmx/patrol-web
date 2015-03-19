@@ -1,3 +1,5 @@
+require 'set'
+
 class AlertMailer < ActionMailer::Base
   default from: "alert-no-reply@managebrite.com"
 
@@ -11,13 +13,12 @@ class AlertMailer < ActionMailer::Base
       end
     end
 
-    recipients = contacts.map {|c| Contact.find(c).email} if contacts
-    recipients ||= []
+    recipients = Set.new(contacts.map {|c| Contact.find(c).email})
     users.each do |u|
-      recipients << User.find(u).email
+      recipients.add(User.find(u).email)
     end
 
-    mail(to: recipients,
+    mail(to: recipients.to_a,
          from: "alert-no-reply@managebrite.com",
          subject: '巡检结果异常通知')
   end
