@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150319061949) do
+ActiveRecord::Schema.define(version: 20150319062933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -186,12 +186,14 @@ ActiveRecord::Schema.define(version: 20150319061949) do
     t.integer  "area_id",                 null: false
     t.integer  "result_image_id"
     t.integer  "result_audio_id"
+    t.integer  "part_id"
   end
 
   add_index "repair_reports", ["area_id"], name: "index_repair_reports_on_area_id", using: :btree
   add_index "repair_reports", ["asset_id"], name: "index_repair_reports_on_asset_id", using: :btree
   add_index "repair_reports", ["check_point_id"], name: "index_repair_reports_on_check_point_id", using: :btree
   add_index "repair_reports", ["check_result_id"], name: "index_repair_reports_on_check_result_id", using: :btree
+  add_index "repair_reports", ["part_id"], name: "index_repair_reports_on_part_id", using: :btree
   add_index "repair_reports", ["result_audio_id"], name: "index_repair_reports_on_result_audio_id", using: :btree
   add_index "repair_reports", ["result_image_id"], name: "index_repair_reports_on_result_image_id", using: :btree
 
