@@ -18,6 +18,7 @@ Blog::Application.routes.draw do
   resources :manuals
   resources :user_preferences
   resources :factories, only: [:index]
+  resources :parts
   resources :repair_reports
   resources :problem_list do
     collection { get 'export' }
