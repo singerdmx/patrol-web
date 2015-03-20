@@ -1,4 +1,3 @@
-chart_x_tick_angle = 45
 fade_speed = 400
 
 $ ->
@@ -366,46 +365,6 @@ setupRecordsDiv = (containerDiv, defaultCalendarDaysRange, params) ->
 
   return
 
-setupCalendar = (containerDiv, defaultCalendarDaysRange) ->
-  $("#{containerDiv} div#startTime").datetimepicker(getDatetimePickerSettings())
-  $("#{containerDiv} div#endTime").datetimepicker(getDatetimePickerSettings())
-  startTimePicker = $("#{containerDiv} div#startTime").data('datetimepicker')
-  endTimePicker = $("#{containerDiv} div#endTime").data('datetimepicker')
-  $("#{containerDiv} div#startTime").on 'changeDate', (e) ->
-    start_time = e.localDate.getTime()/1000
-    end_time = getDatetimePickerEpoch("#{containerDiv} div#endTime")
-    endTimePicker.setLocalDate(new Date(start_time * 1000)) if start_time > end_time
-    return
-  $("#{containerDiv} div#endTime").on 'changeDate', (e) ->
-    end_time = e.localDate.getTime()/1000
-    start_time = getDatetimePickerEpoch("#{containerDiv} div#startTime")
-    startTimePicker.setLocalDate(new Date(end_time * 1000)) if start_time > end_time
-    return
-
-  today = getToday()
-  endTimePicker.setLocalDate(today)
-  startTimePicker.setLocalDate(today.addDays(-defaultCalendarDaysRange))
-  $("#{containerDiv} div#startTime > span.add-on, #{containerDiv} div#endTime > span.add-on, #{containerDiv} div#startTime, #{containerDiv} div#endTime").click ->
-    $("#{containerDiv} > span#recordsCalendarUpdated").text('true')
-    return
-
-  return
-
-getTableParams = (containerDiv, params) ->
-  startTime = getDatetimePickerEpoch("#{containerDiv} div#startTime")
-  endTime = getDatetimePickerEpoch("#{containerDiv} div#endTime") + 86400 # Add one day for 86400 seconds (60 * 60 * 24)
-  requestParams =
-    check_time: "#{startTime}..#{endTime}"
-    ui: true
-
-  $.extend(requestParams, params) if params # merge two objects
-  requestParams
-
-getProblemsTableParams = (containerDiv, params) ->
-  requestParams = getTableParams(containerDiv, params)
-  $.extend(requestParams, { status: $("#{containerDiv} select#status option:selected").val() })
-  requestParams
-
 updateSessionsTable = (containerDiv, params) ->
   requestParams = getTableParams(containerDiv, params)
 
@@ -506,11 +465,11 @@ updateRecordsTable = (containerDiv, params) ->
   $.ajax
     url: getBaseURL() + '/results.json'
     beforeSend: (xhr) ->
-      recordsCalendarUpdated = $("#{containerDiv} > span#recordsCalendarUpdated").text() is 'true'
+      calendarUpdated = $("#{containerDiv} > span#calendarUpdated").text() is 'true'
 
-      if recordsCalendarUpdated
+      if calendarUpdated
         # Force update since we changed calendar
-        $("#{containerDiv} > span#recordsCalendarUpdated").text('false')
+        $("#{containerDiv} > span#calendarUpdated").text('false')
         return
 
       setXhrRequestHeader(xhr, containerDiv, 'records')
@@ -617,7 +576,7 @@ setupProblemsDiv = (containerDiv) ->
 
   # 状态选择改变
   $("#{containerDiv} select#status").change ->
-    $("#{containerDiv} > span#recordsCalendarUpdated").text('true')
+    $("#{containerDiv} > span#calendarUpdated").text('true')
     return
 
   # 更新button
@@ -762,11 +721,11 @@ updateProblemsTable = (containerDiv, params) ->
   $.ajax
     url: getBaseURL() + '/problem_list.json'
     beforeSend: (xhr) ->
-      recordsCalendarUpdated = $("#{containerDiv} > span#recordsCalendarUpdated").text() is 'true'
+      calendarUpdated = $("#{containerDiv} > span#calendarUpdated").text() is 'true'
 
-      if recordsCalendarUpdated
+      if calendarUpdated
         # Force update since we changed calendar
-        $("#{containerDiv} > span#recordsCalendarUpdated").text('false')
+        $("#{containerDiv} > span#calendarUpdated").text('false')
         return
 
       setXhrRequestHeader(xhr, containerDiv, 'problems')
@@ -919,68 +878,6 @@ updateProblemsTable = (containerDiv, params) ->
     dataType: 'json',
     timeout: defaultAjaxCallTimeout
 
-  return
-
-renderAssignedUserStatChart = (chartId, assignedUserStat, choice) ->
-  _line = []
-  _line.push(new Array()) for [1..choice.length]
-
-  _ticks = []
-  _values = []
-  for k, v of assignedUserStat
-    _ticks.push(k)
-    _values.push(v)
-
-  return if _ticks.length == 0
-
-  _unassignedIndex = _ticks.indexOf('未分配')
-  # move '未分配' to the last
-  if _unassignedIndex >= 0
-    _ticks.swap(_unassignedIndex, _ticks.length - 1)
-    _values.swap(_unassignedIndex, _values.length - 1)
-
-  for i in [0.._ticks.length-1]
-    for j in [0..choice.length-1]
-      _line[j].push(_values[i][choice[j]])
-
-  _series = ({label: c} for c in choice)
-  _plot_setting =
-    title: "点检问题处理汇总"
-    stackSeries: true
-    captureRightClick: true
-    seriesDefaults:
-      renderer: $.jqplot.BarRenderer
-      rendererOptions:
-        barMargin: 8
-      pointLabels:
-        show: true
-        hideZeros: true
-    series: _series
-    seriesColors: ['rgb(0, 0, 139)', 'rgb(0, 100, 0)', 'rgb(0, 139, 139)', 'rgb(255, 140, 0)', 'rgb(153, 50, 204)', 'rgb(184, 134, 11)']
-    axesDefaults:
-      tickRenderer: $.jqplot.CanvasAxisTickRenderer
-    axes:
-      xaxis:
-        renderer: $.jqplot.CategoryAxisRenderer
-        ticks: _ticks
-        tickOptions:
-          angle: chart_x_tick_angle
-      yaxis:
-        padMin: 0
-        min: 0
-        tickOptions: {formatString: '%d'}
-    legend:
-      show: true,
-      location: 'ne',
-      placement: 'outside'
-
-  $.jqplot(
-    chartId,
-    _line,
-    _plot_setting
-  )
-
-  $("div##{chartId} div.jqplot-point-label").css('color', 'white')
   return
 
 getCanvasOverlayObjects = (_point) ->
