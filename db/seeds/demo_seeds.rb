@@ -97,14 +97,59 @@ user6 = User.create! do |u|
   #u.ensure_authentication_token!
 end
 
+user7 = User.create! do |u|
+  u.email = 'leader_2@test.com'
+  u.password = 'user1234'
+  u.password_confirmation = 'user1234'
+  u.role = 4
+  u.name = '经理3'
+  #u.ensure_authentication_token!
+end
+
+user8 = User.create! do |u|
+  u.email = 'admin3@test.com'
+  u.password = 'admin1234'
+  u.password_confirmation = 'admin1234'
+  u.role = 3
+  u.name = '管理员3'
+  #u.ensure_authentication_token!
+end
+
+user9 = User.create! do |u|
+  u.email = 'worker4@test.com'
+  u.password = 'worker1234'
+  u.password_confirmation = 'worker1234'
+  u.role = 5
+  u.name = '工人4'
+  #u.ensure_authentication_token!
+end
+
+user10 = User.create! do |u|
+  u.email = 'admin7@test.com'
+  u.password = 'admin1234'
+  u.password_confirmation = 'admin1234'
+  u.role = 7
+  u.name = '管理员7'
+  #u.ensure_authentication_token!
+end
+
+user11 = User.create! do |u|
+  u.email = 'user8@test.com'
+  u.password = 'user1234'
+  u.password_confirmation = 'user1234'
+  u.role = 8
+  u.name = '经理8'
+  #u.ensure_authentication_token!
+end
+
 contact1 = Contact.create! do |c|
   c.name = "维修经理"
-  c.email = "manager1@test.com"
+  c.email = "repairmanager@test.com"
 end
 
 contact2 = Contact.create! do |c|
   c.name = "维修主管"
-  c.email = "lead1@test.com"
+  c.email = "repairlead@test.com"
 end
 
 contact3 = Contact.create! do |c|
