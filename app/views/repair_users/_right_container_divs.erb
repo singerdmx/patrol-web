@@ -1,4 +1,29 @@
 <div class="containerDiv" id="assetsDiv">
+  <div id="assets" style="display: inline">
+    <span class="hiddenSpan" id="assetsIfNoneMatch"></span>
+    <span class="hiddenSpan" id="assetsIfModifiedSince"></span>
+    <div id="assetList">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">设备</h3>
+        </div>
+        <div class="panel-body">
+          <ul class="list-group" id="assetListGroup">
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="assetDetails">
+      <div class="btn-toolbar" id="assetsTreeControlButtons">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default" id="openTree">全部展开</button>
+          <button type="button" class="btn btn-default" id="collapseTree">全部合拢</button>
+        </div>
+      </div>
+      <div id="assetsTree">
+      </div>
+    </div>
+  </div>
 </div>
 <div class="containerDiv" id="historyDiv">
 </div>

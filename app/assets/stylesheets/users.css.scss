@@ -93,29 +93,6 @@ li.blueVioletBackground {
 }
 
 /* routesDiv */
-@mixin mediaList {
-  h4.media-heading {
-    font-size: 16px !important;
-    line-height: 16px !important;
-  }
-  img.media-object.mediaListIcon {
-    cursor: pointer;
-  }
-  span.badge {
-    margin-left: 8px !important;
-    padding-top: 1px !important;
-    cursor: pointer;
-    &:hover {
-      background-color: $LightSkyBlue;
-    }
-  }
-}
-
-@mixin listGroup {
-  margin-left: 3px;
-  margin-right: 10px;
-}
-
 div#factories {
   > div {
     float: left;

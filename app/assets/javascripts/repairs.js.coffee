@@ -2,6 +2,15 @@ $ ->
   return unless isRepairPage()
   setTitle('报修')
   setupSidebar()
+  $('div.containerDiv').first().show()
+  updateAssetList('div#assets')
+  setupAssetsDiv('div#assets')
+
+  removeFlashNotice()
+
+  # Admn tabs
+  return unless getPageTitle() is '报修 | 管理员'
+
   return
 
 isRepairPage = ->
@@ -27,10 +36,45 @@ setupSidebar = ->
     $(containerDiv).show()
     switch id
       when 'assets'
-        updateAssetsTree(containerDiv)
+        updateAssetList(containerDiv)
     return
 
   return
 
-updateAssetsTree = (containerDiv) ->
+updateAssetList = (containerDiv) ->
+  $.ajax
+    url: getBaseURL() + '/assets.json'
+    beforeSend: (xhr) ->
+      setXhrRequestHeader(xhr, containerDiv, 'assets')
+      return
+    success: (data, textStatus, jqHXR) ->
+      if jqHXR.status is 200
+        _$ul = $("div#assetsDiv ul.list-group")
+        _$ul.html('')
+
+        for asset in data
+          _$ul.append "
+                      <li class='list-group-item' data-id='#{asset.id}'>
+                        <span class='badge'>#{asset.parts.length}</span>
+                        #{asset.name}</li>"
+
+        setupAssetListClick(containerDiv)
+        $("#{containerDiv} > span#assetsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} > span#assetsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    ifModified: true,
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
+
+  return
+
+setupAssetListClick = (containerDiv) ->
+  return
+
+setupAssetsDiv  = (containerDiv) ->
+  $("#{containerDiv} div#assetList, #{containerDiv} div#assetDetails").height($(document).height() * 0.8)
   return

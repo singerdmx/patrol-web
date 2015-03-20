@@ -148,14 +148,6 @@ updateFactoriesTree = (containerDiv) ->
   $('div#routesDiv div#routeListInFactory h3.panel-title').text('路线')
   return
 
-setXhrRequestHeader = (xhr, containerDiv, spanName) ->
-  ifNoneMatch = $("#{containerDiv} span##{spanName}IfNoneMatch").text()
-  ifModifiedSince = $("#{containerDiv} span##{spanName}IfModifiedSince").text()
-
-  xhr.setRequestHeader('If-None-Match', ifNoneMatch)
-  xhr.setRequestHeader('If-Modified-Since', ifModifiedSince)
-  return
-
 updateRouteList = (containerDiv) ->
   $.ajax
     url: getBaseURL() + '/routes.json'
@@ -198,15 +190,6 @@ setupRouteListClick = (containerDiv) ->
     $("#{containerDiv} div#routesTree > ul[data-id='#{route_id}']").toggle()
     return
 
-  return
-
-setupTreeViewControlButtons = (containerDiv) ->
-  $("#{containerDiv} button#collapseTree").click ->
-    $("#{containerDiv} ul.media-list > li.media > a.pull-left > img[src$='minus.png']").trigger('click')
-    return
-  $("#{containerDiv} button#openTree").click ->
-    $("#{containerDiv} ul.media-list > li.media > a.pull-left > img[src$='plus.png']").trigger('click')
-    return
   return
 
 updatePreferences = (containerDiv) ->

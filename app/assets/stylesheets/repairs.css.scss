@@ -1,0 +1,36 @@
+@import "bootstrap";
+@import "variable.css.scss";
+
+/* assetsDiv */
+div#assets {
+  > div {
+    float: left;
+    overflow: auto;
+  }
+
+  > div#assetList {
+    width: 30%;
+    margin-top: 10px;
+
+    ul#assetListGroup {
+      @include listGroup;
+      li.list-group-item {
+        &:hover {
+          background-color: $LightSkyBlue;
+        }
+        cursor: pointer;
+      }
+    }
+  }
+
+  > div#assetDetails {
+    padding-left: 40px;
+    width: 65%;
+    div#assetsTreeControlButtons {
+      margin-bottom: 20px;
+    }
+    div#assetsTree {
+      @include mediaList;
+    }
+  }
+}

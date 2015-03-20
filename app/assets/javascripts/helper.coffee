@@ -59,6 +59,14 @@ window.removeFlashNotice = ->
 
 Array::last = -> @[@length - 1]
 
+window.setXhrRequestHeader = (xhr, containerDiv, spanName) ->
+  ifNoneMatch = $("#{containerDiv} span##{spanName}IfNoneMatch").text()
+  ifModifiedSince = $("#{containerDiv} span##{spanName}IfModifiedSince").text()
+
+  xhr.setRequestHeader('If-None-Match', ifNoneMatch)
+  xhr.setRequestHeader('If-Modified-Since', ifModifiedSince)
+  return
+
 window.dateToShortString = (date) ->
   "#{date.getFullYear()}年#{pad2(date.getMonth()+1)}月#{pad2(date.getDate())}日"
 
@@ -84,6 +92,15 @@ window.changePasswordType = (element) ->
     when 'text'
       $(element).attr('type', 'password')
 
+  return
+
+window.setupTreeViewControlButtons = (containerDiv) ->
+  $("#{containerDiv} button#collapseTree").click ->
+    $("#{containerDiv} ul.media-list > li.media > a.pull-left > img[src$='minus.png']").trigger('click')
+    return
+  $("#{containerDiv} button#openTree").click ->
+    $("#{containerDiv} ul.media-list > li.media > a.pull-left > img[src$='plus.png']").trigger('click')
+    return
   return
 
 window.resetToPlaceholderValue = (elements) ->

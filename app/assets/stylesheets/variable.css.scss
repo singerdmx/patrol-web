@@ -148,3 +148,26 @@ $MediumBlue: #0000CD;
 $DarkBlue: #00008B;
 $Navy: #000080;
 $Black: #000000;
+
+@mixin listGroup {
+  margin-left: 3px;
+  margin-right: 10px;
+}
+
+@mixin mediaList {
+  h4.media-heading {
+    font-size: 16px !important;
+    line-height: 16px !important;
+  }
+  img.media-object.mediaListIcon {
+    cursor: pointer;
+  }
+  span.badge {
+    margin-left: 8px !important;
+    padding-top: 1px !important;
+    cursor: pointer;
+    &:hover {
+      background-color: $LightSkyBlue;
+    }
+  }
+}
