@@ -142,7 +142,7 @@ setupRoutesDiv  = (containerDiv) ->
 
 updateFactoriesTree = (containerDiv) ->
   renderTreeView('/factories.json', "#{containerDiv} div#factoriesTree",
-    "#{containerDiv} span#factories", null, false, false)
+    "#{containerDiv} span#factories", null, false, false, buildTreeNode, bindTreeViewClick)
   $('div#routesDiv div#routeListInFactory ul.list-group > li').hide()
   $('div#routesDiv div#factoriesTree li.lawnGreenBackground').removeClass('lawnGreenBackground')
   $('div#routesDiv div#routeListInFactory h3.panel-title').text('路线')
@@ -172,7 +172,7 @@ updateRouteList = (containerDiv) ->
         $("#{containerDiv} > span#routesIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 
         renderTreeView('/routes.json', "#{containerDiv} div#routesTree",
-          null, {group_by_asset: true}, true, true)
+          null, {group_by_asset: true}, true, true, buildTreeNode, bindTreeViewClick)
       return
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
@@ -222,43 +222,6 @@ findParentRoute = (elem) ->
   parent = elem.parent()
   return elem if parent.is('div') and parent.attr('id') is "routesTree"
   findParentRoute(parent)
-
-renderTreeView = (url, containerDiv, ifModifiedSinceSpanId, params, hideTree, showDeleteIcon) ->
-  request_params = { ui: true }
-  $.extend(request_params, params) if params # merge two objects
-  $.ajax
-    url: getBaseURL() + url
-    data: request_params
-    beforeSend: (xhr) ->
-      return if ifModifiedSinceSpanId is null
-
-      ifNoneMatch = $("#{ifModifiedSinceSpanId}IfNoneMatch").text()
-      ifModifiedSince = $("#{ifModifiedSinceSpanId}routesIfModifiedSince").text()
-
-      xhr.setRequestHeader('If-None-Match', ifNoneMatch)
-      xhr.setRequestHeader('If-Modified-Since', ifModifiedSince)
-
-      return
-    success: (data, textStatus, jqHXR) ->
-      if jqHXR.status is 200
-        $(containerDiv).html('')
-        buildTreeNode($(containerDiv), data, showDeleteIcon)
-        bindTreeViewClick(containerDiv)
-
-        $("#{containerDiv} > ul").hide() if hideTree is true
-        unless ifModifiedSinceSpanId is null
-          $("#{ifModifiedSinceSpanId}IfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
-          $("#{ifModifiedSinceSpanId}IfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
-
-      return
-    error: (jqXHR, textStatus, errorThrown) ->
-      showErrorPage(jqXHR.responseText)
-      return
-    ifModified: true,
-    dataType: 'json',
-    timeout: defaultAjaxCallTimeout
-
-  return
 
 buildTreeNode = (parent, data, showDeleteIcon) ->
   for nodeDatum, i in data

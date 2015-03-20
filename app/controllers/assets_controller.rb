@@ -5,8 +5,10 @@ class AssetsController < ApplicationController
   def index
     ActiveRecord::Base.transaction do
       assets = Asset.where(asset_params)
-      if params[:ui] == 'true'
-        assets_index_json =  index_ui_json_builder(assets)
+      if params[:parts_tree_view] == 'true'
+        assets_index_json = index_parts_tree_view_json_builder(assets)
+      elsif params[:ui] == 'true'
+        assets_index_json = index_ui_json_builder(assets)
       else
         assets_index_json =  index_json_builder(assets)
       end

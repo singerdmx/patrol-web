@@ -33,7 +33,7 @@ class CheckRoutesController < ApplicationController
         @check_routes_json  = index_json_builder(@check_routes, route_assets, params[:show_name] == 'true')
       end
     end
-    if stale?(etag: @check_routes_json.to_a,
+    if stale?(etag: @check_routes_json,
             last_modified: @check_routes.maximum(:updated_at))
       render json: @check_routes_json.to_json, status: :ok
     else

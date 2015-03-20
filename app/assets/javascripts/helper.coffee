@@ -161,3 +161,40 @@ window.setupAutocompleteInput = (relativeUrl, valueKey, containerDiv, inputElem,
     timeout: defaultAjaxCallTimeout
 
   return
+
+window.renderTreeView = (url, containerDiv, ifModifiedSinceSpanId, params, hideTree, showDeleteIcon, buildTreeNode, bindTreeViewClick) ->
+  request_params = { ui: true }
+  $.extend(request_params, params) if params # merge two objects
+  $.ajax
+    url: getBaseURL() + url
+    data: request_params
+    beforeSend: (xhr) ->
+      return if ifModifiedSinceSpanId is null
+
+      ifNoneMatch = $("#{ifModifiedSinceSpanId}IfNoneMatch").text()
+      ifModifiedSince = $("#{ifModifiedSinceSpanId}routesIfModifiedSince").text()
+
+      xhr.setRequestHeader('If-None-Match', ifNoneMatch)
+      xhr.setRequestHeader('If-Modified-Since', ifModifiedSince)
+
+      return
+    success: (data, textStatus, jqHXR) ->
+      if jqHXR.status is 200
+        $(containerDiv).html('')
+        buildTreeNode($(containerDiv), data, showDeleteIcon)
+        bindTreeViewClick(containerDiv)
+
+        $("#{containerDiv} > ul").hide() if hideTree is true
+        unless ifModifiedSinceSpanId is null
+          $("#{ifModifiedSinceSpanId}IfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+          $("#{ifModifiedSinceSpanId}IfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    ifModified: true,
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
+
+  return
