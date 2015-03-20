@@ -5,6 +5,7 @@ $ ->
   $('div.containerDiv').first().show()
   updateAssetList('div#assets')
   setupAssetsDiv('div#assets')
+  setupProblemsDiv('div#problemsDiv')
 
   removeFlashNotice()
 
@@ -37,6 +38,8 @@ setupSidebar = ->
     switch id
       when 'assets'
         updateAssetList(containerDiv)
+      when 'problems'
+        updateProblemsTable(containerDiv)
     return
 
   return
