@@ -19,7 +19,7 @@ $ ->
   removeFlashNotice()
 
   # Admn tabs
-  return unless getPageTitle() is '巡检 | 管理员'
+  return unless isAdmin()
 
   setupManageUsersDiv('div#manageUsersDiv')
   setupManageDataDiv()
@@ -51,7 +51,7 @@ setupSidebar = ->
     switch id
       when 'routes'
         updateFactoriesTree(containerDiv) if $('div#factories').is(':visible')
-        updateRouteList("#{containerDiv} div#routes")
+        updateRouteList("#{containerDiv} div#routes") if (isAdmin() and $('div#factories').is(':visible')) or !isAdmin()
       when 'preferences'
         updateRecordsTable(containerDiv, { preference: true })
       when 'sessions'
@@ -283,23 +283,6 @@ bindTreeViewClick = (containerDiv) ->
 
     return
 
-  return
-
-deleteTreeNode = (node) ->
-  $.ajax
-    url: getBaseURL() + "/#{node.data('kind')}s/#{node.data('id')}.json"
-    type: 'DELETE',
-    contentType: 'application/json',
-    dataType: 'json',
-    success: (data, textStatus, jqHXR) ->
-      # remove the <ul> elment
-      node.parent().parent().parent().remove()
-      $("div#routesDiv div#routeList ul#routeListGroup > li.list-group-item[data-id='#{node.data('id')}']").remove()
-      return
-    error: (jqXHR, textStatus, errorThrown) ->
-      alert jqXHR.responseJSON.message
-      return
-    timeout: defaultAjaxCallTimeout
   return
 
 detachPoint = (point) ->
@@ -1724,3 +1707,6 @@ setupEditDeleteRouteDiv = (containerDiv) ->
     return
 
   return
+
+isAdmin = ->
+  getPageTitle() is '巡检 | 管理员'

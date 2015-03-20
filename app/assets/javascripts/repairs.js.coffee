@@ -130,10 +130,7 @@ setupAssetListClick = (containerDiv) ->
 buildTreeNode = (parent, data, showDeleteIcon) ->
   for nodeDatum, i in data
     historyIcon = ''
-    historyIcon = "<span class='badge' data-type='history' data-id='#{nodeDatum.id}'>历史</span>" if nodeDatum.kind is 'point'
-    moveOutIcon = ''
-    if nodeDatum.kind is 'part' and getPageTitle() is '报修 | 管理员'
-      moveOutIcon = "<span class='badge' data-type='moveOut' data-id='#{nodeDatum.id}'>移出</span>"
+    historyIcon = "<span class='badge' data-type='history' data-id='#{nodeDatum.id}'>历史</span>" if nodeDatum.kind is 'part'
     deleteIcon = ''
     if getPageTitle() is '报修 | 管理员' and showDeleteIcon
       deleteIcon = "<span class='badge' data-type='delete' data-id='#{nodeDatum.id}' data-kind='#{nodeDatum.kind}'>删除</span>"
@@ -144,7 +141,7 @@ buildTreeNode = (parent, data, showDeleteIcon) ->
               <img src='/assets/#{nodeDatum.icon}' class='media-object mediaListIcon' data-id='#{nodeDatum.id}'/>
             </a>
             <div class='media-body'>
-            <h4 class='media-heading'>#{nodeDatum.title}#{deleteIcon}#{historyIcon}#{moveOutIcon}</h4>
+            <h4 class='media-heading'>#{nodeDatum.title}#{deleteIcon}#{historyIcon}</h4>
             <span>#{nodeDatum.description}</span>"
 
     $ul = $(parent.children('ul')[i])
@@ -170,10 +167,8 @@ bindTreeViewClick = (containerDiv) ->
     switch $(this).data('type')
       when 'history'
         $('div#sidebar ul > li#history').trigger('click')
-      when 'moveOut'
-        confirm("确认移出？")
       when 'delete'
-        confirm("确认删除？")
+        deleteTreeNode($(this)) if confirm("确认删除？")
 
     return
 

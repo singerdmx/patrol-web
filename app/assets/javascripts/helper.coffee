@@ -729,6 +729,23 @@ setupDraggableRoutes = (containerDiv) ->
 
   return
 
+window.deleteTreeNode = (node) ->
+  $.ajax
+    url: getBaseURL() + "/#{node.data('kind')}s/#{node.data('id')}.json"
+    type: 'DELETE',
+    contentType: 'application/json',
+    dataType: 'json',
+    success: (data, textStatus, jqHXR) ->
+      # remove the <ul> elment
+      node.parent().parent().parent().remove()
+      $("div#routesDiv div#routeList ul#routeListGroup > li.list-group-item[data-id='#{node.data('id')}']").remove()
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      alert jqXHR.responseJSON.message
+      return
+    timeout: defaultAjaxCallTimeout
+  return
+
 window.updateUsersTable = (containerDiv) ->
   $.ajax
     url: getBaseURL() + '/users.json?ui=true'
