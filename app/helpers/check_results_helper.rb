@@ -62,7 +62,9 @@ module CheckResultsHelper
       result['audio'] =  ResultAudio.find(result['result_audio_id']).url if result['result_audio_id']
 
       [
-        result['point']['name'], result['point']['description'],
+        result['point']['name'],
+        result['point']['description'],
+        result['area_id'].nil? ? "" : Area.find(result['area_id']).name,
         result['result'],
         range,
         status,

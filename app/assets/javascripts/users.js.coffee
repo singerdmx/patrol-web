@@ -479,23 +479,27 @@ updateRecordsTable = (containerDiv, params) ->
       if jqHXR.status is 200
         noMedia = true
         for record in data
-          columnDateToString(record, [7])
-          # record[8] is in form of [image_url, audio_url]
-          if record[8][0] isnt null
-            record[8][0] = "<a target='_blank' href='#{record[8][0]}'>图片</a>"
+          columnDateToString(record, [8])
+          # record[9] is in form of [image_url, audio_url]
+          if record[9][0] isnt null
+            record[9][0] = "<a target='_blank' href='#{record[9][0]}'>图片</a>"
 
-          if record[8][1] isnt null
-            record[8][1] = "<a target='_blank' href='#{record[8][1]}'>音频</a>"
+          if record[9][1] isnt null
+            record[9][1] = "<a target='_blank' href='#{record[9][1]}'>音频</a>"
 
-          if record[8][0] is null and record[8][1] is null
-            record[8] = ''
+          if record[9][0] is null and record[9][1] is null
+            record[9] = ''
           else
             noMedia = false
-            record[8] = record[8].join('<br/>')
+            record[9] = record[9].join('<br/>')
 
         columns = [
           { 'sTitle': '名称' },
           { 'sTitle': '描述' },
+          {
+            'sTitle': '机台信息',
+            'sClass': 'center'
+          },
           {
             'sTitle': '读数',
             'sClass': 'center'
@@ -530,9 +534,9 @@ updateRecordsTable = (containerDiv, params) ->
         $("#{containerDiv} table#recordsTable").dataTable
           'aaData': data
           'aoColumns': columns
-          'aaSorting': [[ 7, 'desc' ]]
+          'aaSorting': [[ 8, 'desc' ]]
           'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
-            switch aaData[4]
+            switch aaData[5]
               when '异常'
                 $(nRow).addClass('redBackground')
               when '警告'
@@ -540,7 +544,7 @@ updateRecordsTable = (containerDiv, params) ->
             return
 
         oTable = $("#{containerDiv} table#recordsTable").dataTable()
-        oTable.fnSetColumnVis(8, false) if noMedia
+        oTable.fnSetColumnVis(9, false) if noMedia
         $("#{containerDiv} > span#recordsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
         $("#{containerDiv} > span#recordsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 
