@@ -33,19 +33,19 @@ class User < ActiveRecord::Base
   end
 
   def patrol_user?
-    read_attribute(:role).in? [0,1,2]
+    read_attribute(:role).in? [0,1,2,7,8]
   end
 
   def repair_user?
-    read_attribute(:role).in? [3,4,5,6]
+    read_attribute(:role).in? [3,4,5,6,7,8]
   end
 
   def is_admin?
-    read_attribute(:role).in? [0,3]
+    read_attribute(:role).in? [0,3,7]
   end
 
   def is_leader?
-    read_attribute(:role).in? [1,4]
+    read_attribute(:role).in? [1,4,8]
   end
 
   def is_user?

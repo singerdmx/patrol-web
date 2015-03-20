@@ -12,6 +12,8 @@ $ ->
   # Admn tabs
   return unless getPageTitle() is '报修 | 管理员'
 
+  setupManageUsersDiv('div#manageUsersDiv')
+  setupManageContactsDiv('div#manageContactsDiv')
   return
 
 isRepairPage = ->
@@ -40,6 +42,11 @@ setupSidebar = ->
         updateAssetList(containerDiv)
       when 'problems'
         updateProblemsTable(containerDiv)
+      when 'manageUsers'
+        updateUsersTable(containerDiv)
+      when 'manageContacts'
+        $("#{containerDiv} div#addEditContactDiv, #{containerDiv} button#btnAddNewContact, #{containerDiv} button#btnEditContact").hide()
+        updateContactsTable(containerDiv)
     return
 
   return

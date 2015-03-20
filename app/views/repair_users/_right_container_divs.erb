@@ -153,8 +153,92 @@
   <div id="assignedUserStatChartDiv"></div>
 </div>
 <div class="containerDiv" id="manageUsersDiv">
+  <div id="createUserDiv" style="display: none" class="submissionForm">
+    <h2 class="form-signin-heading">创建用户</h2>
+    <input type="text" value="" required="required" placeholder="用户名" name="user[name]" id="user_name" class="form-control"/>
+    <input type="email" value="" required="required" placeholder="电子邮箱" name="user[email]" id="user_email" class="form-control"/>
+    <div id="userRoleSelection" class="floatLeft">
+      <div>
+        <span>用户级别</span>
+      </div>
+      <div>
+        <select class="form-control" id="userRole">
+          <option value="6">维修工（报修）</option>
+          <option value="5">普通用户（报修）</option>
+          <option value="4">高级用户（报修）</option>
+          <option value="3">管理员（报修）</option>
+          <option value="8">高级用户（巡检，报修）</option>
+          <option value="7">管理员（巡检，报修）</option>
+        </select>
+      </div>
+    </div>
+    <input type="password" required="required" placeholder="密码" name="user[password]" id="user_password" class="form-control">
+    <span style="display: block; margin-bottom: 8px">
+      <input type="checkbox" name="option" value='1' onchange="changePasswordType('div#createUserDiv input#user_password')" style="margin-top: -2px" />
+      显示密码
+    </span>
+
+    <button class="btn btn-warning" type="button" id="btnCancelCreateUser"/>取消</button>
+    <button class="btn btn-primary" type="button" id="btnCreateUser"/>提交</button>
+  </div>
+  <div id="editUserRoutesDiv" style="display: none" class="submissionForm">
+    <h2 class="form-signin-heading">
+      <span id="userName"></span>
+      <span class="hiddenSpan" id="userId"></span>
+    </h2>
+    <div>
+      <div class="dragBox">
+        <h2>已分配路线</h2>
+        <div class="draggableBox"
+             data-bind="template: { name: 'routesTmplRight', foreach: leftRoutes, templateOptions: { parentList: leftRoutes} }, sortableList: leftRoutes">
+        </div>
+      </div>
+
+      <div class="dragBox">
+        <h2>可分配路线</h2>
+        <div class="draggableBox"
+             data-bind="template: { name: 'routesTmplLeft', foreach: rightRoutes, templateOptions: { parentList: rightRoutes} }, sortableList: rightRoutes">
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 10px">
+      <button class="btn btn-warning" type="button" id="btnReturn"/>返回</button>
+      <button class="btn btn-primary" type="button" id="btnSubmit"/>提交</button>
+    </div>
+  </div>
+  <div id="usersTableDiv">
+    <span class="hiddenSpan" id="usersIfNoneMatch"></span>
+    <span class="hiddenSpan" id="usersIfModifiedSince"></span>
+  </div>
+  <div id="add_delete_user_buttons">
+    <button id="btnAddNewUser" class="btn btn-info" type="button">添加用户</button>
+    <button id="btnDeleteUser" class="btn btn-danger" type="button">删除用户</button>
+  </div>
 </div>
 <div class="containerDiv" id="manageDataDiv">
 </div>
 <div class="containerDiv" id="manageContactsDiv">
+  <div class="floatLeft" id="addEditContactDiv" style="display: off">
+    <div style="width: 20%; padding: 10px; margin-top: 0px;">
+      <input type="text" value="" required="required" placeholder="姓名" id="contactNameInput" class="form-control"/>
+    </div>
+    <div style="width: 20%; padding: 10px">
+      <input type="text" value="" required="required" placeholder="邮箱" id="contactEmailInput" class="form-control"/>
+    </div>
+    <div style="width: 100px; padding: 10px">
+      <button id="btnAddNewContact" class="btn btn-info" type="button" data-type="POST">添加联系人</button>
+      <button id="btnEditContact" class="btn btn-primary" type="button" data-type="PUT">保存更改</button>
+      <span class="hiddenSpan" id="contactId"></span>
+    </div>
+  </div>
+  <div id="contactsTableDiv">
+    <span class="hiddenSpan" id="contactsIfNoneMatch"></span>
+    <span class="hiddenSpan" id="contactsIfModifiedSince"></span>
+  </div>
+  <div>
+    <button id="btnDeleteContact" class="btn btn-danger" type="button">删除联系人</button>
+    <button id="btnShowAddNewContact" class="btn btn-info" type="button">添加联系人</button>
+    <button id="btnShowEditContact" class="btn btn-primary" type="button">编辑联系人</button>
+  </div>
 </div>
