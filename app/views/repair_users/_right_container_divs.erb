@@ -217,6 +217,166 @@
   </div>
 </div>
 <div class="containerDiv" id="manageDataDiv">
+  <div id="managementButtons">
+    <div>
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle mediumWidth" type="button" data-toggle="dropdown">
+          <span class="caret"></span>
+          设备管理
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+          <li role="presentation"><a role="menuitem" data-div="createAsset">创建</a></li>
+          <li role="presentation"><a role="menuitem" data-div="deleteAsset">删除</a></li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle mediumWidth" type="button" id="routesDropdownMenu" data-toggle="dropdown">
+          <span class="caret"></span>
+          部件管理
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+          <li role="presentation"><a role="menuitem" data-div="createPoint">创建</a></li>
+          <li role="presentation"><a role="menuitem" data-div="attachPointToAsset">连接到设备</a></li>
+          <li role="presentation"><a role="menuitem" data-div="editDeletePoint">编辑/删除</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div id="managementData">
+    <div id="createAsset" style="display: none" class="submissionForm">
+      <h2 class="form-signin-heading">创建设备</h2>
+      <input type="text" value="" required="required" placeholder="名称（必填）" id="assetName" class="form-control"/>
+      <input type="text" value="" placeholder="描述" id="assetDescription" class="form-control"/>
+      <input type="text" value="" placeholder="条形码" id="assetBarcode" class="form-control"/>
+
+      <div id="addedPointDiv">
+      </div>
+      <div style="margin-top: 5px; display: block">
+        <button class="btn btn-warning" type="button" id="btnCancelCreateAsset"/>重置</button>
+        <button class="btn btn-info" type="button" id="btnAddPointToAsset"/>添加检点</button>
+        <button class="btn btn-primary" type="button" id="btnCreateAsset"/>提交</button>
+      </div>
+    </div>
+    <div id="deleteAsset" style="display: none">
+      <div id="assetsTableDiv">
+        <span class="hiddenSpan" id="assetsIfNoneMatch"></span>
+        <span class="hiddenSpan" id="assetsIfModifiedSince"></span>
+      </div>
+      <div id="add_delete_asset_buttons">
+        <button id="btnDeleteAsset" class="btn btn-danger" type="button">删除设备</button>
+      </div>
+    </div>
+    <div id="createPart" style="display: none" class="submissionForm">
+      <h2 class="form-signin-heading">创建部件</h2>
+      <span class="hiddenSpan" id="pointId"></span>
+      <div class="floatLeft">
+        <div>
+          <span>名称</span>
+        </div>
+        <div>
+          <input type="text" value="" required="required" placeholder="名称（必填）" id="pointName" class="form-control"/>
+        </div>
+      </div>
+      <div class="floatLeft">
+        <div>
+          <span style="font-size: 15px">描述</span>
+        </div>
+        <div style="width: 70%">
+          <input type="text" value="" placeholder="描述" id="pointDescription" class="form-control"/>
+        </div>
+      </div>
+      <div class="floatLeft">
+        <div>
+          <span>条形码</span>
+        </div>
+        <div>
+          <input type="text" value="" placeholder="条形码" id="pointBarcode" class="form-control"/>
+        </div>
+      </div>
+      <div id="categorySelection" class="floatLeft">
+        <div>
+          <span>类型</span>
+        </div>
+        <div>
+          <select class="form-control" id="pointCategory">
+            <% [10, 20, 30, 40, 41, 50].each do |category| %>
+              <option value="<%= category %>">
+                <%= get_category_string(category) %>
+              </option>
+            <% end %>
+          </select>
+        </div>
+      </div>
+      <div id="assignedToSelection" class="floatLeft">
+        <div>
+          <span>责任人</span>
+        </div>
+        <div>
+          <input id="point_assigned_to" class="form-control"/>
+          <span class="hiddenSpan" id="point_assigned_to_id"></span>
+        </div>
+      </div>
+      <div>
+        <div id="addPointChoiceDiv" style="display: none">
+          <div id="addChoiceButtonDiv">
+            <button type="button" id="addChoiceButton" class="btn btn-info btn-lg">
+              添加
+            </button>
+          </div>
+          <div id="pointChoiceDiv">
+            <input type="text" value="" placeholder="填写选项" class="form-control"/>
+            <div>
+                  <span class="lavenderBackground">
+                    <i class="icon-remove"></i>正常
+                  </span>
+                  <span class="lavenderBackground">
+                    <i class="icon-remove"></i>非正常
+                  </span>
+            </div>
+          </div>
+        </div>
+        <div id="fourChoicesDiv" style="display: none">
+          <input type="text" value="" placeholder="正常上限" id="pointMax" class="form-control"/>
+          <input type="text" value="" placeholder="警戒上限" id="pointHigh" class="form-control"/>
+          <input type="text" value="" placeholder="警戒下限" id="pointLow" class="form-control"/>
+          <input type="text" value="" placeholder="正常下限" id="pointMin" class="form-control"/>
+        </div>
+      </div>
+
+      <div style="margin-top: 5px; display: block">
+        <button class="btn btn-warning" type="button" id="btnCancelCreatePoint"/>重置</button>
+        <button class="btn btn-primary" type="button" id="btnCreatePoint"/>提交</button>
+      </div>
+    </div>
+    <div id="attachPartToAsset" style="display: none">
+      <div id="assetsTableDiv">
+        <span class="hiddenSpan" id="assetsIfNoneMatch"></span>
+        <span class="hiddenSpan" id="assetsIfModifiedSince"></span>
+      </div>
+      <div id="attach_point_to_asset_button">
+        <button id="btnAttachPointToAsset" class="btn btn-success" type="button">
+          <i class="icon-upload icon-white"></i>
+          连接检点到设备
+        </button>
+      </div>
+      <div id="pointsTableDiv">
+        <span class="hiddenSpan" id="pointsIfNoneMatch"></span>
+        <span class="hiddenSpan" id="pointsIfModifiedSince"></span>
+      </div>
+    </div>
+    <div id="editDeletePart" style="display: none">
+      <div id="partsTableDiv">
+        <span class="hiddenSpan" id="partsIfNoneMatch"></span>
+        <span class="hiddenSpan" id="partsIfModifiedSince"></span>
+      </div>
+      <div id="edit_delete_part_buttons">
+        <button id="btnEditPart" class="btn btn-info" type="button">编辑部件</button>
+        <button id="btnDeletePart" class="btn btn-danger" type="button">删除部件</button>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="containerDiv" id="manageContactsDiv">
   <div class="floatLeft" id="addEditContactDiv" style="display: off">
