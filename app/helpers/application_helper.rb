@@ -14,6 +14,7 @@ module ApplicationHelper
   def to_hash(record, exclusion = false)
     hash = {}
     record.attributes.each do |k,v|
+      next if k == 'tombstone'
       hash[k] = v unless exclusion and k.in? HASH_EXCLUSION
     end
 
