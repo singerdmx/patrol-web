@@ -4,7 +4,7 @@ class AssetsController < ApplicationController
   # GET /assets.json
   def index
     ActiveRecord::Base.transaction do
-      assets = Asset.where(asset_params)
+      assets = Asset.where(asset_params).where(tombstone: false)
       if params[:parts_tree_view] == 'true'
         assets_index_json = index_parts_tree_view_json_builder(assets)
       elsif params[:ui] == 'true'
@@ -71,7 +71,12 @@ class AssetsController < ApplicationController
       return
     end
 
-    get_asset.destroy
+    ActiveRecord::Base.transaction do
+      asset = get_asset
+      asset.update_attributes(tombstone: true)
+      asset.parts.each {|p| p.update_attributes(tombstone: true)}
+      asset.check_points.each {|p| p.update_attributes(tombstone: true)}
+    end
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
     Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")

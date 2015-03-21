@@ -4,7 +4,7 @@ class PartsController < ApplicationController
   # GET /parts.json
   def index
     ActiveRecord::Base.transaction do
-      parts = Part.where(part_params)
+      parts = Part.where(part_params).where(tombstone: false)
 
       parts_json = index_json_builder(parts)
       if stale?(etag: @check_points_json,
@@ -23,7 +23,7 @@ class PartsController < ApplicationController
       return
     end
 
-    Part.find(params[:id]).destroy
+    Part.find(params[:id]).update_attributes(tombstone: true)
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
     Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")

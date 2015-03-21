@@ -5,7 +5,7 @@ class CheckPointsController < ApplicationController
   # GET /check_points.json
   def index
     ActiveRecord::Base.transaction do
-      @check_points = CheckPoint.where(check_point_params)
+      @check_points = CheckPoint.where(check_point_params).where(tombstone: false)
 
       if params[:ui] == 'true'
         @check_points_json = index_ui_json_builder(@check_points)
@@ -95,7 +95,10 @@ class CheckPointsController < ApplicationController
       return
     end
 
-    CheckPoint.find(params[:id]).destroy
+    ActiveRecord::Base.transaction do
+      CheckPoint.find(params[:id]).update_attributes(tombstone: true)
+      UserPreference.where(check_point_id: params[:id]).delete_all
+    end
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
     Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")

@@ -10,19 +10,19 @@ class FactoriesController < ApplicationController
 
     factories_json = []
     ActiveRecord::Base.transaction do
-      factories = Factory.all
+      factories = Factory.where(tombstone: false)
       factories.reverse.each do |f|
         entry = to_hash(f)
         entry['subfactories'] = []
 
-        f.subfactories.reverse.each do |subf|
+        f.subfactories.select{|s| !s.tombstone}.reverse.each do |subf|
           subf_entry = to_hash(subf)
           subf_entry['areas'] = []
 
-          subf.areas.reverse.each do |area|
+          subf.areas.select{|a| !a.tombstone}.reverse.each do |area|
             area_entry = to_hash(area)
             area_entry['routes'] = []
-            area.check_routes.reverse.each do |r|
+            area.check_routes.select{|r| !r.tombstone}.reverse.each do |r|
               area_entry['routes'] << to_hash(r)
             end
             subf_entry['areas'] << area_entry

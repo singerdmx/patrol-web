@@ -932,10 +932,14 @@ setupCreatePointForm = (containerDiv) ->
             when 'POST'
               $('div#addedPointDiv').append("<span class='lavenderBackground'>
                                         <span class='hiddenSpan'>#{data.id}</span>#{data.name}</span>")
-              alert '检点创建成功'
-            when 'PUT'
-              alert '检点编辑成功'
-              updatePointsTable('div#managementData div#editDeletePoint')
+
+        switch requestType
+          when 'POST'
+            alert '检点创建成功'
+          when 'PUT'
+            alert '检点编辑成功'
+            updatePointsTable('div#managementData div#editDeletePoint')
+
         return
       error: (jqXHR, textStatus, errorThrown) ->
         alert jqXHR.responseJSON.message

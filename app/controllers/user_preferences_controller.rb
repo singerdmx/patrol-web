@@ -47,7 +47,6 @@ class UserPreferencesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_preference_params
-      params[:user_preference]
       request_para = params[:user_preference].nil? ? params : params[:user_preference]
       request_para.select{|key,value| key.in?(UserPreference.column_names())}.symbolize_keys
     end

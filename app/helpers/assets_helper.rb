@@ -4,13 +4,9 @@ module AssetsHelper
     index_result.map do |result|
       entry = to_hash(result)
       entry['points'] =
-        result.check_points.map do |point|
-          point.id
-        end
+        result.check_points.select{|p| !p.tombstone}.map {|p| p.id}
       entry['parts'] =
-        result.parts.map do |part|
-          part.id
-        end
+        result.parts.select{|p| !p.tombstone}.map {|p| p.id}
       entry.delete('manual_id') if entry['manual_id'].nil?
       entry
     end
@@ -24,7 +20,7 @@ module AssetsHelper
         entry['id'],
         entry['name'],
         entry['barcode'],
-        result.check_points.map do |point|
+        result.check_points.select{|p| !p.tombstone}.map do |point|
           point.name
         end
       ]
@@ -39,7 +35,7 @@ module AssetsHelper
       asset[:title] = '设备'
       asset[:icon] = result.parts.empty? ? 'blank.png' : 'minus.png'
       asset[:description] = result.name
-      asset[:children] = result.parts.map do |part|
+      asset[:children] = result.parts.select{|p| !p.tombstone}.map do |part|
         {
           id: part.id,
           kind: 'part',

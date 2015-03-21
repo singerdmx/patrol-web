@@ -48,4 +48,25 @@ class ApplicationController < ActionController::Base
     params
   end
 
+  # go through json object, remove 'tombstone'=false
+  # delete object that has 'tombstone'=true
+  def filter_out_tombstone(json)
+    if json.is_a?(Array)
+      json.select do |j|
+        !j.is_a?(Hash) or !j['tombstone']
+      end.map do |j|
+        filter_out_tombstone(j)
+      end
+    elsif json.is_a?(Hash)
+      json.delete('tombstone')
+      json.delete(:tombstone)
+      json.each do |k,v|
+        json[k] = filter_out_tombstone(v)
+      end
+      json
+    else
+      json
+    end
+  end
+
 end

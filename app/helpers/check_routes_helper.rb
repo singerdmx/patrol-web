@@ -3,17 +3,12 @@ require_relative '../../app/config/settings'
 module CheckRoutesHelper
   include ApplicationHelper
 
-  #replacement of the index.json.jbuilder for complicated converting logic
   def index_json_builder(check_routes, route_assets, show_name = false)
     check_routes.map do |route|
       entry = to_hash(route)
       if route_assets.nil?
-        entry['points'] = route.check_points.map do |point|
-          if show_name
-            point.name
-          else
-            point.id
-          end
+        entry['points'] = route.check_points.select{|p| !p.tombstone}.map do |point|
+          show_name ? point.name : point.id
         end
       else
         entry['assets'] = []

@@ -3,7 +3,7 @@ class ManualsController < ApplicationController
   # GET /manuals.json
   def index
     manuals = {}
-    all_manuals = Manual.all
+    all_manuals = Manual.where(tombstone: false)
     all_manuals.all.each do |m|
       manuals[m[:id]] = m[:entry]
     end

@@ -13,7 +13,7 @@ class UsersController < ApplicationController
     end
 
     ActiveRecord::Base.transaction do
-      users = User.all
+      users = User.where(tombstone: false)
       users_index_json = to_json(users)
       users_index_json = index_ui_json_builder(users_index_json) if params[:ui] == 'true'
       if stale?(etag: users_index_json,
@@ -49,7 +49,7 @@ class UsersController < ApplicationController
     ActiveRecord::Base.transaction do
       user = User.find_by_email(params[:email])
       unless user.nil?
-        render json: {:message => "用户 #{params[:email]} 已经存在！"}.to_json, status: :unprocessable_entity
+        render json: {message: "用户 #{params[:email]} 已经存在！"}.to_json, status: :unprocessable_entity
         return
       end
 
@@ -73,7 +73,10 @@ class UsersController < ApplicationController
       return
     end
 
-    User.find(params[:id]).destroy
+    ActiveRecord::Base.transaction do
+      User.find(params[:id]).update_attributes(tombstone: true)
+      UserPreference.where(user_id: params[:id]).delete_all
+    end
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
     Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")

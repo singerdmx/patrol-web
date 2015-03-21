@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   end
 
   def all_points
-    points = Set.new()
+    points = Set.new
     if is_user?
       routes = check_routes
     else
@@ -24,10 +24,9 @@ class User < ActiveRecord::Base
       routes = CheckRoute.all
     end
 
-    routes.each { |route|
+    routes.each do |route|
       points.merge(route.check_points)
-
-    }
+    end
 
     points
   end
