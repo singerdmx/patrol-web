@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150321182102) do
+ActiveRecord::Schema.define(version: 20150321182204) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -164,6 +164,7 @@ ActiveRecord::Schema.define(version: 20150321182102) do
     t.integer  "default_assigned_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "tombstone",           default: false
   end
 
   add_index "parts", ["asset_id"], name: "index_parts_on_asset_id", using: :btree
