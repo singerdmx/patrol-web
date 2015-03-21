@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150321180102) do
+ActiveRecord::Schema.define(version: 20150321181133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 20150321180102) do
     t.datetime "updated_at"
     t.string   "barcode"
     t.integer  "manual_id"
+    t.boolean  "tombstone",       default: false
   end
 
   add_index "assets", ["barcode"], name: "index_assets_on_barcode", using: :btree
