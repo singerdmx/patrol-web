@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150321181552) do
+ActiveRecord::Schema.define(version: 20150321181727) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -117,6 +117,7 @@ ActiveRecord::Schema.define(version: 20150321181552) do
     t.string   "name"
     t.integer  "area_id"
     t.string   "contacts"
+    t.boolean  "tombstone",   default: false
   end
 
   add_index "check_routes", ["area_id"], name: "index_check_routes_on_area_id", using: :btree
