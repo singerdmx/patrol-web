@@ -62,6 +62,10 @@ class User < ActiveRecord::Base
     true
   end
 
-  private :check_points, :check_points=
+  def active_for_authentication?
+    super and !self.tombstone?
+  end
 
+  private :check_points, :check_points=
+  
 end
