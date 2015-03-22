@@ -9,7 +9,7 @@ module CheckPointsHelper
       entry['state'] = "" if entry['state'].nil?
       entry['default_value'] = '' if entry['default_value'].nil?
       entry['asset'] = result.asset.id
-      entry['routes'] = result.check_routes.map do |route|
+      entry['routes'] = result.check_routes.select{|r| !r.tombstone}.map do |route|
         route.id
       end
       entry
@@ -20,10 +20,6 @@ module CheckPointsHelper
     index_result.map do |result|
       entry = to_hash(result)
       entry['asset'] = result.asset.id
-      entry['routes'] = result.check_routes.map do |route|
-        route.id
-      end
-
       entry['barcode'] = '无' if entry['barcode'].nil?
       choice = []
       choice = JSON.parse(entry['choice']) unless entry['choice'].nil?
@@ -41,7 +37,7 @@ module CheckPointsHelper
         get_category_string(entry['category']),
         choice,
         result.asset.name,
-        result.check_routes.map do |route|
+        result.check_routes.select{|r| !r.tombstone}.map do |route|
           route.name
         end,
         entry['default_assigned_id'].nil? ? '' : User.find(entry['default_assigned_id']).name

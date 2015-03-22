@@ -57,7 +57,7 @@ class AssetsController < ApplicationController
       end
 
       for part_id in (params[:parts].blank? ? [] : params[:parts])
-        part = CheckPoint.find(part_id)
+        part = Part.find(part_id)
         delete_dummy_asset(part, asset.id)
         part.asset_id = asset.id
         part.save

@@ -297,7 +297,7 @@ detachPoint = (point) ->
       point.parent().parent().parent().remove()
       return
     error: (jqXHR, textStatus, errorThrown) ->
-      alert jqXHR.responseJSON.message
+      showErrorPage(jqXHR.responseText)
       return
     timeout: defaultAjaxCallTimeout
 
@@ -942,7 +942,7 @@ setupCreatePointForm = (containerDiv) ->
 
         return
       error: (jqXHR, textStatus, errorThrown) ->
-        alert jqXHR.responseJSON.message
+        showErrorPage(jqXHR.responseText)
         return
       timeout: defaultAjaxCallTimeout
   return
@@ -1053,7 +1053,7 @@ attachPointToRoute = (pointId, routeId, containerDiv) ->
       alert '已经成功连接检点到设备！'
       return
     error: (jqXHR, textStatus, errorThrown) ->
-      alert jqXHR.responseJSON.message
+      showErrorPage(jqXHR.responseText)
       return
     timeout: defaultAjaxCallTimeout
   return
@@ -1147,7 +1147,7 @@ attachPointToAsset = (pointId, assetId, containerDiv) ->
       alert '已经成功连接检点到设备！'
       return
     error: (jqXHR, textStatus, errorThrown) ->
-      alert jqXHR.responseJSON.message
+      showErrorPage(jqXHR.responseText)
       return
     timeout: defaultAjaxCallTimeout
   return
@@ -1212,7 +1212,7 @@ deletePoint = (pointId, containerDiv) ->
       alert '检点已经成功删除！'
       return
     error: (jqXHR, textStatus, errorThrown) ->
-      alert jqXHR.responseJSON.message
+      showErrorPage(jqXHR.responseText)
       return
     timeout: defaultAjaxCallTimeout
   return
@@ -1389,7 +1389,7 @@ setupCreateRouteDiv = ->
 
         return
       error: (jqXHR, textStatus, errorThrown) ->
-        alert jqXHR.responseJSON.message
+        showErrorPage(jqXHR.responseText)
         return
       timeout: defaultAjaxCallTimeout
     return
@@ -1579,7 +1579,7 @@ setupEditDeleteRouteDiv = (containerDiv) ->
             alert '路线已经成功删除！'
             return
           error: (jqXHR, textStatus, errorThrown) ->
-            alert jqXHR.responseJSON.message
+            showErrorPage(jqXHR.responseText)
             return
           timeout: defaultAjaxCallTimeout
 

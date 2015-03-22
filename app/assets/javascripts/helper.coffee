@@ -606,7 +606,7 @@ submitEditProblemForm = (containerDiv, _suggestions) ->
       $("#{containerDiv} button#btnReturn").trigger('click')
       return
     error: (jqXHR, textStatus, errorThrown) ->
-      alert jqXHR.responseJSON.message
+      showErrorPage(jqXHR.responseText)
       return
     timeout: defaultAjaxCallTimeout
 
@@ -656,7 +656,7 @@ window.setupManageUsersDiv = (containerDiv) ->
         $("#{containerDiv} div#usersTableDiv, #{containerDiv} div#add_delete_user_buttons").show()
         return
       error: (jqXHR, textStatus, errorThrown) ->
-        alert jqXHR.responseJSON.message
+        showErrorPage(jqXHR.responseText)
         return
       timeout: defaultAjaxCallTimeout
 
@@ -741,7 +741,7 @@ window.deleteTreeNode = (node) ->
       $("div#routesDiv div#routeList ul#routeListGroup > li.list-group-item[data-id='#{node.data('id')}']").remove()
       return
     error: (jqXHR, textStatus, errorThrown) ->
-      alert jqXHR.responseJSON.message
+      showErrorPage(jqXHR.responseText)
       return
     timeout: defaultAjaxCallTimeout
   return
@@ -850,7 +850,7 @@ deleteUser = (userId, containerDiv) ->
       alert '用户已经成功删除！'
       return
     error: (jqXHR, textStatus, errorThrown) ->
-      alert jqXHR.responseJSON.message
+      showErrorPage(jqXHR.responseText)
       return
     timeout: defaultAjaxCallTimeout
   return
@@ -987,7 +987,7 @@ window.setupManageContactsDiv = (containerDiv) ->
         $("#{containerDiv} div#addEditContactDiv, #{containerDiv} button#btnAddNewContact, #{containerDiv} button#btnEditContact").hide()
         return
       error: (jqXHR, textStatus, errorThrown) ->
-        alert jqXHR.responseJSON.message
+        showErrorPage(jqXHR.responseText)
         return
       timeout: defaultAjaxCallTimeout
 
@@ -1012,7 +1012,7 @@ window.setupManageContactsDiv = (containerDiv) ->
             alert '联系人已经成功删除！'
             return
           error: (jqXHR, textStatus, errorThrown) ->
-            alert jqXHR.responseJSON.message
+            showErrorPage(jqXHR.responseText)
             return
           timeout: defaultAjaxCallTimeout
 
@@ -1041,6 +1041,8 @@ window.setupCreateAssetDiv = (setupBtnAddPointOrPartToAsset) ->
 
     pointIds = (parseInt($(pointId).text()) for pointId in $('div#createAsset div#addedPointDiv > span > span'))
     assetInfo['points'] = pointIds
+    partIds = (parseInt($(partId).text()) for partId in $('div#createAsset div#addedPartDiv > span > span'))
+    assetInfo['parts'] = partIds
     $.ajax
       url: getBaseURL() + '/assets.json'
       type: 'POST',
@@ -1052,7 +1054,7 @@ window.setupCreateAssetDiv = (setupBtnAddPointOrPartToAsset) ->
         clearCreateAssetForm()
         return
       error: (jqXHR, textStatus, errorThrown) ->
-        alert jqXHR.responseJSON.message
+        showErrorPage(jqXHR.responseText)
         return
       timeout: defaultAjaxCallTimeout
     return
@@ -1062,6 +1064,7 @@ window.setupCreateAssetDiv = (setupBtnAddPointOrPartToAsset) ->
 clearCreateAssetForm = ->
   resetToPlaceholderValue($('div#createAsset input'))
   $('div#createAsset div#addedPointDiv > span').remove()
+  $('div#createAsset div#addedPartDiv > span').remove()
   return
 
 window.setupDeleteAssetDiv = (containerDiv) ->
@@ -1089,7 +1092,7 @@ deleteAsset = (assetId, containerDiv) ->
       alert '设备已经成功删除！'
       return
     error: (jqXHR, textStatus, errorThrown) ->
-      alert jqXHR.responseJSON.message
+      showErrorPage(jqXHR.responseText)
       return
     timeout: defaultAjaxCallTimeout
 

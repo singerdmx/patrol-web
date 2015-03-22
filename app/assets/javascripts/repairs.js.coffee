@@ -196,26 +196,26 @@ setupManageDataDiv = ->
         $('div#managementData div#categorySelection').show()
       when 'deleteAsset'
         updateAssetsTable('div#managementData div#deleteAsset')
-#      when 'createPart'
-#        $('div#managementData span#switchPartTo').text('')
-#        $('div#createPart button#btnCancelCreatePart').text('重置')
-#        $('div#createPart > h2:first').text('创建部件')
-#        $('div#managementData div#categorySelection').show()
-#        setupCreatePartForm('div#createPart')
-#      when 'editDeletePart'
-#        $('div#managementData div#partsTableDiv, div#managementData div#edit_delete_part_buttons').show()
-#        $('div#createPart').hide()
-#        $('div#createPart button#btnCancelCreatePart').text('返回')
-#        $('div#createPart > h2:first').text('编辑部件')
-#        $('div#managementData div#categorySelection').hide()
-#        updatePartsTable('div#managementData div#editDeletePart')
-#      when 'attachPartToAsset'
-#        updateAssetsTable('div#managementData div#attachPartToAsset')
-#        updatePartsTable('div#managementData div#attachPartToAsset')
+      when 'createPart'
+        $('div#managementData span#switchPartTo').text('')
+        $('div#createPart button#btnCancelCreatePart').text('重置')
+        $('div#createPart > h2:first').text('创建部件')
+        $('div#managementData div#categorySelection').show()
+        setupCreatePartForm('div#createPart')
+      when 'editDeletePart'
+        $('div#managementData div#partsTableDiv, div#managementData div#edit_delete_part_buttons').show()
+        $('div#createPart').hide()
+        $('div#createPart button#btnCancelCreatePart').text('返回')
+        $('div#createPart > h2:first').text('编辑部件')
+        $('div#managementData div#categorySelection').hide()
+        updatePartsTable('div#managementData div#editDeletePart')
+      when 'attachPartToAsset'
+        updateAssetsTable('div#managementData div#attachPartToAsset')
+        updatePartsTable('div#managementData div#attachPartToAsset')
     return
 
   setupCreatePartDiv()
-#  setupEditDeletePartDiv('div#managementData div#editDeletePart')
+  setupEditDeletePartDiv('div#managementData div#editDeletePart')
   setupCreateAssetDiv(setupBtnAddPartToAsset)
   setupDeleteAssetDiv('div#managementData div#deleteAsset')
 #  setupAttachPartToAssetDiv('div#managementData div#attachPartToAsset')
@@ -283,7 +283,7 @@ setupCreatePartForm = (containerDiv) ->
 
         return
       error: (jqXHR, textStatus, errorThrown) ->
-        alert jqXHR.responseJSON.message
+        showErrorPage(jqXHR.responseText)
         return
       timeout: defaultAjaxCallTimeout
   return
@@ -327,11 +327,130 @@ setupCreatePartDiv = ->
       $('div#managementData span#switchPartTo').text('')
       $("#{_switchPartTo}").show()
       $('div#createPart').hide()
-#      switch $('div#createPart > h2:first').text()
-#        when '编辑部件'
-#          updatePartsTable('div#managementData div#editDeletePart')
+      switch $('div#createPart > h2:first').text()
+        when '编辑部件'
+          updatePartsTable('div#managementData div#editDeletePart')
       return
 
     return
 
   return
+
+updatePartsTable = (containerDiv) ->
+  $.ajax
+    url: getBaseURL() + '/parts.json?ui=true'
+    beforeSend: (xhr) ->
+      setXhrRequestHeader(xhr, containerDiv, 'parts')
+      return
+    success: (data, textStatus, jqHXR) ->
+      if jqHXR.status is 200
+        columns = [
+          { "sTitle": "ID" },
+          { "sTitle": "名称" },
+          { "sTitle": "条形码" },
+          { "sTitle": "设备" },
+          {
+            "sTitle": "责任人",
+            "sClass": "center"
+          }
+        ]
+        if $("#{containerDiv} table#partsTable > tbody[role='alert'] td.dataTables_empty").length is 0
+          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
+          oTable = $("#{containerDiv} table#partsTable").dataTable()
+          oTable.fnDestroy() unless oTable?
+
+        $("#{containerDiv} div#partsTable_wrapper").remove()
+        $("#{containerDiv} div#partsTableDiv").append('<table id="partsTable"></table>')
+        $("#{containerDiv} table#partsTable").dataTable
+          'aaData': data
+          'aoColumns': columns
+          'aaSorting': [[ 3, 'desc' ]]
+          'iDisplayLength': 5
+          'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, '全部']]
+
+        oTable = $("#{containerDiv} table#partsTable").dataTable()
+        oTable.fnSetColumnVis(0, false)
+        $("#{containerDiv} table#partsTable > tbody").on(
+          'click',
+          'tr',
+          ->
+            oTable = $("#{containerDiv} table#partsTable").dataTable()
+            oTable.$('tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
+            $(this).addClass('mediumSeaGreenBackground')
+            return
+        )
+
+        $("#{containerDiv} span#partsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} span#partsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    ifModified: true,
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
+  return
+
+setupEditDeletePartDiv = (containerDiv) ->
+  $("#{containerDiv} button#btnEditPart").click ->
+    oTable = $("#{containerDiv} table#partsTable").dataTable()
+    _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
+    if _selectedTr.length is 0
+      alert '请选择部件！'
+    else
+      row = oTable.fnGetData(_selectedTr[0])
+
+      _switchPartTo = "#{containerDiv} div#partsTableDiv, #{containerDiv} div#edit_delete_part_buttons"
+      $('div#managementData span#switchPartTo').text(_switchPartTo)
+      $(_switchPartTo).hide()
+      $('div#createPart').show()
+      setupCreatePartForm('div#createPart')
+      $.ajax
+        url: getBaseURL() + "/parts/#{row[0]}.json?r=#{getRandomArbitrary(0, 10240)}" # disable browser cache for the same GET
+        success: (data, textStatus, jqHXR) ->
+          if jqHXR.status is 200
+            $('div#createPart span#partId').text(data.id)
+            $('div#createPart input#partName').val(data.name)
+            $('div#createPart input#partDescription').val(data.description)
+            $('div#createPart input#partBarcode').val(data.barcode)
+            if data.default_assigned_id
+              $('div#createPart input#part_assigned_to').val(data.default_assigned_user)
+              $('div#createPart span#part_assigned_to_id').text(data.default_assigned_id)
+
+          return
+        error: (jqXHR, textStatus, errorThrown) ->
+          showErrorPage(jqXHR.responseText)
+          return
+        ifModified: true,
+        dataType: 'json',
+        timeout: defaultAjaxCallTimeout
+
+    return
+
+  $("#{containerDiv} button#btnDeletePart").click ->
+    oTable = $("#{containerDiv} table#partsTable").dataTable()
+    _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
+    if _selectedTr.length is 0
+      alert '请选择部件！'
+    else
+      row = oTable.fnGetData(_selectedTr[0])
+      deletePart(row[0], containerDiv) if confirm("您确定要删除部件 '#{row[1]}' 条形码 '#{row[2]}' 吗？")
+
+    return
+
+  return
+
+deletePart = (partId, containerDiv) ->
+  $.ajax
+    url: getBaseURL() + "/parts/#{partId}.json"
+    type: 'DELETE',
+    contentType: 'application/json',
+    dataType: 'json',
+    success: (data, textStatus, jqHXR) ->
+      updatePartsTable(containerDiv)
+      alert '部件已经成功删除！'
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    timeout: defaultAjaxCallTimeout
+  return 

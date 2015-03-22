@@ -6,14 +6,32 @@ class PartsController < ApplicationController
     ActiveRecord::Base.transaction do
       parts = Part.where(part_params).where(tombstone: false)
 
-      parts_json = index_json_builder(parts)
-      if stale?(etag: @check_points_json,
+      if params[:ui] == 'true'
+        parts_json = index_ui_json_builder(parts)
+      else
+        parts_json = index_json_builder(parts)
+      end
+      if stale?(etag: parts_json,
                 last_modified: parts.maximum(:updated_at))
         render json: parts_json.to_json, status: :ok
       else
         head :not_modified
       end
     end
+  end
+
+  # GET /parts/1.json
+  def show
+    ActiveRecord::Base.transaction do
+      part = Part.find(params[:id])
+      p = to_hash(part)
+      p['default_assigned_user'] = User.find(p['default_assigned_id']).name if p['default_assigned_id']
+      p['asset'] = to_hash(Asset.find(p['asset_id']))
+      render json: p.to_json
+    end
+  rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
+    render json: {message: e.to_s}.to_json, status: :not_found
   end
 
   # POST /part.json
