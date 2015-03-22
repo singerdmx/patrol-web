@@ -218,7 +218,7 @@ setupManageDataDiv = ->
   setupEditDeletePartDiv('div#managementData div#editDeletePart')
   setupCreateAssetDiv(setupBtnAddPartToAsset)
   setupDeleteAssetDiv('div#managementData div#deleteAsset')
-#  setupAttachPartToAssetDiv('div#managementData div#attachPartToAsset')
+  setupAttachPartToAssetDiv('div#managementData div#attachPartToAsset')
 
   return
 
@@ -448,6 +448,45 @@ deletePart = (partId, containerDiv) ->
     success: (data, textStatus, jqHXR) ->
       updatePartsTable(containerDiv)
       alert '部件已经成功删除！'
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    timeout: defaultAjaxCallTimeout
+  return
+
+setupAttachPartToAssetDiv = (containerDiv) ->
+  $("#{containerDiv} button#btnAttachPartToAsset").click ->
+    oTable1 = $("#{containerDiv} table#assetsTable").dataTable()
+    _selectedTr1 = oTable1.$('tr.mediumSeaGreenBackground')
+    if _selectedTr1.length is 0
+      alert '请选择设备！'
+      return
+
+    oTable2 = $("#{containerDiv} table#partsTable").dataTable()
+    _selectedTr2 = oTable2.$('tr.mediumSeaGreenBackground')
+    if _selectedTr2.length is 0
+      alert '请选择部件！'
+      return
+
+    row1 = oTable1.fnGetData(_selectedTr1[0])
+    row2 = oTable2.fnGetData(_selectedTr2[0])
+    attachPartToAsset(row2[0], row1[0], containerDiv) if confirm("连接部件 '#{row2[1]}' 条形码 '#{row2[2]}' 到设备 '#{row1[1]}' 条形码 '#{row1[2]}' 吗？")
+
+    return
+
+  return
+
+attachPartToAsset = (partId, assetId, containerDiv) ->
+  $.ajax
+    url: getBaseURL() + "/assets/#{assetId}/attach_part?part=#{partId}"
+    type: 'PUT',
+    contentType: 'application/json',
+    dataType: 'json',
+    success: (data, textStatus, jqHXR) ->
+      updateAssetsTable(containerDiv)
+      updatePartsTable(containerDiv)
+      alert '已经成功连接部件到设备！'
       return
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)

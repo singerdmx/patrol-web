@@ -3,6 +3,7 @@ Blog::Application.routes.draw do
   resources :notification
   resources :assets do
     put :attach_point
+    put :attach_part
   end
   resources :check_routes, :path => :routes do
     put :detach_point

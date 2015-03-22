@@ -90,7 +90,7 @@ class AssetsController < ApplicationController
     render json: {message: e.to_s}.to_json, status: :unprocessable_entity
   end
 
-  #PUT /assets/1/attach_point?point=id
+  # PUT /assets/1/attach_point?point=id
   def attach_point
     ActiveRecord::Base.transaction do
       point = CheckPoint.find(params[:point])
@@ -99,9 +99,23 @@ class AssetsController < ApplicationController
       point.save
     end
     render json: { success: true }.to_json, status: :ok
-  rescue ActiveRecord::RecordNotFound
-    Rails.logger.error("Bad point id from parameter #{params[:point]}")
-    render json: {message: "Bad point id from parameter #{params[:point]}"}, status: :bad_request
+  rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
+    render json: {message: e.to_s}.to_json, status: :unprocessable_entity
+  end
+
+  # PUT /assets/1/attach_part?part=id
+  def attach_part
+    ActiveRecord::Base.transaction do
+      part = Part.find(params[:part])
+      delete_dummy_asset(part, params[:asset_id])
+      part.asset_id = params[:asset_id]
+      part.save
+    end
+    render json: { success: true }.to_json, status: :ok
+  rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
+    render json: {message: e.to_s}.to_json, status: :unprocessable_entity
   end
 
   private

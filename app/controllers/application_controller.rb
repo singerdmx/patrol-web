@@ -78,7 +78,7 @@ class ApplicationController < ActionController::Base
   end
 
   def delete_dummy_asset(p, new_asset_id = nil)
-    return if new_asset_id and p.asset_id == new_asset_id
+    return if new_asset_id and p.asset_id.to_i == new_asset_id.to_i
 
     dummy_asset = Asset.find(p.asset_id)
     return unless dummy_asset and dummy_asset.barcode == p.barcode and
