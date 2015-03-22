@@ -24,7 +24,6 @@ class AssetsController < ApplicationController
     render json: {message: e.to_s}.to_json, status: :not_found
   end
 
-  # GET /assets/1
   # GET /assets/1.json
   # GET http://localhost:3000/assets/780672318863.json?barcode=true
   def show
@@ -32,6 +31,7 @@ class AssetsController < ApplicationController
       asset = get_asset
       asset_hash = to_hash(asset)
       asset_hash['points'] = asset.check_points
+      asset_hash['parts'] = asset.parts
       render json: asset_hash.to_json
     end
   rescue Exception => e

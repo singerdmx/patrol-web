@@ -5,6 +5,7 @@ $ ->
   $('div.containerDiv').first().show()
   updateAssetList('div#assets')
   setupAssetsDiv('div#assets')
+  setupHistoryDiv('div#historyDiv')
   setupProblemsDiv('div#problemsDiv')
 
   removeFlashNotice()
@@ -492,4 +493,113 @@ attachPartToAsset = (partId, assetId, containerDiv) ->
       showErrorPage(jqXHR.responseText)
       return
     timeout: defaultAjaxCallTimeout
+  return
+
+setupHistoryDiv = (containerDiv) ->
+  setupCalendar(containerDiv, 100)
+  $("#{containerDiv} input#barcodeInput").val('')
+  $("#{containerDiv} button#barcodeButton").click ->
+    _val = $("#{containerDiv} input#barcodeInput").val()
+    unless $.trim(_val)
+      alert '条形码不能为空！'
+      return
+
+    updateChart(containerDiv, {barcode: _val})
+    return
+
+  $("#{containerDiv} button#btnPartSelection").click ->
+    updatePartChart(containerDiv, {id: $("#{containerDiv} select#partSelection").val()})
+    return
+  return
+
+updateChart = (containerDiv, params) ->
+  $("#{containerDiv} div#chartDiv").html('')
+  $("#{containerDiv} div.historyBanner").hide()
+
+  if params.barcode
+    $.ajax
+      url: getBaseURL() + "/assets/#{params.barcode}.json?barcode=true"
+      success: (data, textStatus, jqHXR) ->
+        if jqHXR.status is 200
+          if data.parts.length == 1
+            updateChart(containerDiv, {id: data.parts[0].id})
+            return
+
+          $("#{containerDiv} div#partSelectionBanner").show()
+          $partSelection = $("#{containerDiv} div#partSelectionBanner select#partSelection")
+          $partSelection.html('')
+          for part in data.parts
+            $partSelection.append("<option value='#{part.id}'>#{part.name} #{part.description}</option>")
+
+        return
+      error: (jqXHR, textStatus, errorThrown) ->
+        if jqXHR.status is 404
+          updatePartChart(containerDiv, params)
+        else
+          showErrorPage(jqXHR.responseText)
+
+        return
+      dataType: 'json',
+      timeout: defaultAjaxCallTimeout
+  else
+    updatePartChart(containerDiv, params)
+
+  return
+
+updatePartChart = (containerDiv, params) ->
+  $("#{containerDiv} div#chartDiv").html('')
+  $("#{containerDiv} div#noHistoryBanner, #{containerDiv} div#errorBanner, #{containerDiv} div#infoBanner").hide()
+
+  start_time = getDatetimePickerEpoch("#{containerDiv} div#startTime")
+  end_time = getDatetimePickerEpoch("#{containerDiv} div#endTime") + 86400 # Add one day for 86400 seconds (60 * 60 * 24)
+  request_params = { check_time: "#{start_time}..#{end_time}" }
+  _id = params.id
+  _barcode = params.barcode
+
+  unless _barcode is undefined
+    request_params.barcode = true
+    _id = _barcode
+
+#  $.ajax
+#    url: getBaseURL() + "/parts/#{_id}/history.json?aggregate=30"
+#    data: request_params
+#    success: (data, textStatus, jqHXR) ->
+#      if jqHXR.status is 200
+#        $('div#errorBanner, div#infoBanner').hide()
+#        _part = data.part
+#        $("#{containerDiv} input#barcodeInput").val(_part.barcode)
+#        if data.result.length is 0
+#          $('div#noHistoryBanner').text('该部件没有历史纪录').show()
+#        else
+#          $('div#noHistoryBanner').hide()
+#          title = "#{_part.name}   #{_part.description}"
+#          switch _part.category
+#            when 30, 50
+#              [min, max, canvasOverlayObjects] = getCanvasOverlayObjects(_part)
+#
+#              if data.group
+#                renderHighLowChart('chartDiv', title, data.result, min, max, canvasOverlayObjects)
+#              else
+#                renderLineChart('chartDiv', title, data.result, min, max, canvasOverlayObjects)
+#            when 40,41
+#              renderBarChart('chartDiv', title, data.result, data.group, JSON.parse(_part.choice))
+#            when 10,30
+#              $('div#infoBanner').text("在选择时间范围内共巡检了#{data.result}次")
+#              $('div#infoBanner').show()
+#            else
+#              $('div#noHistoryBanner').text('该巡部件没有历史纪录').show()
+#
+#      return
+#    error: (jqXHR, textStatus, errorThrown) ->
+#      if jqXHR.status is 404
+#        $('div#noHistoryBanner,div#infoBanner').hide()
+#        $('div#errorBanner').text(jqXHR.responseJSON.error)
+#        $('div#errorBanner').show()
+#      else
+#        showErrorPage(jqXHR.responseText)
+#
+#      return
+#    dataType: 'json',
+#    timeout: defaultAjaxCallTimeout
+
   return 

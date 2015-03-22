@@ -26,6 +26,54 @@
   </div>
 </div>
 <div class="containerDiv" id="historyDiv">
+  <div style="width: 60%">
+    <div style="width: 50%" class="calendarWidgetDiv">
+      <div>起始时间</div>
+      <div id="startTime" class="input-append">
+        <input data-format="yyyy-MM-dd" type="text"/>
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+              </i>
+            </span>
+      </div>
+    </div>
+    <div style="width: 50%" class="calendarWidgetDiv">
+      <div>结束时间</div>
+      <div id="endTime" class="input-append">
+        <input data-format="yyyy-MM-dd" type="text"/>
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+              </i>
+            </span>
+      </div>
+    </div>
+  </div>
+  <div class="input-group">
+    <div style="width: 20%">
+          <span class="input-group-btn">
+            <button class="btn btn-info" type="button" id="barcodeButton">更新</button>
+          </span>
+    </div>
+    <div style="width: 80%">
+      <input type="text" class="form-control" id="barcodeInput" placeholder="条形码"/>
+    </div>
+  </div>
+  <div class="alert alert-info historyBanner" id="partSelectionBanner" style="display: none">
+    <div>
+      <span>选择部件</span>
+    </div>
+    <div>
+      <select class="form-control" id="partSelection">
+      </select>
+    </div>
+    <div>
+      <button class="btn btn-primary" type="button" id="btnPointSelection"/>提交</button>
+    </div>
+  </div>
+  <div class="alert alert-warning historyBanner" id="noHistoryBanner">请输入条形码并更新</div>
+  <div class="alert alert-danger historyBanner" id="errorBanner" style="display: none"></div>
+  <div class="alert alert-info historyBanner" id="infoBanner" style="display: none"></div>
+  <div id="chartDiv"></div>
 </div>
 <div class="containerDiv" id="problemsDiv">
   <div id="editProblemsDiv" style="display: none" class="submissionForm">
