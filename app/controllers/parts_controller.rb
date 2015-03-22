@@ -63,7 +63,11 @@ class PartsController < ApplicationController
       return
     end
 
-    Part.find(params[:id]).update_attributes(tombstone: true)
+    ActiveRecord::Base.transaction do
+      part = Part.find(params[:id])
+      delete_dummy_asset(part)
+      part.update_attributes(tombstone: true)
+    end
     render json: { success: true }.to_json, status: :ok
   rescue Exception => e
     Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")

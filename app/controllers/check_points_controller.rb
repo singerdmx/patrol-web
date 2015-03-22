@@ -87,7 +87,9 @@ class CheckPointsController < ApplicationController
     end
 
     ActiveRecord::Base.transaction do
-      CheckPoint.find(params[:id]).update_attributes(tombstone: true)
+      point = CheckPoint.find(params[:id])
+      delete_dummy_asset(point)
+      point.update_attributes(tombstone: true)
       UserPreference.where(check_point_id: params[:id]).delete_all
     end
     render json: { success: true }.to_json, status: :ok
