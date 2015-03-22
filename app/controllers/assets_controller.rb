@@ -1,6 +1,5 @@
 class AssetsController < ApplicationController
   include AssetsHelper
-  # GET /assets
   # GET /assets.json
   def index
     ActiveRecord::Base.transaction do
@@ -8,7 +7,7 @@ class AssetsController < ApplicationController
       if params[:parts_tree_view] == 'true'
         assets_index_json = index_parts_tree_view_json_builder(assets)
       elsif params[:ui] == 'true'
-        assets_index_json = index_ui_json_builder(assets)
+        assets_index_json = index_ui_json_builder(assets, params[:repair] == 'true')
       else
         assets_index_json =  index_json_builder(assets)
       end
@@ -50,10 +49,16 @@ class AssetsController < ApplicationController
 
     ActiveRecord::Base.transaction do
       asset = Asset.create!(asset_params)
-      for pointId in params[:points]
-        point = CheckPoint.find(pointId)
+      for point_id in (params[:points].blank?  ? [] : params[:points])
+        point = CheckPoint.find(point_id)
         point.asset_id = asset.id
         point.save
+      end
+
+      for part_id in (params[:parts].blank? ? [] : params[:parts])
+        part = CheckPoint.find(part_id)
+        part.asset_id = asset.id
+        part.save
       end
 
       render json: asset.to_json, status: :created

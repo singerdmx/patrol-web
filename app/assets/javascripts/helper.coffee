@@ -1020,6 +1020,137 @@ window.setupManageContactsDiv = (containerDiv) ->
 
   return
 
+window.setupCreateAssetDiv = (setupBtnAddPointOrPartToAsset) ->
+  setupBtnAddPointOrPartToAsset()
+
+  $('div#createAsset button#btnCancelCreateAsset').click(clearCreateAssetForm)
+
+  $('div#createAsset button#btnCreateAsset').click ->
+    $assetName = $('div#createAsset input#assetName')
+    if isInputValueEmpty($assetName)
+      alert '请填写名称！'
+      return
+
+    assetInfo = {}
+    assetInfo['name'] = $assetName.val()
+
+    $assetDescription = $('div#createAsset input#assetDescription')
+    assetInfo['description'] = $assetDescription.val() unless isInputValueEmpty($assetDescription)
+    $assetBarcode = $('div#createAsset input#assetBarcode')
+    assetInfo['barcode'] = $assetBarcode.val() unless isInputValueEmpty($assetBarcode)
+
+    pointIds = (parseInt($(pointId).text()) for pointId in $('div#createAsset div#addedPointDiv > span > span'))
+    assetInfo['points'] = pointIds
+    $.ajax
+      url: getBaseURL() + '/assets.json'
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(assetInfo),
+      dataType: 'json',
+      success: (data, textStatus, jqHXR) ->
+        alert '设备创建成功'
+        clearCreateAssetForm()
+        return
+      error: (jqXHR, textStatus, errorThrown) ->
+        alert jqXHR.responseJSON.message
+        return
+      timeout: defaultAjaxCallTimeout
+    return
+
+  return
+
+clearCreateAssetForm = ->
+  resetToPlaceholderValue($('div#createAsset input'))
+  $('div#createAsset div#addedPointDiv > span').remove()
+  return
+
+window.setupDeleteAssetDiv = (containerDiv) ->
+  $("#{containerDiv} button#btnDeleteAsset").click ->
+    oTable = $("#{containerDiv} table#assetsTable").dataTable()
+    _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
+    if _selectedTr.length is 0
+      alert '请选择设备！'
+    else
+      row = oTable.fnGetData(_selectedTr[0])
+      deleteAsset(row[0], containerDiv) if confirm("您确定要删除设备 '#{row[1]}' 条形码 '#{row[2]}' 吗？")
+
+    return
+
+  return
+
+deleteAsset = (assetId, containerDiv) ->
+  $.ajax
+    url: getBaseURL() + "/assets/#{assetId}.json"
+    type: 'DELETE',
+    contentType: 'application/json',
+    dataType: 'json',
+    success: (data, textStatus, jqHXR) ->
+      updateAssetsTable(containerDiv)
+      alert '设备已经成功删除！'
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      alert jqXHR.responseJSON.message
+      return
+    timeout: defaultAjaxCallTimeout
+
+  return
+
+window.updateAssetsTable = (containerDiv) ->
+  repair = $('span#logo').text() is '报修'
+  $.ajax
+    url: getBaseURL() + "/assets.json?ui=true&repair=#{repair}"
+    beforeSend: (xhr) ->
+      setXhrRequestHeader(xhr, containerDiv, 'assets')
+      return
+    success: (data, textStatus, jqHXR) ->
+      if jqHXR.status is 200
+        for record in data
+          record[3] = joinStringArrayWithBR(record[3])
+
+        sTitle = "检点"
+        sTitle = "部件" if repair
+        columns = [
+          { "sTitle": "ID" },
+          { "sTitle": "名称" },
+          { "sTitle": "条形码" },
+          { "sTitle": sTitle }
+        ]
+        if $("#{containerDiv} table#assetsTable > tbody[role='alert'] td.dataTables_empty").length is 0
+          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
+          oTable = $("#{containerDiv} table#assetsTable").dataTable()
+          oTable.fnDestroy() unless oTable?
+
+        $("#{containerDiv} div#assetsTable_wrapper").remove()
+        $("#{containerDiv} div#assetsTableDiv").append('<table id="assetsTable"></table>')
+        $("#{containerDiv} table#assetsTable").dataTable
+          'aaData': data
+          'aoColumns': columns
+          'aaSorting': [[ 1, 'desc' ]]
+          'iDisplayLength': 5
+          'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, '全部']]
+
+        oTable = $("#{containerDiv} table#assetsTable").dataTable()
+        oTable.fnSetColumnVis(0, false)
+        $("#{containerDiv} table#assetsTable > tbody").on(
+          'click',
+          'tr',
+        ->
+          oTable = $("#{containerDiv} table#assetsTable").dataTable()
+          oTable.$('tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
+          $(this).addClass('mediumSeaGreenBackground')
+          return
+        )
+
+        $("#{containerDiv} span#assetsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} span#assetsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    ifModified: true,
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
+  return
+
 Route = (id, name) ->
   this.id = ko.observable(id)
   this.name = ko.observable(name)

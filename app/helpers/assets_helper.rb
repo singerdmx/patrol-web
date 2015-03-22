@@ -12,17 +12,18 @@ module AssetsHelper
     end
   end
 
-  def index_ui_json_builder(index_result)
+  def index_ui_json_builder(index_result, repair)
     index_result.map do |result|
       entry = to_hash(result)
+      points_or_parts = repair ? result.parts : result.check_points
+      points_or_parts = points_or_parts.select{|p| !p.tombstone}.map { |p| p.name }
+
       entry['barcode'] = '无' if entry['barcode'].nil?
       [
         entry['id'],
         entry['name'],
         entry['barcode'],
-        result.check_points.select{|p| !p.tombstone}.map do |point|
-          point.name
-        end
+        points_or_parts
       ]
     end
   end

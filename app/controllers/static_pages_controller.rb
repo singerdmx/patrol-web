@@ -7,7 +7,7 @@ class StaticPagesController < ApplicationController
     end
 
     respond_to do |format|
-      if user_signed_in?
+      if !current_user.tombstone and user_signed_in?
         logger.debug("logged in")
         if current_user.patrol_user?
             format.html { redirect_to "/users/#{current_user.id}" }

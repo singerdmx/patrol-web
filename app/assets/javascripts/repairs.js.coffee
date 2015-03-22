@@ -13,6 +13,7 @@ $ ->
   return unless getPageTitle() is '报修 | 管理员'
 
   setupManageUsersDiv('div#manageUsersDiv')
+  setupManageDataDiv()
   setupManageContactsDiv('div#manageContactsDiv')
   return
 
@@ -169,6 +170,167 @@ bindTreeViewClick = (containerDiv) ->
         $('div#sidebar ul > li#history').trigger('click')
       when 'delete'
         deleteTreeNode($(this)) if confirm("确认删除？")
+
+    return
+
+  return
+
+setupBtnAddPartToAsset = ->
+  $('div#createAsset button#btnAddPartToAsset').click ->
+    $('div#managementData span#switchPartTo').text('div#createAsset')
+    clearCreatePartForm()
+    $('div#createAsset').hide()
+    $('div#createPart').show()
+    setupCreatePartForm('div#createPart')
+  return
+
+setupManageDataDiv = ->
+  $('div#managementButtons ul.dropdown-menu > li > a').click ->
+    $('div#managementData > div').hide()
+    divId = $(this).data('div')
+    $("div#managementData > div##{divId}").show()
+    switch divId
+      when 'createAsset'
+        $('div#createPart button#btnCancelCreatePart').text('重置')
+        $('div#createPart > h2:first').text('创建部件')
+        $('div#managementData div#categorySelection').show()
+      when 'deleteAsset'
+        updateAssetsTable('div#managementData div#deleteAsset')
+#      when 'createPart'
+#        $('div#managementData span#switchPartTo').text('')
+#        $('div#createPart button#btnCancelCreatePart').text('重置')
+#        $('div#createPart > h2:first').text('创建部件')
+#        $('div#managementData div#categorySelection').show()
+#        setupCreatePartForm('div#createPart')
+#      when 'editDeletePart'
+#        $('div#managementData div#partsTableDiv, div#managementData div#edit_delete_part_buttons').show()
+#        $('div#createPart').hide()
+#        $('div#createPart button#btnCancelCreatePart').text('返回')
+#        $('div#createPart > h2:first').text('编辑部件')
+#        $('div#managementData div#categorySelection').hide()
+#        updatePartsTable('div#managementData div#editDeletePart')
+#      when 'attachPartToAsset'
+#        updateAssetsTable('div#managementData div#attachPartToAsset')
+#        updatePartsTable('div#managementData div#attachPartToAsset')
+    return
+
+  setupCreatePartDiv()
+#  setupEditDeletePartDiv('div#managementData div#editDeletePart')
+  setupCreateAssetDiv(setupBtnAddPartToAsset)
+  setupDeleteAssetDiv('div#managementData div#deleteAsset')
+#  setupAttachPartToAssetDiv('div#managementData div#attachPartToAsset')
+
+  return
+
+clearCreatePartForm = ->
+  resetToPlaceholderValue($('div#createPart input'))
+  $('div#assignedToSelection input#part_assigned_to').val('')
+  $('div#assignedToSelection span#part_assigned_to_id').text('')
+  return
+
+setupCreatePartForm = (containerDiv) ->
+  _suggestions = []
+  setupAutocompleteInput('/users.json', 'name', containerDiv,
+    'input#part_assigned_to',
+    _suggestions, $("#{containerDiv} span#part_assigned_to_id"))
+
+  $('div#createPart button#btnCreatePart').unbind('click')
+  $('div#createPart button#btnCreatePart').click ->
+    requestType = null
+    _relativeUrl = null
+    switch $('div#createPart > h2:first').text()
+      when '创建部件'
+        requestType = 'POST'
+        _relativeUrl = '/parts.json'
+      when '编辑部件'
+        requestType = 'PUT'
+        _relativeUrl = "/parts/#{$('div#createPart span#partId').text()}.json"
+      else
+        alert "Wrong createPart title #{$('div#createPart > h2:first').text()}"
+        return
+
+    partInfo = {}
+    return unless validateCreatePartForm('div#createPart', partInfo, _suggestions)
+    $partDescription = $('div#createPart input#partDescription')
+    partInfo['description'] = $partDescription.val() unless isInputValueEmpty($partDescription)
+    $partBarcode = $('div#createPart input#partBarcode')
+    partInfo['barcode'] = $partBarcode.val() unless isInputValueEmpty($partBarcode)
+
+    $.ajax
+      url: getBaseURL() + _relativeUrl
+      type: requestType,
+      contentType: 'application/json',
+      data: JSON.stringify(partInfo),
+      dataType: 'json',
+      success: (data, textStatus, jqHXR) ->
+        clearCreatePartForm()
+        _switchPartTo = $('div#managementData span#switchPartTo').text()
+        unless _switchPartTo is ''
+          $('div#managementData span#switchPartTo').text('')
+          $("#{_switchPartTo}").show()
+          $('div#createPart').hide()
+          switch requestType
+            when 'POST'
+              $('div#addedPartDiv').append("<span class='lavenderBackground'>
+                                                      <span class='hiddenSpan'>#{data.id}</span>#{data.name}</span>")
+
+        switch requestType
+          when 'POST'
+            alert '部件创建成功'
+          when 'PUT'
+            alert '部件编辑成功'
+            updatePartsTable('div#managementData div#editDeletePart')
+
+        return
+      error: (jqXHR, textStatus, errorThrown) ->
+        alert jqXHR.responseJSON.message
+        return
+      timeout: defaultAjaxCallTimeout
+  return
+
+validateCreatePartForm = (containerDiv, partInfo, suggestions) ->
+  partInfo = {} unless partInfo
+  partName = $("#{containerDiv} input#partName")
+  if isInputValueEmpty(partName)
+    alert '请填写名称！'
+    return false
+
+  partInfo['name'] = partName.val()
+  assignedUser = $("#{containerDiv} input#part_assigned_to").val().trim()
+  assignedToId = $("#{containerDiv} span#part_assigned_to_id").text()
+  valid = true
+
+  if assignedUser is ''
+    $("#{containerDiv} span#part_assigned_to_id").text('')
+    assignedToId = ''
+  else
+    _u = $.grep(
+      suggestions,
+    (e) ->
+      e.data.toString() is assignedToId
+    )
+
+    valid = false unless _u.length > 0 and _u[0].value is assignedUser
+
+  unless valid
+    alert '责任人填写错误！'
+    return
+
+  partInfo['default_assigned_id'] = assignedToId
+  true
+
+setupCreatePartDiv = ->
+  $('div#createPart button#btnCancelCreatePart').click ->
+    clearCreatePartForm()
+    _switchPartTo = $('div#managementData span#switchPartTo').text()
+    unless _switchPartTo is ''
+      $('div#managementData span#switchPartTo').text('')
+      $("#{_switchPartTo}").show()
+      $('div#createPart').hide()
+#      switch $('div#createPart > h2:first').text()
+#        when '编辑部件'
+#          updatePartsTable('div#managementData div#editDeletePart')
+      return
 
     return
 
