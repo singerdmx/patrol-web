@@ -69,4 +69,24 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def create_dummy_asset(params)
+    Rails.logger.info("Creating dummy asset")
+    Asset.create({
+                   barcode: params[:barcode],
+                   name: params[:name],
+                   description: params[:description]
+                 })
+  end
+
+  def delete_dummy_asset(p, new_asset_id)
+    return if p.asset_id == new_asset_id
+
+    dummy_asset = Asset.find(p.asset_id)
+    return unless dummy_asset and dummy_asset.barcode == p.barcode and
+      dummy_asset.name == p.name and dummy_asset.description == p.description
+
+    Rails.logger.info("Deleting dummy asset")
+    dummy_asset.update_attributes(tombstone: true)
+  end
+
 end

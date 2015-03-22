@@ -25,12 +25,7 @@ class PartsController < ApplicationController
 
     ActiveRecord::Base.transaction do
       if part_params[:asset_id].nil?
-        logger.info("no asset id provided when creating part:so creating dummy asset")
-        asset = Asset.create({
-                               barcode: part_params[:barcode],
-                               name: part_params[:name],
-                               description: part_params[:description]
-                             })
+        asset = create_dummy_asset(part_params)
       else
         asset = Asset.find(part_params[:asset_id])
       end

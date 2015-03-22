@@ -49,12 +49,7 @@ class CheckPointsController < ApplicationController
 
     ActiveRecord::Base.transaction do
       if check_point_params[:asset_id].nil?
-        logger.info("no asset id provided when creating point:so creating dummy asset")
-        asset = Asset.create({
-                               barcode: check_point_params[:barcode],
-                               name: check_point_params[:name],
-                               description: check_point_params[:description]
-                             })
+        asset = create_dummy_asset(check_point_params)
       else
         asset = Asset.find(check_point_params[:asset_id])
       end

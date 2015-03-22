@@ -51,12 +51,14 @@ class AssetsController < ApplicationController
       asset = Asset.create!(asset_params)
       for point_id in (params[:points].blank?  ? [] : params[:points])
         point = CheckPoint.find(point_id)
+        delete_dummy_asset(point, asset.id)
         point.asset_id = asset.id
         point.save
       end
 
       for part_id in (params[:parts].blank? ? [] : params[:parts])
         part = CheckPoint.find(part_id)
+        delete_dummy_asset(part, asset.id)
         part.asset_id = asset.id
         part.save
       end
@@ -92,6 +94,7 @@ class AssetsController < ApplicationController
   def attach_point
     ActiveRecord::Base.transaction do
       point = CheckPoint.find(params[:point])
+      delete_dummy_asset(point, params[:asset_id])
       point.asset_id = params[:asset_id]
       point.save
     end
