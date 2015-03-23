@@ -65,6 +65,8 @@ setupSidebar = ->
         updateContactsTable(containerDiv)
       when 'problems'
         updateProblemsTable(containerDiv)
+      when 'history'
+        $("#{containerDiv} span#targetPointId").text('')
     return
   return
 
@@ -275,6 +277,7 @@ bindTreeViewClick = (containerDiv) ->
     switch $(this).data('type')
       when 'history'
         $('div#sidebar ul > li#history').trigger('click')
+        $('div#historyDiv span#targetPointId').text($(this).data('id'))
         updateChart('div#historyDiv', {id: $(this).data('id')})
       when 'moveOut'
         detachPoint($(this)) if confirm("确认移出？")
@@ -547,7 +550,10 @@ setupHistoryDiv = (containerDiv) ->
   $("#{containerDiv} button#barcodeButton").click ->
     _val = $("#{containerDiv} input#barcodeInput").val()
     unless $.trim(_val)
-      alert '条形码不能为空！'
+      if $("#{containerDiv} span#targetPointId").text() is ''
+        alert '条形码不能为空！'
+      else
+        updatePointChart(containerDiv, {id: $("#{containerDiv} span#targetPointId").text()})
       return
 
     updateChart(containerDiv, {barcode: _val})
@@ -663,12 +669,12 @@ updatePointChart = (containerDiv, params) ->
       if jqHXR.status is 200
          $('div#errorBanner, div#infoBanner').hide()
          _point = data.point
+         title = "#{_point.name}   #{_point.description}"
          $("#{containerDiv} input#barcodeInput").val(_point.barcode)
          if data.result.length is 0
-           $('div#noHistoryBanner').text('该巡检点没有历史纪录').show()
+           $('div#noHistoryBanner').text("巡检点\"#{title}\"没有历史纪录").show()
          else
            $('div#noHistoryBanner').hide()
-           title = "#{_point.name}   #{_point.description}"
            switch _point.category
              when 30, 50
                [min, max, canvasOverlayObjects] = getCanvasOverlayObjects(_point)

@@ -49,6 +49,8 @@ setupSidebar = ->
       when 'manageContacts'
         $("#{containerDiv} div#addEditContactDiv, #{containerDiv} button#btnAddNewContact, #{containerDiv} button#btnEditContact").hide()
         updateContactsTable(containerDiv)
+      when 'history'
+        $("#{containerDiv} span#targetPartId").text('')
     return
 
   return
@@ -169,6 +171,7 @@ bindTreeViewClick = (containerDiv) ->
     switch $(this).data('type')
       when 'history'
         $('div#sidebar ul > li#history').trigger('click')
+        $('div#historyDiv span#targetPartId').text($(this).data('id'))
         updateChart('div#historyDiv', {id: $(this).data('id')})
       when 'delete'
         deleteTreeNode($(this)) if confirm("确认删除？")
@@ -502,7 +505,10 @@ setupHistoryDiv = (containerDiv) ->
   $("#{containerDiv} button#barcodeButton").click ->
     _val = $("#{containerDiv} input#barcodeInput").val()
     unless $.trim(_val)
-      alert '条形码不能为空！'
+      if $("#{containerDiv} span#targetPartId").text() is ''
+        alert '条形码不能为空！'
+      else
+        updatePartChart(containerDiv, {id: $("#{containerDiv} span#targetPartId").text()})
       return
 
     updateChart(containerDiv, {barcode: _val})
@@ -568,12 +574,12 @@ updatePartChart = (containerDiv, params) ->
       if jqHXR.status is 200
         $('div#errorBanner, div#infoBanner').hide()
         _part = data.part
+        title = "#{_part.name}   #{_part.description}"
         $("#{containerDiv} input#barcodeInput").val(_part.barcode)
         if data.result.length is 0
-          $('div#noHistoryBanner').text('该部件没有历史纪录').show()
+          $('div#noHistoryBanner').text("部件\"#{title}\"没有历史纪录").show()
         else
           $('div#noHistoryBanner').hide()
-          title = "#{_part.name}   #{_part.description}"
           renderFilledAreaChart('chartDiv', title, data.result)
 
       return
