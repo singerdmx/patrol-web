@@ -499,8 +499,43 @@ attachPartToAsset = (partId, assetId, containerDiv) ->
     timeout: defaultAjaxCallTimeout
   return
 
+moveCalendar = (containerDiv, days) ->
+  startTimePicker = $("#{containerDiv} div#startTime").data('datetimepicker')
+  endTimePicker = $("#{containerDiv} div#endTime").data('datetimepicker')
+
+  startTime = startTimePicker.getLocalDate()
+  endTime = endTimePicker.getLocalDate()
+
+  today = getToday()
+  console.log endTime
+  console.log today
+  if endTime.addDays(days) > today
+    _shift = parseInt((today - endTime) / 86400000) # 24*60*60*1000 hours*minutes*seconds*milliseconds
+    console.log _shift
+    startTimePicker.setLocalDate(startTime.addDays(_shift))
+    endTimePicker.setLocalDate(today)
+  else
+    startTimePicker.setLocalDate(startTime.addDays(days))
+    endTimePicker.setLocalDate(endTime.addDays(days))
+
+  return
+
+setupMoveCalendarBtn = (containerDiv) ->
+  $("#{containerDiv} span#btnBackwardCalendar").click ->
+    moveCalendar(containerDiv, -30)
+    $("#{containerDiv} button#barcodeButton").trigger('click')
+    return
+
+  $("#{containerDiv} span#btnForwardCalendar").click ->
+    moveCalendar(containerDiv, 30)
+    $("#{containerDiv} button#barcodeButton").trigger('click')
+    return
+
+  return
+
 setupHistoryDiv = (containerDiv) ->
   setupCalendar(containerDiv, 30, 30)
+  setupMoveCalendarBtn(containerDiv)
   $("#{containerDiv} input#barcodeInput").val('')
   $("#{containerDiv} button#barcodeButton").click ->
     _val = $("#{containerDiv} input#barcodeInput").val()
