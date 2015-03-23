@@ -17,8 +17,8 @@ class RepairReportsController < ApplicationController
     ActiveRecord::Base.transaction do
       if params[:chart] == 'true'
         check_time = convert_check_time(params)[:check_time]
-        reports = RepairReport.where(repair_report_params)
-        reports_json = index_json_chart_builder(reports, params[:part_id])
+        reports = RepairReport.where(part_id: params[:part_id]).order(created_at: :asc)
+        reports_json = index_json_chart_builder(reports, params[:part_id], check_time)
       else
         reports = RepairReport.where(created_by_id: current_user.id)
         reports_json = index_json_builder(reports)
@@ -33,7 +33,7 @@ class RepairReportsController < ApplicationController
     end
   rescue Exception => e
     Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
-    flash[:error] = e.message
+    render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
   # POST /repair_reports.json

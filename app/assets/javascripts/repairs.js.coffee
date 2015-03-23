@@ -573,7 +573,7 @@ updatePartChart = (containerDiv, params) ->
         else
           $('div#noHistoryBanner').hide()
           title = "#{_part.name}   #{_part.description}"
-          renderFilledAreaChart('chartDiv', title)
+          renderFilledAreaChart('chartDiv', title, data.result)
 
       return
     error: (jqXHR, textStatus, errorThrown) ->
@@ -590,10 +590,15 @@ updatePartChart = (containerDiv, params) ->
 
   return
 
-renderFilledAreaChart = (chartId, title) ->
-  _line = [0, 0, 1, 1, 1]
-  _ticks = ["Mon", "Tue", "Wed", "Thr", "Fri"]
-  _series = [{label: 'baoxiu'}]
+renderFilledAreaChart = (chartId, title, data) ->
+  _line = []
+  _ticks = []
+  for datum in data
+    _range = dateToShortString(new Date(datum.time * 1000))
+    _ticks.push(_range)
+    _line.push(datum.status)
+
+  _series = [{label: '故障'}]
   _plot_setting =
     title: title
     stackSeries: true
@@ -603,6 +608,12 @@ renderFilledAreaChart = (chartId, title) ->
       rendererOptions:
         highlightMouseDown: true
     series: _series
+    highlighter:
+      tooltipContentEditor: (str, seriesIndex, pointIndex) ->
+        _ticks[pointIndex]
+      show: true,
+      showMarker: true,
+      tooltipLocation: 'se'
     seriesColors: ['rgb(255, 0, 0)']
     axesDefaults:
       tickRenderer: $.jqplot.CanvasAxisTickRenderer

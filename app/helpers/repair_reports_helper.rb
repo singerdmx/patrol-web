@@ -39,10 +39,55 @@ module RepairReportsHelper
     end
   end
 
-  def index_json_chart_builder(db_results, part_id)
+  def index_json_chart_builder(reports, part_id, date_range)
     results = {}
     results['part'] = to_hash(Part.find(part_id))
-    results['result'] = [1]
+    results['result'] = []
+
+    error_ranges = []
+    reports.each do |r|
+      case get_problem_status_string(r.status)
+        when '完成', '取消'
+          error_ranges << [r.created_at, r.updated_at]
+        else
+          error_ranges << [r.created_at, Time.now]
+      end
+    end
+    status = 0
+    hit_error_end = false
+    error_range_index = 0
+    # map converts date_range to one day interval
+    # ignore last tick since it is extra
+    date_range = date_range.map { |t| t }[0..-2]
+    results['result'] = date_range.map do |t|
+      if hit_error_end
+        error_range_index += 1
+        status = 0
+        hit_error_end = false
+      end
+      error_range = error_ranges[error_range_index]
+      if status > 0
+        # see if hit error end
+        error_end = error_range[1]
+        if t <= error_end and error_end <= t + 24.hours
+          hit_error_end = true
+        end
+      elsif error_range
+        # see if hit error beg
+        error_beg = error_range[0]
+        if t <= error_beg and error_beg <= t + 24.hours
+          status = 1
+        end
+      end
+
+      {
+        time: t.to_i,
+        status: status
+      }
+    end
     results
   end
+
+  private
+
 end
