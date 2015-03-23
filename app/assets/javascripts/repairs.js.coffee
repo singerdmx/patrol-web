@@ -169,6 +169,7 @@ bindTreeViewClick = (containerDiv) ->
     switch $(this).data('type')
       when 'history'
         $('div#sidebar ul > li#history').trigger('click')
+        updateChart('div#historyDiv', {id: $(this).data('id')})
       when 'delete'
         deleteTreeNode($(this)) if confirm("确认删除？")
 
