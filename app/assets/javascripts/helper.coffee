@@ -200,20 +200,28 @@ window.renderTreeView = (url, containerDiv, ifModifiedSinceSpanId, params, hideT
 
   return
 
-window.setupCalendar = (containerDiv, defaultCalendarDaysRange) ->
+window.setupCalendar = (containerDiv, defaultCalendarDaysRange, maxCalendarDaysRange) ->
   $("#{containerDiv} div#startTime").datetimepicker(getDatetimePickerSettings())
   $("#{containerDiv} div#endTime").datetimepicker(getDatetimePickerSettings())
   startTimePicker = $("#{containerDiv} div#startTime").data('datetimepicker')
   endTimePicker = $("#{containerDiv} div#endTime").data('datetimepicker')
   $("#{containerDiv} div#startTime").on 'changeDate', (e) ->
-    start_time = e.localDate.getTime()/1000
-    end_time = getDatetimePickerEpoch("#{containerDiv} div#endTime")
-    endTimePicker.setLocalDate(new Date(start_time * 1000)) if start_time > end_time
+    startTime = e.localDate.getTime()/1000
+    endTime = getDatetimePickerEpoch("#{containerDiv} div#endTime")
+    endTimePicker.setLocalDate(new Date(startTime * 1000)) if startTime > endTime
+    maxEndTime = startTime + maxCalendarDaysRange * 86400 unless maxCalendarDaysRange is null # one day is 86400 seconds (60 * 60 * 24)
+    if maxEndTime isnt null and endTime > maxEndTime
+      alert "选择日期范围不可以超过#{maxCalendarDaysRange}天！"
+      endTimePicker.setLocalDate(new Date(maxEndTime * 1000))
     return
   $("#{containerDiv} div#endTime").on 'changeDate', (e) ->
-    end_time = e.localDate.getTime()/1000
-    start_time = getDatetimePickerEpoch("#{containerDiv} div#startTime")
-    startTimePicker.setLocalDate(new Date(end_time * 1000)) if start_time > end_time
+    endTime = e.localDate.getTime()/1000
+    startTime = getDatetimePickerEpoch("#{containerDiv} div#startTime")
+    startTimePicker.setLocalDate(new Date(endTime * 1000)) if startTime > endTime
+    minStartTime = endTime - maxCalendarDaysRange * 86400 unless maxCalendarDaysRange is null # one day is 86400 seconds (60 * 60 * 24)
+    if minStartTime isnt null and startTime < minStartTime
+      alert "选择日期范围不可以超过#{maxCalendarDaysRange}天！"
+      startTimePicker.setLocalDate(new Date(minStartTime * 1000))
     return
 
   today = getToday()

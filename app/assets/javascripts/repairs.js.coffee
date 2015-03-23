@@ -496,7 +496,7 @@ attachPartToAsset = (partId, assetId, containerDiv) ->
   return
 
 setupHistoryDiv = (containerDiv) ->
-  setupCalendar(containerDiv, 100)
+  setupCalendar(containerDiv, 30, 30)
   $("#{containerDiv} input#barcodeInput").val('')
   $("#{containerDiv} button#barcodeButton").click ->
     _val = $("#{containerDiv} input#barcodeInput").val()
@@ -613,10 +613,11 @@ renderFilledAreaChart = (chartId, title) ->
         tickOptions:
           angle: chart_x_tick_angle
       yaxis:
-        showTicks: false
+        ticks: [[0, '正常'], [1, '维护']]
         padMin: 0
         min: 0
-        tickOptions: {formatString: '%d'}
+        padMax: 2
+        max: 2
     legend:
       show: true,
       location: 'ne',
