@@ -15,22 +15,21 @@ class RepairReportsController < ApplicationController
     end
 
     ActiveRecord::Base.transaction do
-      reports_json = nil
       if params[:chart] == 'true'
-        index_para = convert_check_time(repair_report_params)
-        reports = RepairReport.where(index_para)
+        check_time = convert_check_time(params)[:check_time]
+        reports = RepairReport.where(repair_report_params)
         reports_json = index_json_chart_builder(reports, params[:part_id])
       else
         reports = RepairReport.where(created_by_id: current_user.id)
         reports_json = index_json_builder(reports)
       end
 
-      #if stale?(etag: reports_json,
-      #          last_modified: reports.maximum(:updated_at))
+      if stale?(etag: reports_json,
+                last_modified: reports.maximum(:updated_at))
         render json: reports_json.to_json
-      #else
-      #  head :not_modified
-      #end
+      else
+        head :not_modified
+      end
     end
   rescue Exception => e
     Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
@@ -57,7 +56,7 @@ class RepairReportsController < ApplicationController
 
   def repair_report_params
     request_para = params[:repair_report].nil? ? params : params[:repair_report]
-    request_para.select{|key,value| key.in?(CheckResult.column_names())}.symbolize_keys
+    request_para.select{|key,value| key.in?(RepairReport.column_names())}.symbolize_keys
   end
 
   def create_repair_report(repair_reports)
