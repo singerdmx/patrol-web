@@ -560,46 +560,71 @@ updatePartChart = (containerDiv, params) ->
     request_params.barcode = true
     _id = _barcode
 
-#  $.ajax
-#    url: getBaseURL() + "/parts/#{_id}/history.json?aggregate=30"
-#    data: request_params
-#    success: (data, textStatus, jqHXR) ->
-#      if jqHXR.status is 200
-#        $('div#errorBanner, div#infoBanner').hide()
-#        _part = data.part
-#        $("#{containerDiv} input#barcodeInput").val(_part.barcode)
-#        if data.result.length is 0
-#          $('div#noHistoryBanner').text('该部件没有历史纪录').show()
-#        else
-#          $('div#noHistoryBanner').hide()
-#          title = "#{_part.name}   #{_part.description}"
-#          switch _part.category
-#            when 30, 50
-#              [min, max, canvasOverlayObjects] = getCanvasOverlayObjects(_part)
-#
-#              if data.group
-#                renderHighLowChart('chartDiv', title, data.result, min, max, canvasOverlayObjects)
-#              else
-#                renderLineChart('chartDiv', title, data.result, min, max, canvasOverlayObjects)
-#            when 40,41
-#              renderBarChart('chartDiv', title, data.result, data.group, JSON.parse(_part.choice))
-#            when 10,30
-#              $('div#infoBanner').text("在选择时间范围内共巡检了#{data.result}次")
-#              $('div#infoBanner').show()
-#            else
-#              $('div#noHistoryBanner').text('该巡部件没有历史纪录').show()
-#
-#      return
-#    error: (jqXHR, textStatus, errorThrown) ->
-#      if jqXHR.status is 404
-#        $('div#noHistoryBanner,div#infoBanner').hide()
-#        $('div#errorBanner').text(jqXHR.responseJSON.error)
-#        $('div#errorBanner').show()
-#      else
-#        showErrorPage(jqXHR.responseText)
-#
-#      return
-#    dataType: 'json',
-#    timeout: defaultAjaxCallTimeout
+  $.ajax
+    url: getBaseURL() + "/parts/#{_id}/history.json?chart=true"
+    data: request_params
+    success: (data, textStatus, jqHXR) ->
+      if jqHXR.status is 200
+        $('div#errorBanner, div#infoBanner').hide()
+        _part = data.part
+        $("#{containerDiv} input#barcodeInput").val(_part.barcode)
+        if data.result.length is 0
+          $('div#noHistoryBanner').text('该部件没有历史纪录').show()
+        else
+          $('div#noHistoryBanner').hide()
+          title = "#{_part.name}   #{_part.description}"
+          renderFilledAreaChart('chartDiv', title)
 
-  return 
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      if jqXHR.status is 404
+        $('div#noHistoryBanner,div#infoBanner').hide()
+        $('div#errorBanner').text(jqXHR.responseJSON.error)
+        $('div#errorBanner').show()
+      else
+        showErrorPage(jqXHR.responseText)
+
+      return
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
+
+  return
+
+renderFilledAreaChart = (chartId, title) ->
+  _line = [0, 0, 1, 1, 1]
+  _ticks = ["Mon", "Tue", "Wed", "Thr", "Fri"]
+  _series = [{label: 'baoxiu'}]
+  _plot_setting =
+    title: title
+    stackSeries: true
+    seriesDefaults:
+      fill: true
+      fillToZero: true
+      rendererOptions:
+        highlightMouseDown: true
+    series: _series
+    seriesColors: ['rgb(255, 0, 0)']
+    axesDefaults:
+      tickRenderer: $.jqplot.CanvasAxisTickRenderer
+    axes:
+      xaxis:
+        renderer: $.jqplot.CategoryAxisRenderer
+        ticks: _ticks
+        tickOptions:
+          angle: chart_x_tick_angle
+      yaxis:
+        showTicks: false
+        padMin: 0
+        min: 0
+        tickOptions: {formatString: '%d'}
+    legend:
+      show: true,
+      location: 'ne',
+      placement: 'outside'
+
+  $.jqplot(
+    chartId,
+    [_line],
+    _plot_setting
+  )
+  return

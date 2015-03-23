@@ -15,8 +15,16 @@ module RepairReportsHelper
       barcode = asset.barcode if asset
       if entry['kind'] == "POINT"
         point = CheckPoint.find_by(id: entry['check_point_id'])
-        ticket_name = "#{ticket_name} #{point.name}" if point
-        barcode = point.barcode if point
+        if point
+          ticket_name = "#{ticket_name} #{point.name}"
+          barcode = point.barcode
+        end
+      elsif entry['kind'] == "PART"
+        part = Part.find_by(id: entry['part_id'])
+        if part
+          ticket_name = "#{ticket_name} #{part.name}"
+          barcode = part.barcode if part
+        end
       end
       entry['name'] = ticket_name.nil? ? "" : ticket_name
       entry['barcode'] = barcode.nil? ? "" : barcode
@@ -29,5 +37,12 @@ module RepairReportsHelper
 
       entry
     end
+  end
+
+  def index_json_chart_builder(db_results, part_id)
+    results = {}
+    results['part'] = to_hash(Part.find(part_id))
+    results['result'] = [1]
+    results
   end
 end

@@ -3,20 +3,17 @@ require 'set'
 class CheckResultsController < ApplicationController
   include CheckResultsHelper, ProblemListHelper
 
-  # GET /check_results
   # GET /check_results.json
   # Example: http://localhost:3000/results.json?check_time=1424332800..1424505600&&ui=true&check_session_id=8
   # http://localhost:3000/points/A001/history.json?aggregate=30&check_time=1416038400..1424764800&barcode=true
   def index
-    if !params[:check_point_id].nil?
-      if params[:barcode] == 'true'
-        point = CheckPoint.find_by(barcode: params[:check_point_id])
-        if point.nil?
-          render json: { error: "无法找到条形码为\"#{params[:check_point_id]}\"的巡检点" }.to_json, status: :not_found
-          return
-        else
-          params[:check_point_id] = point.id
-        end
+    if params[:check_point_id] and params[:barcode] == 'true'
+      point = CheckPoint.find_by(barcode: params[:check_point_id])
+      if point.nil?
+        render json: { error: "无法找到条形码为\"#{params[:check_point_id]}\"的巡检点" }.to_json, status: :not_found
+        return
+      else
+        params[:check_point_id] = point.id
       end
     end
 

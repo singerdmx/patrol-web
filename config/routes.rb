@@ -5,17 +5,20 @@ Blog::Application.routes.draw do
     put :attach_point
     put :attach_part
   end
-  resources :check_routes, :path => :routes do
+  resources :check_routes, path: :routes do
     put :detach_point
     put :attach_point
   end
-  resources :check_points,     :path => :points do
+  resources :check_points, path: :points do
     resources :history, controller: 'check_results', only: [:index]
   end
-  resources :check_results, :path => :results do
+  resources :parts, path: :parts do
+    resources :history, controller: 'repair_reports', only: [:index]
+  end
+  resources :check_results, path: :results do
     collection { get 'export' }
   end
-  resources :check_sessions, :path => :sessions
+  resources :check_sessions, path: :sessions
   resources :manuals
   resources :user_preferences
   resources :factories, only: [:index]
@@ -27,7 +30,7 @@ Blog::Application.routes.draw do
 
   resources :contacts
 
-  devise_for :users, :skip => [:registrations], controllers: {
+  devise_for :users, skip: [:registrations], controllers: {
     sessions: "users/sessions" }
 
   root to: 'static_pages#home'

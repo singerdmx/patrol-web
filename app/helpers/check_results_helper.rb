@@ -18,7 +18,7 @@ module CheckResultsHelper
       results['group'] = false
       results['group'] = true if index_result.size > group
 
-      if !params[:check_point_id].nil?
+      if params[:check_point_id]
         results['point'] = to_hash(CheckPoint.find(check_point_id))
       end
       case results['point']['category']
