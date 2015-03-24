@@ -65,6 +65,7 @@ module RepairReportsHelper
         status = 0
         hit_error_end = false
       end
+
       error_range = error_ranges[error_range_index]
       if status > 0
         # see if hit error end
@@ -72,11 +73,18 @@ module RepairReportsHelper
         if t <= error_end and error_end <= t + 24.hours
           hit_error_end = true
         end
-      elsif error_range
-        # see if hit error beg
-        error_beg = error_range[0]
-        if t <= error_beg and error_beg <= t + 24.hours
-          status = 1
+      else
+        while error_range
+          # see if hit error beg
+          error_beg = error_range[0]
+          break if error_beg > t + 24.hours
+          error_end = error_range[1]
+          if error_beg <= t + 24.hours and t <= error_end
+            status = 1
+            break
+          end
+          error_range_index += 1
+          error_range = error_ranges[error_range_index]
         end
       end
 
