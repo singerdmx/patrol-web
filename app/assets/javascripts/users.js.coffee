@@ -683,7 +683,7 @@ updatePointChart = (containerDiv, params) ->
                  renderHighLowChart('chartDiv', title, data.result, min, max, canvasOverlayObjects)
                else
                  renderLineChart('chartDiv', title, data.result, min, max, canvasOverlayObjects)
-             when 40,41
+             when 40,41,51
                renderBarChart('chartDiv', title, data.result, data.group, JSON.parse(_point.choice))
              when 10,30
                $('div#infoBanner').text("在选择时间范围内共巡检了#{data.result}次")
