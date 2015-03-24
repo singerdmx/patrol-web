@@ -244,7 +244,7 @@ asset3.check_points.create([
                  state:        "运转",
                  category:         51,
                  default_value: 20,
-                 choice:       '["", "", "", "70"]',
+                 choice:       '["正常","非正常"]',
                  measure_unit: "C",
                  point_code:   "EE-11310-H01",
                  default_assigned_id: user5.id,
@@ -536,6 +536,9 @@ route1.check_points << asset1.check_points.last
 
 route2 = area2.check_routes.create!(
     {name: "二工区机械8小时点巡检", description: "二工区机械8小时点巡检"})
+route2.check_points << asset3.check_points.first
+route2.check_points << asset3.check_points.limit(2).last
+route2.check_points << asset3.check_points.limit(3).last
 route2.check_points << asset3.check_points.last
 
 
@@ -926,12 +929,13 @@ check_point_3_choice_json = JSON.parse(check_point_3_choice)
   status = 0 if result == 0
 
   session.check_results.create(
-    {result: check_point_3_choice_json[result],
-     status: status,
-     memo: "",
-     area_id: area1.id,
-     check_time: check_time,
-     check_point_id: asset2.check_points.first.id,
+    {
+      result: rand(100),
+      status: status,
+      memo: "",
+      area_id: area1.id,
+      check_time: check_time,
+      check_point_id: asset3.check_points.limit(3).last.id,
     })
 end
 
