@@ -929,6 +929,7 @@ check_point_3_choice_json = JSON.parse(check_point_3_choice)
     {result: check_point_3_choice_json[result],
      status: status,
      memo: "",
+     area_id: area1.id,
      check_time: check_time,
      check_point_id: asset2.check_points.first.id,
     })
