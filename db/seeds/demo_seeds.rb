@@ -220,7 +220,7 @@ asset3.check_points.create([
                { name:         "输入端轴承",
                  description:  "温度测量",
                  state:        "运转",
-                 category:         51,
+                 category:         50,
                  default_value: 20,
                  barcode:      "999972318875",
                  choice:       '["20", "30", "60", "70"]',
@@ -1399,5 +1399,65 @@ repair_report21 = RepairReport.create(
    report_type: "报修",
    created_at: report_time,
    updated_at: report_time,
+  })
+
+report_time = Time.now - 3600 * 24 * 30
+done_time = Time.now - 3600 * 24 * 28
+repair_report22 = RepairReport.create(
+  {asset_id: asset3.id,
+   part_id: asset3.parts.first.id,
+   kind: "PART",
+   code: 2,
+   description: "need to replace parts",
+   content: "轴承磨损，需要更换。",
+   stopped: false,
+   area_id: area2.id,
+   production_line_stopped: false,
+   created_by_id: user1.id,
+   priority: 1,
+   status: 1,
+   report_type: "报修",
+   created_at: report_time,
+   updated_at: done_time,
+  })
+
+report_time = Time.now - 3600 * 24 * 60
+done_time = Time.now - 3600 * 24 * 58
+repair_report23 = RepairReport.create(
+  {asset_id: asset3.id,
+   part_id: asset3.parts.first.id,
+   kind: "PART",
+   code: 2,
+   description: "need to replace parts",
+   content: "轴承磨损，需要更换。",
+   stopped: false,
+   area_id: area2.id,
+   production_line_stopped: false,
+   created_by_id: user1.id,
+   priority: 1,
+   status: 2,
+   report_type: "报修",
+   created_at: report_time,
+   updated_at: done_time,
+  })
+
+report_time = Time.now - 3600 * 24 * 90
+done_time = Time.now - 3600 * 24 * 88
+repair_report24 = RepairReport.create(
+  {asset_id: asset3.id,
+   part_id: asset3.parts.first.id,
+   kind: "PART",
+   code: 2,
+   description: "need to replace parts",
+   content: "轴承磨损，需要更换。",
+   stopped: false,
+   area_id: area2.id,
+   production_line_stopped: false,
+   created_by_id: user1.id,
+   priority: 1,
+   status: 2,
+   report_type: "报修",
+   created_at: report_time,
+   updated_at: done_time,
   })
 
