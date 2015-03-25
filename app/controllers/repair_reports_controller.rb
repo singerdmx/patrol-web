@@ -19,6 +19,8 @@ class RepairReportsController < ApplicationController
         check_time = convert_check_time(params)[:check_time]
         reports = RepairReport.where(part_id: params[:part_id]).order(created_at: :asc)
         reports_json = index_json_chart_builder(reports, params[:part_id], check_time)
+        render json: reports_json.to_json
+        return
       else
         reports = RepairReport.where(created_by_id: current_user.id)
         reports_json = index_json_builder(reports)

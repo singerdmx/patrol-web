@@ -5,7 +5,7 @@ $ ->
   $('div.containerDiv').first().show()
   updateAssetList('div#assets')
   setupAssetsDiv('div#assets')
-  setupHistoryDiv('div#historyDiv')
+  setupHistoryDiv('div#historyDiv', 120)
   setupProblemsDiv('div#problemsDiv')
 
   removeFlashNotice()
@@ -522,22 +522,22 @@ moveCalendar = (containerDiv, days) ->
 
   return
 
-setupMoveCalendarBtn = (containerDiv) ->
+setupMoveCalendarBtn = (containerDiv, maxDays) ->
   $("#{containerDiv} span#btnBackwardCalendar").click ->
-    moveCalendar(containerDiv, -30)
+    moveCalendar(containerDiv, -maxDays)
     $("#{containerDiv} button#barcodeButton").trigger('click')
     return
 
   $("#{containerDiv} span#btnForwardCalendar").click ->
-    moveCalendar(containerDiv, 30)
+    moveCalendar(containerDiv, maxDays)
     $("#{containerDiv} button#barcodeButton").trigger('click')
     return
 
   return
 
-setupHistoryDiv = (containerDiv) ->
-  setupCalendar(containerDiv, 30, 30)
-  setupMoveCalendarBtn(containerDiv)
+setupHistoryDiv = (containerDiv, maxDays) ->
+  setupCalendar(containerDiv, maxDays, maxDays)
+  setupMoveCalendarBtn(containerDiv, maxDays)
   $("#{containerDiv} input#barcodeInput").val('')
   $("#{containerDiv} button#barcodeButton").click ->
     _val = $("#{containerDiv} input#barcodeInput").val()
@@ -646,6 +646,10 @@ renderFilledAreaChart = (chartId, title, data) ->
       else
         _line.push(0)
 
+  _trimmed_ticks = _ticks.slice()
+  for i in [0..(_trimmed_ticks.length - 1)]
+    _trimmed_ticks[i] = ' ' unless i % 7 is 0
+
   _series = [{label: '保养'}, {label: '报修'}, {label: '其他'}]
   _plot_setting =
     title: title
@@ -669,7 +673,7 @@ renderFilledAreaChart = (chartId, title, data) ->
     axes:
       xaxis:
         renderer: $.jqplot.CategoryAxisRenderer
-        ticks: _ticks
+        ticks: _trimmed_ticks
         tickOptions:
           angle: chart_x_tick_angle
       yaxis:
