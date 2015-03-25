@@ -137,7 +137,7 @@ buildTreeNode = (parent, data, showDeleteIcon) ->
     historyIcon = ''
     if nodeDatum.kind is 'part'
       _status_css_class = ['success', 'warning', 'danger', 'info'][nodeDatum.status_code]
-      statusIcon = "<span class='badge label-#{_status_css_class}'>#{nodeDatum.status}</span>"
+      statusIcon = "<span class='badge noCursor label-#{_status_css_class}'>#{nodeDatum.status}</span>"
       historyIcon = "<span class='badge' data-type='history' data-id='#{nodeDatum.id}'>历史</span>"
 
     deleteIcon = ''
@@ -512,11 +512,8 @@ moveCalendar = (containerDiv, days) ->
   endTime = endTimePicker.getLocalDate()
 
   today = getToday()
-  console.log endTime
-  console.log today
   if endTime.addDays(days) > today
     _shift = parseInt((today - endTime) / 86400000) # 24*60*60*1000 hours*minutes*seconds*milliseconds
-    console.log _shift
     startTimePicker.setLocalDate(startTime.addDays(_shift))
     endTimePicker.setLocalDate(today)
   else

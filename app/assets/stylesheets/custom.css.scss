@@ -130,6 +130,10 @@ span.hiddenSpan {
   display: none;
 }
 
+.noCursor {
+  cursor: default !important;
+}
+
 .darkBlueTextColor {
   color: $DarkBlue !important;
 }

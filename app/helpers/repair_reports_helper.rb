@@ -58,7 +58,6 @@ module RepairReportsHelper
     error_range_index = 0
     # map converts date_range to one day interval
     # ignore last tick since it is extra
-    date_range = date_range.map { |t| t }[0..-2]
     results['result'] = date_range.map do |t|
       if hit_error_end
         error_range_index += 1
