@@ -183,7 +183,7 @@ ActiveRecord::Schema.define(version: 20150325045729) do
     t.integer  "created_by_id",           null: false
     t.integer  "assigned_to_id"
     t.integer  "priority"
-    t.string   "report_type",             null: false
+    t.integer  "report_type",             null: false
     t.integer  "status",                  null: false
     t.integer  "check_result_id"
     t.date     "plan_date"

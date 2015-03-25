@@ -133,7 +133,7 @@ class CheckResultsController < ApplicationController
       priority: 1,
       status: 2,
       check_result_id: result_record.id,
-      report_type: '报修',
+      report_type: 2,
       assigned_to_id: check_point.default_assigned_id,
       created_at: check_time_,
       result_image_id: point['image'],
