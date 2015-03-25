@@ -264,6 +264,7 @@ asset3.parts.create([
                       { name:         "输入端轴承",
                         description:  "输入端轴承",
                         barcode:      "999972318875",
+                        status:       2,
                         default_assigned_id: user5.id,
                       },
                       {
@@ -276,6 +277,7 @@ asset3.parts.create([
                         barcode:      "999972318812",
                         name:         "箱体",
                         description:  "箱体",
+                        status:       1,
                         default_assigned_id: user5.id,
                       } ])
 
