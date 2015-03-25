@@ -40,11 +40,10 @@ class RepairReportsController < ApplicationController
   def create
     fail "no data when trying to create repair report!" if params[:repairReports].blank? && params[:ticketUpdates].blank?
 
-    start_time_ = Time.at(params[:start_time]).to_datetime
-    end_time_ = Time.at(params[:end_time]).to_datetime
-
-    create_repair_report(params[:repairReports])
-    update_repair_report(params[:ticketUpdates])
+    ActiveRecord::Base.transaction do
+      create_repair_report(params[:repairReports])
+      update_repair_report(params[:ticketUpdates])
+    end
 
     render nothing: true, status: :created
   rescue Exception => e
@@ -63,10 +62,11 @@ class RepairReportsController < ApplicationController
     return if repair_reports.blank?
     repair_reports.each do |repair_report|
       repair_report['created_by_id'] = current_user.id
-      report = repair_report.select do |key, value|
+      report_params = repair_report.select do |key, value|
         key.in?(RepairReport.column_names())
       end.symbolize_keys
-      RepairReport.create!(report)
+      report = RepairReport.create!(report_params)
+      update_part_status(report)
     end
   end
 
@@ -75,6 +75,7 @@ class RepairReportsController < ApplicationController
     ticket_updates.each do |ticket_update|
       report = RepairReport.find(ticket_update[:id])
       report.update(status: ticket_update[:status])
+      update_part_status(report)
     end
   end
 end

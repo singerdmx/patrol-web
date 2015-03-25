@@ -1,5 +1,5 @@
 class ProblemListController < ApplicationController
-  include ProblemListHelper
+  include ProblemListHelper, RepairReportsHelper
 
   # GET /problem_list.json
   # Example http://localhost:3000/problem_list.json?ui=true&status=2
@@ -51,7 +51,10 @@ class ProblemListController < ApplicationController
     new_value[:plan_date] = Time.at(params[:plan_date]).to_date if params[:plan_date]
     new_value[:assigned_to_id] = params[:assigned_to_id] unless params[:assigned_to_id].blank?
 
-    report.update_attributes(new_value)
+    ActiveRecord::Base.transaction do
+      report.update_attributes(new_value)
+      update_part_status(report)
+    end
 
     render json: {id: params[:id]}.to_json
   rescue Exception => e

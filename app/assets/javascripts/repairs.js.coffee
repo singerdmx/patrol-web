@@ -133,8 +133,13 @@ setupAssetListClick = (containerDiv) ->
 
 buildTreeNode = (parent, data, showDeleteIcon) ->
   for nodeDatum, i in data
+    statusIcon = ''
     historyIcon = ''
-    historyIcon = "<span class='badge' data-type='history' data-id='#{nodeDatum.id}'>历史</span>" if nodeDatum.kind is 'part'
+    if nodeDatum.kind is 'part'
+      _status_css_class = ['success', 'warning', 'danger', 'info'][nodeDatum.status_code]
+      statusIcon = "<span class='badge label-#{_status_css_class}'>#{nodeDatum.status}</span>"
+      historyIcon = "<span class='badge' data-type='history' data-id='#{nodeDatum.id}'>历史</span>"
+
     deleteIcon = ''
     if getPageTitle() is '报修 | 管理员' and showDeleteIcon
       deleteIcon = "<span class='badge' data-type='delete' data-id='#{nodeDatum.id}' data-kind='#{nodeDatum.kind}'>删除</span>"
@@ -145,7 +150,7 @@ buildTreeNode = (parent, data, showDeleteIcon) ->
               <img src='/assets/#{nodeDatum.icon}' class='media-object mediaListIcon' data-id='#{nodeDatum.id}'/>
             </a>
             <div class='media-body'>
-            <h4 class='media-heading'>#{nodeDatum.title}#{deleteIcon}#{historyIcon}</h4>
+            <h4 class='media-heading'>#{nodeDatum.title}#{statusIcon}#{deleteIcon}#{historyIcon}</h4>
             <span>#{nodeDatum.description}</span>"
 
     $ul = $(parent.children('ul')[i])

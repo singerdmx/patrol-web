@@ -96,6 +96,26 @@ module RepairReportsHelper
     results
   end
 
-  private
+  def update_part_status(report)
+    if report.part_id
+      part = Part.find(report.part_id)
+      status_string = get_problem_status_string(params[:status])
+      if status_string.in? ['完成', '取消']
+        part.update_attributes(status: 0)
+      else
+        part.update_attributes(status:  report.report_type)
+      end
+    end
+  end
+
+  def get_part_status_string(status)
+    case status
+      when 0 then '正常'
+      when 1 then '保养'
+      when 2 then '报修'
+      when 3 then '其他'
+      else fail "invalid part status #{status}"
+    end
+  end
 
 end

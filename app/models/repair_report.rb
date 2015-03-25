@@ -1,5 +1,6 @@
 require 'csv'
 
+# string "report_type": 1 (保养), 2(报修), 3(其他)
 class RepairReport < ActiveRecord::Base
   include ModelHelper
 

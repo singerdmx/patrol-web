@@ -1,5 +1,5 @@
 module AssetsHelper
-  include ApplicationHelper
+  include ApplicationHelper, RepairReportsHelper
   def index_json_builder(index_result)
     index_result.map do |result|
       entry = to_hash(result)
@@ -42,7 +42,9 @@ module AssetsHelper
           kind: 'part',
           icon: 'tool.png',
           title: part.name,
-          description: part.description,
+          description: part.description.nil? ? '' : part.description,
+          status_code: part.status,
+          status: get_part_status_string(part.status),
           children: []
         }
       end
