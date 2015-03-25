@@ -635,14 +635,18 @@ updatePartChart = (containerDiv, params) ->
   return
 
 renderFilledAreaChart = (chartId, title, data) ->
-  _line = []
+  _lines = [[],[],[]]
   _ticks = []
   for datum in data
     _range = dateToShortString(new Date(datum.time * 1000))
     _ticks.push(_range)
-    _line.push(datum.status)
+    for _line, i in _lines
+      if i is datum.status - 1
+        _line.push(1)
+      else
+        _line.push(0)
 
-  _series = [{label: '故障'}]
+  _series = [{label: '保养'}, {label: '报修'}, {label: '其他'}]
   _plot_setting =
     title: title
     stackSeries: true
@@ -652,13 +656,14 @@ renderFilledAreaChart = (chartId, title, data) ->
       rendererOptions:
         highlightMouseDown: true
     series: _series
+#    seriesColors: ['rgb(248, 148,​ 6)', 'rgb(217,​ 83,​ 79)', 'rgb(135,​ 206,​ 250)']
+    seriesColors: ['#F89406', '#D9534F', '#87CEFA']
     highlighter:
       tooltipContentEditor: (str, seriesIndex, pointIndex) ->
         _ticks[pointIndex]
       show: true,
       showMarker: true,
       tooltipLocation: 'se'
-    seriesColors: ['rgb(255, 0, 0)']
     axesDefaults:
       tickRenderer: $.jqplot.CanvasAxisTickRenderer
     axes:
@@ -680,7 +685,7 @@ renderFilledAreaChart = (chartId, title, data) ->
 
   $.jqplot(
     chartId,
-    [_line],
+    _lines,
     _plot_setting
   )
   return

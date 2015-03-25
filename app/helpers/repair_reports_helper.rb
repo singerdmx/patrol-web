@@ -48,9 +48,9 @@ module RepairReportsHelper
     reports.each do |r|
       case get_problem_status_string(r.status)
         when '完成', '取消'
-          error_ranges << [r.created_at, r.updated_at]
+          error_ranges << [r.created_at, r.updated_at, r.report_type]
         else
-          error_ranges << [r.created_at, Time.now]
+          error_ranges << [r.created_at, Time.now, r.report_type]
       end
     end
     status = 0
@@ -79,7 +79,7 @@ module RepairReportsHelper
           break if error_beg > t + 24.hours
           error_end = error_range[1]
           if error_beg <= t + 24.hours and t <= error_end
-            status = 1
+            status = error_range[2]
             break
           end
           error_range_index += 1
