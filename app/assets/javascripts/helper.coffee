@@ -1083,7 +1083,7 @@ window.setupDeleteAssetDiv = (containerDiv) ->
       alert '请选择设备！'
     else
       row = oTable.fnGetData(_selectedTr[0])
-      deleteAsset(row[0], containerDiv) if confirm("您确定要删除设备 '#{row[1]}' 条形码 '#{row[2]}' 吗？")
+      deleteAsset(row[0], containerDiv) if confirm("警告：该设备的检点和部件将一同被删除\n您确定要删除设备 '#{row[1]}' 条形码 '#{row[2]}' 吗？")
 
     return
 

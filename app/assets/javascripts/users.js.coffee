@@ -282,7 +282,9 @@ bindTreeViewClick = (containerDiv) ->
       when 'moveOut'
         detachPoint($(this)) if confirm("确认移出？")
       when 'delete'
-        deleteTreeNode($(this)) if confirm("确认删除？")
+        _msg = '确认删除？'
+        _msg = '警告：该设备的检点和部件将一同被删除\n' + _msg if $(this).data('kind') is 'asset'
+        deleteTreeNode($(this)) if confirm(_msg)
 
     return
 
