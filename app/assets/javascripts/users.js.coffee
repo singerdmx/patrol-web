@@ -444,7 +444,8 @@ showSessionInRecordsTable = (sessionId, sessionRoute, sessionStartTime, sessionE
   $('div#sidebar li#records').trigger('click')
   return
 
-updateRecordsTable = (containerDiv, params) ->
+updateRecordsTable = (containerDiv, params, tableDiv) ->
+  tableDiv = "#{containerDiv} > div:first" unless tableDiv
   requestParams = getTableParams(containerDiv, params)
   $sessionFilterDiv = $("#{containerDiv} div#sessionFilterDiv")
   if $sessionFilterDiv.length > 0 and $sessionFilterDiv.is(':visible')
@@ -518,7 +519,7 @@ updateRecordsTable = (containerDiv, params) ->
           oTable.fnDestroy() unless oTable?
 
         $("#{containerDiv} div#recordsTable_wrapper").remove()
-        $("#{containerDiv} > div").append('<table id="recordsTable"></table>')
+        $(tableDiv).append('<table id="recordsTable"></table>')
         $("#{containerDiv} table#recordsTable").dataTable
           'aaData': data
           'aoColumns': columns
@@ -692,6 +693,8 @@ updatePointChart = (containerDiv, params) ->
                $('div#infoBanner').show()
              else
                $('div#noHistoryBanner').text('该巡检点没有历史纪录').show()
+
+         updateRecordsTable(containerDiv, {check_point_id: _point.id},"#{containerDiv} div#recordsDiv > div:first")
 
       return
     error: (jqXHR, textStatus, errorThrown) ->
@@ -1012,7 +1015,6 @@ setupManageDataDiv = ->
     url: getBaseURL() + '/file.json',
     dataType: 'json',
     done: (e, data)->
-      console.log "Done", data.result
       $('div#uploadInfo').addClass('alert-success').text('上传成功！').show()
       return
 

@@ -173,6 +173,9 @@
 </div>
 <div class="containerDiv" id="historyDiv">
   <span id="targetPointId" class="hiddenSpan"></span>
+  <span class="hiddenSpan" id="recordsIfNoneMatch"></span>
+  <span class="hiddenSpan" id="recordsIfModifiedSince"></span>
+  <span class="hiddenSpan" id="calendarUpdated">false</span>
   <div style="width: 60%">
     <div style="width: 50%" class="calendarWidgetDiv">
       <div>起始时间</div>
@@ -220,6 +223,9 @@
   <div class="alert alert-warning historyBanner" id="noHistoryBanner">请输入条形码并更新</div>
   <div class="alert alert-danger historyBanner" id="errorBanner" style="display: none"></div>
   <div class="alert alert-info historyBanner" id="infoBanner" style="display: none"></div>
+  <div id="recordsDiv">
+    <div></div>
+  </div>
   <div id="chartDiv"></div>
 </div>
 <div class="containerDiv" id="problemsDiv">
