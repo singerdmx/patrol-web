@@ -7,11 +7,6 @@ class UsersController < ApplicationController
 
   # GET /users.json
   def index
-    if !show_full_view?
-      render json: {error: "此用户没有足够权限访问本页"}.to_json, status: :unauthorized
-      return
-    end
-
     ActiveRecord::Base.transaction do
       users = User.where(tombstone: false)
       users_index_json = to_json(users)

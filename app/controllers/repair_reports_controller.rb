@@ -22,7 +22,7 @@ class RepairReportsController < ApplicationController
         render json: reports_json.to_json
         return
       else
-        reports = RepairReport.where(created_by_id: current_user.id)
+        reports = RepairReport.where("created_by_id = ? OR assigned_to_id = ?", current_user.id, current_user.id).order(updated_at: :desc).limit(30)
         reports_json = index_json_builder(reports)
       end
 

@@ -37,11 +37,6 @@ class ProblemListController < ApplicationController
 
   # PUT /problem_list/1.json
   def update
-    unless current_user.is_admin?
-      render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
-      return
-    end
-
     report = RepairReport.find(params[:id])
 
     new_value = {
@@ -77,9 +72,12 @@ class ProblemListController < ApplicationController
 
   def query_repair_report(params)
     if params[:status] and params[:status].to_i != 0
-      RepairReport.where(status: params[:status].to_i)
+      reports = RepairReport.where(status: params[:status].to_i)
     else
-      RepairReport.all
+      reports = RepairReport.all
     end
+
+    reports = reports.where("created_by_id = ? OR assigned_to_id = ?", current_user.id, current_user.id) unless show_full_view?
+    reports
   end
 end
