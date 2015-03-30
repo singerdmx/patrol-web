@@ -105,6 +105,7 @@ class CheckResultsController < ApplicationController
         result: point['result'],
         status: point['status'],
         memo: point['memo'],
+        area_id: route.area.id,
         result_image_id: point['image'],
         result_audio_id: point['audio']
       }
