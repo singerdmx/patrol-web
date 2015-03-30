@@ -114,13 +114,13 @@ class CheckResultsController < ApplicationController
       result_record = CheckResult.create!(check_result_input)
 
       if point['status'] == 1
-        reports << create_repair_report(users, check_time_, point, result_record)
+        reports << create_repair_report(route, users, check_time_, point, result_record)
         contacts.merge(JSON.parse(route.contacts).map {|c| c.to_i}) unless route.contacts.blank?
       end
     end
   end
 
-  def create_repair_report(users, check_time_, point, result_record)
+  def create_repair_report(route, users, check_time_, point, result_record)
     check_point = CheckPoint.find(point['id'])
     users.add(check_point.default_assigned_id) if check_point.default_assigned_id
     repair_report_input = {
@@ -141,7 +141,7 @@ class CheckResultsController < ApplicationController
       result_audio_id: point['audio'],
       stopped: false,
       production_line_stopped: false,
-      area_id: check_point.check_routes.first.area.id
+      area_id: route.area.id
     }
     Rails.logger.info("creating repair_report #{repair_report_input}")
     RepairReport.create(repair_report_input)
