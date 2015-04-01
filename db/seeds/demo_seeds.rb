@@ -42,6 +42,7 @@ User.delete_all
 Contact.delete_all
 RepairReport.delete_all
 CheckSession.delete_all
+Manual.delete_all
 
 user1 = User.create! do |u|
   u.email = 'user@test.com'
@@ -969,12 +970,21 @@ check_point_7_choice_json = JSON.parse(check_point_7_choice)
 end
 
 
-manual1 = Manual.create( entry: "维护保养手册：条目 1 － 步骤如 1 －－ 1" )
+manual1 = Manual.create(
+  {
+    name: "工作指导 一",
+    entry: "维护保养手册：条目 1 － 步骤如 1 －－ 1"
+  })
+manual1.assets << asset3
 manual1.assets << asset10
 manual1.assets << asset11
 manual1.assets << asset12
 
-manual2 = Manual.create( entry: "维护保养手册：条目 2 － 步骤如 2 －－ 1" )
+manual2 = Manual.create(
+  {
+    name: "工作指导 二",
+    entry: "维护保养手册：条目 2 － 步骤如 2 －－ 1"
+  } )
 manual2.assets << asset20
 manual2.assets << asset21
 manual2.assets << asset22
