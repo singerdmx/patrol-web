@@ -1025,6 +1025,7 @@ repair_report11 = RepairReport.create(
      priority: 1,
      status: 2,
      check_result_id: session11.check_results.first.id,
+     report_num: "15033100001",
      report_type: 2,
     })
 
@@ -1064,6 +1065,7 @@ repair_report12 = RepairReport.create(
      status: 1,
      check_result_id: session12.check_results.first.id,
      report_type: 2,
+     report_num: "14121800001",
      created_at: "2014-12-18 06:47:34.954",
      updated_at: "2014-12-18 06:47:34.954"
     })
@@ -1103,6 +1105,7 @@ repair_report13 = RepairReport.create(
      status: 1,
      check_result_id: session13.check_results.first.id,
      report_type: 2,
+     report_num: "14121800002",
      created_at: "2014-12-18 06:47:34.954",
      updated_at: "2014-12-18 06:47:34.954"
     })
@@ -1142,6 +1145,7 @@ repair_report14 = RepairReport.create(
      status: 2,
      check_result_id: session14.check_results.first.id,
      report_type: 2,
+     report_num: "14121800003",
      created_at: "2014-12-18 06:47:34.954",
      updated_at: "2014-12-18 06:47:34.954"
     })
@@ -1181,6 +1185,7 @@ repair_report15 = RepairReport.create(
      status: 3,
      check_result_id: session15.check_results.first.id,
      report_type: 2,
+     report_num: "14121800004",
      created_at: "2014-12-18 06:47:34.954",
      updated_at: "2014-12-18 06:47:34.954"
     })
@@ -1221,6 +1226,7 @@ repair_report16 = RepairReport.create(
      status: 1,
      check_result_id: session16.check_results.first.id,
      report_type: 2,
+     report_num: "14121700005",
      created_at: "2014-12-17 06:47:34.954",
      updated_at: "2014-12-17 06:47:34.954"
     })
@@ -1260,6 +1266,7 @@ repair_report17 = RepairReport.create(
      status: 1,
      check_result_id: session17.check_results.first.id,
      report_type: 2,
+     report_num: "14121600006",
      created_at: "2014-12-16 06:47:34.954",
      updated_at: "2014-12-16 06:47:34.954"
     })
@@ -1299,6 +1306,7 @@ repair_report18 = RepairReport.create(
      status: 1,
      check_result_id: session18.check_results.first.id,
      report_type: 2,
+     report_num: "14121500001",
      created_at: "2014-12-15 06:47:34.954",
      updated_at: "2014-12-15 06:47:34.954"
     })
@@ -1340,6 +1348,7 @@ repair_report19 = RepairReport.create(
      check_result_id: session19.check_results.first.id,
      report_type: 2,
      plan_date: "2014-12-16",
+     report_num: "14121500002",
      created_at: "2014-12-15 06:47:34.954",
      updated_at: "2014-12-15 06:47:34.954"
     })
@@ -1377,6 +1386,7 @@ repair_report19 = RepairReport.create(
      created_by_id: user1.id,
      priority: 1,
      status: 2,
+     report_num: "14121800010",
      check_result_id: session19.check_results.first.id,
      report_type: 2,
     })
@@ -1396,6 +1406,7 @@ repair_report20 = RepairReport.create(
    priority: 1,
    status: 2,
    report_type: 1,
+   report_num: "14033100001",
    created_at: report_time,
    updated_at: report_time,
   })
@@ -1414,6 +1425,7 @@ repair_report21 = RepairReport.create(
    priority: 1,
    status: 2,
    report_type: 2,
+   report_num: "15033000001",
    created_at: report_time,
    updated_at: report_time,
   })
@@ -1434,6 +1446,7 @@ repair_report22 = RepairReport.create(
    priority: 1,
    status: 1,
    report_type: 2,
+   report_num: "15033000002",
    created_at: report_time,
    updated_at: done_time,
   })
@@ -1454,6 +1467,7 @@ repair_report23 = RepairReport.create(
    priority: 1,
    status: 1,
    report_type: 1,
+   report_num: "15033000003",
    created_at: report_time,
    updated_at: done_time,
   })
@@ -1474,6 +1488,7 @@ repair_report24 = RepairReport.create(
    priority: 1,
    status: 1,
    report_type: 2,
+   report_num: "15033000004",
    created_at: report_time,
    updated_at: done_time,
   })
