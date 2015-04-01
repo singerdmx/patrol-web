@@ -1,16 +1,22 @@
 class ManualsController < ApplicationController
+  include ManualsHelper
 
   # GET /manuals.json
   def index
-    manuals = {}
-    all_manuals = Manual.where(tombstone: false)
-    all_manuals.all.each do |m|
-      manuals[m[:id]] = m[:entry]
-    end
-    if stale?(etag: manuals, last_modified: all_manuals.maximum(:updated_at))
-      render json: manuals.to_json
-    else
-      head :not_modified
+    ActiveRecord::Base.transaction do
+      manuals = Manual.where(manual_params).where(tombstone: false)
+      if params[:ui] == 'true'
+        manuals_json = index_ui_json_builder(manuals)
+      else
+        manuals_json = index_json_builder(manuals)
+      end
+
+      if stale?(etag: manuals_json,
+                last_modified: manuals.maximum(:updated_at))
+        render json: manuals_json.to_json
+      else
+        head :not_modified
+      end
     end
   rescue Exception => e
     Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")

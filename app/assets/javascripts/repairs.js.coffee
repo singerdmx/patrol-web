@@ -224,6 +224,8 @@ setupManageDataDiv = ->
       when 'attachPartToAsset'
         updateAssetsTable('div#managementData div#attachPartToAsset')
         updatePartsTable('div#managementData div#attachPartToAsset')
+      when 'editManual'
+        updateManualsTable('div#managementData div#editManual')
     return
 
   setupCreatePartDiv()
@@ -232,6 +234,7 @@ setupManageDataDiv = ->
   setupDeleteAssetDiv('div#managementData div#deleteAsset')
   setupAttachPartToAssetDiv('div#managementData div#attachPartToAsset')
   setupCreateManualDiv('div#managementData div#createManual')
+  setupEditManualDiv('div#managementData div#editManual')
 
   return
 
@@ -543,6 +546,65 @@ setupCreateManualDiv = (containerDiv) ->
         return
       timeout: defaultAjaxCallTimeout
     return
+
+  return
+
+setupEditManualDiv = (containerDiv) ->
+  $("#{containerDiv} button#btnEditManual").click ->
+    return
+  return
+
+updateManualsTable = (containerDiv) ->
+  $.ajax
+    url: getBaseURL() + '/manuals.json?ui=true'
+    beforeSend: (xhr) ->
+      setXhrRequestHeader(xhr, containerDiv, 'manuals')
+      return
+    success: (data, textStatus, jqHXR) ->
+      if jqHXR.status is 200
+        for record in data
+          record[3] = joinStringArrayWithBR(record[3])
+
+        columns = [
+          { "sTitle": "ID" },
+          { "sTitle": "名称" },
+          { "sTitle": "内容" },
+          { "sTitle": "设备" }
+        ]
+        if $("#{containerDiv} table#manualsTable > tbody[role='alert'] td.dataTables_empty").length is 0
+          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
+          oTable = $("#{containerDiv} table#manualsTable").dataTable()
+          oTable.fnDestroy() unless oTable?
+
+        $("#{containerDiv} div#manualsTable_wrapper").remove()
+        $("#{containerDiv} div#manualsTableDiv").append('<table id="manualsTable"></table>')
+        $("#{containerDiv} table#manualsTable").dataTable
+          'aaData': data
+          'aoColumns': columns
+          'aaSorting': [[ 1, 'asc' ]]
+          'iDisplayLength': 5
+          'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, '全部']]
+
+        oTable = $("#{containerDiv} table#manualsTable").dataTable()
+        oTable.fnSetColumnVis(0, false)
+        $("#{containerDiv} table#manualsTable > tbody").on(
+            'click',
+            'tr',
+          ->
+            oTable = $("#{containerDiv} table#manualsTable").dataTable()
+            oTable.$('tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
+            $(this).addClass('mediumSeaGreenBackground')
+            return
+        )
+
+        $("#{containerDiv} span#manualsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+        $("#{containerDiv} span#manualsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    ifModified: true,
+    dataType: 'json',
+    timeout: defaultAjaxCallTimeout
 
   return
 
