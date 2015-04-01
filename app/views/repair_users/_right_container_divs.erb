@@ -298,6 +298,18 @@
         </ul>
       </div>
     </div>
+    <div>
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle mediumWidth" type="button" data-toggle="dropdown">
+          <span class="caret"></span>
+          工作指导管理
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+          <li role="presentation"><a role="menuitem" data-div="createManual">创建</a></li>
+          <li role="presentation"><a role="menuitem" data-div="editManual">编辑</a></li>
+        </ul>
+      </div>
+    </div>
   </div>
   <div id="managementData">
     <span class="hiddenSpan" id="switchPartTo"></span>
@@ -390,6 +402,17 @@
       <div id="edit_delete_part_buttons">
         <button id="btnEditPart" class="btn btn-info" type="button">编辑部件</button>
         <button id="btnDeletePart" class="btn btn-danger" type="button">删除部件</button>
+      </div>
+    </div>
+    <div id="createManual" style="display: none" class="submissionForm">
+      <h2 class="form-signin-heading">创建工作指导</h2>
+      <input type="text" value="" required="required" placeholder="名称（必填）" id="manualName" class="form-control"/>
+      <h5 style="color: #999999">内容（必填）</h5>
+      <textarea id="manualEntry" required="required" class="form-control"></textarea>
+
+      <div style="margin-top: 5px; display: block">
+        <button class="btn btn-warning" type="button" id="btnCancelCreateManual"/>重置</button>
+        <button class="btn btn-primary" type="button" id="btnCreateManual"/>提交</button>
       </div>
     </div>
   </div>

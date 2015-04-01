@@ -231,6 +231,7 @@ setupManageDataDiv = ->
   setupCreateAssetDiv(setupBtnAddPartToAsset)
   setupDeleteAssetDiv('div#managementData div#deleteAsset')
   setupAttachPartToAssetDiv('div#managementData div#attachPartToAsset')
+  setupCreateManualDiv('div#managementData div#createManual')
 
   return
 
@@ -504,6 +505,18 @@ attachPartToAsset = (partId, assetId, containerDiv) ->
       showErrorPage(jqXHR.responseText)
       return
     timeout: defaultAjaxCallTimeout
+  return
+
+setupCreateManualDiv = (containerDiv) ->
+  $("#{containerDiv} button#btnCancelCreateManual").click ->
+    clearCreateManualForm(containerDiv)
+    return
+
+  return
+
+clearCreateManualForm = (containerDiv) ->
+  resetToPlaceholderValue($("#{containerDiv} input"))
+  $("#{containerDiv} textarea").val('')
   return
 
 moveCalendar = (containerDiv, days) ->
