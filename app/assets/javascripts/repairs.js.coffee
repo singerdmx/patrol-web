@@ -512,6 +512,38 @@ setupCreateManualDiv = (containerDiv) ->
     clearCreateManualForm(containerDiv)
     return
 
+  $("#{containerDiv} button#btnCreateManual").click ->
+    $manualName = $("#{containerDiv} input#manualName")
+    if isInputValueEmpty($manualName)
+      alert '请填写名称！'
+      return
+
+    $manualEntry = $("#{containerDiv} textarea#manualEntry")
+    if isInputValueEmpty($manualEntry)
+      alert '请填写内容！'
+      return
+
+    manualInfo = {
+      name: $manualName.val(),
+      entry: $manualEntry.val()
+    }
+
+    $.ajax
+      url: getBaseURL() + '/manuals.json'
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(manualInfo),
+      dataType: 'json',
+      success: (data, textStatus, jqHXR) ->
+        alert '工作指导创建成功'
+        clearCreateManualForm(containerDiv)
+        return
+      error: (jqXHR, textStatus, errorThrown) ->
+        showErrorPage(jqXHR.responseText)
+        return
+      timeout: defaultAjaxCallTimeout
+    return
+
   return
 
 clearCreateManualForm = (containerDiv) ->

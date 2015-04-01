@@ -39,7 +39,6 @@ class AssetsController < ApplicationController
     render json: {message: e.to_s}.to_json, status: :not_found
   end
 
-  # POST /assets
   # POST /assets.json
   def create
     unless current_user.is_admin?
