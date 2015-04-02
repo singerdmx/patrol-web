@@ -216,7 +216,7 @@ setupManageDataDiv = ->
         setupCreatePartForm('div#createPart')
       when 'editDeletePart'
         $('div#managementData div#partsTableDiv, div#managementData div#edit_delete_part_buttons').show()
-        $('div#createPart').hide()
+        $('div#managementData div#createPart').hide()
         $('div#createPart button#btnCancelCreatePart').text('返回')
         $('div#createPart > h2:first').text('编辑部件')
         $('div#managementData div#categorySelection').hide()
@@ -224,7 +224,16 @@ setupManageDataDiv = ->
       when 'attachPartToAsset'
         updateAssetsTable('div#managementData div#attachPartToAsset')
         updatePartsTable('div#managementData div#attachPartToAsset')
+      when 'createManual'
+        $('div#managementData span#switchManualTo').text('')
+        $('div#createManual button#btnCancelCreateManual').text('重置')
+        $('div#createManual > h2:first').text('创建工作指导')
+        setupCreateManualForm('div#createManual')
       when 'editManual'
+        $('div#managementData div#manualsTableDiv, div#managementData div#edit_manual_buttons').show()
+        $('div#managementData div#createManual').hide()
+        $('div#createManual button#btnCancelCreateManual').text('返回')
+        $('div#createManual > h2:first').text('编辑工作指导')
         updateManualsTable('div#managementData div#editManual')
     return
 
@@ -330,7 +339,7 @@ validateCreatePartForm = (containerDiv, partInfo, suggestions) ->
 
   unless valid
     alert '责任人填写错误！'
-    return
+    return false
 
   partInfo['default_assigned_id'] = assignedToId
   true
@@ -346,7 +355,6 @@ setupCreatePartDiv = ->
       switch $('div#createPart > h2:first').text()
         when '编辑部件'
           updatePartsTable('div#managementData div#editDeletePart')
-      return
 
     return
 
@@ -513,46 +521,115 @@ attachPartToAsset = (partId, assetId, containerDiv) ->
 setupCreateManualDiv = (containerDiv) ->
   $("#{containerDiv} button#btnCancelCreateManual").click ->
     clearCreateManualForm(containerDiv)
+    _switchManualTo = $('div#managementData span#switchManualTo').text()
+    unless _switchManualTo is ''
+      $('div#managementData span#switchManualTo').text('')
+      $("#{_switchManualTo}").show()
+      $('div#createManual').hide()
+      switch $('div#createManual > h2:first').text()
+        when '编辑工作指导'
+          updatePartsTable('div#managementData div#editManual')
+
+    return
+  return
+
+setupEditManualDiv = (containerDiv) ->
+  $("#{containerDiv} button#btnEditManual").click ->
+    oTable = $("#{containerDiv} table#manualsTable").dataTable()
+    _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
+    if _selectedTr.length is 0
+      alert '请选择工作指导！'
+      return
+
+    row = oTable.fnGetData(_selectedTr[0])
+    _switchManualTo = "#{containerDiv} div#manualsTableDiv, #{containerDiv} div#edit_manual_buttons"
+    $('div#managementData span#switchManualTo').text(_switchManualTo)
+    $(_switchManualTo).hide()
+    $('div#createManual').show()
+    setupCreateManualForm('div#createManual')
+    $.ajax
+      url: getBaseURL() + "/manuals/#{row[0]}.json?r=#{getRandomArbitrary(0, 10240)}" # disable browser cache for the same GET
+      success: (data, textStatus, jqHXR) ->
+        if jqHXR.status is 200
+          $('div#createManual span#manualId').text(data.id)
+          $('div#createManual input#manualName').val(data.name)
+          $('div#createManual textarea#manualEntry').val(data.entry)
+
+        return
+      error: (jqXHR, textStatus, errorThrown) ->
+        showErrorPage(jqXHR.responseText)
+        return
+      ifModified: true,
+      dataType: 'json',
+      timeout: defaultAjaxCallTimeout
+
     return
 
-  $("#{containerDiv} button#btnCreateManual").click ->
-    $manualName = $("#{containerDiv} input#manualName")
-    if isInputValueEmpty($manualName)
-      alert '请填写名称！'
-      return
+  return
 
-    $manualEntry = $("#{containerDiv} textarea#manualEntry")
-    if isInputValueEmpty($manualEntry)
-      alert '请填写内容！'
-      return
+setupCreateManualForm = (containerDiv) ->
+  $('div#createManual button#btnCreateManual').unbind('click')
+  $('div#createManual button#btnCreateManual').click ->
+    requestType = null
+    _relativeUrl = null
+    switch $('div#createManual > h2:first').text()
+      when '创建工作指导'
+        requestType = 'POST'
+        _relativeUrl = '/manuals.json'
+      when '编辑工作指导'
+        requestType = 'PUT'
+        _relativeUrl = "/manuals/#{$('div#createManual span#manualId').text()}.json"
+      else
+        alert "Wrong createManual title #{$('div#createManual > h2:first').text()}"
+        return
 
-    manualInfo = {
-      name: $manualName.val(),
-      entry: $manualEntry.val()
-    }
-
+    manualInfo = {}
+    return unless validateCreateManualForm('div#createManual', manualInfo)
     $.ajax
-      url: getBaseURL() + '/manuals.json'
-      type: 'POST',
+      url: getBaseURL() + _relativeUrl
+      type: requestType,
       contentType: 'application/json',
       data: JSON.stringify(manualInfo),
       dataType: 'json',
       success: (data, textStatus, jqHXR) ->
-        alert '工作指导创建成功'
         clearCreateManualForm(containerDiv)
+        _switchManualTo = $('div#managementData span#switchManualTo').text()
+        unless _switchManualTo is ''
+          $('div#managementData span#switchManualTo').text('')
+          $("#{_switchManualTo}").show()
+          $('div#createManual').hide()
+
+        switch requestType
+          when 'POST'
+            alert '工作指导创建成功'
+          when 'PUT'
+            alert '工作指导编辑成功'
+            updateManualsTable('div#managementData div#editManual')
+
         return
       error: (jqXHR, textStatus, errorThrown) ->
         showErrorPage(jqXHR.responseText)
         return
       timeout: defaultAjaxCallTimeout
-    return
 
-  return
-
-setupEditManualDiv = (containerDiv) ->
-  $("#{containerDiv} button#btnEditManual").click ->
     return
   return
+
+validateCreateManualForm = (containerDiv, manualInfo) ->
+  manualInfo = {} unless manualInfo
+  $manualName = $("#{containerDiv} input#manualName")
+  if isInputValueEmpty($manualName)
+    alert '请填写名称！'
+    return false
+
+  $manualEntry = $("#{containerDiv} textarea#manualEntry")
+  if isInputValueEmpty($manualEntry)
+    alert '请填写内容！'
+    return false
+
+  manualInfo['name'] = $manualName.val()
+  manualInfo['entry'] = $manualEntry.val()
+  true
 
 updateManualsTable = (containerDiv) ->
   $.ajax

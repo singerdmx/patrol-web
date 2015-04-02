@@ -23,6 +23,19 @@ class ManualsController < ApplicationController
     render json: {message: e.to_s}.to_json, status: :internal_server_error
   end
 
+  # GET /manuals/1.json
+  def show
+    ActiveRecord::Base.transaction do
+      manual = Manual.find(params[:id])
+      m = to_hash(manual)
+      m['assets'] = Asset.where(manual_id: m['id']).where(tombstone: false)
+      render json: m.to_json
+    end
+  rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
+    render json: {message: e.to_s}.to_json, status: :not_found
+  end
+
   # POST /manuals.json
   def create
     unless current_user.is_admin?
@@ -32,6 +45,23 @@ class ManualsController < ApplicationController
 
     manual = Manual.create!(manual_params)
     render json: manual.to_json, status: :created
+  rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
+    render json: {message: e.to_s}.to_json, status: :internal_server_error
+  end
+
+  # PATCH/PUT /manuals/1.json
+  def update
+    unless current_user.is_admin?
+      render json: {message: '您没有权限进行本次操作！'}.to_json, status: :unauthorized
+      return
+    end
+
+    if Manual.find(params[:id]).update(manual_params)
+      render json: {id: params[:id]}.to_json
+    else
+      fail 'Update failed'
+    end
   rescue Exception => e
     Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error

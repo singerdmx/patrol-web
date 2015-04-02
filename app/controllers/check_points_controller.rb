@@ -70,7 +70,7 @@ class CheckPointsController < ApplicationController
     end
 
     if CheckPoint.find(params[:id]).update(check_point_params.except(:category, :choice))
-      render nothing: true
+      render json: {id: params[:id]}.to_json
     else
       fail 'Update failed'
     end

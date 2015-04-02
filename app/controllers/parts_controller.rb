@@ -63,9 +63,8 @@ class PartsController < ApplicationController
       return
     end
 
-    part = Part.find(params[:id])
-    if part.update(part_params)
-      render nothing: true
+    if Part.find(params[:id]).update(part_params)
+      render json: {id: params[:id]}.to_json
     else
       fail 'Update failed'
     end
