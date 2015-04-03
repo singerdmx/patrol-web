@@ -117,6 +117,15 @@ class AssetsController < ApplicationController
     render json: {message: e.to_s}.to_json, status: :unprocessable_entity
   end
 
+  # PUT /assets/1/set_manual?manual=id
+  def set_manual
+    Asset.find(params[:asset_id]).update_attributes(manual_id: params[:manual])
+    render json: { success: true }.to_json, status: :ok
+  rescue Exception => e
+    Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
+    render json: {message: e.to_s}.to_json, status: :unprocessable_entity
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

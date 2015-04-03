@@ -307,6 +307,7 @@
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation"><a role="menuitem" data-div="createManual">创建</a></li>
           <li role="presentation"><a role="menuitem" data-div="editManual">编辑</a></li>
+          <li role="presentation"><a role="menuitem" data-div="attachManualToAsset">指定设备</a></li>
         </ul>
       </div>
     </div>
@@ -424,6 +425,22 @@
       </div>
       <div id="edit_manual_buttons">
         <button id="btnEditManual" class="btn btn-info" type="button">编辑工作指导</button>
+      </div>
+    </div>
+    <div id="attachManualToAsset" style="display: none">
+      <div id="assetsTableDiv">
+        <span class="hiddenSpan" id="assetsIfNoneMatch"></span>
+        <span class="hiddenSpan" id="assetsIfModifiedSince"></span>
+      </div>
+      <div id="attach_manual_to_asset_button">
+        <button id="btnAttachManualToAsset" class="btn btn-success" type="button">
+          <i class="icon-upload icon-white"></i>
+          指定设备的工作指导
+        </button>
+      </div>
+      <div id="manualsTableDiv">
+        <span class="hiddenSpan" id="partsIfNoneMatch"></span>
+        <span class="hiddenSpan" id="partsIfModifiedSince"></span>
       </div>
     </div>
   </div>

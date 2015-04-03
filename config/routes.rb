@@ -4,6 +4,7 @@ Blog::Application.routes.draw do
   resources :assets do
     put :attach_point
     put :attach_part
+    put :set_manual
   end
   resources :check_routes, path: :routes do
     put :detach_point

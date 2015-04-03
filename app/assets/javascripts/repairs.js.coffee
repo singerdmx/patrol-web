@@ -235,6 +235,9 @@ setupManageDataDiv = ->
         $('div#createManual button#btnCancelCreateManual').text('返回')
         $('div#createManual > h2:first').text('编辑工作指导')
         updateManualsTable('div#managementData div#editManual')
+      when 'attachManualToAsset'
+        updateAssetsTable('div#managementData div#attachManualToAsset')
+        updateManualsTable('div#managementData div#attachManualToAsset')
     return
 
   setupCreatePartDiv()
@@ -244,6 +247,7 @@ setupManageDataDiv = ->
   setupAttachPartToAssetDiv('div#managementData div#attachPartToAsset')
   setupCreateManualDiv('div#managementData div#createManual')
   setupEditManualDiv('div#managementData div#editManual')
+  setupAttachManualToAssetDiv('div#managementData div#attachManualToAsset')
 
   return
 
@@ -688,6 +692,45 @@ updateManualsTable = (containerDiv) ->
 clearCreateManualForm = (containerDiv) ->
   resetToPlaceholderValue($("#{containerDiv} input"))
   $("#{containerDiv} textarea").val('')
+  return
+
+setupAttachManualToAssetDiv = (containerDiv) ->
+  $("#{containerDiv} button#btnAttachManualToAsset").click ->
+    oTable1 = $("#{containerDiv} table#assetsTable").dataTable()
+    _selectedTr1 = oTable1.$('tr.mediumSeaGreenBackground')
+    if _selectedTr1.length is 0
+      alert '请选择设备！'
+      return
+
+    oTable2 = $("#{containerDiv} table#manualsTable").dataTable()
+    _selectedTr2 = oTable2.$('tr.mediumSeaGreenBackground')
+    if _selectedTr2.length is 0
+      alert '请选择工作指导！'
+      return
+
+    row1 = oTable1.fnGetData(_selectedTr1[0])
+    row2 = oTable2.fnGetData(_selectedTr2[0])
+    setManualToAsset(row2[0], row1[0], containerDiv) if confirm("指定设备 '#{row1[1]}' 条形码 '#{row1[2]}' 的工作指导为 '#{row2[1]}' 吗？")
+
+    return
+
+  return
+
+setManualToAsset = (manualId, assetId, containerDiv) ->
+  $.ajax
+    url: getBaseURL() + "/assets/#{assetId}/set_manual?manual=#{manualId}"
+    type: 'PUT',
+    contentType: 'application/json',
+    dataType: 'json',
+    success: (data, textStatus, jqHXR) ->
+      updateAssetsTable(containerDiv)
+      updateManualsTable(containerDiv)
+      alert '已经成功指定设备的工作指导！'
+      return
+    error: (jqXHR, textStatus, errorThrown) ->
+      showErrorPage(jqXHR.responseText)
+      return
+    timeout: defaultAjaxCallTimeout
   return
 
 moveCalendar = (containerDiv, days) ->
