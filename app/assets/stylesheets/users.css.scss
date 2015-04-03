@@ -313,15 +313,6 @@ div#manageDataDiv {
   }
 }
 
-div#createRoute {
-  div#contacts_for_route {
-    height: 100px;
-    overflow-y: scroll;
-    padding: 3px;
-    background-color: $LightCyan;
-  }
-}
-
 div#createPoint {
   div#addPointChoiceDiv {
     > div {

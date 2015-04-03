@@ -412,6 +412,15 @@
       <input type="text" value="" required="required" placeholder="名称（必填）" id="manualName" class="form-control"/>
       <h5 style="color: #999999">内容（必填）</h5>
       <textarea id="manualEntry" required="required" class="form-control" style="height: 180px"></textarea>
+      <div class="floatLeft">
+        <div>
+          <span>设备</span>
+        </div>
+        <div>
+          <div id="assets" class="selectionArea">
+          </div>
+        </div>
+      </div>
 
       <div style="margin-top: 5px; display: block">
         <button class="btn btn-warning" type="button" id="btnCancelCreateManual"/>重置</button>
@@ -439,8 +448,8 @@
         </button>
       </div>
       <div id="manualsTableDiv">
-        <span class="hiddenSpan" id="partsIfNoneMatch"></span>
-        <span class="hiddenSpan" id="partsIfModifiedSince"></span>
+        <span class="hiddenSpan" id="manualsIfNoneMatch"></span>
+        <span class="hiddenSpan" id="manualsIfModifiedSince"></span>
       </div>
     </div>
   </div>

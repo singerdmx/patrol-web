@@ -279,6 +279,13 @@ input {
   @extend .error;
 }
 
+div.selectionArea {
+  height: 100px;
+  overflow-y: scroll;
+  padding: 3px;
+  background-color: $LightCyan;
+}
+
 /* Users index */
 
 .users {

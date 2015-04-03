@@ -57,10 +57,22 @@ class ManualsController < ApplicationController
       return
     end
 
-    if Manual.find(params[:id]).update(manual_params)
-      render json: {id: params[:id]}.to_json
-    else
-      fail 'Update failed'
+    ActiveRecord::Base.transaction do
+      if Manual.find(params[:id]).update(manual_params)
+        params[:assets] = [] unless params[:assets]
+        Set.new Asset.where(manual_id: params[:id]).where(tombstone: false).each do |asset|
+          unless params[:assets].include?(asset.id.to_s)
+            asset.update_attributes(manual_id: nil)
+          end
+        end
+        params[:assets].each do |a|
+          asset_id = a.to_i
+          Asset.find(asset_id).update_attributes(manual_id: params[:id])
+        end
+        render json: {id: params[:id]}.to_json
+      else
+        fail 'Update failed'
+      end
     end
   rescue Exception => e
     Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")

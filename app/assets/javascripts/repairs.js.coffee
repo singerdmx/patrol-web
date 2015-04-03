@@ -559,6 +559,15 @@ setupEditManualDiv = (containerDiv) ->
           $('div#createManual input#manualName').val(data.name)
           $('div#createManual textarea#manualEntry').val(data.entry)
 
+          if data.assets
+            for a in data.assets
+              asset = a.name
+              asset += a.description if a.description
+              $('div#createManual div#assets').append("<span class='lavenderBackground'>
+                    <span class='hiddenSpan'>#{a.id}</span><i class='icon-remove'></i>#{asset}</span>")
+
+          $('div#createManual div#assets > span > i').click(removeParent)
+
         return
       error: (jqXHR, textStatus, errorThrown) ->
         showErrorPage(jqXHR.responseText)
@@ -589,6 +598,7 @@ setupCreateManualForm = (containerDiv) ->
 
     manualInfo = {}
     return unless validateCreateManualForm('div#createManual', manualInfo)
+    manualInfo['assets'] = ($(span).children('span').text() for span in $('div#createManual div#assets > span'))
     $.ajax
       url: getBaseURL() + _relativeUrl
       type: requestType,
@@ -692,6 +702,7 @@ updateManualsTable = (containerDiv) ->
 clearCreateManualForm = (containerDiv) ->
   resetToPlaceholderValue($("#{containerDiv} input"))
   $("#{containerDiv} textarea").val('')
+  $("#{containerDiv} div#assets").html('')
   return
 
 setupAttachManualToAssetDiv = (containerDiv) ->
