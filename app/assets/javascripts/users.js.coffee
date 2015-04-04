@@ -370,56 +370,51 @@ updateSessionsTable = (containerDiv, params) ->
       return
     data: requestParams
     success: (data, textStatus, jqHXR) ->
-      if jqHXR.status is 200
-        for record in data
-          columnDateToString(record, [2, 3])
+      return unless jqHXR.status is 200
 
-        columns = [
-          { "sTitle": "ID" },
-          { "sTitle": "路线" },
-          { "sTitle": "开始时间" },
-          { "sTitle": "结束时间" },
-          { "sTitle": "用户名" },
-          { "sTitle": "邮箱" },
-        ]
+      for record in data
+        columnDateToString(record, [2, 3])
 
-        if $("#{containerDiv} table#sessionsTable > tbody[role='alert'] td.dataTables_empty").length is 0
-          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
-          oTable = $("#{containerDiv} table#sessionsTable").dataTable()
-          oTable.fnDestroy() unless oTable?
+      columns = [
+        { "sTitle": "ID" },
+        { "sTitle": "路线" },
+        { "sTitle": "开始时间" },
+        { "sTitle": "结束时间" },
+        { "sTitle": "用户名" },
+        { "sTitle": "邮箱" },
+      ]
 
-        $("#{containerDiv} div#sessionsTable_wrapper").remove()
-        $("#{containerDiv} > div").append('<table id="sessionsTable"></table>')
-        $("#{containerDiv} table#sessionsTable").dataTable
-          'aaData': data
-          'aoColumns': columns
-          'aaSorting': [[ 2, 'desc' ]]
-          'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
-            $(nRow).hover(
-              ->
-                $(this).addClass('mediumSeaGreenBackground')
-                $(this).css('cursor', 'pointer')
-                $("#{containerDiv} div#sessionsTooltipDiv").show()
-                return
-              ->
-                $(this).removeClass('mediumSeaGreenBackground')
-                $("#{containerDiv} div#sessionsTooltipDiv").hide()
-                return
-            )
-
-            $(nRow).click ->
-              showSessionInRecordsTable(aaData[0], aaData[1], aaData[2], aaData[3],
-                getDatetimePickerEpoch('div#sessionsDiv div#startTime'),
-                getDatetimePickerEpoch('div#sessionsDiv div#endTime'))
+      clearTable(containerDiv, 'sessionsTable', 'sessions')
+      $("#{containerDiv} table#sessionsTable").dataTable
+        'aaData': data
+        'aoColumns': columns
+        'aaSorting': [[ 2, 'desc' ]]
+        'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
+          $(nRow).hover(
+            ->
+              $(this).addClass('mediumSeaGreenBackground')
+              $(this).css('cursor', 'pointer')
+              $("#{containerDiv} div#sessionsTooltipDiv").show()
               return
+            ->
+              $(this).removeClass('mediumSeaGreenBackground')
+              $("#{containerDiv} div#sessionsTooltipDiv").hide()
+              return
+          )
 
+          $(nRow).click ->
+            showSessionInRecordsTable(aaData[0], aaData[1], aaData[2], aaData[3],
+              getDatetimePickerEpoch('div#sessionsDiv div#startTime'),
+              getDatetimePickerEpoch('div#sessionsDiv div#endTime'))
             return
 
-        oTable = $("#{containerDiv} table#sessionsTable").dataTable()
-        oTable.fnSetColumnVis(0, false)
+          return
 
-        $("#{containerDiv} > span#sessionsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
-        $("#{containerDiv} > span#sessionsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+      oTable = $("#{containerDiv} table#sessionsTable").dataTable()
+      oTable.fnSetColumnVis(0, false)
+
+      $("#{containerDiv} > span#sessionsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+      $("#{containerDiv} > span#sessionsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 
       return
     error: (jqXHR, textStatus, errorThrown) ->
@@ -949,7 +944,7 @@ setupCreatePointForm = (containerDiv) ->
             alert '检点创建成功'
           when 'PUT'
             alert '检点编辑成功'
-            updatePointsTable('div#managementData div#editDeletePoint')
+            updatePointsTable('div#managementData div#editDeletePoint', 'pointsEditTable')
 
         return
       error: (jqXHR, textStatus, errorThrown) ->
@@ -983,7 +978,7 @@ setupManageDataDiv = ->
         $('div#createRoute button#btnCancelCreateRoute').text('返回')
         $('div#createRoute > h2:first').text('编辑路线')
         $('div#editDeleteRoute > div').show()
-        updateRoutesTable('div#managementData div#editDeleteRoute')
+        updateRoutesTable('div#managementData div#editDeleteRoute', 'routesEditDeleteTable')
       when 'createPoint'
         $('div#managementData span#switchPointTo').text('')
         $('div#createPoint button#btnCancelCreatePoint').text('重置')
@@ -1000,15 +995,15 @@ setupManageDataDiv = ->
         $('div#createPoint button#btnCancelCreatePoint').text('返回')
         $('div#createPoint > h2:first').text('编辑检点')
         $('div#managementData div#categorySelection').hide()
-        updatePointsTable('div#managementData div#editDeletePoint')
+        updatePointsTable('div#managementData div#editDeletePoint', 'pointsEditTable')
       when 'deleteAsset'
-        updateAssetsTable('div#managementData div#deleteAsset')
+        updateAssetsTable('div#managementData div#deleteAsset', 'assetsDeleteTable')
       when 'attachPointToAsset'
-        updateAssetsTable('div#managementData div#attachPointToAsset')
-        updatePointsTable('div#managementData div#attachPointToAsset')
+        updateAssetsTable('div#managementData div#attachPointToAsset', 'assetsAttachPointTable')
+        updatePointsTable('div#managementData div#attachPointToAsset', 'pointsAttachAssetTable')
       when 'attachPointToRoute'
-        updateRoutesTable('div#managementData div#attachPointToRoute')
-        updatePointsTable('div#managementData div#attachPointToRoute')
+        updateRoutesTable('div#managementData div#attachPointToRoute', 'routesAttachTable')
+        updatePointsTable('div#managementData div#attachPointToRoute', 'pointsAttachRouteTable')
     return
 
   $('form#uploadFile').fileupload
@@ -1058,9 +1053,9 @@ attachPointToRoute = (pointId, routeId, containerDiv) ->
     contentType: 'application/json',
     dataType: 'json',
     success: (data, textStatus, jqHXR) ->
-      updateRoutesTable(containerDiv)
-      updatePointsTable(containerDiv)
-      alert '已经成功连接检点到设备！'
+      updateRoutesTable(containerDiv, 'routesAttachTable')
+      updatePointsTable(containerDiv, 'pointsAttachRouteTable')
+      alert '已经成功连接检点到路线！'
       return
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
@@ -1068,53 +1063,36 @@ attachPointToRoute = (pointId, routeId, containerDiv) ->
     timeout: defaultAjaxCallTimeout
   return
 
-updateRoutesTable = (containerDiv) ->
+updateRoutesTable = (containerDiv, tableName) ->
   $.ajax
     url: getBaseURL() + '/routes.json?show_name=true'
     beforeSend: (xhr) ->
       setXhrRequestHeader(xhr, containerDiv, 'routes')
       return
     success: (data, textStatus, jqHXR) ->
-      if jqHXR.status is 200
-        records = ([record['id'], record['name'], record['description'], record['area_name'], record['points'], joinStringArrayWithBR(record['contacts'])] for record in data)
+      return unless jqHXR.status is 200
 
-        columns = [
-          { "sTitle": "ID" },
-          { "sTitle": "名称" },
-          { "sTitle": "描述" },
-          { "sTitle": "工区" },
-          { "sTitle": "检点" },
-          { "sTitle": "联系人" }
-        ]
-        if $("#{containerDiv} table#routesTable > tbody[role='alert'] td.dataTables_empty").length is 0
-          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
-          oTable = $("#{containerDiv} table#routesTable").dataTable()
-          oTable.fnDestroy() unless oTable?
+      records = ([record['id'], record['name'], record['description'], record['area_name'], record['points'], joinStringArrayWithBR(record['contacts'])] for record in data)
 
-        $("#{containerDiv} div#routesTable_wrapper").remove()
-        $("#{containerDiv} div#routesTableDiv").append('<table id="routesTable"></table>')
-        $("#{containerDiv} table#routesTable").dataTable
-          'aaData': records
-          'aoColumns': columns
-          'aaSorting': [[ 1, 'desc' ]]
-          'iDisplayLength': 5
-          'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, '全部']]
+      columns = [
+        { "sTitle": "ID" },
+        { "sTitle": "名称" },
+        { "sTitle": "描述" },
+        { "sTitle": "工区" },
+        { "sTitle": "检点" },
+        { "sTitle": "联系人" }
+      ]
 
-        oTable = $("#{containerDiv} table#routesTable").dataTable()
-        oTable.fnSetColumnVis(0, false)
-        $("#{containerDiv} table#routesTable > tbody").on(
-          'click',
-          'tr',
-          ->
-            oTable = $("#{containerDiv} table#routesTable").dataTable()
-            oTable.$('tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
-            $(this).addClass('mediumSeaGreenBackground')
-            return
-        )
+      clearTable(containerDiv, tableName, 'routes')
+      $("#{containerDiv} table##{tableName}").dataTable
+        'aaData': records
+        'aoColumns': columns
+        'aaSorting': [[ 1, 'desc' ]]
+        'iDisplayLength': 5
+        'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, '全部']]
 
-        $("#{containerDiv} span#routesIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
-        $("#{containerDiv} span#routesIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
-        return
+      setTableClickRowEvent(containerDiv, tableName, 'routes', jqHXR)
+      return
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
@@ -1152,8 +1130,8 @@ attachPointToAsset = (pointId, assetId, containerDiv) ->
     contentType: 'application/json',
     dataType: 'json',
     success: (data, textStatus, jqHXR) ->
-      updateAssetsTable(containerDiv)
-      updatePointsTable(containerDiv)
+      updateAssetsTable(containerDiv, 'assetsAttachPointTable')
+      updatePointsTable(containerDiv, 'pointsAttachAssetTable')
       alert '已经成功连接检点到设备！'
       return
     error: (jqXHR, textStatus, errorThrown) ->
@@ -1218,7 +1196,7 @@ deletePoint = (pointId, containerDiv) ->
     contentType: 'application/json',
     dataType: 'json',
     success: (data, textStatus, jqHXR) ->
-      updatePointsTable(containerDiv)
+      updatePointsTable(containerDiv, 'pointsEditTable')
       alert '检点已经成功删除！'
       return
     error: (jqXHR, textStatus, errorThrown) ->
@@ -1227,75 +1205,59 @@ deletePoint = (pointId, containerDiv) ->
     timeout: defaultAjaxCallTimeout
   return
 
-updatePointsTable = (containerDiv) ->
+updatePointsTable = (containerDiv, tableName) ->
   $.ajax
     url: getBaseURL() + '/points.json?ui=true'
     beforeSend: (xhr) ->
       setXhrRequestHeader(xhr, containerDiv, 'points')
       return
     success: (data, textStatus, jqHXR) ->
-      if jqHXR.status is 200
-        for record in data
-          record[4] = joinStringArrayWithBR(record[4])
-          record[6] = joinStringArrayWithBR(record[6])
+      return unless jqHXR.status is 200
 
-        columns = [
-          { "sTitle": "ID" },
-          { "sTitle": "名称" },
-          { "sTitle": "条形码" },
-          {
-            "sTitle": "类型",
-            "sClass": "center",
-            "sWidth": "45px"
-          },
-          {
-            "sTitle": "选项",
-            "sWidth": "20%"
-          },
-          { "sTitle": "设备" },
-          { "sTitle": "路线" },
-          {
-            "sTitle": "责任人",
-            "sClass": "center"
-          }
-        ]
-        if $("#{containerDiv} table#pointsTable > tbody[role='alert'] td.dataTables_empty").length is 0
-          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
-          oTable = $("#{containerDiv} table#pointsTable").dataTable()
-          oTable.fnDestroy() unless oTable?
+      for record in data
+        record[4] = joinStringArrayWithBR(record[4])
+        record[6] = joinStringArrayWithBR(record[6])
 
-        $("#{containerDiv} div#pointsTable_wrapper").remove()
-        $("#{containerDiv} div#pointsTableDiv").append('<table id="pointsTable"></table>')
-        $("#{containerDiv} table#pointsTable").dataTable
-          'aaData': data
-          'aoColumns': columns
-          'aaSorting': [[ 5, 'desc' ]]
-          'iDisplayLength': 5
-          'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, '全部']]
-          'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
-            switch aaData[3]
-              when '日常巡检'
-                $(nRow).addClass('darkBlueTextColor')
-              when '普通巡检'
-                $(nRow).addClass('darkGreenTextColor')
-              when '状态'
-                $(nRow).addClass('darkCyanTextColor')
-            return
+      columns = [
+        { "sTitle": "ID" },
+        { "sTitle": "名称" },
+        { "sTitle": "条形码" },
+        {
+          "sTitle": "类型",
+          "sClass": "center",
+          "sWidth": "45px"
+        },
+        {
+          "sTitle": "选项",
+          "sWidth": "20%"
+        },
+        { "sTitle": "设备" },
+        { "sTitle": "路线" },
+        {
+          "sTitle": "责任人",
+          "sClass": "center"
+        }
+      ]
 
-        oTable = $("#{containerDiv} table#pointsTable").dataTable()
-        oTable.fnSetColumnVis(0, false)
-        $("#{containerDiv} table#pointsTable > tbody").on(
-          'click',
-          'tr',
-          ->
-            oTable = $("#{containerDiv} table#pointsTable").dataTable()
-            oTable.$('tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
-            $(this).addClass('mediumSeaGreenBackground')
-            return
-        )
+      clearTable(containerDiv, tableName, 'points')
+      $("#{containerDiv} table##{tableName}").dataTable
+        'aaData': data
+        'aoColumns': columns
+        'aaSorting': [[ 5, 'desc' ]]
+        'iDisplayLength': 5
+        'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, '全部']]
+        'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
+          switch aaData[3]
+            when '日常巡检'
+              $(nRow).addClass('darkBlueTextColor')
+            when '普通巡检'
+              $(nRow).addClass('darkGreenTextColor')
+            when '状态'
+              $(nRow).addClass('darkCyanTextColor')
+          return
 
-        $("#{containerDiv} span#pointsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
-        $("#{containerDiv} span#pointsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+      setTableClickRowEvent(containerDiv, tableName, 'points', jqHXR)
+      return
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
@@ -1394,7 +1356,7 @@ setupCreateRouteDiv = ->
           when 'PUT'
             $('div#createRoute').hide()
             $('div#editDeleteRoute > div').show()
-            updateRoutesTable('div#managementData div#editDeleteRoute')
+            updateRoutesTable('div#managementData div#editDeleteRoute', 'routesEditDeleteTable')
             alert '路线编辑成功'
 
         return
@@ -1450,7 +1412,7 @@ setupCreatePointDiv = ->
       $('div#createPoint').hide()
       switch $('div#createPoint > h2:first').text()
         when '编辑检点'
-          updatePointsTable('div#managementData div#editDeletePoint')
+          updatePointsTable('div#managementData div#editDeletePoint', 'pointsEditTable')
       return
 
     return
@@ -1585,7 +1547,7 @@ setupEditDeleteRouteDiv = (containerDiv) ->
           contentType: 'application/json',
           dataType: 'json',
           success: (data, textStatus, jqHXR) ->
-            updateRoutesTable(containerDiv)
+            updateRoutesTable(containerDiv, 'routesEditDeleteTable')
             alert '路线已经成功删除！'
             return
           error: (jqXHR, textStatus, errorThrown) ->

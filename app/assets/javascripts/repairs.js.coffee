@@ -207,7 +207,7 @@ setupManageDataDiv = ->
         $('div#createPart > h2:first').text('创建部件')
         $('div#managementData div#categorySelection').show()
       when 'deleteAsset'
-        updateAssetsTable('div#managementData div#deleteAsset')
+        updateAssetsTable('div#managementData div#deleteAsset', 'assetsDeleteTable')
       when 'createPart'
         $('div#managementData span#switchPartTo').text('')
         $('div#createPart button#btnCancelCreatePart').text('重置')
@@ -220,10 +220,10 @@ setupManageDataDiv = ->
         $('div#createPart button#btnCancelCreatePart').text('返回')
         $('div#createPart > h2:first').text('编辑部件')
         $('div#managementData div#categorySelection').hide()
-        updatePartsTable('div#managementData div#editDeletePart')
+        updatePartsTable('div#managementData div#editDeletePart', 'partsEditDeleteTable')
       when 'attachPartToAsset'
-        updateAssetsTable('div#managementData div#attachPartToAsset')
-        updatePartsTable('div#managementData div#attachPartToAsset')
+        updateAssetsTable('div#managementData div#attachPartToAsset', 'assetsAttachPartTable')
+        updatePartsTable('div#managementData div#attachPartToAsset', 'partsAttachTable')
       when 'createManual'
         $('div#managementData span#switchManualTo').text('')
         $('div#createManual button#btnCancelCreateManual').text('重置')
@@ -234,10 +234,10 @@ setupManageDataDiv = ->
         $('div#managementData div#createManual').hide()
         $('div#createManual button#btnCancelCreateManual').text('返回')
         $('div#createManual > h2:first').text('编辑工作指导')
-        updateManualsTable('div#managementData div#editManual')
+        updateManualsTable('div#managementData div#editManual', 'manualsEditTable')
       when 'attachManualToAsset'
-        updateAssetsTable('div#managementData div#attachManualToAsset')
-        updateManualsTable('div#managementData div#attachManualToAsset')
+        updateAssetsTable('div#managementData div#attachManualToAsset', 'assetsAttachManualTable')
+        updateManualsTable('div#managementData div#attachManualToAsset', 'manualsAttachTable')
     return
 
   setupCreatePartDiv()
@@ -308,7 +308,7 @@ setupCreatePartForm = (containerDiv) ->
             alert '部件创建成功'
           when 'PUT'
             alert '部件编辑成功'
-            updatePartsTable('div#managementData div#editDeletePart')
+            updatePartsTable('div#managementData div#editDeletePart', 'partsEditDeleteTable')
 
         return
       error: (jqXHR, textStatus, errorThrown) ->
@@ -358,58 +358,42 @@ setupCreatePartDiv = ->
       $('div#createPart').hide()
       switch $('div#createPart > h2:first').text()
         when '编辑部件'
-          updatePartsTable('div#managementData div#editDeletePart')
+          updatePartsTable('div#managementData div#editDeletePart', 'partsEditDeleteTable')
 
     return
 
   return
 
-updatePartsTable = (containerDiv) ->
+updatePartsTable = (containerDiv, tableName) ->
   $.ajax
     url: getBaseURL() + '/parts.json?ui=true'
     beforeSend: (xhr) ->
       setXhrRequestHeader(xhr, containerDiv, 'parts')
       return
     success: (data, textStatus, jqHXR) ->
-      if jqHXR.status is 200
-        columns = [
-          { "sTitle": "ID" },
-          { "sTitle": "名称" },
-          { "sTitle": "条形码" },
-          { "sTitle": "设备" },
-          {
-            "sTitle": "责任人",
-            "sClass": "center"
-          }
-        ]
-        if $("#{containerDiv} table#partsTable > tbody[role='alert'] td.dataTables_empty").length is 0
-          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
-          oTable = $("#{containerDiv} table#partsTable").dataTable()
-          oTable.fnDestroy() unless oTable?
+      return unless jqHXR.status is 200
 
-        $("#{containerDiv} div#partsTable_wrapper").remove()
-        $("#{containerDiv} div#partsTableDiv").append('<table id="partsTable"></table>')
-        $("#{containerDiv} table#partsTable").dataTable
-          'aaData': data
-          'aoColumns': columns
-          'aaSorting': [[ 3, 'desc' ]]
-          'iDisplayLength': 5
-          'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, '全部']]
+      columns = [
+        { "sTitle": "ID" },
+        { "sTitle": "名称" },
+        { "sTitle": "条形码" },
+        { "sTitle": "设备" },
+        {
+          "sTitle": "责任人",
+          "sClass": "center"
+        }
+      ]
 
-        oTable = $("#{containerDiv} table#partsTable").dataTable()
-        oTable.fnSetColumnVis(0, false)
-        $("#{containerDiv} table#partsTable > tbody").on(
-          'click',
-          'tr',
-          ->
-            oTable = $("#{containerDiv} table#partsTable").dataTable()
-            oTable.$('tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
-            $(this).addClass('mediumSeaGreenBackground')
-            return
-        )
+      clearTable(containerDiv, tableName, 'parts')
+      $("#{containerDiv} table##{tableName}").dataTable
+        'aaData': data
+        'aoColumns': columns
+        'aaSorting': [[ 3, 'desc' ]]
+        'iDisplayLength': 5
+        'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, '全部']]
 
-        $("#{containerDiv} span#partsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
-        $("#{containerDiv} span#partsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+      setTableClickRowEvent(containerDiv, tableName, 'parts', jqHXR)
+      return
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
@@ -474,7 +458,7 @@ deletePart = (partId, containerDiv) ->
     contentType: 'application/json',
     dataType: 'json',
     success: (data, textStatus, jqHXR) ->
-      updatePartsTable(containerDiv)
+      updatePartsTable(containerDiv, 'partsEditDeleteTable')
       alert '部件已经成功删除！'
       return
     error: (jqXHR, textStatus, errorThrown) ->
@@ -512,8 +496,8 @@ attachPartToAsset = (partId, assetId, containerDiv) ->
     contentType: 'application/json',
     dataType: 'json',
     success: (data, textStatus, jqHXR) ->
-      updateAssetsTable(containerDiv)
-      updatePartsTable(containerDiv)
+      updateAssetsTable(containerDiv, 'assetsAttachPartTable')
+      updatePartsTable(containerDiv, 'partsAttachTable')
       alert '已经成功连接部件到设备！'
       return
     error: (jqXHR, textStatus, errorThrown) ->
@@ -532,14 +516,14 @@ setupCreateManualDiv = (containerDiv) ->
       $('div#createManual').hide()
       switch $('div#createManual > h2:first').text()
         when '编辑工作指导'
-          updatePartsTable('div#managementData div#editManual')
+          updateManualsTable('div#managementData div#editManual', 'manualsEditTable')
 
     return
   return
 
 setupEditManualDiv = (containerDiv) ->
   $("#{containerDiv} button#btnEditManual").click ->
-    oTable = $("#{containerDiv} table#manualsTable").dataTable()
+    oTable = $("#{containerDiv} table#manualsEditTable").dataTable()
     _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
     if _selectedTr.length is 0
       alert '请选择工作指导！'
@@ -618,7 +602,7 @@ setupCreateManualForm = (containerDiv) ->
             alert '工作指导创建成功'
           when 'PUT'
             alert '工作指导编辑成功'
-            updateManualsTable('div#managementData div#editManual')
+            updateManualsTable('div#managementData div#editManual', 'manualsEditTable')
 
         return
       error: (jqXHR, textStatus, errorThrown) ->
@@ -645,51 +629,34 @@ validateCreateManualForm = (containerDiv, manualInfo) ->
   manualInfo['entry'] = $manualEntry.val()
   true
 
-updateManualsTable = (containerDiv) ->
+updateManualsTable = (containerDiv, tableName) ->
   $.ajax
     url: getBaseURL() + '/manuals.json?ui=true'
     beforeSend: (xhr) ->
       setXhrRequestHeader(xhr, containerDiv, 'manuals')
       return
     success: (data, textStatus, jqHXR) ->
-      if jqHXR.status is 200
-        for record in data
-          record[3] = joinStringArrayWithBR(record[3])
+      return unless jqHXR.status is 200
 
-        columns = [
-          { "sTitle": "ID" },
-          { "sTitle": "名称" },
-          { "sTitle": "内容" },
-          { "sTitle": "设备" }
-        ]
-        if $("#{containerDiv} table#manualsTable > tbody[role='alert'] td.dataTables_empty").length is 0
-          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
-          oTable = $("#{containerDiv} table#manualsTable").dataTable()
-          oTable.fnDestroy() unless oTable?
+      for record in data
+        record[3] = joinStringArrayWithBR(record[3])
 
-        $("#{containerDiv} div#manualsTable_wrapper").remove()
-        $("#{containerDiv} div#manualsTableDiv").append('<table id="manualsTable"></table>')
-        $("#{containerDiv} table#manualsTable").dataTable
-          'aaData': data
-          'aoColumns': columns
-          'aaSorting': [[ 1, 'asc' ]]
-          'iDisplayLength': 5
-          'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, '全部']]
+      columns = [
+        { "sTitle": "ID" },
+        { "sTitle": "名称" },
+        { "sTitle": "内容" },
+        { "sTitle": "设备" }
+      ]
+      clearTable(containerDiv, tableName, 'manuals')
+      $("#{containerDiv} table##{tableName}").dataTable
+        'aaData': data
+        'aoColumns': columns
+        'aaSorting': [[ 1, 'asc' ]]
+        'iDisplayLength': 5
+        'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, '全部']]
 
-        oTable = $("#{containerDiv} table#manualsTable").dataTable()
-        oTable.fnSetColumnVis(0, false)
-        $("#{containerDiv} table#manualsTable > tbody").on(
-            'click',
-            'tr',
-          ->
-            oTable = $("#{containerDiv} table#manualsTable").dataTable()
-            oTable.$('tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
-            $(this).addClass('mediumSeaGreenBackground')
-            return
-        )
-
-        $("#{containerDiv} span#manualsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
-        $("#{containerDiv} span#manualsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+      setTableClickRowEvent(containerDiv, tableName, 'manuals', jqHXR)
+      return
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
@@ -713,7 +680,7 @@ setupAttachManualToAssetDiv = (containerDiv) ->
       alert '请选择设备！'
       return
 
-    oTable2 = $("#{containerDiv} table#manualsTable").dataTable()
+    oTable2 = $("#{containerDiv} table#manualsAttachTable").dataTable()
     _selectedTr2 = oTable2.$('tr.mediumSeaGreenBackground')
     if _selectedTr2.length is 0
       alert '请选择工作指导！'
@@ -734,8 +701,8 @@ setManualToAsset = (manualId, assetId, containerDiv) ->
     contentType: 'application/json',
     dataType: 'json',
     success: (data, textStatus, jqHXR) ->
-      updateAssetsTable(containerDiv)
-      updateManualsTable(containerDiv)
+      updateAssetsTable(containerDiv, 'assetsAttachManualTable')
+      updateManualsTable(containerDiv, 'manualsAttachTable')
       alert '已经成功指定设备的工作指导！'
       return
     error: (jqXHR, textStatus, errorThrown) ->

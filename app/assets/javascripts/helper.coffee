@@ -327,144 +327,145 @@ window.updateProblemsTable = (containerDiv, params) ->
       return
     data: requestParams
     success: (data, textStatus, jqHXR) ->
-      if jqHXR.status is 200
-        $("#{containerDiv} div#assignedUserStatChartDiv").html('')
-        statusEnum = ($(o).text().trim() for o in $("#{containerDiv} select#status").children('option'))
-        statusEnum.remove(statusEnum.indexOf('全部')) # remove “全部”
-        assignedUserStat = {}
+      return unless jqHXR.status is 200
 
-        noMedia = true
-        for record in data
-          columnDateToString(record, [0])
-          record[9] = dateToShortString(new Date(record[9] * 1000)) if record[9]
-          record[11] = "<span class='sessionLink' data-session='#{record[11]}'>巡检记录</span>" if record[11] # 详情
-          # record[12] is in form of [image_url, audio_url]
-          if record[12][0] isnt null
-            record[12][0] = "<a target='_blank' href='#{record[12][0]}'>图片</a>"
+      $("#{containerDiv} div#assignedUserStatChartDiv").html('')
+      statusEnum = ($(o).text().trim() for o in $("#{containerDiv} select#status").children('option'))
+      statusEnum.remove(statusEnum.indexOf('全部')) # remove “全部”
+      assignedUserStat = {}
 
-          if record[12][1] isnt null
-            record[12][1] = "<a target='_blank' href='#{record[12][1]}'>音频</a>"
+      noMedia = true
+      for record in data
+        columnDateToString(record, [0])
+        record[9] = dateToShortString(new Date(record[9] * 1000)) if record[9]
+        record[11] = "<span class='sessionLink' data-session='#{record[11]}'>巡检记录</span>" if record[11] # 详情
+        # record[12] is in form of [image_url, audio_url]
+        if record[12][0] isnt null
+          record[12][0] = "<a target='_blank' href='#{record[12][0]}'>图片</a>"
 
-          if record[12][0] is null and record[12][1] is null
-            record[12] = ''
-          else
-            noMedia = false
-            record[12] = record[12].join('<br/>')
+        if record[12][1] isnt null
+          record[12][1] = "<a target='_blank' href='#{record[12][1]}'>音频</a>"
 
-          status = record[7]
-          assignedUser = record[6]
-          assignedUser = '未分配' unless assignedUser
-          unless assignedUserStat[assignedUser]
-            assignedUserStat[assignedUser] = {}
-            for _s in statusEnum
-              assignedUserStat[assignedUser][_s] = 0
+        if record[12][0] is null and record[12][1] is null
+          record[12] = ''
+        else
+          noMedia = false
+          record[12] = record[12].join('<br/>')
 
-          assignedUserStat[assignedUser][status] += 1
+        status = record[7]
+        assignedUser = record[6]
+        assignedUser = '未分配' unless assignedUser
+        unless assignedUserStat[assignedUser]
+          assignedUserStat[assignedUser] = {}
+          for _s in statusEnum
+            assignedUserStat[assignedUser][_s] = 0
 
-        renderAssignedUserStatChart('assignedUserStatChartDiv', assignedUserStat, statusEnum)
-        columns = [
-          { 'sTitle': '日期' },
-          {
-            'sTitle': '提交人',
-            'sClass': 'center'
-          },
-          {
-            'sTitle': '机台信息',
-            'sClass': 'center'
-          },
-          {
-            'sTitle': '部位名称',
-            'sClass': 'center'
-          },
-          {
-            'sTitle': '内容',
-            'sClass': 'center'
-          },
-          {
-            'sTitle': '问题描述',
-            'sClass': 'center'
-          },
-          {
-            'sTitle': '责任人',
-            'sClass': 'center'
-          },
-          {
-            'sTitle': '状态',
-            'sClass': 'center'
-          },
-          {
-            'sTitle': '备注',
-            'sClass': 'center'
-          },
-          { 'sTitle': '计划完成日期' },
-          { 'sTitle': 'ID' },
-          { 'sTitle': '详情' },
-          {
-            'sTitle': '媒体',
-            'sClass': 'center',
-            'sWidth': '24px'
-          }
-        ]
-        if $("#{containerDiv} table#problemsTable > tbody[role='alert'] td.dataTables_empty").length is 0
-          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
-          oTable = $("#{containerDiv} table#problemsTable").dataTable()
-          oTable.fnDestroy() unless oTable?
+        assignedUserStat[assignedUser][status] += 1
 
-        $("#{containerDiv} div#problemsTable_wrapper").remove()
-        $("#{containerDiv} > div#problemListDiv").append('<table id="problemsTable"></table>')
-        $("#{containerDiv} table#problemsTable").dataTable
-          'aaData': data,
-          'aoColumns': columns,
-          'aaSorting': [[ 0, 'desc' ]]
-          'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
-            switch aaData[7]
-              when '未完成'
-                $(nRow).addClass('darkBlueTextColor')
-              when '完成'
-                $(nRow).addClass('darkGreenTextColor')
-              when '取消'
-                $(nRow).addClass('darkCyanTextColor')
-              when '进行中'
-                $(nRow).addClass('darkOrangeTextColor')
-              when '部分完成'
-                $(nRow).addClass('darkGoldenrodTextColor')
-            return
-
+      renderAssignedUserStatChart('assignedUserStatChartDiv', assignedUserStat, statusEnum)
+      columns = [
+        { 'sTitle': '日期' },
+        {
+          'sTitle': '提交人',
+          'sClass': 'center'
+        },
+        {
+          'sTitle': '机台信息',
+          'sClass': 'center'
+        },
+        {
+          'sTitle': '部位名称',
+          'sClass': 'center'
+        },
+        {
+          'sTitle': '内容',
+          'sClass': 'center'
+        },
+        {
+          'sTitle': '问题描述',
+          'sClass': 'center'
+        },
+        {
+          'sTitle': '责任人',
+          'sClass': 'center'
+        },
+        {
+          'sTitle': '状态',
+          'sClass': 'center'
+        },
+        {
+          'sTitle': '备注',
+          'sClass': 'center'
+        },
+        { 'sTitle': '计划完成日期' },
+        { 'sTitle': 'ID' },
+        { 'sTitle': '详情' },
+        {
+          'sTitle': '媒体',
+          'sClass': 'center',
+          'sWidth': '24px'
+        }
+      ]
+      if $("#{containerDiv} table#problemsTable > tbody[role='alert'] td.dataTables_empty").length is 0
+        # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
         oTable = $("#{containerDiv} table#problemsTable").dataTable()
-        oTable.fnSetColumnVis(10, false)
-        oTable.fnSetColumnVis(12, false) if noMedia
-        oTable.fnSetColumnVis(11, false) unless $('span#logo').text() is '巡检'
+        oTable.fnDestroy() unless oTable?
 
-        $("#{containerDiv} table#problemsTable > tbody").on(
-          'click',
-          'tr',
+      $("#{containerDiv} div#problemsTable_wrapper").remove()
+      $("#{containerDiv} > div#problemListDiv").append('<table id="problemsTable"></table>')
+      $("#{containerDiv} table#problemsTable").dataTable
+        'aaData': data,
+        'aoColumns': columns,
+        'aaSorting': [[ 0, 'desc' ]]
+        'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
+          switch aaData[7]
+            when '未完成'
+              $(nRow).addClass('darkBlueTextColor')
+            when '完成'
+              $(nRow).addClass('darkGreenTextColor')
+            when '取消'
+              $(nRow).addClass('darkCyanTextColor')
+            when '进行中'
+              $(nRow).addClass('darkOrangeTextColor')
+            when '部分完成'
+              $(nRow).addClass('darkGoldenrodTextColor')
+          return
+
+      oTable = $("#{containerDiv} table#problemsTable").dataTable()
+      oTable.fnSetColumnVis(10, false)
+      oTable.fnSetColumnVis(12, false) if noMedia
+      oTable.fnSetColumnVis(11, false) unless $('span#logo').text() is '巡检'
+
+      $("#{containerDiv} table#problemsTable > tbody").on(
+        'click',
+        'tr',
         ->
           oTable = $("#{containerDiv} table#problemsTable").dataTable()
           oTable.$('tr').removeClass('mediumSeaGreenBackground')
           $(this).addClass('mediumSeaGreenBackground')
           return
-        )
+      )
 
-        $("#{containerDiv} table#problemsTable span.sessionLink").click ->
-          session_id = $(this).data('session')
-          $.ajax
-            url: getBaseURL() + "/sessions/#{session_id}.json"
-            dataType: 'json',
-            success: (data, textStatus, jqHXR) ->
-              if jqHXR.status is 200
-                showSessionInRecordsTable(session_id, data.route,
-                  dateToString(new Date(data.start_time * 1000)),
-                  dateToString(new Date(data.end_time * 1000)),
-                  data.start_time, data.end_time)
-              return
-            error: (jqXHR, textStatus, errorThrown) ->
-              showErrorPage(jqXHR.responseText)
-              return
-            timeout: defaultAjaxCallTimeout
-          return
+      $("#{containerDiv} table#problemsTable span.sessionLink").click ->
+        session_id = $(this).data('session')
+        $.ajax
+          url: getBaseURL() + "/sessions/#{session_id}.json"
+          dataType: 'json',
+          success: (data, textStatus, jqHXR) ->
+            if jqHXR.status is 200
+              showSessionInRecordsTable(session_id, data.route,
+                dateToString(new Date(data.start_time * 1000)),
+                dateToString(new Date(data.end_time * 1000)),
+                data.start_time, data.end_time)
+            return
+          error: (jqXHR, textStatus, errorThrown) ->
+            showErrorPage(jqXHR.responseText)
+            return
+          timeout: defaultAjaxCallTimeout
+        return
 
-        $("#{containerDiv} > span#problemsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
-        $("#{containerDiv} > span#problemsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+      $("#{containerDiv} > span#problemsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+      $("#{containerDiv} > span#problemsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 
       return
     error: (jqXHR, textStatus, errorThrown) ->
@@ -761,81 +762,77 @@ window.updateUsersTable = (containerDiv) ->
       setXhrRequestHeader(xhr, containerDiv, 'users')
       return
     success: (data, textStatus, jqHXR) ->
-      if jqHXR.status is 200
-        for record in data
-          columnDateToString(record, [4, 5, 8, 9])
+      return unless jqHXR.status is 200
 
-          switch record[3]
-            when 0
-              record[3] = '管理员（巡检）'
-            when 1
-              record[3] = '高级用户（巡检）'
-            when 2
-              record[3] = '普通用户（巡检）'
-            when 3
-              record[3] = '管理员（报修）'
-            when 4
-              record[3] = '高级用户（报修）'
-            when 5
-              record[3] = '普通用户（报修）'
-            when 6
-              record[3] = '维修工（报修）'
-            when 7
-              record[3] = '管理员（巡检，报修）'
-            when 8
-              record[3] = '高级用户（巡检，报修）'
+      for record in data
+        columnDateToString(record, [4, 5, 8, 9])
 
-        columns = [
-          { "sTitle": "ID" },
-          { "sTitle": "用户名" },
-          { "sTitle": "邮箱" },
-          {
-            "sTitle": "用户级别",
-            "sClass": "center"
-          },
-          { "sTitle": "本次登录时间" },
-          { "sTitle": "上次登录时间" },
-          { "sTitle": "本次登录IP地址" },
-          { "sTitle": "上次登录IP地址" },
-          { "sTitle": "创建时间" },
-          { "sTitle": "最近更新时间" }
-        ]
-        if $("#{containerDiv} table#usersTable > tbody[role='alert'] td.dataTables_empty").length is 0
-          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
-          oTable = $("#{containerDiv} table#usersTable").dataTable()
-          oTable.fnDestroy() unless oTable?
+        switch record[3]
+          when 0
+            record[3] = '管理员（巡检）'
+          when 1
+            record[3] = '高级用户（巡检）'
+          when 2
+            record[3] = '普通用户（巡检）'
+          when 3
+            record[3] = '管理员（报修）'
+          when 4
+            record[3] = '高级用户（报修）'
+          when 5
+            record[3] = '普通用户（报修）'
+          when 6
+            record[3] = '维修工（报修）'
+          when 7
+            record[3] = '管理员（巡检，报修）'
+          when 8
+            record[3] = '高级用户（巡检，报修）'
 
-        $("#{containerDiv} div#usersTable_wrapper").remove()
-        $("#{containerDiv} div#usersTableDiv").append('<table id="usersTable"></table>')
-        $("#{containerDiv} table#usersTable").dataTable
-          'aaData': data
-          'aoColumns': columns
-          'aaSorting': [[ 3, 'desc' ]]
-          'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
-            switch aaData[3]
-              when '高级用户'
-                $(nRow).addClass('darkBlueTextColor')
-              when '管理员'
-                $(nRow).addClass('darkGreenTextColor')
-              when '用户'
-                $(nRow).addClass('darkCyanTextColor')
-            return
+      columns = [
+        { "sTitle": "ID" },
+        { "sTitle": "用户名" },
+        { "sTitle": "邮箱" },
+        {
+          "sTitle": "用户级别",
+          "sClass": "center"
+        },
+        { "sTitle": "本次登录时间" },
+        { "sTitle": "上次登录时间" },
+        { "sTitle": "本次登录IP地址" },
+        { "sTitle": "上次登录IP地址" },
+        { "sTitle": "创建时间" },
+        { "sTitle": "最近更新时间" }
+      ]
 
-        oTable = $("#{containerDiv} table#usersTable").dataTable()
-        oTable.fnSetColumnVis(0, false)
+      clearTable(containerDiv, 'usersTable', 'users')
+      $("#{containerDiv} table#usersTable").dataTable
+        'aaData': data
+        'aoColumns': columns
+        'aaSorting': [[ 3, 'desc' ]]
+        'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
+          switch aaData[3]
+            when '高级用户'
+              $(nRow).addClass('darkBlueTextColor')
+            when '管理员'
+              $(nRow).addClass('darkGreenTextColor')
+            when '用户'
+              $(nRow).addClass('darkCyanTextColor')
+          return
 
-        $("#{containerDiv} table#usersTable > tbody").on(
-          'click',
-          'tr',
+      oTable = $("#{containerDiv} table#usersTable").dataTable()
+      oTable.fnSetColumnVis(0, false)
+
+      $("#{containerDiv} table#usersTable > tbody").on(
+        'click',
+        'tr',
         ->
           oTable = $("#{containerDiv} table#usersTable").dataTable()
           oTable.$('tr').removeClass('mediumSeaGreenBackground')
           $(this).addClass('mediumSeaGreenBackground')
           return
-        )
+      )
 
-        $("#{containerDiv} > span#usersIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
-        $("#{containerDiv} > span#usersIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+      $("#{containerDiv} > span#usersIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+      $("#{containerDiv} > span#usersIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 
       return
     error: (jqXHR, textStatus, errorThrown) ->
@@ -870,30 +867,26 @@ window.updateContactsTable = (containerDiv) ->
       setXhrRequestHeader(xhr, containerDiv, 'contacts')
       return
     success: (data, textStatus, jqHXR) ->
-      if jqHXR.status is 200
-        columns = [
-          { "sTitle": "ID" },
-          { "sTitle": "姓名" },
-          { "sTitle": "邮箱" }
-        ]
-        if $("#{containerDiv} table#contactsTable > tbody[role='alert'] td.dataTables_empty").length is 0
-          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
-          oTable = $("#{containerDiv} table#contactsTable").dataTable()
-          oTable.fnDestroy() unless oTable?
+      return unless jqHXR.status is 200
 
-        $("#{containerDiv} div#contactsTable_wrapper").remove()
-        $("#{containerDiv} div#contactsTableDiv").append('<table id="contactsTable"></table>')
-        $("#{containerDiv} table#contactsTable").dataTable
-          'aaData': data
-          'aoColumns': columns
+      columns = [
+        { "sTitle": "ID" },
+        { "sTitle": "姓名" },
+        { "sTitle": "邮箱" }
+      ]
 
-        $("#{containerDiv} table#contactsTable > thead th").css('text-align', 'left')
-        oTable = $("#{containerDiv} table#contactsTable").dataTable()
-        oTable.fnSetColumnVis(0, false)
+      clearTable(containerDiv, 'contactsTable', 'contacts')
+      $("#{containerDiv} table#contactsTable").dataTable
+        'aaData': data
+        'aoColumns': columns
 
-        $("#{containerDiv} table#contactsTable > tbody").on(
-          'click',
-          'tr',
+      $("#{containerDiv} table#contactsTable > thead th").css('text-align', 'left')
+      oTable = $("#{containerDiv} table#contactsTable").dataTable()
+      oTable.fnSetColumnVis(0, false)
+
+      $("#{containerDiv} table#contactsTable > tbody").on(
+        'click',
+        'tr',
         ->
           oTable = $("#{containerDiv} table#contactsTable").dataTable()
           oTable.$('tr').removeClass('mediumSeaGreenBackground')
@@ -906,10 +899,10 @@ window.updateContactsTable = (containerDiv) ->
             $("#{containerDiv} input#contactEmailInput").val(row[2])
 
           return
-        )
+      )
 
-        $("#{containerDiv} > span#contactsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
-        $("#{containerDiv} > span#contactsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+      $("#{containerDiv} > span#contactsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+      $("#{containerDiv} > span#contactsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 
       return
     error: (jqXHR, textStatus, errorThrown) ->
@@ -1096,7 +1089,7 @@ deleteAsset = (assetId, containerDiv) ->
     contentType: 'application/json',
     dataType: 'json',
     success: (data, textStatus, jqHXR) ->
-      updateAssetsTable(containerDiv)
+      updateAssetsTable(containerDiv, 'assetsDeleteTable')
       alert '设备已经成功删除！'
       return
     error: (jqXHR, textStatus, errorThrown) ->
@@ -1106,7 +1099,7 @@ deleteAsset = (assetId, containerDiv) ->
 
   return
 
-window.updateAssetsTable = (containerDiv) ->
+window.updateAssetsTable = (containerDiv, tableName) ->
   repair = $('span#logo').text() is '报修'
   $.ajax
     url: getBaseURL() + "/assets.json?ui=true&repair=#{repair}"
@@ -1114,52 +1107,62 @@ window.updateAssetsTable = (containerDiv) ->
       setXhrRequestHeader(xhr, containerDiv, 'assets')
       return
     success: (data, textStatus, jqHXR) ->
-      if jqHXR.status is 200
-        for record in data
-          record[3] = joinStringArrayWithBR(record[3])
+      return unless jqHXR.status is 200
 
-        sTitle = "检点"
-        sTitle = "部件" if repair
-        columns = [
-          { "sTitle": "ID" },
-          { "sTitle": "名称" },
-          { "sTitle": "条形码" },
-          { "sTitle": sTitle }
-        ]
-        if $("#{containerDiv} table#assetsTable > tbody[role='alert'] td.dataTables_empty").length is 0
-          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
-          oTable = $("#{containerDiv} table#assetsTable").dataTable()
-          oTable.fnDestroy() unless oTable?
+      for record in data
+        record[3] = joinStringArrayWithBR(record[3])
 
-        $("#{containerDiv} div#assetsTable_wrapper").remove()
-        $("#{containerDiv} div#assetsTableDiv").append('<table id="assetsTable"></table>')
-        $("#{containerDiv} table#assetsTable").dataTable
-          'aaData': data
-          'aoColumns': columns
-          'aaSorting': [[ 1, 'desc' ]]
-          'iDisplayLength': 5
-          'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, '全部']]
+      sTitle = "检点"
+      sTitle = "部件" if repair
+      columns = [
+        { "sTitle": "ID" },
+        { "sTitle": "名称" },
+        { "sTitle": "条形码" },
+        { "sTitle": sTitle }
+      ]
 
-        oTable = $("#{containerDiv} table#assetsTable").dataTable()
-        oTable.fnSetColumnVis(0, false)
-        $("#{containerDiv} table#assetsTable > tbody").on(
-          'click',
-          'tr',
-        ->
-          oTable = $("#{containerDiv} table#assetsTable").dataTable()
-          oTable.$('tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
-          $(this).addClass('mediumSeaGreenBackground')
-          return
-        )
+      clearTable(containerDiv, tableName, 'assets')
+      $("#{containerDiv} table##{tableName}").dataTable
+        'aaData': data
+        'aoColumns': columns
+        'aaSorting': [[ 1, 'desc' ]]
+        'iDisplayLength': 5
+        'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, '全部']]
 
-        $("#{containerDiv} span#assetsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
-        $("#{containerDiv} span#assetsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+      setTableClickRowEvent(containerDiv, tableName, 'assets', jqHXR)
+
+      return
     error: (jqXHR, textStatus, errorThrown) ->
       showErrorPage(jqXHR.responseText)
       return
     ifModified: true,
     dataType: 'json',
     timeout: defaultAjaxCallTimeout
+  return
+
+window.clearTable = (containerDiv, tableName, type) ->
+  if $("#{containerDiv} table##{tableName} > tbody[role='alert'] td.dataTables_empty").length is 0
+    # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
+    oTable = $("#{containerDiv} table##{tableName}").dataTable()
+    oTable.fnDestroy() unless oTable?
+
+  $("#{containerDiv} div##{type}Table_wrapper").remove()
+  $("#{containerDiv} div##{type}TableDiv").append("<table id='#{tableName}'></table>")
+  return
+
+window.setTableClickRowEvent = (containerDiv, tableName, type, jqHXR) ->
+  oTable = $("#{containerDiv} table##{tableName}").dataTable()
+  oTable.fnSetColumnVis(0, false)
+  $("#{containerDiv} table##{tableName} > tbody > tr").unbind('click')
+  $("#{containerDiv} table##{tableName} > tbody > tr").click ->
+    oTable = $("#{containerDiv} table##{tableName}").dataTable()
+    oTable.$('tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
+    $(this).addClass('mediumSeaGreenBackground')
+    return
+
+  $("#{containerDiv} span##{type}IfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+  $("#{containerDiv} span##{type}IfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+
   return
 
 Route = (id, name) ->
