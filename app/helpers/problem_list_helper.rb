@@ -76,4 +76,10 @@ module ProblemListHelper
       entry['area'] = areas.first.name unless areas.empty?
     end
   end
+
+  def set_report_num(report)
+    report_num = report.created_at.strftime('%Y%m%d') + report.id.to_s.rjust(4, '0')
+    Rails.logger.info("set report_num #{report_num}")
+    report.update_attributes(report_num: report_num)
+  end
 end

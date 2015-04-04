@@ -141,10 +141,12 @@ class CheckResultsController < ApplicationController
       result_audio_id: point['audio'],
       stopped: false,
       production_line_stopped: false,
-      area_id: route.area.id
+      area_id: route.area.id,
+      report_num: 'YYYYMMDD0000'
     }
     Rails.logger.info("creating repair_report #{repair_report_input}")
-    RepairReport.create(repair_report_input)
+    report = RepairReport.create!(repair_report_input)
+    set_report_num(report)
   end
 
   def send_emails(reports, contacts, users)

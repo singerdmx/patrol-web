@@ -1,5 +1,5 @@
 class RepairReportsController < ApplicationController
-  include RepairReportsHelper
+  include RepairReportsHelper, ProblemListHelper
 
   # GET /repair_reports.json
   # http://localhost:3000/parts/A001/history.json?chart=true&check_time=1416038400..1424764800&barcode=true
@@ -67,7 +67,8 @@ class RepairReportsController < ApplicationController
       report_params = repair_report.select do |key, value|
         key.in?(RepairReport.column_names())
       end.symbolize_keys
-      report = RepairReport.create!(report_params)
+      report = RepairReport.create!({report_num: 'YYYYMMDD0000'}.merge(report_params))
+      set_report_num(report)
       update_part_status(report)
     end
   end
