@@ -384,7 +384,13 @@ updateSessionsTable = (containerDiv, params) ->
         { "sTitle": "邮箱" },
       ]
 
-      clearTable(containerDiv, 'sessionsTable', 'sessions')
+      if $("#{containerDiv} table#sessionsTable > tbody[role='alert'] td.dataTables_empty").length is 0
+        # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
+        oTable = $("#{containerDiv} table#sessionsTable").dataTable()
+        oTable.fnDestroy() unless oTable?
+
+      $("#{containerDiv} div#sessionsTable_wrapper").remove()
+      $("#{containerDiv} > div").append('<table id="sessionsTable"></table>')
       $("#{containerDiv} table#sessionsTable").dataTable
         'aaData': data
         'aoColumns': columns
