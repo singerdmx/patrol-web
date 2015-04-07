@@ -5,12 +5,12 @@ $ ->
   setTitle('巡检')
   setupSidebar()
   $('div.containerDiv').first().show()
-  setupRecordsDiv('div#preferencesDiv', 1, { preference: true })
-  updateRecordsTable('div#preferencesDiv', { preference: true })
+  setupRecordsDiv('div#preferencesDiv', 'preferencesRecordsTable', 1, { preference: true })
+  updateRecordsTable('div#preferencesDiv', 'preferencesRecordsTable', { preference: true })
   setupRoutesDiv('div#routes')
   setupFactoriesDiv('div#factories')
   setupSessionsDiv('div#sessionsDiv', 1)
-  setupRecordsDiv('div#recordsDiv', 1)
+  setupRecordsDiv('div#recordsDiv', 'recordsTable', 1)
   setupHistoryDiv('div#historyDiv')
   setupProblemsDiv('div#problemsDiv')
 
@@ -53,11 +53,11 @@ setupSidebar = ->
         updateFactoriesTree(containerDiv) if $('div#factories').is(':visible')
         updateRouteList("#{containerDiv} div#routes") if (isAdmin() and $('div#factories').is(':visible')) or !isAdmin()
       when 'preferences'
-        updateRecordsTable(containerDiv, { preference: true })
+        updateRecordsTable(containerDiv, 'preferencesRecordsTable', { preference: true })
       when 'sessions'
         updateSessionsTable(containerDiv)
       when 'records'
-        updateRecordsTable(containerDiv)
+        updateRecordsTable(containerDiv, 'recordsTable')
       when 'manageUsers'
         updateUsersTable(containerDiv)
       when 'manageContacts'
@@ -330,7 +330,7 @@ setupSessionsDiv = (containerDiv, defaultCalendarDaysRange, params) ->
     return
   return
 
-setupRecordsDiv = (containerDiv, defaultCalendarDaysRange, params) ->
+setupRecordsDiv = (containerDiv, tableName, defaultCalendarDaysRange, params) ->
   # Calendar widget
   setupCalendar(containerDiv, defaultCalendarDaysRange)
 
@@ -342,7 +342,7 @@ setupRecordsDiv = (containerDiv, defaultCalendarDaysRange, params) ->
 
   # 更新button
   $("#{containerDiv} button#updateRecordsTableButton").click (e) ->
-    updateRecordsTable(containerDiv, params)
+    updateRecordsTable(containerDiv, tableName, params)
     return
 
   # 重置button
@@ -384,13 +384,7 @@ updateSessionsTable = (containerDiv, params) ->
         { "sTitle": "邮箱" },
       ]
 
-      if $("#{containerDiv} table#sessionsTable > tbody[role='alert'] td.dataTables_empty").length is 0
-        # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
-        oTable = $("#{containerDiv} table#sessionsTable").dataTable()
-        oTable.fnDestroy() unless oTable?
-
-      $("#{containerDiv} div#sessionsTable_wrapper").remove()
-      $("#{containerDiv} > div").append('<table id="sessionsTable"></table>')
+      clearTable(containerDiv, 'sessionsTable')
       $("#{containerDiv} table#sessionsTable").dataTable
         'aaData': data
         'aoColumns': columns
@@ -445,7 +439,7 @@ showSessionInRecordsTable = (sessionId, sessionRoute, sessionStartTime, sessionE
   $('div#sidebar li#records').trigger('click')
   return
 
-updateRecordsTable = (containerDiv, params, tableDiv) ->
+updateRecordsTable = (containerDiv, tableName, params, tableDiv) ->
   tableDiv = "#{containerDiv} > div:first" unless tableDiv
   requestParams = getTableParams(containerDiv, params)
   $sessionFilterDiv = $("#{containerDiv} div#sessionFilterDiv")
@@ -514,14 +508,8 @@ updateRecordsTable = (containerDiv, params, tableDiv) ->
           'sWidth': '46px'
         }
       ]
-      if $("#{containerDiv} table#recordsTable > tbody[role='alert'] td.dataTables_empty").length is 0
-        # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
-        oTable = $("#{containerDiv} table#recordsTable").dataTable()
-        oTable.fnDestroy() unless oTable?
-
-      $("#{containerDiv} div#recordsTable_wrapper").remove()
-      $(tableDiv).append('<table id="recordsTable"></table>')
-      $("#{containerDiv} table#recordsTable").dataTable
+      clearTable(containerDiv, tableName)
+      $("#{containerDiv} table##{tableName}").dataTable
         'aaData': data
         'aoColumns': columns
         'aaSorting': [[ 8, 'desc' ]]
@@ -533,7 +521,7 @@ updateRecordsTable = (containerDiv, params, tableDiv) ->
               $(nRow).addClass('yellowBackground')
           return
 
-      oTable = $("#{containerDiv} table#recordsTable").dataTable()
+      oTable = $("#{containerDiv} table##{tableName}").dataTable()
       oTable.fnSetColumnVis(9, false) if noMedia
       $("#{containerDiv} > span#recordsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
       $("#{containerDiv} > span#recordsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
@@ -698,7 +686,7 @@ updatePointChart = (containerDiv, params) ->
           $('div#noHistoryBanner').text('该巡检点没有历史纪录').show()
 
       $("#{containerDiv} > span#calendarUpdated").text('true') # force update of records table
-      updateRecordsTable(containerDiv, {check_point_id: _point.id}, "#{containerDiv} div#recordsDiv > div:first")
+      updateRecordsTable(containerDiv, 'historyRecordsTable', {check_point_id: _point.id}, "#{containerDiv} div#recordsDiv > div:first")
 
       return
     error: (jqXHR, textStatus, errorThrown) ->

@@ -406,13 +406,7 @@ window.updateProblemsTable = (containerDiv, params) ->
           'sWidth': '24px'
         }
       ]
-      if $("#{containerDiv} table#problemsTable > tbody[role='alert'] td.dataTables_empty").length is 0
-        # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
-        oTable = $("#{containerDiv} table#problemsTable").dataTable()
-        oTable.fnDestroy() unless oTable?
-
-      $("#{containerDiv} div#problemsTable_wrapper").remove()
-      $("#{containerDiv} > div#problemListDiv").append('<table id="problemsTable"></table>')
+      clearTable(containerDiv, 'problemsTable', 'problems')
       $("#{containerDiv} table#problemsTable").dataTable
         'aaData': data,
         'aoColumns': columns,
@@ -1146,8 +1140,11 @@ window.clearTable = (containerDiv, tableName, type) ->
     oTable = $("#{containerDiv} table##{tableName}").dataTable()
     oTable.fnDestroy() unless oTable?
 
-  $("#{containerDiv} div##{type}Table_wrapper").remove()
-  $("#{containerDiv} div##{type}TableDiv").append("<table id='#{tableName}'></table>")
+  $("#{containerDiv} div##{tableName}_wrapper").remove()
+  if type
+    $("#{containerDiv} div##{type}TableDiv").append("<table id='#{tableName}'></table>")
+  else
+    $("#{containerDiv} div##{tableName}Div").append("<table id='#{tableName}'></table>")
   return
 
 window.setTableClickRowEvent = (containerDiv, tableName, type, jqHXR) ->
