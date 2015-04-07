@@ -453,7 +453,7 @@ updateRecordsTable = (containerDiv, params, tableDiv) ->
     $.extend(requestParams, { check_session_id: $("#{containerDiv} div#sessionFilterDiv > span:nth-child(2)").text() })
 
   $.ajax
-    url: getBaseURL() + '/results.json'
+    url: getBaseURL() + "/results.json?r=#{getRandomArbitrary(0, 10240)}" # disable browser cache for the same GET
     beforeSend: (xhr) ->
       calendarUpdated = $("#{containerDiv} > span#calendarUpdated").text() is 'true'
 
@@ -466,77 +466,77 @@ updateRecordsTable = (containerDiv, params, tableDiv) ->
       return
     data: requestParams
     success: (data, textStatus, jqHXR) ->
-      if jqHXR.status is 200
-        noMedia = true
-        for record in data
-          columnDateToString(record, [8])
-          # record[9] is in form of [image_url, audio_url]
-          if record[9][0] isnt null
-            record[9][0] = "<a target='_blank' href='#{record[9][0]}'>图片</a>"
+      return unless jqHXR.status is 200
+      noMedia = true
+      for record in data
+        columnDateToString(record, [8])
+        # record[9] is in form of [image_url, audio_url]
+        if record[9][0] isnt null
+          record[9][0] = "<a target='_blank' href='#{record[9][0]}'>图片</a>"
 
-          if record[9][1] isnt null
-            record[9][1] = "<a target='_blank' href='#{record[9][1]}'>音频</a>"
+        if record[9][1] isnt null
+          record[9][1] = "<a target='_blank' href='#{record[9][1]}'>音频</a>"
 
-          if record[9][0] is null and record[9][1] is null
-            record[9] = ''
-          else
-            noMedia = false
-            record[9] = record[9].join('<br/>')
+        if record[9][0] is null and record[9][1] is null
+          record[9] = ''
+        else
+          noMedia = false
+          record[9] = record[9].join('<br/>')
 
-        columns = [
-          { 'sTitle': '名称' },
-          { 'sTitle': '描述' },
-          {
-            'sTitle': '机台信息',
-            'sClass': 'center'
-          },
-          {
-            'sTitle': '读数',
-            'sClass': 'center'
-          },
-          {
-            'sTitle': '正常范围',
-            'sClass': 'center'
-          },
-          {
-            'sTitle': '状态',
-            'sClass': 'center'
-          },
-          { 'sTitle': '备注' },
-          {
-            'sTitle': '条形码',
-            'sClass': 'center'
-          },
-          { 'sTitle': '检测时间' },
-          {
-            'sTitle': '媒体',
-            'sClass': 'center',
-            'sWidth': '46px'
-          }
-        ]
-        if $("#{containerDiv} table#recordsTable > tbody[role='alert'] td.dataTables_empty").length is 0
-          # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
-          oTable = $("#{containerDiv} table#recordsTable").dataTable()
-          oTable.fnDestroy() unless oTable?
-
-        $("#{containerDiv} div#recordsTable_wrapper").remove()
-        $(tableDiv).append('<table id="recordsTable"></table>')
-        $("#{containerDiv} table#recordsTable").dataTable
-          'aaData': data
-          'aoColumns': columns
-          'aaSorting': [[ 8, 'desc' ]]
-          'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
-            switch aaData[5]
-              when '异常'
-                $(nRow).addClass('redBackground')
-              when '警告'
-                $(nRow).addClass('yellowBackground')
-            return
-
+      columns = [
+        { 'sTitle': '名称' },
+        { 'sTitle': '描述' },
+        {
+          'sTitle': '机台信息',
+          'sClass': 'center'
+        },
+        {
+          'sTitle': '读数',
+          'sClass': 'center'
+        },
+        {
+          'sTitle': '正常范围',
+          'sClass': 'center'
+        },
+        {
+          'sTitle': '状态',
+          'sClass': 'center'
+        },
+        { 'sTitle': '备注' },
+        {
+          'sTitle': '条形码',
+          'sClass': 'center'
+        },
+        { 'sTitle': '检测时间' },
+        {
+          'sTitle': '媒体',
+          'sClass': 'center',
+          'sWidth': '46px'
+        }
+      ]
+      if $("#{containerDiv} table#recordsTable > tbody[role='alert'] td.dataTables_empty").length is 0
+        # when there is no records in table, do not destroy it. It is ok to initialize it which is not reinitializing.
         oTable = $("#{containerDiv} table#recordsTable").dataTable()
-        oTable.fnSetColumnVis(9, false) if noMedia
-        $("#{containerDiv} > span#recordsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
-        $("#{containerDiv} > span#recordsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
+        oTable.fnDestroy() unless oTable?
+
+      $("#{containerDiv} div#recordsTable_wrapper").remove()
+      $(tableDiv).append('<table id="recordsTable"></table>')
+      $("#{containerDiv} table#recordsTable").dataTable
+        'aaData': data
+        'aoColumns': columns
+        'aaSorting': [[ 8, 'desc' ]]
+        'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
+          switch aaData[5]
+            when '异常'
+              $(nRow).addClass('redBackground')
+            when '警告'
+              $(nRow).addClass('yellowBackground')
+          return
+
+      oTable = $("#{containerDiv} table#recordsTable").dataTable()
+      oTable.fnSetColumnVis(9, false) if noMedia
+      $("#{containerDiv} > span#recordsIfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
+      $("#{containerDiv} > span#recordsIfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))
 
       return
     error: (jqXHR, textStatus, errorThrown) ->
@@ -670,32 +670,35 @@ updatePointChart = (containerDiv, params) ->
     url: getBaseURL() + "/points/#{_id}/history.json?aggregate=30"
     data: request_params
     success: (data, textStatus, jqHXR) ->
-      if jqHXR.status is 200
-         $('div#errorBanner, div#infoBanner').hide()
-         _point = data.point
-         title = "#{_point.name}   #{_point.description}"
-         $("#{containerDiv} input#barcodeInput").val(_point.barcode)
-         if data.result.length is 0
-           $('div#noHistoryBanner').text("巡检点\"#{title}\"没有历史纪录").show()
-         else
-           $('div#noHistoryBanner').hide()
-           switch _point.category
-             when 30, 50
-               [min, max, canvasOverlayObjects] = getCanvasOverlayObjects(_point)
+      return unless jqHXR.status is 200
 
-               if data.group
-                 renderHighLowChart('chartDiv', title, data.result, min, max, canvasOverlayObjects)
-               else
-                 renderLineChart('chartDiv', title, data.result, min, max, canvasOverlayObjects)
-             when 40,41,51
-               renderBarChart('chartDiv', title, data.result, data.group, JSON.parse(_point.choice))
-             when 10,30
-               $('div#infoBanner').text("在选择时间范围内共巡检了#{data.result}次")
-               $('div#infoBanner').show()
-             else
-               $('div#noHistoryBanner').text('该巡检点没有历史纪录').show()
+      $('div#errorBanner, div#infoBanner').hide()
+      _point = data.point
+      title = "#{_point.name}   #{_point.description}"
+      $("#{containerDiv} input#barcodeInput").val(_point.barcode)
+      if data.result.length is 0
+        $('div#noHistoryBanner').text("巡检点\"#{title}\"没有历史纪录").show()
+        return
 
-         updateRecordsTable(containerDiv, {check_point_id: _point.id},"#{containerDiv} div#recordsDiv > div:first")
+      $('div#noHistoryBanner').hide()
+      switch _point.category
+        when 30, 50
+          [min, max, canvasOverlayObjects] = getCanvasOverlayObjects(_point)
+
+          if data.group
+            renderHighLowChart('chartDiv', title, data.result, min, max, canvasOverlayObjects)
+          else
+            renderLineChart('chartDiv', title, data.result, min, max, canvasOverlayObjects)
+        when 40,41,51
+          renderBarChart('chartDiv', title, data.result, data.group, JSON.parse(_point.choice))
+        when 10,30
+          $('div#infoBanner').text("在选择时间范围内共巡检了#{data.result}次")
+          $('div#infoBanner').show()
+        else
+          $('div#noHistoryBanner').text('该巡检点没有历史纪录').show()
+
+      $("#{containerDiv} > span#calendarUpdated").text('true') # force update of records table
+      updateRecordsTable(containerDiv, {check_point_id: _point.id}, "#{containerDiv} div#recordsDiv > div:first")
 
       return
     error: (jqXHR, textStatus, errorThrown) ->
