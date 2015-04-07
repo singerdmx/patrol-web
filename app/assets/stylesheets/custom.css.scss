@@ -12,6 +12,12 @@
 
 /* universal */
 
+.mainContainer {
+  width: 88% !important;
+  min-width: 940px !important;
+  margin-left: 168px !important;
+}
+
 .defaultBackgroundImage {
   background-image: url("/assets/cloud.jpg");
   background-size: 140% auto;
