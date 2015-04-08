@@ -22,12 +22,12 @@ $.extend( true, $.fn.dataTable.defaults, {
     "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
     "sPaginationType": "bootstrap",
     "oLanguage": {
-        "sEmptyTable": "没有符合条件的纪录",
-        "sLengthMenu": "每页显示_MENU_ 条纪录",
-        "sZeroRecords": "没有符合条件的纪录",
-        "sInfo": "_TOTAL_ 条纪录中显示_START_ 到 _END_",
-        "sInfoEmpty": "显示0条纪录",
-        "sInfoFiltered": "(从_MAX_条纪录中筛选出)",
+        "sEmptyTable": "没有符合条件的记录",
+        "sLengthMenu": "每页显示_MENU_ 条记录",
+        "sZeroRecords": "没有符合条件的记录",
+        "sInfo": "_TOTAL_ 条记录中显示_START_ 到 _END_",
+        "sInfoEmpty": "显示0条记录",
+        "sInfoFiltered": "(从_MAX_条记录中筛选出)",
         "sSearch": "搜索",
         "oPaginate": {
             "sPrevious": "前一页",

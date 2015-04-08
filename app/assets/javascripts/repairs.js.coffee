@@ -821,7 +821,7 @@ updatePartChart = (containerDiv, params) ->
         title = "#{_part.name}   #{_part.description}"
         $("#{containerDiv} input#barcodeInput").val(_part.barcode)
         if data.result.length is 0
-          $('div#noHistoryBanner').text("部件\"#{title}\"没有历史纪录").show()
+          $('div#noHistoryBanner').text("部件\"#{title}\"没有历史记录").show()
         else
           $('div#noHistoryBanner').hide()
           renderFilledAreaChart('chartDiv', title, data.result)

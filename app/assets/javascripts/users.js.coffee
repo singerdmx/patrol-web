@@ -665,7 +665,7 @@ updatePointChart = (containerDiv, params) ->
       title = "#{_point.name}   #{_point.description}"
       $("#{containerDiv} input#barcodeInput").val(_point.barcode)
       if data.result.length is 0
-        $('div#noHistoryBanner').text("巡检点\"#{title}\"没有历史纪录").show()
+        $('div#noHistoryBanner').text("巡检点\"#{title}\"没有历史记录").show()
         return
 
       $('div#noHistoryBanner').hide()
@@ -683,7 +683,7 @@ updatePointChart = (containerDiv, params) ->
           $('div#infoBanner').text("在选择时间范围内共巡检了#{data.result}次")
           $('div#infoBanner').show()
         else
-          $('div#noHistoryBanner').text('该巡检点没有历史纪录').show()
+          $('div#noHistoryBanner').text('该巡检点没有历史记录').show()
 
       $("#{containerDiv} > span#calendarUpdated").text('true') # force update of records table
       updateRecordsTable(containerDiv, 'historyRecordsTable', {check_point_id: _point.id}, "#{containerDiv} div#recordsDiv > div:first")
