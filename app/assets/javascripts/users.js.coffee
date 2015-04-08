@@ -426,19 +426,6 @@ updateSessionsTable = (containerDiv, params) ->
 
   return
 
-showSessionInRecordsTable = (sessionId, sessionRoute, sessionStartTime, sessionEndTime, searchStartTime, searchEndTime) ->
-  $('div#recordsDiv > div > div.calendarWidgetDiv').hide()
-  $('div#recordsDiv div#sessionFilterDiv').show()
-  $('div#recordsDiv div#sessionFilterDiv > span:first-child').text(
-    sessionRoute + '， ' + sessionStartTime + ' － ' + sessionEndTime)
-  $('div#recordsDiv div#sessionFilterDiv > span:nth-child(2)').text(sessionId)
-  $('div#recordsDiv div#startTime').data('datetimepicker').setLocalDate(
-    new Date(searchStartTime * 1000))
-  $('div#recordsDiv div#endTime').data('datetimepicker').setLocalDate(
-    new Date(searchEndTime * 1000))
-  $('div#sidebar li#records').trigger('click')
-  return
-
 updateRecordsTable = (containerDiv, tableName, params, tableDiv) ->
   tableDiv = "#{containerDiv} > div:first" unless tableDiv
   requestParams = getTableParams(containerDiv, params)

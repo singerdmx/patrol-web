@@ -446,11 +446,12 @@ window.updateProblemsTable = (containerDiv, params) ->
           url: getBaseURL() + "/sessions/#{session_id}.json"
           dataType: 'json',
           success: (data, textStatus, jqHXR) ->
-            if jqHXR.status is 200
-              showSessionInRecordsTable(session_id, data.route,
-                dateToString(new Date(data.start_time * 1000)),
-                dateToString(new Date(data.end_time * 1000)),
-                data.start_time, data.end_time)
+            return unless jqHXR.status is 200
+
+            showSessionInRecordsTable(session_id, data.route,
+              dateToString(new Date(data.start_time * 1000)),
+              dateToString(new Date(data.end_time * 1000)),
+              data.start_time, data.end_time)
             return
           error: (jqXHR, textStatus, errorThrown) ->
             showErrorPage(jqXHR.responseText)
@@ -469,6 +470,19 @@ window.updateProblemsTable = (containerDiv, params) ->
     dataType: 'json',
     timeout: defaultAjaxCallTimeout
 
+  return
+
+window.showSessionInRecordsTable = (sessionId, sessionRoute, sessionStartTime, sessionEndTime, searchStartTime, searchEndTime) ->
+  $('div#recordsDiv > div > div.calendarWidgetDiv').hide()
+  $('div#recordsDiv div#sessionFilterDiv').show()
+  $('div#recordsDiv div#sessionFilterDiv > span:first-child').text(
+    sessionRoute + '， ' + sessionStartTime + ' － ' + sessionEndTime)
+  $('div#recordsDiv div#sessionFilterDiv > span:nth-child(2)').text(sessionId)
+  $('div#recordsDiv div#startTime').data('datetimepicker').setLocalDate(
+    new Date(searchStartTime * 1000))
+  $('div#recordsDiv div#endTime').data('datetimepicker').setLocalDate(
+    new Date(searchEndTime * 1000))
+  $('div#sidebar li#records').trigger('click')
   return
 
 window.setupProblemsDiv = (containerDiv) ->
