@@ -147,6 +147,7 @@ class CheckResultsController < ApplicationController
     Rails.logger.info("creating repair_report #{repair_report_input}")
     report = RepairReport.create!(repair_report_input)
     set_report_num(report)
+    report
   end
 
   def send_emails(reports, contacts, users)
