@@ -501,42 +501,43 @@ window.setupProblemsDiv = (containerDiv) ->
       $.ajax
         url: getBaseURL() + "/problem_list/#{id}.json"
         success: (data, textStatus, jqHXR) ->
-          if jqHXR.status is 200
-            $("#{containerDiv} span#problemId").text(id)
-            $("#{containerDiv} span#problem_created_at").text(dateToString(new Date(data['created_at'] * 1000)))
-            $("#{containerDiv} span#problem_created_by_user").text(data['created_by_user'])
-            $("#{containerDiv} span#problem_name").text(data['name'])
-            $("#{containerDiv} span#problem_description").text(data['description'])
-            $("#{containerDiv} span#problem_area").text(data['area'])
-            $("#{containerDiv} span#problem_point_description").text(data['point_description'])
-            changeSelectByValue('problem_status', data['status'])
-            $("#{containerDiv} textarea#problem_content").val(data['content'])
-            $("#{containerDiv} input#problem_assigned_to_user").val(data['assigned_to_user'])
-            $("#{containerDiv} span#problem_assigned_to_id").text(data['assigned_to_id'])
-            $("#{containerDiv} div#problem_plan_date").datetimepicker(getDatetimePickerSettingsWithStartDate())
-            planDatePicker = $("#{containerDiv} div#problem_plan_date").data('datetimepicker')
-            planDatePicker.setLocalDate(if data['plan_date'] then new Date(data['plan_date'] * 1000) else 0)
-            if data['image']
-              $("#{containerDiv} div#problem_image").show()
-              $("#{containerDiv} span#problem_image_link").html(
-                "<a target='_blank' href='" + data['image'] + "'>链接</a>")
-            else
-              $("#{containerDiv} div#problem_image").hide()
-            if data['audio']
-              $("#{containerDiv} div#problem_audio").show()
-              $("#{containerDiv} span#problem_audio_link").html(
-                "<a target='_blank' href='" + data['audio'] + "'>链接</a>")
-            else
-              $("#{containerDiv} div#problem_audio").hide()
+          return unless jqHXR.status is 200
 
-            _suggestions = []
-            setupAutocompleteInput('/users.json', 'name', containerDiv, 'input#problem_assigned_to_user',
-              _suggestions, $("#{containerDiv} span#problem_assigned_to_id"))
+          $("#{containerDiv} span#problemId").text(id)
+          $("#{containerDiv} span#problem_created_at").text(dateToString(new Date(data['created_at'] * 1000)))
+          $("#{containerDiv} span#problem_created_by_user").text(data['created_by_user'])
+          $("#{containerDiv} span#problem_name").text(data['name'])
+          $("#{containerDiv} span#problem_description").text(data['description'])
+          $("#{containerDiv} span#problem_area").text(data['area'])
+          $("#{containerDiv} span#problem_point_description").text(data['point_description'])
+          changeSelectByValue('problem_status', data['status'])
+          $("#{containerDiv} textarea#problem_content").val(data['content'])
+          $("#{containerDiv} input#problem_assigned_to_user").val(data['assigned_to_user'])
+          $("#{containerDiv} span#problem_assigned_to_id").text(data['assigned_to_id'])
+          $("#{containerDiv} div#problem_plan_date").datetimepicker(getDatetimePickerSettingsWithStartDate())
+          planDatePicker = $("#{containerDiv} div#problem_plan_date").data('datetimepicker')
+          planDatePicker.setLocalDate(if data['plan_date'] then new Date(data['plan_date'] * 1000) else 0)
+          if data['image']
+            $("#{containerDiv} div#problem_image").show()
+            $("#{containerDiv} span#problem_image_link").html(
+              "<a target='_blank' href='" + data['image'] + "'>链接</a>")
+          else
+            $("#{containerDiv} div#problem_image").hide()
+          if data['audio']
+            $("#{containerDiv} div#problem_audio").show()
+            $("#{containerDiv} span#problem_audio_link").html(
+              "<a target='_blank' href='" + data['audio'] + "'>链接</a>")
+          else
+            $("#{containerDiv} div#problem_audio").hide()
 
-            $("#{containerDiv} button#btnSubmit").unbind('click')
-            $("#{containerDiv} button#btnSubmit").click ->
-              submitEditProblemForm(containerDiv, _suggestions)
-              return
+          _suggestions = []
+          setupAutocompleteInput('/users.json', 'name', containerDiv, 'input#problem_assigned_to_user',
+            _suggestions, $("#{containerDiv} span#problem_assigned_to_id"))
+
+          $("#{containerDiv} button#btnSubmit").unbind('click')
+          $("#{containerDiv} button#btnSubmit").click ->
+            submitEditProblemForm(containerDiv, _suggestions)
+            return
 
           return
         error: (jqXHR, textStatus, errorThrown) ->
@@ -546,14 +547,14 @@ window.setupProblemsDiv = (containerDiv) ->
         timeout: defaultAjaxCallTimeout
 
       $("#{containerDiv} div#editProblemsDiv").show()
-      $("#{containerDiv} div#problemListDiv, #{containerDiv} div#editProblemListDiv, #{containerDiv} div#assignedUserStatChartDiv").hide()
+      $("#{containerDiv} div#problemsTableDiv, #{containerDiv} div#editProblemListDiv, #{containerDiv} div#assignedUserStatChartDiv").hide()
 
     return
 
   $("#{containerDiv} button#btnReturn").click ->
     updateProblemsTable(containerDiv)
     $("#{containerDiv} div#editProblemsDiv").hide()
-    $("#{containerDiv} div#problemListDiv, #{containerDiv} div#editProblemListDiv, #{containerDiv} div#assignedUserStatChartDiv").show()
+    $("#{containerDiv} div#problemsTableDiv, #{containerDiv} div#editProblemListDiv, #{containerDiv} div#assignedUserStatChartDiv").show()
 
     return
 
