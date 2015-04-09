@@ -642,7 +642,7 @@ updatePointChart = (containerDiv, params) ->
     _id = _barcode
 
   $.ajax
-    url: getBaseURL() + "/points/#{_id}/history.json?aggregate=30"
+    url: getBaseURL() + "/points/#{_id}/history.json?aggregate=60"
     data: request_params
     success: (data, textStatus, jqHXR) ->
       return unless jqHXR.status is 200
