@@ -69,9 +69,14 @@ class CheckResultsController < ApplicationController
   def export
     index_para = convert_check_time(check_result_params)
     results = get_results(index_para, params[:preference]=='true')
-    send_data results.to_csv,
-              type: 'text/csv; charset=UTF-8;',
-              disposition: "attachment; filename=results.txt"
+    results_to_excel = results.map do |r|
+      result = to_excel(r)
+      result[:status] = get_check_result_status_string(result[:status])
+      result
+    end
+    send_data update_excel_titles(results_to_excel).to_xls(column_width: [5,25,25,20,40,40,10,20,25,40,20,10]),
+              type: 'text/excel; charset=UTF-8;',
+              disposition: "attachment; filename=results.xls"
   rescue Exception => e
     Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error

@@ -60,9 +60,23 @@ class ProblemListController < ApplicationController
   # GET /problem_list/export.json
   def export
     reports = query_repair_report(params)
-    send_data reports.to_csv,
-              type: 'text/csv; charset=UTF-8;',
-              disposition: "attachment; filename=reports.txt"
+    reports_to_excel = reports.map do |r|
+      result = to_excel(r, [:kind])
+      result[:status] = get_problem_status_string(result[:status])
+      result[:report_type] = get_part_status_string(result[:report_type])
+      result
+    end
+
+    additional_mapping = {
+      content: '报修内容',
+      code: '故障现象代码',
+      stopped: '已停止',
+      production_line_stopped: '生产线停止',
+      report_type: '工单类型'
+    }
+    send_data update_excel_titles(reports_to_excel, additional_mapping).to_xls(column_width: [5,25,25,20,40,40,20,20,20,15,20,20,20,25,8,30,12,30,10,10,10]),
+              type: 'text/excel; charset=UTF-8;',
+              disposition: "attachment; filename=reports.xls"
   rescue Exception => e
     Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error

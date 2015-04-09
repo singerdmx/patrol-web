@@ -40,12 +40,7 @@ module CheckResultsHelper
 
   def index_ui_json_builder(check_results_json)
     check_results_json.map do |result|
-      status = case result['status']
-                 when 0 then '正常'
-                 when 1 then '异常'
-                 when 2 then '警告'
-                 else '未知'
-               end
+      status = get_check_result_status_string(result['status'])
       choice = JSON.parse(result['point']['choice'])
       range = case result['point']['category']
                 when 50
@@ -234,6 +229,17 @@ module CheckResultsHelper
     end
 
     aggregated_results
+  end
+
+  private
+
+  def get_check_result_status_string(status)
+    case status
+      when 0 then '正常'
+      when 1 then '异常'
+      when 2 then '警告'
+      else '未知'
+    end
   end
 
 end

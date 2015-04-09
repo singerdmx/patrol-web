@@ -42,6 +42,8 @@ gem 'json', '~> 1.8.1'
 
 gem 'aws-sdk', '~> 2.0.22'
 
+gem 'to_xls-rails', '~> 1.3.1'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem "sdoc", require: false
