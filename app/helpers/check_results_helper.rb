@@ -41,20 +41,6 @@ module CheckResultsHelper
   def index_ui_json_builder(check_results_json)
     check_results_json.map do |result|
       status = get_check_result_status_string(result['status'])
-      choice = JSON.parse(result['point']['choice'])
-      range = case result['point']['category']
-                when 50
-                  if choice[0] != '' and choice[3] != ''
-                    "介于#{choice[0]}和#{choice[3]}之间"
-                  elsif choice[0] != ''
-                    "大于#{choice[0]}"
-                  elsif choice[3] != ''
-                    "小于#{choice[3]}"
-                  else
-                    'N/A'
-                  end
-                else ''
-              end
       result['image'] =  ResultImage.find(result['result_image_id']).url if result['result_image_id']
       result['audio'] =  ResultAudio.find(result['result_audio_id']).url if result['result_audio_id']
 
@@ -63,7 +49,7 @@ module CheckResultsHelper
         result['point']['description'],
         result['area_id'].nil? ? "" : Area.find(result['area_id']).name,
         result['result'],
-        range,
+        get_point_normal_range(result),
         status,
         result['memo'],
         result['point']['barcode'],

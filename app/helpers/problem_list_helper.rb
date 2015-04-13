@@ -40,17 +40,29 @@ module ProblemListHelper
     entry['assigned_to_user'] = assigned_to_user.nil? ? '' : assigned_to_user.name
     entry['image'] = ResultImage.find(entry['result_image_id']).url if entry['result_image_id']
     entry['audio'] = ResultAudio.find(entry['result_audio_id']).url if entry['result_audio_id']
-    entry['session'] = CheckResult.find(result.check_result_id).check_session_id if result.check_result_id
+    entry['result'] = ''
+    if result.check_result_id
+      check_result = CheckResult.find(result.check_result_id)
+      entry['session'] = check_result.check_session_id
+      entry['result'] = check_result.result
+    end
 
     entry
   end
 
   def problem_list_ui_json_builder(index_result)
     index_result.map do |r|
+      if r['kind'] == 'POINT'
+        point = CheckPoint.find(r['check_point_id'])
+        r['point'] = to_hash(point)
+      end
+
       [
         r['created_at'],
         r['created_by_user'],
         r['area'],
+        r['result'],
+        get_point_normal_range(r),
         r['name'],
         r['point_description'],
         r['description'],

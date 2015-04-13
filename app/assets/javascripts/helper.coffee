@@ -335,25 +335,26 @@ window.updateProblemsTable = (containerDiv, params) ->
       assignedUserStat = {}
 
       noMedia = true
+      _col = 0
       for record in data
         columnDateToString(record, [0])
-        record[9] = dateToShortString(new Date(record[9] * 1000)) if record[9]
-        record[11] = "<span class='sessionLink' data-session='#{record[11]}'>巡检记录</span>" if record[11] # 详情
-        # record[12] is in form of [image_url, audio_url]
-        if record[12][0] isnt null
-          record[12][0] = "<a target='_blank' href='#{record[12][0]}'>图片</a>"
+        record[_col + 11] = dateToShortString(new Date(record[_col + 11] * 1000)) if record[_col + 11]
+        record[_col + 13] = "<span class='sessionLink' data-session='#{record[_col + 13]}'>巡检记录</span>" if record[_col + 13] # 详情
+        # record[14] is in form of [image_url, audio_url]
+        if record[_col + 14][0] isnt null
+          record[_col + 14][0] = "<a target='_blank' href='#{record[_col + 14][0]}'>图片</a>"
 
-        if record[12][1] isnt null
-          record[12][1] = "<a target='_blank' href='#{record[12][1]}'>音频</a>"
+        if record[_col + 14][1] isnt null
+          record[_col + 14][1] = "<a target='_blank' href='#{record[_col + 14][1]}'>音频</a>"
 
-        if record[12][0] is null and record[12][1] is null
-          record[12] = ''
+        if record[_col + 14][0] is null and record[_col + 14][1] is null
+          record[_col + 14] = ''
         else
           noMedia = false
-          record[12] = record[12].join('<br/>')
+          record[_col + 14] = record[_col + 14].join('<br/>')
 
-        status = record[7]
-        assignedUser = record[6]
+        status = record[_col + 9]
+        assignedUser = record[_col + 8]
         assignedUser = '未分配' unless assignedUser
         unless assignedUserStat[assignedUser]
           assignedUserStat[assignedUser] = {}
@@ -371,6 +372,14 @@ window.updateProblemsTable = (containerDiv, params) ->
         },
         {
           'sTitle': '机台信息',
+          'sClass': 'center'
+        },
+        {
+          'sTitle': '读数',
+          'sClass': 'center'
+        },
+        {
+          'sTitle': '标准值',
           'sClass': 'center'
         },
         {
@@ -412,7 +421,7 @@ window.updateProblemsTable = (containerDiv, params) ->
         'aoColumns': columns,
         'aaSorting': [[ 0, 'desc' ]]
         'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
-          switch aaData[7]
+          switch aaData[_col + 9]
             when '未完成'
               $(nRow).addClass('darkBlueTextColor')
             when '完成'
@@ -426,9 +435,9 @@ window.updateProblemsTable = (containerDiv, params) ->
           return
 
       oTable = $("#{containerDiv} table#problemsTable").dataTable()
-      oTable.fnSetColumnVis(10, false)
-      oTable.fnSetColumnVis(12, false) if noMedia
-      oTable.fnSetColumnVis(11, false) unless $('span#logo').text() is '巡检'
+      oTable.fnSetColumnVis(_col + 12, false)
+      oTable.fnSetColumnVis(_col + 14, false) if noMedia
+      oTable.fnSetColumnVis(_col + 13, false) unless $('span#logo').text() is '巡检'
 
       $("#{containerDiv} table#problemsTable > tbody").on(
         'click',

@@ -476,7 +476,7 @@ updateRecordsTable = (containerDiv, tableName, params, tableDiv) ->
           'sClass': 'center'
         },
         {
-          'sTitle': '正常范围',
+          'sTitle': '标准值',
           'sClass': 'center'
         },
         {

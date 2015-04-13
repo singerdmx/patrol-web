@@ -22,9 +22,7 @@ class CheckResultsController < ApplicationController
       @check_results = get_results(index_para, params[:preference]=='true')
       @check_results_json = index_json_builder(@check_results, params[:check_point_id])
 
-      if params[:ui] == 'true'
-        @check_results_json = index_ui_json_builder(@check_results_json)
-      end
+      @check_results_json = index_ui_json_builder(@check_results_json) if params[:ui] == 'true'
 
       if stale?(etag: @check_results_json,
                 last_modified: @check_results.maximum(:updated_at))
@@ -156,15 +154,19 @@ class CheckResultsController < ApplicationController
   end
 
   def send_emails(reports, contacts, users)
-    reports = reports.map { |r| db_result_to_hash(r) }
-    email_content =
-      problem_list_ui_json_builder(reports).map do |c|
-        c[0] = Time.at(c[0]).strftime("%Y年%m月%d日")
-        c[9] = c[9].nil? ? '' : Time.at(c[9]).strftime("%Y年%m月%d日")
-        c
-      end
-    Rails.logger.info("sending email: #{email_content}")
-    AlertMailer.alert_email(contacts, users, email_content).deliver
+    return if reports.empty?
+
+    Thread.new do
+      reports = reports.map { |r| db_result_to_hash(r) }
+      email_content =
+        problem_list_ui_json_builder(reports).map do |c|
+          c[0] = Time.at(c[0]).strftime("%Y年%m月%d日")
+          c[11] = c[11].nil? ? '' : Time.at(c[11]).strftime("%Y年%m月%d日")
+          c
+        end
+      Rails.logger.info("sending email: #{email_content}")
+      AlertMailer.alert_email(contacts, users, email_content).deliver
+    end
   end
 
 end

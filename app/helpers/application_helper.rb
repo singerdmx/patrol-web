@@ -111,4 +111,25 @@ module ApplicationHelper
       else "#{status}"
     end
   end
+
+  def get_point_normal_range(result)
+    return '' unless result['point']
+    # try 标准值 first
+
+    choice = JSON.parse(result['point']['choice'])
+
+    case result['point']['category']
+      when 50
+        if choice[0] != '' and choice[3] != ''
+          "#{choice[0]} - #{choice[3]} #{result['point']['measure_unit']}"
+        elsif choice[0] != ''
+          "大于#{choice[0]} #{result['point']['measure_unit']}"
+        elsif choice[3] != ''
+          "小于#{choice[3]} #{result['point']['measure_unit']}"
+        else
+          'N/A'
+        end
+      else ''
+    end
+  end
 end

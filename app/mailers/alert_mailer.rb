@@ -7,7 +7,7 @@ class AlertMailer < ActionMailer::Base
     @hasMedia = false
     @content = content
     @content.each do |row|
-      unless row[0].nil? && row[1].nil?
+      unless row[14][0].nil? && row[14][1].nil?
         @hasMedia = true
         break
       end

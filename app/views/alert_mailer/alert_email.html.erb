@@ -118,6 +118,12 @@
     <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 50px;"
         aria-label="机台信息: activate to sort column ascending">机台信息
     </th>
+    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 50px;"
+        aria-label="读数: activate to sort column ascending">读数
+    </th>
+    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 50px;"
+        aria-label="标准值: activate to sort column ascending">标准值
+    </th>
     <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 104px;"
         aria-label="部位名称: activate to sort column ascending">部位名称
     </th>
@@ -150,19 +156,19 @@
   <% count = 0 %>
   <% for row in @content %>
     <tr class="<%= count % 2 == 0 ? 'odd' : 'even' %>">
-      <% for i in 0..9 %>
+      <% for i in 0..11 %>
         <td class="center"><%= row[i] %></td>
       <% end %>
       <% if @hasMedia %>
         <td class="center">
-          <% if !row[12][0].nil? %>
-            <a target="_blank" href="<%= row[12][0] %>">
+          <% if !row[14][0].nil? %>
+            <a target="_blank" href="<%= row[14][0] %>">
               图片
             </a>
           <% end %>
           <br/>
-          <% if !row[12][1].nil? %>
-            <a target="_blank" href="<%= row[12][1] %>">
+          <% if !row[14][1].nil? %>
+            <a target="_blank" href="<%= row[14][1] %>">
               音频
             </a>
           <% end %>

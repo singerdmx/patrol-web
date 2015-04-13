@@ -8,9 +8,7 @@ class ProblemListController < ApplicationController
       reports = query_repair_report(params)
       reports_json = index_json_builder(reports)
 
-      if params[:ui] == 'true'
-        reports_json = problem_list_ui_json_builder(reports_json)
-      end
+      reports_json = problem_list_ui_json_builder(reports_json) if params[:ui] == 'true'
 
       if stale?(etag: reports_json,
                 last_modified: reports.maximum(:updated_at))
