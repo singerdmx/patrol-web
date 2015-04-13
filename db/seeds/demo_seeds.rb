@@ -174,6 +174,7 @@ asset1.check_points.create([
                   state:        "运转",
                   category:         50,
                   choice:       '["", "", "", "70"]',
+                  standard:     '<70',
                   measure_unit: "C",
                   point_code:   "EE-11310-G01",
                   default_assigned_id: user5.id,
@@ -187,6 +188,7 @@ asset1.check_points.create([
                   measure_unit: "mm/s",
                   point_code:   "EE-11310-G02",
                   choice:       '["", "", "", "4"]',
+                  standard:     '<4',
                   default_assigned_id: user5.id,
                 } ])
 
@@ -206,6 +208,7 @@ asset2.check_points.create([
                  state:        "停止",
                  category:         41,
                  choice:       check_point_3_choice,
+                 standard:     '位置正常',
                  point_code:   "EE-11310-G03",
                } ])
 
@@ -225,6 +228,7 @@ asset3.check_points.create([
                  default_value: 20,
                  barcode:      "999972318875",
                  choice:       '["20", "30", "60", "70"]',
+                 standard:     '20-70C',
                  measure_unit: "C",
                  point_code:   "EE-11310-G04",
                  default_assigned_id: user5.id,
@@ -234,6 +238,7 @@ asset3.check_points.create([
                  state:        "运转",
                  category:         50,
                  choice:       '["", "", "", "4"]',
+                 standard:     '<4',
                  measure_unit: "mm/s",
                  point_code:   "EE-11310-G05",
                  default_assigned_id: user5.id,
@@ -246,6 +251,7 @@ asset3.check_points.create([
                  category:         51,
                  default_value: 20,
                  choice:       '["正常","非正常"]',
+                 standard:     '温度适中',
                  measure_unit: "C",
                  point_code:   "EE-11310-H01",
                  default_assigned_id: user5.id,
@@ -256,6 +262,7 @@ asset3.check_points.create([
                  description:  "噪音检测",
                  state:        "运转",
                  category:         41,
+                 standard:     '安静无噪音',
                  choice:       check_point_7_choice,
                  point_code:   "EE-11310-J00",
                  default_assigned_id: user5.id,
@@ -295,6 +302,7 @@ asset10.check_points.create([
                                     description:  "巡更",
                                     barcode:      "1006723188100",
                                     state:        "运转",
+                                    standard:     '安静无噪音',
                                     category:         10,
                                     choice:       '[]',
                                 } ])
@@ -310,6 +318,7 @@ asset11.check_points.create([
                                     name:         "T40桶体",
                                     description:  "巡更",
                                     barcode:      "1006723188101",
+                                    standard:     '安静无噪音',
                                     state:        "运转",
                                     category:         10,
                                     choice:       '[]',
@@ -326,6 +335,7 @@ asset12.check_points.create([
                                     name:         "T40桶体",
                                     description:  "巡更",
                                     barcode:      "1006723188102",
+                                    standard:     '安静无噪音',
                                     state:        "运转",
                                     category:         10,
                                     choice:       '[]',
@@ -342,6 +352,7 @@ asset13.check_points.create([
                                     name:         "T40桶体",
                                     description:  "巡更",
                                     barcode:      "1006723188103",
+                                    standard:     '安静无噪音',
                                     state:        "运转",
                                     category:         10,
                                     choice:       '[]',
@@ -357,6 +368,7 @@ asset14.check_points.create([
                                 {
                                     name:         "T40桶体",
                                     description:  "巡更",
+                                    standard:     '安静无噪音',
                                     barcode:      "1006723188104",
                                     state:        "运转",
                                     category:         10,
@@ -373,6 +385,7 @@ asset15.check_points.create([
                                 {
                                     name:         "T40桶体",
                                     description:  "巡更",
+                                    standard:     '安静无噪音',
                                     barcode:      "1006723188105",
                                     state:        "运转",
                                     category:         10,
