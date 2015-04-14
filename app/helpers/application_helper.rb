@@ -116,6 +116,10 @@ module ApplicationHelper
     return '' unless result['point']
     # try 标准值 first
 
+    standard = result['point']['standard']
+    return standard if standard && !standard.empty?
+      return standard
+
     choice = JSON.parse(result['point']['choice'])
 
     case result['point']['category']
