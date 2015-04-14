@@ -520,7 +520,7 @@ window.setupProblemsDiv = (containerDiv) ->
       alert '请选择问题！'
     else
       row = oTable.fnGetData(_selectedTr[0])
-      id = row[10]
+      id = row[12]
       $.ajax
         url: getBaseURL() + "/problem_list/#{id}.json"
         success: (data, textStatus, jqHXR) ->
