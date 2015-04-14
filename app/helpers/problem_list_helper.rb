@@ -62,7 +62,7 @@ module ProblemListHelper
         r['created_by_user'],
         r['area'],
         r['result'],
-        get_point_normal_range(r),
+        get_point_standard(r),
         r['name'],
         r['point_description'],
         r['description'],

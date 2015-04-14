@@ -49,7 +49,7 @@ module CheckResultsHelper
         result['point']['description'],
         result['area_id'].nil? ? "" : Area.find(result['area_id']).name,
         result['result'],
-        get_point_normal_range(result),
+        get_point_standard(result),
         status,
         result['memo'],
         result['point']['barcode'],

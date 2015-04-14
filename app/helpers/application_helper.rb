@@ -112,13 +112,12 @@ module ApplicationHelper
     end
   end
 
-  def get_point_normal_range(result)
+  def get_point_standard(result)
     return '' unless result['point']
-    # try 标准值 first
 
+    # try 标准值 first
     standard = result['point']['standard']
-    return standard if standard && !standard.empty?
-      return standard
+    return standard unless standard.blank?
 
     choice = JSON.parse(result['point']['choice'])
 
