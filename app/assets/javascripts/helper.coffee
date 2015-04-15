@@ -1175,11 +1175,15 @@ window.setTableClickRowEvent = (containerDiv, tableName, type, jqHXR) ->
   oTable = $("#{containerDiv} table##{tableName}").dataTable()
   oTable.fnSetColumnVis(0, false)
   $("#{containerDiv} table##{tableName} > tbody > tr").unbind('click')
-  $("#{containerDiv} table##{tableName} > tbody > tr").click ->
-    oTable = $("#{containerDiv} table##{tableName}").dataTable()
-    oTable.$('tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
-    $(this).addClass('mediumSeaGreenBackground')
-    return
+  $("#{containerDiv} table##{tableName} > tbody").on(
+    'click',
+    'tr',
+    ->
+      oTable = $("#{containerDiv} table##{tableName}").dataTable()
+      oTable.$('tr.mediumSeaGreenBackground').removeClass('mediumSeaGreenBackground')
+      $(this).addClass('mediumSeaGreenBackground')
+      return
+  )
 
   $("#{containerDiv} span##{type}IfNoneMatch").text(jqHXR.getResponseHeader('Etag'))
   $("#{containerDiv} span##{type}IfModifiedSince").text(jqHXR.getResponseHeader('Last-Modified'))

@@ -904,6 +904,8 @@ setupCreatePointForm = (containerDiv) ->
     pointInfo['description'] = $pointDescription.val() unless isInputValueEmpty($pointDescription)
     $pointBarcode = $('div#createPoint input#pointBarcode')
     pointInfo['barcode'] = $pointBarcode.val() unless isInputValueEmpty($pointBarcode)
+    $pointStandard = $('div#createPoint input#pointStandard')
+    pointInfo['standard'] = $pointStandard.val() unless isInputValueEmpty($pointStandard)
 
     $.ajax
       url: getBaseURL() + _relativeUrl
@@ -968,6 +970,7 @@ setupManageDataDiv = ->
         $('div#createPoint button#btnCancelCreatePoint').text('重置')
         $('div#createPoint > h2:first').text('创建检点')
         $('div#managementData div#categorySelection').show()
+        clearCreatePointForm()
         setupCreatePointForm('div#createPoint')
       when 'createAsset'
         $('div#createPoint button#btnCancelCreatePoint').text('重置')
@@ -1126,37 +1129,42 @@ attachPointToAsset = (pointId, assetId, containerDiv) ->
 
 setupEditDeletePointDiv = (containerDiv) ->
   $("#{containerDiv} button#btnEditPoint").click ->
-    oTable = $("#{containerDiv} table#pointsTable").dataTable()
+    oTable = $("#{containerDiv} table#pointsEditTable").dataTable()
     _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
     if _selectedTr.length is 0
       alert '请选择检点！'
-    else
-      row = oTable.fnGetData(_selectedTr[0])
+      return
 
-      _switchPointTo = "#{containerDiv} div#pointsTableDiv, #{containerDiv} div#edit_delete_point_buttons"
-      $('div#managementData span#switchPointTo').text(_switchPointTo)
-      $(_switchPointTo).hide()
-      $('div#createPoint').show()
-      setupCreatePointForm('div#createPoint')
-      $.ajax
-        url: getBaseURL() + "/points/#{row[0]}.json?r=#{getRandomArbitrary(0, 10240)}" # disable browser cache for the same GET
-        success: (data, textStatus, jqHXR) ->
-          if jqHXR.status is 200
-            $('div#createPoint span#pointId').text(data.id)
-            $('div#createPoint input#pointName').val(data.name)
-            $('div#createPoint input#pointDescription').val(data.description)
-            $('div#createPoint input#pointBarcode').val(data.barcode)
-            if data.default_assigned_id
-              $('div#createPoint input#point_assigned_to').val(data.default_assigned_user)
-              $('div#createPoint span#point_assigned_to_id').text(data.default_assigned_id)
+    row = oTable.fnGetData(_selectedTr[0])
 
-          return
-        error: (jqXHR, textStatus, errorThrown) ->
-          showErrorPage(jqXHR.responseText)
-          return
-        ifModified: true,
-        dataType: 'json',
-        timeout: defaultAjaxCallTimeout
+    _switchPointTo = "#{containerDiv} div#pointsTableDiv, #{containerDiv} div#edit_delete_point_buttons"
+    $('div#managementData span#switchPointTo').text(_switchPointTo)
+    $(_switchPointTo).hide()
+    $('div#createPoint').show()
+    setupCreatePointForm('div#createPoint')
+    console.log 1
+    $.ajax
+      url: getBaseURL() + "/points/#{row[0]}.json?r=#{getRandomArbitrary(0, 10240)}" # disable browser cache for the same GET
+      success: (data, textStatus, jqHXR) ->
+        return unless jqHXR.status is 200
+
+        console.log 2
+        $('div#createPoint span#pointId').text(data.id)
+        $('div#createPoint input#pointName').val(data.name)
+        $('div#createPoint input#pointDescription').val(data.description)
+        $('div#createPoint input#pointBarcode').val(data.barcode)
+        $('div#createPoint input#pointStandard').val(data.standard)
+        if data.default_assigned_id
+          $('div#createPoint input#point_assigned_to').val(data.default_assigned_user)
+          $('div#createPoint span#point_assigned_to_id').text(data.default_assigned_id)
+
+        return
+      error: (jqXHR, textStatus, errorThrown) ->
+        showErrorPage(jqXHR.responseText)
+        return
+      ifModified: true,
+      dataType: 'json',
+      timeout: defaultAjaxCallTimeout
 
     return
 
