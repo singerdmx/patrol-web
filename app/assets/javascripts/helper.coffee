@@ -1054,8 +1054,10 @@ window.setupCreateAssetDiv = (setupBtnAddPointOrPartToAsset) ->
     assetInfo['name'] = $assetName.val()
 
     $assetDescription = $('div#createAsset input#assetDescription')
+    assetInfo['description'] = null
     assetInfo['description'] = $assetDescription.val() unless isInputValueEmpty($assetDescription)
     $assetBarcode = $('div#createAsset input#assetBarcode')
+    assetInfo['barcode'] = null
     assetInfo['barcode'] = $assetBarcode.val() unless isInputValueEmpty($assetBarcode)
 
     pointIds = (parseInt($(pointId).text()) for pointId in $('div#createAsset div#addedPointDiv > span > span'))

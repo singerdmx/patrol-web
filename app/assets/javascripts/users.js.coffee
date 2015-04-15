@@ -899,12 +899,18 @@ setupCreatePointForm = (containerDiv) ->
 
     pointInfo = {}
     return unless validateCreatePointForm('div#createPoint', pointInfo, _suggestions)
-    pointInfo['choice'] = JSON.stringify(pointInfo['choice']) if requestType is 'POST'
+    if requestType is 'POST'
+      pointInfo['choice'] = JSON.stringify(pointInfo['choice'])
+    else
+      delete pointInfo['choice']
     $pointDescription = $('div#createPoint input#pointDescription')
+    pointInfo['description'] = null
     pointInfo['description'] = $pointDescription.val() unless isInputValueEmpty($pointDescription)
     $pointBarcode = $('div#createPoint input#pointBarcode')
+    pointInfo['barcode'] = null
     pointInfo['barcode'] = $pointBarcode.val() unless isInputValueEmpty($pointBarcode)
     $pointStandard = $('div#createPoint input#pointStandard')
+    pointInfo['standard'] = null
     pointInfo['standard'] = $pointStandard.val() unless isInputValueEmpty($pointStandard)
 
     $.ajax
@@ -1306,6 +1312,7 @@ setupCreateRouteDiv = ->
     routeInfo = {}
     routeInfo['name'] = $routeName.val()
     $routeDescription = $('div#createRoute input#routeDescription')
+    routeInfo['description'] = null
     routeInfo['description'] = $routeDescription.val() unless isInputValueEmpty($routeDescription)
     routeInfo['area'] = $('div#createRoute select#routeArea').val()
     _contacts = []

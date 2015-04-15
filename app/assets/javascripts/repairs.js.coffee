@@ -281,8 +281,10 @@ setupCreatePartForm = (containerDiv) ->
     partInfo = {}
     return unless validateCreatePartForm('div#createPart', partInfo, _suggestions)
     $partDescription = $('div#createPart input#partDescription')
+    partInfo['description'] = null
     partInfo['description'] = $partDescription.val() unless isInputValueEmpty($partDescription)
     $partBarcode = $('div#createPart input#partBarcode')
+    partInfo['barcode'] = null
     partInfo['barcode'] = $partBarcode.val() unless isInputValueEmpty($partBarcode)
 
     $.ajax
