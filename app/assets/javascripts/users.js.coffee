@@ -1140,15 +1140,14 @@ setupEditDeletePointDiv = (containerDiv) ->
     _switchPointTo = "#{containerDiv} div#pointsTableDiv, #{containerDiv} div#edit_delete_point_buttons"
     $('div#managementData span#switchPointTo').text(_switchPointTo)
     $(_switchPointTo).hide()
+    $('div#createPoint div#addPointChoiceDiv, div#createPoint div#fourChoicesDiv').hide()
     $('div#createPoint').show()
     setupCreatePointForm('div#createPoint')
-    console.log 1
     $.ajax
       url: getBaseURL() + "/points/#{row[0]}.json?r=#{getRandomArbitrary(0, 10240)}" # disable browser cache for the same GET
       success: (data, textStatus, jqHXR) ->
         return unless jqHXR.status is 200
 
-        console.log 2
         $('div#createPoint span#pointId').text(data.id)
         $('div#createPoint input#pointName').val(data.name)
         $('div#createPoint input#pointDescription').val(data.description)
