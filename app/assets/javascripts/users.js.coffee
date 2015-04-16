@@ -1498,7 +1498,7 @@ clearCreatePointForm = ->
 
 setupEditDeleteRouteDiv = (containerDiv) ->
   $("#{containerDiv} button#btnEditRoute").click ->
-    oTable = $("#{containerDiv} table#routesTable").dataTable()
+    oTable = $("#{containerDiv} table#routesEditDeleteTable").dataTable()
     _selectedTr = oTable.$('tr.mediumSeaGreenBackground')
     if _selectedTr.length is 0
       alert '请选择路线！'
