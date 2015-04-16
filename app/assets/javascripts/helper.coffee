@@ -337,8 +337,8 @@ window.updateProblemsTable = (containerDiv, params) ->
       noMedia = true
       _col = 0
       for record in data
-        columnDateToString(record, [0])
-        record[_col + 11] = dateToShortString(new Date(record[_col + 11] * 1000)) if record[_col + 11]
+        columnDateToString(record, [_col + 1])
+        record[_col + 10] = dateToShortString(new Date(record[_col + 10] * 1000)) if record[_col + 10]
         record[_col + 13] = "<span class='sessionLink' data-session='#{record[_col + 13]}'>巡检记录</span>" if record[_col + 13] # 详情
         # record[14] is in form of [image_url, audio_url]
         if record[_col + 14][0] isnt null
@@ -365,21 +365,13 @@ window.updateProblemsTable = (containerDiv, params) ->
 
       renderAssignedUserStatChart('assignedUserStatChartDiv', assignedUserStat, statusEnum)
       columns = [
-        { 'sTitle': '日期' },
-        {
-          'sTitle': '提交人',
-          'sClass': 'center'
-        },
         {
           'sTitle': '机台信息',
           'sClass': 'center'
         },
+        { 'sTitle': '日期' },
         {
-          'sTitle': '读数',
-          'sClass': 'center'
-        },
-        {
-          'sTitle': '标准值',
+          'sTitle': '提交人',
           'sClass': 'center'
         },
         {
@@ -391,7 +383,15 @@ window.updateProblemsTable = (containerDiv, params) ->
           'sClass': 'center'
         },
         {
+          'sTitle': '标准值',
+          'sClass': 'center'
+        },
+        {
           'sTitle': '问题描述',
+          'sClass': 'center'
+        },
+        {
+          'sTitle': '读数',
           'sClass': 'center'
         },
         {
@@ -402,11 +402,11 @@ window.updateProblemsTable = (containerDiv, params) ->
           'sTitle': '状态',
           'sClass': 'center'
         },
+        { 'sTitle': '计划完成日期' },
         {
           'sTitle': '备注',
           'sClass': 'center'
         },
-        { 'sTitle': '计划完成日期' },
         { 'sTitle': 'ID' },
         { 'sTitle': '详情' },
         {
@@ -419,7 +419,7 @@ window.updateProblemsTable = (containerDiv, params) ->
       $("#{containerDiv} table#problemsTable").dataTable
         'aaData': data,
         'aoColumns': columns,
-        'aaSorting': [[ 0, 'desc' ]]
+        'aaSorting': [[ _col + 1, 'desc' ]]
         'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
           switch aaData[_col + 9]
             when '未完成'

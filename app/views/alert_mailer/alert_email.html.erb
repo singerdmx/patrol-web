@@ -109,29 +109,29 @@
 <table id="problemsTable" class="dataTable" aria-describedby="problemsTable_info" style="width: 920px;">
   <thead>
   <tr role="row">
+    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 50px;"
+        aria-label="area: activate to sort column ascending">机台信息
+    </th>
     <th tabindex="0" rowspan="1" colspan="1" style="width: 108px;" aria-sort="descending"
-        aria-label="日期: activate to sort column ascending">日期
+        aria-label="created_at: activate to sort column ascending">日期
     </th>
     <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 50px;"
-        aria-label="提交人: activate to sort column ascending">提交人
-    </th>
-    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 50px;"
-        aria-label="机台信息: activate to sort column ascending">机台信息
-    </th>
-    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 50px;"
-        aria-label="读数: activate to sort column ascending">读数
-    </th>
-    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 50px;"
-        aria-label="标准值: activate to sort column ascending">标准值
+        aria-label="created_by_user: activate to sort column ascending">提交人
     </th>
     <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 104px;"
-        aria-label="部位名称: activate to sort column ascending">部位名称
+        aria-label="name: activate to sort column ascending">部位名称
     </th>
     <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 54px;"
-        aria-label="内容: activate to sort column ascending">内容
+        aria-label="point_description: activate to sort column ascending">内容
+    </th>
+    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 50px;"
+        aria-label="standard: activate to sort column ascending">标准值
     </th>
     <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 102px;"
-        aria-label="问题描述: activate to sort column ascending">问题描述
+        aria-label="description: activate to sort column ascending">问题描述
+    </th>
+    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 50px;"
+        aria-label="result: activate to sort column ascending">读数
     </th>
     <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 41px;"
         aria-label="责任人: activate to sort column ascending">责任人
@@ -139,11 +139,11 @@
     <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 45px;"
         aria-label="状态: activate to sort column ascending">状态
     </th>
-    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 86px;"
-        aria-label="备注: activate to sort column ascending">备注
-    </th>
     <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width: 80px;"
-        aria-label="计划完成日期: activate to sort column ascending">计划完成日期
+        aria-label="plan_date: activate to sort column ascending">计划完成日期
+    </th>
+    <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 86px;"
+        aria-label="content: activate to sort column ascending">备注
     </th>
     <% if @hasMedia %>
       <th class="center sorting" tabindex="0" rowspan="1" colspan="1" style="width: 50px;"

@@ -162,8 +162,8 @@ class CheckResultsController < ApplicationController
       reports = reports.map { |r| db_result_to_hash(r) }
       email_content =
         problem_list_ui_json_builder(reports).map do |c|
-          c[0] = Time.at(c[0]).strftime("%Y年%m月%d日")
-          c[11] = c[11].nil? ? '' : Time.at(c[11]).strftime("%Y年%m月%d日")
+          c[1] = Time.at(c[1]).strftime("%Y年%m月%d日")
+          c[10] = c[10].nil? ? '' : Time.at(c[11]).strftime("%Y年%m月%d日")
           c
         end
       Rails.logger.info("sending email: #{email_content}")

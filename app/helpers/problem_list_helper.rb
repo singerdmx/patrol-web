@@ -58,18 +58,18 @@ module ProblemListHelper
       end
 
       [
+        r['area'],
         r['created_at'],
         r['created_by_user'],
-        r['area'],
-        r['result'],
-        get_point_standard(r),
         r['name'],
         r['point_description'],
+        get_point_standard(r),
         r['description'],
+        r['result'],
         r['assigned_to_user'],
         get_problem_status_string(r['status'].to_i),
-        r['content'],
         r['plan_date'],
+        r['content'],
         r['id'],
         r['session'],
         [r['image'], r['audio']]

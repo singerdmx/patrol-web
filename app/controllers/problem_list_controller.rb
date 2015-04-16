@@ -1,8 +1,9 @@
 class ProblemListController < ApplicationController
   include ProblemListHelper, RepairReportsHelper
 
-  PROBLEMS_TABLE_TITLES = [:created_at, :created_by_id, :area_id, :result, :standard, :part_name, :content,
-                           :problem_description, :assigned_to_id, :status, :memo, :plan_date, nil, nil, :media]
+  PROBLEMS_TABLE_TITLES = [:area_id, :created_at, :created_by_id, :part_name, :content, :standard,
+                           :problem_description, :result, :assigned_to_id, :status, :plan_date, :memo,
+                           nil, nil, :media]
 
   # GET /problem_list.json
   # Example http://localhost:3000/problem_list.json?ui=true&status=2

@@ -32,6 +32,8 @@ module ApplicationHelper
           v = Time.at(v).to_datetime.strftime("%Y年%m月%d日 %H:%M") if v
         elsif [:plan_date].include?(key)
           v = Time.at(v).to_datetime.strftime("%Y年%m月%d日") if v
+        elsif key == :media
+          v = "图片：#{v[0].nil? ? '无' : v[0]}，\n音频：#{v[1].nil? ? '无' : v[1]}"
         end
         record[key] = v
       end
