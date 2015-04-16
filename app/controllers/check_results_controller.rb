@@ -3,7 +3,8 @@ require 'set'
 class CheckResultsController < ApplicationController
   include CheckResultsHelper, ProblemListHelper
 
-  RESULTS_TABLE_TITLES = [:name, :description, :area_id, :result, :standard, :status, :memo, :barcode, :check_time]
+  RESULTS_TABLE_TITLES = [:name, :description, :area_id, :result, :standard, :status,
+                          :problem_description, :barcode, :check_time, :media]
 
   # GET /check_results.json
   # Example: http://localhost:3000/results.json?check_time=1424332800..1424505600&&ui=true&check_session_id=8
@@ -73,7 +74,7 @@ class CheckResultsController < ApplicationController
       results_json = index_json_builder(results)
       results_json = index_ui_json_builder(results_json)
       results_to_excel = to_excel(results_json, RESULTS_TABLE_TITLES)
-      send_data update_excel_titles(results_to_excel).to_xls(column_width: [15,25,25,20,15,25,20,20,20]),
+      send_data update_excel_titles(results_to_excel).to_xls(column_width: [15,25,25,20,15,25,20,20,20,30,30]),
                 type: 'text/excel; charset=UTF-8;',
                 disposition: "attachment; filename=results.xls"
     end

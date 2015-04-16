@@ -448,6 +448,7 @@ updateRecordsTable = (containerDiv, tableName, params, tableDiv) ->
     data: requestParams
     success: (data, textStatus, jqHXR) ->
       return unless jqHXR.status is 200
+
       noMedia = true
       for record in data
         columnDateToString(record, [8])
@@ -483,7 +484,7 @@ updateRecordsTable = (containerDiv, tableName, params, tableDiv) ->
           'sTitle': '状态',
           'sClass': 'center'
         },
-        { 'sTitle': '备注' },
+        { 'sTitle': '问题描述' },
         {
           'sTitle': '条形码',
           'sClass': 'center'
