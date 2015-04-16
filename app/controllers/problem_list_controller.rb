@@ -1,6 +1,9 @@
 class ProblemListController < ApplicationController
   include ProblemListHelper, RepairReportsHelper
 
+  PROBLEMS_TABLE_TITLES = [:created_at, :created_by_id, :area_id, :result, :standard, :part_name, :content,
+                           :problem_description, :assigned_to_id, :status, :memo, :plan_date, nil, nil, :media]
+
   # GET /problem_list.json
   # Example http://localhost:3000/problem_list.json?ui=true&status=2
   def index
@@ -57,24 +60,16 @@ class ProblemListController < ApplicationController
 
   # GET /problem_list/export.json
   def export
-    reports = query_repair_report(params)
-    reports_to_excel = reports.map do |r|
-      result = to_excel(r, [:kind])
-      result[:status] = get_problem_status_string(result[:status])
-      result[:report_type] = get_part_status_string(result[:report_type])
-      result
-    end
+    ActiveRecord::Base.transaction do
+      reports = query_repair_report(params)
+      reports_json = index_json_builder(reports)
+      reports_json = problem_list_ui_json_builder(reports_json)
+      reports_to_excel = to_excel(reports_json, PROBLEMS_TABLE_TITLES)
 
-    additional_mapping = {
-      content: '报修内容',
-      code: '故障现象代码',
-      stopped: '已停止',
-      production_line_stopped: '生产线停止',
-      report_type: '工单类型'
-    }
-    send_data update_excel_titles(reports_to_excel, additional_mapping).to_xls(column_width: [5,25,25,20,40,40,20,20,20,15,20,20,20,25,8,30,12,30,10,10,10]),
-              type: 'text/excel; charset=UTF-8;',
-              disposition: "attachment; filename=reports.xls"
+      send_data update_excel_titles(reports_to_excel).to_xls(column_width: [15,25,10,20,20,10,10,15,15,15,20,20,40]),
+                type: 'text/excel; charset=UTF-8;',
+                disposition: "attachment; filename=reports.xls"
+    end
   rescue Exception => e
     Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error

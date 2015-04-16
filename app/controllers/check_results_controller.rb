@@ -3,6 +3,8 @@ require 'set'
 class CheckResultsController < ApplicationController
   include CheckResultsHelper, ProblemListHelper
 
+  RESULTS_TABLE_TITLES = [:name, :description, :area_id, :result, :standard, :status, :memo, :barcode, :check_time]
+
   # GET /check_results.json
   # Example: http://localhost:3000/results.json?check_time=1424332800..1424505600&&ui=true&check_session_id=8
   # http://localhost:3000/points/A001/history.json?aggregate=30&check_time=1416038400..1424764800&barcode=true
@@ -66,15 +68,15 @@ class CheckResultsController < ApplicationController
   # GET /results/export.json
   def export
     index_para = convert_check_time(check_result_params)
-    results = get_results(index_para, params[:preference]=='true')
-    results_to_excel = results.map do |r|
-      result = to_excel(r)
-      result[:status] = get_check_result_status_string(result[:status])
-      result
+    ActiveRecord::Base.transaction do
+      results = get_results(index_para)
+      results_json = index_json_builder(results)
+      results_json = index_ui_json_builder(results_json)
+      results_to_excel = to_excel(results_json, RESULTS_TABLE_TITLES)
+      send_data update_excel_titles(results_to_excel).to_xls(column_width: [15,25,25,20,15,25,20,20,20]),
+                type: 'text/excel; charset=UTF-8;',
+                disposition: "attachment; filename=results.xls"
     end
-    send_data update_excel_titles(results_to_excel).to_xls(column_width: [5,25,25,20,40,40,10,20,25,40,20,10]),
-              type: 'text/excel; charset=UTF-8;',
-              disposition: "attachment; filename=results.xls"
   rescue Exception => e
     Rails.logger.error("Encountered an error: #{e.inspect}\nbacktrace: #{e.backtrace}")
     render json: {message: e.to_s}.to_json, status: :internal_server_error

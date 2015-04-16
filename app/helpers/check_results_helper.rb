@@ -2,7 +2,7 @@ require 'json'
 
 module CheckResultsHelper
   include ApplicationHelper
-  def index_json_builder(index_result, check_point_id)
+  def index_json_builder(index_result, check_point_id = nil)
     if params[:aggregate].nil?
       results = []
       index_result.each do |entry|
