@@ -3,8 +3,8 @@ require 'set'
 class CheckResultsController < ApplicationController
   include CheckResultsHelper, ProblemListHelper
 
-  RESULTS_TABLE_TITLES = [:name, :description, :area_id, :result, :standard, :status,
-                          :problem_description, :barcode, :check_time, :media]
+  RESULTS_TABLE_TITLES = [:area_id, :check_time, :name, :description, :standard, :problem_description,
+                          :result, :status, :barcode, :media]
 
   # GET /check_results.json
   # Example: http://localhost:3000/results.json?check_time=1424332800..1424505600&&ui=true&check_session_id=8

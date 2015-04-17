@@ -45,15 +45,15 @@ module CheckResultsHelper
       result['audio'] =  ResultAudio.find(result['result_audio_id']).url if result['result_audio_id']
 
       [
+        result['area_id'].nil? ? '' : Area.find(result['area_id']).name,
+        result['check_time'].to_i,
         result['point']['name'],
         result['point']['description'],
-        result['area_id'].nil? ? "" : Area.find(result['area_id']).name,
-        result['result'],
         get_point_standard(result),
-        status,
         result['memo'],
+        result['result'],
+        status,
         result['point']['barcode'],
-        result['check_time'].to_i,
         [result['image'], result['audio']],
         result['session'].id
       ]

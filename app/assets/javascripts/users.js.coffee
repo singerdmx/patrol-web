@@ -451,7 +451,7 @@ updateRecordsTable = (containerDiv, tableName, params, tableDiv) ->
 
       noMedia = true
       for record in data
-        columnDateToString(record, [8])
+        columnDateToString(record, [1])
         # record[9] is in form of [image_url, audio_url]
         if record[9][0] isnt null
           record[9][0] = "<a target='_blank' href='#{record[9][0]}'>图片</a>"
@@ -466,30 +466,30 @@ updateRecordsTable = (containerDiv, tableName, params, tableDiv) ->
           record[9] = record[9].join('<br/>')
 
       columns = [
-        { 'sTitle': '名称' },
-        { 'sTitle': '描述' },
         {
           'sTitle': '机台信息',
           'sClass': 'center'
         },
-        {
-          'sTitle': '读数',
-          'sClass': 'center'
-        },
+        { 'sTitle': '检测时间' },
+        { 'sTitle': '名称' },
+        { 'sTitle': '描述' },
         {
           'sTitle': '标准值',
+          'sClass': 'center'
+        },
+        { 'sTitle': '问题描述' },
+        {
+          'sTitle': '读数',
           'sClass': 'center'
         },
         {
           'sTitle': '状态',
           'sClass': 'center'
         },
-        { 'sTitle': '问题描述' },
         {
           'sTitle': '条形码',
           'sClass': 'center'
         },
-        { 'sTitle': '检测时间' },
         {
           'sTitle': '媒体',
           'sClass': 'center',
@@ -500,9 +500,9 @@ updateRecordsTable = (containerDiv, tableName, params, tableDiv) ->
       $("#{containerDiv} table##{tableName}").dataTable
         'aaData': data
         'aoColumns': columns
-        'aaSorting': [[ 8, 'desc' ]]
+        'aaSorting': [[ 1, 'desc' ]]
         'fnRowCallback': (nRow, aaData, iDisplayIndex ) ->
-          switch aaData[5]
+          switch aaData[7]
             when '异常'
               $(nRow).addClass('redBackground')
             when '警告'
